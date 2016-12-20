@@ -7,6 +7,10 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('transfer');
+  this.route('search');
+  this.route('add');
+  this.route('scan');
 });
 
 export default Router;

@@ -1,16 +1,20 @@
 <header>
     <div class="container-fluid">
-        <h1> R E T I N A </h1>
+        {{#link-to "search" class="btn btn-default"}} 0 {{/link-to}}
+        {{#link-to "add" class="btn btn-default"}} + {{/link-to}}
     </div>
 </header>
+<nav>
+    <div class="container nav-cont">
+        {{#link-to "transfer" class="nav-btn"}} Transfer {{/link-to}}
+    </div>
+    <div class="container nav-cont">
+        {{#link-to "scan" class="nav-btn"}} Scan {{/link-to}}    
+    </div>
+    
+        
+    </nav>
 
-<div id="screen-view" class="container-fluid">
+<div id="screen-view">
     {{outlet}}
 </div>
-
-<nav>
-        {{#link-to "transfer" class="btn btn-primary nav-btn"}} Transfer {{/link-to}}
-        {{#link-to "search" class="btn btn-primary nav-btn"}} Search {{/link-to}}
-        {{#link-to "add" class="btn btn-primary nav-btn"}} Add {{/link-to}}
-        {{#link-to "scan" class="btn btn-primary nav-btn"}} Scan {{/link-to}}    
-</nav>

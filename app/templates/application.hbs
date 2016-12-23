@@ -1,2 +1,21 @@
-<h1> this is biggie </h1>
-{{outlet}}
+
+<header>
+    <div class="container-fluid">
+        {{#link-to "search" class="btn btn-default"}} 0 {{/link-to}}
+        {{#link-to "add" class="btn btn-default"}} + {{/link-to}}
+    </div>
+</header>
+<nav>
+    <div class="container nav-cont">
+        {{#link-to "transfer" class="nav-btn"}} Transfer {{/link-to}}
+    </div>
+    <div class="container nav-cont">
+        {{#link-to "scan" class="nav-btn"}} Scan {{/link-to}}    
+    </div>
+    
+        
+    </nav>
+
+<div id="screen-view">
+    {{outlet}}
+</div>

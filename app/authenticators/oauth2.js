@@ -2,23 +2,7 @@ import OAuth2PasswordGrant from 'ember-simple-auth/authenticators/oauth2-passwor
 
 export default OAuth2PasswordGrant.extend({
 
-//  makeRequest(url, data) {
-//    const options = {
-//        url: url,
-//        data: data,
-//        type: 'POST',
-//        dataType: 'json',
-//        accept: 'application/vnd.api+json',
-//        headers: {
-//        "Content-Type": 'application/vnd.api+json'
-//        }
-//    };
-//
-//    return Ember.$.ajax(options);
-//  }
-    
-  makeRequest(url, data) {
-      
+  makeRequest(url, data) { 
     const options = {
         processData: false,
         url: url,

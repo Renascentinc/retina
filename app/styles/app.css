@@ -1,4 +1,4 @@
- #title{
+ #titlebar{
     position: absolute;
     height: 78px;
     margin 0px 0px;
@@ -24,17 +24,40 @@ nav{
 
 .container.nav-cont{
     text-align: center;
-    width: 48%;
+    width: 49%;
     display: inline-block;
     height: 100%;
     line-height: 65px;
     font-size: 30px;
     font-family: "Helvetica Neue";
     font-weight: 300;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    overflow-x: hidden;
 }
 
 .nav-btn{
+    position: relative;
     color: white;
+    display: block;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+#title{
+    color: white;
+    font-family: "Helvetica Neue";
+    font-weight: 100;
+    font-size: 38px;
+    line-height: 78px;
+    text-align: center;
+    width: 100%;
+}
+
+.active{
+    border-bottom: solid;
+    border-bottom-color: white;
+    border-bottom-width: 4px;
 }
 
 /*

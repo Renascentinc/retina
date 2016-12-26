@@ -60,6 +60,11 @@ nav{
     border-bottom-width: 4px;
 }
 
+a:hover{
+    color: white;
+    text-decoration: none;
+}
+
 /*
 
 

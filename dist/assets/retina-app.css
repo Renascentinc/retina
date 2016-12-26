@@ -1,0 +1,35 @@
+header {
+    background-color: #122;
+/*    position: inherit;*/
+    margin: 0px 0px;
+    width: 100%;
+/*    top: 0px;*/
+    height: 50px;
+}
+
+nav {
+    background-color: #F00;
+    width: 100%;
+    height: 45px;
+}
+
+.nav-btn {
+    width: 100%;
+    height: 100%;
+    font-size: 23px;
+    color: white;
+    font-family: "adobe-clean", sans-serif;
+    margin-bottom: 10px;
+}
+
+.nav-cont {
+    height: inherit;
+    width: 50%;
+    float: left;
+    padding-top: 9px;
+    text-align: -webkit-center;
+}
+
+.active {
+    border-bottom: 2px solid white;
+}

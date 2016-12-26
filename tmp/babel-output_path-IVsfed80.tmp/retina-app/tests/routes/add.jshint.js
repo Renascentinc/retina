@@ -1,0 +1,9 @@
+define('retina-app/tests/routes/add.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/add.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/add.js should pass jshint.');
+  });
+});

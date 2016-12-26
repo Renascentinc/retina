@@ -1,0 +1,1 @@
+/Users/Amos/Desktop/Retina/retina-app/tmp/creator-output_path-ze1jRvhI.tmp/version.js

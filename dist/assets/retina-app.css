@@ -1,0 +1,86 @@
+#titlebar{
+    position: absolute;
+    height: 78px;
+    margin 0px 0px;
+    width: 100%;
+    background-color: #363636;
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, .49);
+    z-index: 2;
+    top: 0px;
+	display: inline-flex;
+}
+
+nav{
+    height: 22px;
+    position: absolute;
+    margin 0px 0px;
+    background-color: #E30000;
+    position: absolute;
+    top: 78px;
+    width: 100%;
+    z-index: 1;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, .49);
+}
+
+.container.nav-cont{
+    text-align: center;
+    width: calc(50% - 2px);
+    display: inline-block;
+    height: 100%;
+    line-height: 65px;
+    font-size: 30px;
+    font-family: "Helvetica Neue";
+    font-weight: 300;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    overflow-x: hidden;
+}
+
+.nav-btn{
+    position: relative;
+    color: white;
+    display: block;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+#title{
+    color: white;
+    font-family: "Helvetica Neue";
+    font-weight: 100;
+    font-size: 38px;
+    text-align: center;
+	width: 200px;
+	position: relative;
+	margin-top: auto;
+	margin-bottom: auto;
+    
+}
+
+.active{
+	background-color: rgba(255, 255, 255, 0.42);
+}
+
+a:hover{
+    color: white;
+    text-decoration: none;
+}
+
+.icon-btn{
+	position: relative;
+	margin-top: auto;
+	margin-bottom: auto;
+	border-radius: 8px;
+	margin-right: 8px;
+}
+
+.glyphicon{
+	position: relative;
+	vertical-align: middle;
+	padding: 8px;
+	color: white;
+	font-size: 32px;
+	margin-top: auto;
+	margin-bottom: auto;
+	
+}

@@ -1,0 +1,1 @@
+/Users/Amos/Desktop/Retina/retina-app/tmp/broccoli_merge_trees-input_base_path-LwA51dv0.tmp/test-helper.jshint.js

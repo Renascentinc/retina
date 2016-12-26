@@ -1,15 +1,15 @@
 $(document).ready(function(){
 	
 	$("#add-icon").click(function(){
-		$("#title").text("ADD");
+		$("#title").text('ADD');
 	});
 	
 	$("#search-icon").click(function(){
-		$("#title").text("SEARCH");
+		$("#title").text('SEARCH');
 	});
 	
 	$("#tool-icon").click(function(){
-		$("#title").text("TOOL");
+		$("#title").text('TOOL');
 	});
-	
+	console.log("hello world");
 });

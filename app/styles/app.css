@@ -7,12 +7,11 @@
     box-shadow: 0px 3px 4px rgba(0, 0, 0, .49);
     z-index: 2;
     top: 0px;
-    display: inline;
+	display: inline-flex;
 }
 
 nav{
-    text-align: center;
-    height: 63px;
+    height: 22px;
     position: absolute;
     margin 0px 0px;
     background-color: #E30000;
@@ -50,20 +49,16 @@ nav{
     font-family: "Helvetica Neue";
     font-weight: 100;
     font-size: 38px;
-    line-height: 78px;
     text-align: center;
-    width: 50%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+	width: 200px;
+	position: relative;
+	margin-top: auto;
+	margin-bottom: auto;
     
 }
 
 .active{
-    border-bottom: solid;
-    border-bottom-color: white;
-    border-bottom-width: 4px;
+	background-color: rgba(255, 255, 255, 0.42);
 }
 
 a:hover{
@@ -72,24 +67,20 @@ a:hover{
 }
 
 .icon-btn{
-	position: absolute;
-	top: 12px;
-}
-
-#add-icon{
-	left: 3%;
-}
-
-#search-icon{
-	left: 15%;
+	position: relative;
+	margin-top: auto;
+	margin-bottom: auto;
+	border-radius: 8px;
+	margin-right: 8px;
 }
 
 .glyphicon{
 	position: relative;
 	vertical-align: middle;
 	padding: 8px;
-	border-radius: 8px;
 	color: white;
 	font-size: 32px;
+	margin-top: auto;
+	margin-bottom: auto;
 	
 }

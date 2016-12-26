@@ -72,6 +72,24 @@ a:hover{
 }
 
 .icon-btn{
-	margin-top: auto;
-	margin-bottom: auto;
+	position: absolute;
+	top: 12px;
+}
+
+#add-icon{
+	left: 3%;
+}
+
+#search-icon{
+	left: 15%;
+}
+
+.glyphicon{
+	position: relative;
+	vertical-align: middle;
+	padding: 8px;
+	border-radius: 8px;
+	color: white;
+	font-size: 32px;
+	
 }

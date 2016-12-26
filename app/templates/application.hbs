@@ -1,6 +1,11 @@
 
 <header>
     <div id="titlebar" class="container-fluid">
+        {{#link-to "add" class="icon-btn"}}add{{/link-to}} 
+        
+        {{#link-to "search" class="icon-btn"}}search{{/link-to}} 
+        
+        
         <div id="title">
             RETINA
         </div>
@@ -9,7 +14,7 @@
 </header>
 <nav>
     <div class="container nav-cont">
-        {{#link-to "scan" class="nav-btn"}} Scan {{/link-to}}    
+        {{#link-to "scan" class="nav-btn"}}Scan{{/link-to}}    
     </div>
     <div class="container nav-cont">
         {{#link-to "transfer" class="nav-btn"}} Transfer {{/link-to}}

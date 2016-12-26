@@ -1,4 +1,4 @@
- #titlebar{
+#titlebar{
     position: absolute;
     height: 78px;
     margin 0px 0px;
@@ -7,11 +7,12 @@
     box-shadow: 0px 3px 4px rgba(0, 0, 0, .49);
     z-index: 2;
     top: 0px;
+    display: inline-block;
 }
 
 nav{
     text-align: center;
-    height: 63.64px;
+    height: 63px;
     position: absolute;
     margin 0px 0px;
     background-color: #E30000;
@@ -24,7 +25,7 @@ nav{
 
 .container.nav-cont{
     text-align: center;
-    width: 49%;
+    width: calc(50% - 2px);
     display: inline-block;
     height: 100%;
     line-height: 65px;
@@ -51,7 +52,12 @@ nav{
     font-size: 38px;
     line-height: 78px;
     text-align: center;
-    width: 100%;
+    width: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    
 }
 
 .active{
@@ -64,47 +70,3 @@ a:hover{
     color: white;
     text-decoration: none;
 }
-
-/*
-
-
-
-
-
-
-header {
-    background-color: #122;
-    position: inherit;
-    margin: 0px 0px;
-    width: 100%;
-    top: 0px;
-    height: 50px;
-}
-
-nav {
-    background-color: #F00;
-    width: 100%;
-    height: 45px;
-}
-
-.nav-btn {
-    width: 100%;
-    height: 100%;
-    font-size: 23px;
-    color: white;
-    font-family: "adobe-clean", sans-serif;
-    margin-bottom: 10px;
-}
-
-.nav-cont {
-    height: inherit;
-    width: 50%;
-    float: left;
-    padding-top: 9px;
-    text-align: -webkit-center;
-}
-
-.active {
-    border-bottom: 2px solid white;
-}
-

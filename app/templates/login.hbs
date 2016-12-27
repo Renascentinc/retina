@@ -1,10 +1,21 @@
+<div id="login-page">
+	<div id="splash-title">
+		RETINA
+	</div>
+	
+	<div id="splash-subtitle">
+		Renascent Tool Inventory Application
+	</div>
+	
+	
+	
 <form {{action 'authenticate' on='submit'}}>
-  <label for="identification">Login</label>
-  {{input id='identification' placeholder='Enter Login' value=identification}}
-  <label for="password">Password</label>
-  {{input id='password' placeholder='Enter Password' type='password' value=password}}
-  <button type="submit">Login</button>
+  {{input class="text-field" id='identification' placeholder='username' value=identification}}<br>
+  {{input class="text-field" id='password' placeholder='password' type='password' value=password}}<br>
+  <button id="login-btn" type="submit">Login</button>
   {{#if errorMessage}}
     <p>{{errorMessage}}</p>
   {{/if}}
 </form>
+</div>
+

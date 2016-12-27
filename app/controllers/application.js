@@ -13,5 +13,20 @@ export default Ember.Controller.extend({
     get() {
         return (this.get('currentRouteName') === 'login');
     }
+  }),
+  
+  getHeaderText: Ember.computed('currentRouteName', {
+      get() {
+          let headerText = 'RETINA';
+          let routeName = this.get('currentRouteName');
+          
+          if( routeName === 'search' ) {
+              headerText = 'Search';
+              
+          } else if( routeName === 'add') {
+              headerText = 'Add Tool';
+          }
+          return( headerText );
+      }
   })
 });

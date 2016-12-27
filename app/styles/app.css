@@ -15,7 +15,6 @@ nav{
     position: absolute;
     margin 0px 0px;
     background-color: #E30000;
-    position: absolute;
     top: 78px;
     width: 100%;
     z-index: 1;
@@ -81,6 +80,19 @@ a:hover{
 	color: white;
 	font-size: 32px;
 	margin-top: auto;
+	margin-bottom: auto;	
+}
+
+.login-logout{
+	position: relative;
+	margin-top: auto;
 	margin-bottom: auto;
-	
+	margin-left: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+#screen-view {
+    position: absolute;
+    top: 100px;
 }

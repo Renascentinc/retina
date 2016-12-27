@@ -8,10 +8,12 @@
     z-index: 2;
     top: 0px;
 	display: inline-flex;
+	text-align: center;
+	padding: 0px 0px;
 }
 
 nav{
-    height: 22px;
+    height: 30px;
     position: absolute;
     margin 0px 0px;
     background-color: #E30000;
@@ -19,6 +21,8 @@ nav{
     width: 100%;
     z-index: 1;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, .49);
+	color: white;
+	text-align: center;
 }
 
 .container.nav-cont{
@@ -33,14 +37,6 @@ nav{
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
     overflow-x: hidden;
-}
-
-.nav-btn{
-    position: relative;
-    color: white;
-    display: block;
-    overflow-x: hidden;
-    height: 100%;
 }
 
 #title{
@@ -70,7 +66,6 @@ a:hover{
 	margin-top: auto;
 	margin-bottom: auto;
 	border-radius: 8px;
-	margin-right: 8px;
 }
 
 .glyphicon{
@@ -81,18 +76,29 @@ a:hover{
 	font-size: 32px;
 	margin-top: auto;
 	margin-bottom: auto;	
+	margin-left: auto;
+	margin-right: auto;
+	
 }
 
-.login-logout{
+#screen-view{
+    position: absolute;
+    top: 108px;
+}
+
+.subtitle{
 	position: relative;
+	display: inline-block;
+	width: 24%;
+	vertical-align: middle;
+	height: 100%;
+	line-height: 30px;
+}
+
+.nav-container{
+	position: relative;
+	display: inline-block;
+	width: 25%;
 	margin-top: auto;
 	margin-bottom: auto;
-	margin-left: 8px;
-    color: white;
-    cursor: pointer;
-}
-
-#screen-view {
-    position: absolute;
-    top: 100px;
 }

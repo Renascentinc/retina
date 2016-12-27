@@ -1,8 +1,19 @@
 
+{{#if isLoginRoute}}
+    {{outlet}}
+{{else}}
+
 <header>
     <div class="container-fluid">
         {{#link-to "search" class="btn btn-default"}} 0 {{/link-to}}
         {{#link-to "add" class="btn btn-default"}} + {{/link-to}}
+    </div>
+    <div>
+      {{#if session.isAuthenticated}}
+        <a {{action 'invalidateSession'}}>Logout</a>
+      {{else}}
+        {{#link-to 'login'}}Login{{/link-to}}
+      {{/if}}
     </div>
 </header>
 <nav>
@@ -19,3 +30,5 @@
 <div id="screen-view">
     {{outlet}}
 </div>
+
+{{/if}}

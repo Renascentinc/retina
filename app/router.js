@@ -11,6 +11,7 @@ Router.map(function() {
   this.route('search');
   this.route('add');
   this.route('scan');
+  this.route('login');
 });
 
 export default Router;

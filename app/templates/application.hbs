@@ -12,17 +12,17 @@
 		{{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-wrench" aria-hidden="true"></span>{{/link-to}} 
         
 		
-        
         <div id="title">
-            RETINA
+            {{getHeaderText}}
         </div>
 
+        {{#if session.isAuthenticated}}
+            <a {{action 'invalidateSession'}} class="login-logout">Logout</a>
+        {{else}}
+            {{#link-to 'login' class="login-logout"}}Login{{/link-to}}
+        {{/if}}        
+        
     </div>
-	      {{#if session.isAuthenticated}}
-        <a {{action 'invalidateSession'}}>Logout</a>
-      {{else}}
-        {{#link-to 'login'}}Login{{/link-to}}
-      {{/if}}
 		
 </header>
 <nav></nav>

@@ -104,6 +104,7 @@ a:hover{
 #screen-view {
     position: absolute;
     top: 108px;
+	bottom: 0px;
 }
 
 #login-page{
@@ -143,16 +144,47 @@ a:hover{
 	margin-top: 10px;
 }
 
-#login-btn{
+.go{
 	position: relative;
-	background-color: white;
+	background-color: #e30000;
 	border: none;
 	border-radius: 6px;
-	color: #e30000;
+	color: white;
 	height: 62px;
 	width: 189px;
 	font-size: 32px;
 	font-weight: 300;
+	box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
+}
+
+#scan-group{
+	position: relative;
+	margin-top: 31px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 6px;
+	font-size: 0px;
+	overflow: hidden;
+	width: 300px;
+	box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
+	bottom: 0px;
+	
+	
+}
+
+#info-btn, #transfer-btn{
+	width: calc(50% - 2px);
+	display: inline-block;
+	border-radius: 0px;
+	line-height: 62px;
+	text-align: center;
+	box-shadow: none;
+}
+
+
+#login-btn{
+	background-color: white;
+	color: #e30000;
 	margin-left: calc(50% - 95px);
 	margin-top: 20px;
 }
@@ -183,4 +215,6 @@ select{
 	color: #797979;
 	font-size: 18px;
 }
+
+
 

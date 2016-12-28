@@ -5,27 +5,54 @@
 
 <header>
     <div id="titlebar" class="container-fluid">
-		{{#link-to "add" class="icon-btn" id="add-icon"}}<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{{/link-to}} 
+		<div class="nav-container">
+			{{#link-to "add" class="icon-btn" id="add-icon"}}<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{{/link-to}} 
+		</div>
         
-        {{#link-to "search" class="icon-btn" id="search-icon"}}<span  class="glyphicon glyphicon-search" aria-hidden="true"></span>{{/link-to}} 
+		<div class="nav-container">
+	        {{#link-to "search" class="icon-btn" id="search-icon"}}<span  class="glyphicon glyphicon-search" aria-hidden="true"></span>{{/link-to}} 
+		</div>
 		
-		{{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-wrench" aria-hidden="true"></span>{{/link-to}} 
+		<div class="nav-container">
+			{{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-wrench" aria-hidden="true"></span>{{/link-to}} 
+		</div>
         
-		
-        <div id="title">
-            {{getHeaderText}}
-        </div>
 
         {{#if session.isAuthenticated}}
-            <a {{action 'invalidateSession'}} class="login-logout">Logout</a>
+			<div class="nav-container">
+				<a {{action 'invalidateSession'}} class="icon-btn"><span  class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a>
+			</div>
         {{else}}
-            {{#link-to 'login' class="login-logout"}}Login{{/link-to}}
+			<div class="nav-container">
+				{{#link-to "login" class="icon-btn" id="logout-icon"}}
+					<span  class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+				{{/link-to}} 
+			</div>
         {{/if}}        
         
     </div>
 		
 </header>
-<nav></nav>
+<nav>
+	<div class="subtitle" id="add">
+		ADD
+	</div>
+	
+	<div class="subtitle" id="search">
+		SEARCH
+	</div>
+	
+	<div class="subtitle" id="tool">
+		TOOL
+	</div>
+	
+	<div class="subtitle" id="logout">
+		LOGOUT
+	</div>
+	
+	
+	
+</nav>
 
 <div id="screen-view">
     <div class="container-fluid">

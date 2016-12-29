@@ -6,26 +6,26 @@
 <header>
     <div id="titlebar" class="container-fluid">
 		<div class="nav-container">
-			{{#link-to "add" class="icon-btn" id="add-icon"}}<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{{/link-to}} 
+			{{#link-to "add" class="icon-btn" id="add-icon"}}<span class="glyphicon glyphicon-main glyphicon-plus" aria-hidden="true"></span>{{/link-to}} 
 		</div>
         
 		<div class="nav-container">
-	        {{#link-to "search" class="icon-btn" id="search-icon"}}<span  class="glyphicon glyphicon-search" aria-hidden="true"></span>{{/link-to}} 
+	        {{#link-to "search" class="icon-btn" id="search-icon"}}<span  class="glyphicon glyphicon-main glyphicon-search" aria-hidden="true"></span>{{/link-to}} 
 		</div>
 		
 		<div class="nav-container">
-			{{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-wrench" aria-hidden="true"></span>{{/link-to}} 
+			{{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-main glyphicon-wrench" aria-hidden="true"></span>{{/link-to}} 
 		</div>
         
 
         {{#if session.isAuthenticated}}
 			<div class="nav-container">
-				<a {{action 'invalidateSession'}} class="icon-btn"><span  class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a>
+				<a {{action 'invalidateSession'}} class="icon-btn"><span  class="glyphicon glyphicon-main glyphicon-log-out" aria-hidden="true"></span></a>
 			</div>
         {{else}}
 			<div class="nav-container">
 				{{#link-to "login" class="icon-btn" id="logout-icon"}}
-					<span  class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+					<span  class="glyphicon glyphicon-main glyphicon-log-in" aria-hidden="true"></span>
 				{{/link-to}} 
 			</div>
         {{/if}}        
@@ -55,9 +55,7 @@
 </nav>
 
 <div id="screen-view">
-    <div class="container-fluid">
-        {{outlet}}
-    </div>    
+        {{outlet}} 
 </div>
 
 {{/if}}

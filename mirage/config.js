@@ -24,5 +24,19 @@ export default function() {
             return { "access_token": "567k345jsd1o34sdklsdf34534" };
         }
     }); //end post => /token
+	
+    this.get('/tools/:id', (schema, request) => {	
+		return {
+		  data: {
+			type: "tool",
+			id: request.params.id,
+			attributes: {
+				ownerFirstName: "Shaboygen",
+				ownerLastName: "Cactapuss",
+				dateLastCheckout: "Stardate 0.12.4.12"
+			}
+		  }
+		}
+    }); //end get => /tools/:id	
     
 }//end config

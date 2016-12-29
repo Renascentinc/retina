@@ -12,7 +12,7 @@ Router.map(function() {
   this.route('add');
   this.route('scan');
   this.route('login');
-  this.route('info', { path: "tool/*wildcard" });
+  this.route('info', { path: "tool/:id" });
 });
 
 export default Router;

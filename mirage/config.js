@@ -36,7 +36,7 @@ export default function() {
 				dateLastCheckout: "Stardate 0.12.4.12"
 			}
 		  }
-		}
+		};
     }); //end get => /tools/:id	
     
 }//end config

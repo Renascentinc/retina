@@ -52,5 +52,9 @@ module.exports = function(environment) {
   'media-src': null
 }
   
+  ENV['ember-cli-mirage'] = {
+      enabled: false
+  };
+  
   return ENV;
 };

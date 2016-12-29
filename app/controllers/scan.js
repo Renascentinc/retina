@@ -14,12 +14,12 @@ export default Ember.Controller.extend({
 				return result[1];
 			}
 		}
-		*/
+		
 		  
 		
 		  
 		  
       }
-  })
+  })*/
 
 });

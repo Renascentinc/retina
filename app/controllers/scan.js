@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 	
-	
+	/*
 	myFunc: Ember.computed('currentRouteName', {
       get() {
        	var url = window.location.href;
@@ -12,12 +12,9 @@ export default Ember.Controller.extend({
 			result = result[1].split("=");
 			if (result[1]){
 				return result[1];
-			} else{
-				return ("Tool ID");
 			}
-		} else{
-			return ("Tool ID");
 		}
+		*/
 		  
 		
 		  

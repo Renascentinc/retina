@@ -31,12 +31,22 @@ export default function() {
 			type: "tool",
 			id: request.params.id,
 			attributes: {
-				ownerFirstName: "Shaboygen",
-				ownerLastName: "Cactapuss",
-				dateLastCheckout: "Stardate 0.12.4.12"
+				ownerfirstname: "Shaboygen",
+				ownerlastname: "Cactapuss",
+				datelastcheckout: "Stardate 0.12.4.12",
+				purchasedate: "Stardate 020.2.3.23"
 			}
 		  }
 		};
     }); //end get => /tools/:id	
+    
+    this.post('/tools', (schema, request) => {	
+		console.log(request);
+    }); //end post => /tools
+    
+    this.patch('/tools/:id', (schema, request) => {	
+		console.log(request);
+        console.log(params.id);
+    }); //end post => /tools
     
 }//end config

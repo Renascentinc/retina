@@ -31,12 +31,139 @@ export default function() {
 			type: "tool",
 			id: request.params.id,
 			attributes: {
-				ownerFirstName: "Shaboygen",
-				ownerLastName: "Cactapuss",
-				dateLastCheckout: "Stardate 0.12.4.12"
+				ownerfirstname: "Shaboygen",
+				ownerlastname: "Cactapuss",
+				datelastcheckout: "Stardate 0.12.4.12",
+				purchasedate: "Stardate 020.2.3.23"
 			}
 		  }
 		};
     }); //end get => /tools/:id	
+    
+    this.post('/tools', (schema, request) => {	
+		console.log(request);
+    }); //end post => /tools
+    
+    this.patch('/tools/:id', (schema, request) => {	
+		console.log(request);
+        console.log(params.id);
+    }); //end post => /tools
+	
+	this.get('/tools', function() {
+    return {
+      data: [{
+        type: 'tool',
+        id: '1',
+        attributes: {
+          brand: 'Bosch',
+          ownerfirstname: 'George',
+          ownerlastname: 'Boole',
+		  type: 'hammer drill',
+		  status: 'in use'
+        }
+      }, {
+        type: 'tool',
+        id: '2',
+        attributes: {
+          brand: 'DeWalt',
+          ownerfirstname: 'Mike',
+          ownerlastname: 'Flag',
+		  type: 'impact driver',
+		  status: 'in use'
+        }
+      }, {
+        type: 'tool',
+        id: '3',
+        attributes: {
+          brand: 'Milwaukee',
+          ownerfirstname: 'Charlie',
+          ownerlastname: 'Delta',
+		  type: 'reciprocating saw',
+		  status: 'available'
+        }
+      }]
+    };
+  });
+	
+	this.get('/status', function() {
+    return {
+      data: [{
+        type: 'status',
+        id: '1',
+        attributes: {
+          status: 'in-use',
+        }
+      }, {
+        type: 'status',
+        id: '2',
+        attributes: {
+          status: 'available',
+        }
+	  },
+	  {
+        type: 'status',
+        id: '3',
+        attributes: {
+          status: 'out of service',
+        }
+      }]
+    };
+  });
+	
+		this.get('/owner', function() {
+    return {
+      data: [{
+        type: 'owner',
+        id: '1',
+        attributes: {
+          id: '12345',
+		  firstname: 'george',
+		  lastname: 'boole'
+        }
+      }, {
+        type: 'owner',
+        id: '2',
+        attributes: {
+          id: '43215',
+		  firstname: 'charlie',
+		  lastname: 'delta'
+        }
+	  },
+	  {
+        type: 'owner',
+        id: '3',
+        attributes: {
+          id: '54326',
+		  firstname: 'mike',
+		  lastname: 'flag'
+        }
+      }]
+    };
+  });
+	
+		this.get('/type', function() {
+    return {
+      data: [{
+        type: 'type',
+        id: '1',
+        attributes: {
+          status: 'reciprocating saw',
+        }
+      }, {
+        type: 'type',
+        id: '2',
+        attributes: {
+          status: 'hammer drill',
+        }
+	  },
+	  {
+        type: 'type',
+        id: '3',
+        attributes: {
+          status: 'impact driver',
+        }
+      }]
+    };
+  });
     
 }//end config

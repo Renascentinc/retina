@@ -201,7 +201,7 @@ a:hover{
 	font-weight: 200;
 	text-indent: 6px;
 	font-size: 18px;
-	margin: 0px;
+	margin-top: 10px;
 }
 
 #icon-container{
@@ -319,6 +319,7 @@ a:hover{
 	margin-top: 5px;
 }
 
+
 #specs{
 	margin: 10px;
 	display: inline-block;
@@ -338,3 +339,13 @@ a:hover{
 	overflow-y: scroll;
 	height: 100%;
 }
+
+form{
+	margin-left: auto;
+	margin-right: auto;
+	width: 100vw;
+	margin-top: 20px;
+	text-align: center;
+}
+
+

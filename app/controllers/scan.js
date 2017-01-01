@@ -16,9 +16,8 @@ export default Ember.Controller.extend({
 		addToList(id){
             if( !this.toolList.includes(id) ) {
                 this.toolList.push(id);
+                Ember.$("#list").append(id + "<br>");
             }
-			console.log( this.toolList );
-            Ember.$("#list").append(id + "<br>");
 		},
         
         transferTools() {

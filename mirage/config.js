@@ -21,7 +21,7 @@ export default function() {
         let params = request.requestBody;
         
         if (params.username === 'letme' && params.password === 'in') {
-            return { "access_token": "567k345jsd1o34sdklsdf34534" };
+            return { "access_token": "567k345jsd1o34sdklsdf34534", userid: 189823748 };
         }
     }); //end post => /token
 	
@@ -84,6 +84,46 @@ export default function() {
 		  type: 'reciprocating saw',
 		  status: 'available'
         }
+      }, {
+        type: 'tool',
+        id: '3',
+        attributes: {
+          brand: 'Milwaukee',
+          ownerfirstname: 'Charlie',
+          ownerlastname: 'Delta',
+		  type: 'reciprocating saw',
+		  status: 'available'
+        }
+      }, {
+        type: 'tool',
+        id: '234',
+        attributes: {
+          brand: 'Milwaukee',
+          ownerfirstname: 'Charlie',
+          ownerlastname: 'Delta',
+		  type: 'reciprocating saw',
+		  status: 'available'
+        }
+      }, {
+        type: 'tool',
+        id: '10',
+        attributes: {
+          brand: 'Milwaukee',
+          ownerfirstname: 'Charlie',
+          ownerlastname: 'Delta',
+		  type: 'reciprocating saw',
+		  status: 'available'
+        }
+      }, {
+        type: 'tool',
+        id: '5',
+        attributes: {
+          brand: 'Milwaukee',
+          ownerfirstname: 'Charlie',
+          ownerlastname: 'Delta',
+		  type: 'reciprocating saw',
+		  status: 'available'
+        }
       }]
     };
   });
@@ -127,8 +167,15 @@ export default function() {
     return ["hammer drill", "reciprocating saw", "impact driver"];
   });
     
+  this.get('/providers', function() {
+    return ["jobsite supply", "home depot", "ace hardware", "lowes"];
+  });  
     
-    this.put('/transfer', (schema, request) => {
-        console.log( request.requestBody );
-    }); //end post => /token    
+  this.get('/brands', function() {
+    return ["milwuake", "black & decker", "dewalt", "bosch"];
+  });      
+    
+  this.put('/transfer', (schema, request) => {
+    console.log( request.requestBody );
+  }); //end post => /token    
 }//end config

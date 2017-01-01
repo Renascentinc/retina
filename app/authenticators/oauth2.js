@@ -2,7 +2,7 @@ import Ember from 'ember';
 import OAuth2PasswordGrant from 'ember-simple-auth/authenticators/oauth2-password-grant';
 
 export default OAuth2PasswordGrant.extend({
-
+  session: Ember.inject.service('session'),
   makeRequest(url, data) { 
     const options = {
         processData: false,
@@ -16,7 +16,13 @@ export default OAuth2PasswordGrant.extend({
         }
     };
 
-    return Ember.$.ajax(options);
+    var $ajaxCall = Ember.$.ajax(options);
+    var _this = this;
+      
+    $ajaxCall.then(function(response) {
+        _this.get('session').set('data.currentUserID', response.userid);
+    });
+      
+    return $ajaxCall;
   }
-     
 });

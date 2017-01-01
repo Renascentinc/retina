@@ -1,37 +1,40 @@
 <form>
     <div>
-        <select id="brand">
+        <select id="brand" class="dark-dropdown">
             <option value=""> Brand </option>
             {{#each model.brands as |brand|}}
               <option value={{brand}}> {{brand}} </option>
             {{/each}}
         </select>    
     </div>
-    
-    <label for="price"> $ </label>
-    {{input id="price" type="text" placeholder="price" valueBinding="model.tool.price"}}
-    
-    <div>
-        <select id="type">
-            <option value=""> Type </option>
-            {{#each model.types as |type|}}
-              <option value={{type}}> {{type}} </option>
-            {{/each}}
-        </select>
-    </div>
-    
-    {{input type="text" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
-    
-    <div>
-        <select id="purchasedfrom">
+	
+	<div>
+        <select id="purchasedfrom" class="dark-dropdown">
             <option value=""> Purchased From </option>
             {{#each model.providers as |provider|}}
               <option value={{provider}}> {{provider}} </option>
             {{/each}}
         </select>
     </div>
+	
+	<div>
+        <select id="type" class="dark-dropdown">
+            <option value=""> Type </option>
+            {{#each model.types as |type|}}
+              <option value={{type}}> {{type}} </option>
+            {{/each}}
+        </select>
+    </div>
+
+    {{input placeholder="$ price" class="text-field"  id="price" type="text"  valueBinding="model.tool.price"}}
     
-    {{input type="text" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}    
     
-    <button {{action "saveNewTool" model.tool}} class="go"> add </button>
+    
+    {{input type="text" class="text-field" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
+    
+    
+    
+    {{input type="text" class="text-field" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}<br>
+    
+    <button style="margin-top: 20px;"{{action "saveNewTool" model.tool}} class="go"> add </button>
 </form>

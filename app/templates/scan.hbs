@@ -12,6 +12,7 @@
 	</select>
 </div>
 
+<div id="tool-display-box">
 {{#each model.tools as |tool|}}
 	<div class="specs-box">
 		<div class="facts">
@@ -23,10 +24,38 @@
 		</div>
 		
 		<div class="options">
+			<button>more 
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
+			</button><br>
 			
-			
+			<button {{action 'addToList'}}>add to list
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			</button>
 		</div>
 	</div>
 {{/each}}
+</div>
+
+<div id="menu">
+	<div id="cart">
+		<div id="list-title">
+			Transfer List
+		</div>
+
+		<div id="list">
+			1234 <br>
+			4321 <br>
+			2341 <br>
+		</div>
+	</div>
+	<div id="cart-actions">
+		<select class="dark-dropdown">
+			<option>Transfer to:</option>
+		</select>
+		
+		<button class="go" id="transfer-button">transfer</button>
+	</div>
+</div>
+
 
 {{outlet}}

@@ -105,6 +105,7 @@ a:hover{
     position: absolute;
     top: 108px;
 	bottom: 0px;
+	overflow: hidden;
 }
 
 #login-page{
@@ -192,14 +193,14 @@ a:hover{
 }
 
 .dark-dropdown{
-	height: 57px;
-	width: 170px;
+	height: 47px;
+	width: 80%;
 	background-color: #333333;
 	color: white;
+	font-weight: 200;
 	text-indent: 6px;
 	font-size: 18px;
-	margin: 10px;
-	width: 45%;
+	margin: 0px;
 }
 
 #icon-container{
@@ -241,10 +242,70 @@ a:hover{
 }
 
 .specs-box{
-	height: 90px;
+	height: 80px;
+	width: 100vw;
 	border-bottom-style: solid;
 	border-bottom-color: #797979;
 	border-bottom-width: 1px;
 	padding: 5px;
 	margin: 5px;
+}
+
+.facts{
+	width: 65%;
+	display: inline-block;
+	top: 0px;
+	height: auto;
+	color: #363636;
+}
+
+.options{
+	text-align: right;
+	display: inline-block;
+	width: 33%;
+	color: #797979;
+}
+
+#tool-display-box{
+	overflow-y: scroll;
+	height: 60%;
+	border-bottom-style: solid;
+	border-bottom-width: 4px;
+	border-bottom-color: rgba(76, 90, 96, .49);
+}
+
+#cart{
+	display: inline-block;
+	width: 30%;
+	height: 100%;
+	text-align: center;
+}
+
+#list-title{
+	margin: 5px;
+	color: #363636;
+	font-weight: 500;
+}
+
+#list{
+	margin: 5px;
+	color: #797979;
+	font-size: 18px;
+}
+
+#cart-actions{
+	text-align: center;
+	width: 65%;
+	display: inline-block;
+}
+
+#menu{
+	width: 100vw;
+}
+
+#transfer-button{
+	width: 80%;
+	font-size: 20px;
+	height: 47px;
+	margin-top: 5px;
 }

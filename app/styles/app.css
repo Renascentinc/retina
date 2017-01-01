@@ -278,8 +278,11 @@ a:hover{
 #cart{
 	display: inline-block;
 	width: 30%;
-	height: 100%;
 	text-align: center;
+}
+
+.search{
+	width: 32%;
 }
 
 #list-title{
@@ -325,4 +328,9 @@ a:hover{
 #tool-details{
 	color: rgba(0, 0, 0, .57);
 	font-size: 18px;
+}
+
+#tool-display-box-full{
+	overflow-y: scroll;
+	height: 100%;
 }

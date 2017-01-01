@@ -5,7 +5,12 @@ export default Ember.Controller.extend({
         goToInfoPage() {
             let toolid = Ember.$("#toolid").val();
             this.get('target').transitionTo('info', toolid);
-        }
+        },
+		
+		goToTransferPage() {
+			let toolid = Ember.$("#toolid").val();
+			this.get('target').transitionTo('transfer', toolid);
+		}
     }
 
 });

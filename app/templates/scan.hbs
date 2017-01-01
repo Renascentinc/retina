@@ -1,25 +1,32 @@
-
-<div id="icon-container">
-	<span  class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+<div class="search-bar">
+	<select class="search-parameter">
+		<option>Status</option>
+	</select>
+	
+	<select class="search-parameter">
+		<option>Owner</option>
+	</select>
+	
+	<select class="search-parameter">
+		<option>Type</option>
+	</select>
 </div>
 
-<label class="description">
-	Hold phone to NFC tag on tool <br>
-	Or, enter Tool ID manually below
-</label>
-
-{{input class="text-field" id='toolid' placeholder='Tool ID' type='num'}}
-
-<div id="scan-group" class="button-group">
-	
-	
-	<button {{action "goToInfoPage"}} id="info-btn" class="sub-element go"> info </button>
-	
-	<div id="spacer" style="background-color: white; height: 100%; width: 4px; display: inline-block;"></div>
-	<div id="transfer-btn" class="sub-element go">transfer</div>
-</div>
-
-
-
+{{#each model.tools as |tool|}}
+	<div class="specs-box">
+		<div class="facts">
+			{{tool.brand}} 
+			{{tool.type}}<br>
+			{{tool.id}}<br>
+			{{tool.ownerfirstname}} 
+			{{tool.ownerlastname}}
+		</div>
+		
+		<div class="options">
+			
+			
+		</div>
+	</div>
+{{/each}}
 
 {{outlet}}

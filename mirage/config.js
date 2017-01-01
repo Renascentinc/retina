@@ -86,37 +86,16 @@ export default function() {
   });
 	
 	this.get('/status', function() {
-    return {
-      data: [{
-        type: 'status',
-        id: '1',
-        attributes: {
-          status: 'in-use',
-        }
-      }, {
-        type: 'status',
-        id: '2',
-        attributes: {
-          status: 'available',
-        }
-	  },
-	  {
-        type: 'status',
-        id: '3',
-        attributes: {
-          status: 'out of service',
-        }
-      }]
-    };
-  });
+    return ['in-use', 'available', 'out of service'];
+  	});
 	
-		this.get('/owner', function() {
+	this.get('/owners', function() {
     return {
       data: [{
         type: 'owner',
         id: '1',
         attributes: {
-          id: '12345',
+          ownerid: '12345',
 		  firstname: 'george',
 		  lastname: 'boole'
         }
@@ -141,29 +120,12 @@ export default function() {
     };
   });
 	
-		this.get('/type', function() {
-    return {
-      data: [{
-        type: 'type',
-        id: '1',
-        attributes: {
-          status: 'reciprocating saw',
-        }
-      }, {
-        type: 'type',
-        id: '2',
-        attributes: {
-          status: 'hammer drill',
-        }
-	  },
-	  {
-        type: 'type',
-        id: '3',
-        attributes: {
-          status: 'impact driver',
-        }
-      }]
-    };
+  this.get('/type', function() {
+    return ["hammer drill", "reciprocating saw", "impact driver"];
   });
     
+    
+    this.put('/transfer', (schema, request) => {
+        console.log( request.requestBody );
+    }); //end post => /token    
 }//end config

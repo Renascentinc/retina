@@ -236,9 +236,9 @@ a:hover{
 .search-parameter{
 	display: inline-block;
 	height: 100%;
-	width: 32%;
+	width: 49%;
 	color: rgba(0, 0, 0, .87);
-	font-size: 16px;	
+	font-size: 16px;
 }
 
 .specs-box{

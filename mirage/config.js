@@ -89,7 +89,7 @@ export default function() {
     return ['in-use', 'available', 'out of service'];
   	});
 	
-		this.get('/owner', function() {
+	this.get('/owner', function() {
     return {
       data: [{
         type: 'owner',
@@ -120,29 +120,8 @@ export default function() {
     };
   });
 	
-		this.get('/type', function() {
-    return {
-      data: [{
-        type: 'type',
-        id: '1',
-        attributes: {
-          status: 'reciprocating saw',
-        }
-      }, {
-        type: 'type',
-        id: '2',
-        attributes: {
-          status: 'hammer drill',
-        }
-	  },
-	  {
-        type: 'type',
-        id: '3',
-        attributes: {
-          status: 'impact driver',
-        }
-      }]
-    };
+  this.get('/type', function() {
+    return ["hammer drill", "reciprocating saw", "impact driver"];
   });
     
     

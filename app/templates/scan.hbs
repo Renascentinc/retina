@@ -9,16 +9,12 @@
 	</select>
 	
 	<select class="search-parameter">
-		<option value="">Owner</option>
-		{{#each model.owners as |owner|}}
-			<option value={{owner.id}}>
-				{{owner.firstname}} {{owner.lastname}}
+		<option>Type</option>
+		{{#each model.types as |type|}}
+			<option value={{type}}>
+				{{type}}
 			</option>
 		{{/each}}
-	</select>
-	
-	<select class="search-parameter">
-		<option>Type</option>
 	</select>
 </div>
 
@@ -58,7 +54,12 @@
 	</div>
 	<div id="cart-actions">
 		<select id="user-to-transfer-to" class="dark-dropdown">
-			<option value="123">Transfer to</option>
+			<option value="">Transfer to</option>
+			{{#each model.owners as |owner|}}
+				<option value={{owner.id}}>
+					{{owner.firstname}}
+				</option>
+			{{/each}}
 		</select>
 		
 		<button {{action "transferTools"}} class="go" id="transfer-button">transfer</button>

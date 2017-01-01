@@ -86,29 +86,8 @@ export default function() {
   });
 	
 	this.get('/status', function() {
-    return {
-      data: [{
-        type: 'status',
-        id: '1',
-        attributes: {
-          status: 'in-use',
-        }
-      }, {
-        type: 'status',
-        id: '2',
-        attributes: {
-          status: 'available',
-        }
-	  },
-	  {
-        type: 'status',
-        id: '3',
-        attributes: {
-          status: 'out of service',
-        }
-      }]
-    };
-  });
+    return ['in-use', 'available', 'out of service'];
+  	});
 	
 		this.get('/owner', function() {
     return {

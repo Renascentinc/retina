@@ -291,6 +291,7 @@ a:hover{
 	margin: 5px;
 	color: #797979;
 	font-size: 18px;
+	overflow: scroll;
 }
 
 #cart-actions{

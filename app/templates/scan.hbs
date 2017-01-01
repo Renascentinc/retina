@@ -1,10 +1,20 @@
 <div class="search-bar">
 	<select class="search-parameter">
-		<option>Status</option>
+		<option value=""> Status </option>
+		{{#each model.status as |status|}}
+			<option value=status>
+				{{status}}
+			</option>
+		{{/each}}
 	</select>
 	
 	<select class="search-parameter">
-		<option>Owner</option>
+		<option value="">Owner</option>
+		{{#each model.owners as |owner|}}
+			<option value={{owner.id}}>
+				{{owner.firstname}} {{owner.lastname}}
+			</option>
+		{{/each}}
 	</select>
 	
 	<select class="search-parameter">

@@ -1,15 +1,37 @@
-<div id="styleSelect">
-<select class="dropdown" id="brand">
-	<option>Brand</option>
-</select>
-</div>
-
-<select id="type">
-	<option>Type</option>
-</select>
-
-<select id="purchasedFrom">
-	<option>Purchased From</option>
-</select>
-
-{{outlet}}
+<form>
+    <div>
+        <select id="brand">
+            <option value=""> Brand </option>
+            {{#each model.brands as |brand|}}
+              <option value={{brand}}> {{brand}} </option>
+            {{/each}}
+        </select>    
+    </div>
+    
+    <label for="price"> $ </label>
+    {{input id="price" type="text" placeholder="price" valueBinding="model.price"}}
+    
+    <div>
+        <select id="type">
+            <option value=""> Type </option>
+            {{#each model.types as |type|}}
+              <option value={{type}}> {{type}} </option>
+            {{/each}}
+        </select>
+    </div>
+    
+    {{input type="text" placeholder="Purchase Date" valueBinding="model.purchasedate"}}
+    
+    <div>
+        <select id="purchasedfrom">
+            <option value=""> Purchased From </option>
+            {{#each model.providers as |provider|}}
+              <option value={{provider}}> {{provider}} </option>
+            {{/each}}
+        </select>
+    </div>
+    
+    {{input type="text" placeholder="Model Number" valueBinding="model.modelnumber"}}    
+    
+    <button {{action "saveNewTool" model.tool}} class="go"> add </button>
+</form>

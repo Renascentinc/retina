@@ -9,7 +9,7 @@
     </div>
     
     <label for="price"> $ </label>
-    {{input id="price" type="text" placeholder="price" valueBinding="model.price"}}
+    {{input id="price" type="text" placeholder="price" valueBinding="model.tool.price"}}
     
     <div>
         <select id="type">
@@ -20,7 +20,7 @@
         </select>
     </div>
     
-    {{input type="text" placeholder="Purchase Date" valueBinding="model.purchasedate"}}
+    {{input type="text" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
     
     <div>
         <select id="purchasedfrom">
@@ -31,7 +31,7 @@
         </select>
     </div>
     
-    {{input type="text" placeholder="Model Number" valueBinding="model.modelnumber"}}    
+    {{input type="text" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}    
     
     <button {{action "saveNewTool" model.tool}} class="go"> add </button>
 </form>

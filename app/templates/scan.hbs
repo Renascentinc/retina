@@ -1,14 +1,20 @@
 <div class="search-bar">
 	<select class="search-parameter">
-		<option>Status</option>
-	</select>
-	
-	<select class="search-parameter">
-		<option>Owner</option>
+		<option value=""> Status </option>
+		{{#each model.status as |status|}}
+			<option value={{status}}>
+				{{status}}
+			</option>
+		{{/each}}
 	</select>
 	
 	<select class="search-parameter">
 		<option>Type</option>
+		{{#each model.types as |type|}}
+			<option value={{type}}>
+				{{type}}
+			</option>
+		{{/each}}
 	</select>
 </div>
 
@@ -24,11 +30,12 @@
 		</div>
 		
 		<div class="options">
-			<button>more 
+			{{#link-to 'info' tool.id}}more 
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
-			</button><br>
+			{{/link-to}}<br>
+            
 			
-			<button {{action 'addToList'}}>add to list
+			<button {{action 'addToList' tool.id}}>add to list
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 			</button>
 		</div>
@@ -43,17 +50,19 @@
 		</div>
 
 		<div id="list">
-			1234 <br>
-			4321 <br>
-			2341 <br>
 		</div>
 	</div>
 	<div id="cart-actions">
-		<select class="dark-dropdown">
-			<option>Transfer to:</option>
+		<select id="user-to-transfer-to" class="dark-dropdown">
+			<option value="">Transfer to</option>
+			{{#each model.owners as |owner|}}
+				<option value={{owner.id}}>
+					{{owner.firstname}}
+				</option>
+			{{/each}}
 		</select>
 		
-		<button class="go" id="transfer-button">transfer</button>
+		<button {{action "transferTools"}} class="go" id="transfer-button">transfer</button>
 	</div>
 </div>
 

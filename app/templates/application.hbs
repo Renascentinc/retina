@@ -17,19 +17,9 @@
 			{{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-main glyphicon-wrench" aria-hidden="true"></span>{{/link-to}} 
 		</div>
         
-
-        {{#if session.isAuthenticated}}
-			<div class="nav-container">
-				<a {{action 'invalidateSession'}} class="icon-btn"><span  class="glyphicon glyphicon-main glyphicon-log-out" aria-hidden="true"></span></a>
-			</div>
-        {{else}}
-			<div class="nav-container">
-				{{#link-to "login" class="icon-btn" id="logout-icon"}}
-					<span  class="glyphicon glyphicon-main glyphicon-log-in" aria-hidden="true"></span>
-				{{/link-to}} 
-			</div>
-        {{/if}}        
-        
+        <div class="nav-container">
+            <a {{action 'invalidateSession'}} class="icon-btn"><span  class="glyphicon glyphicon-main glyphicon-log-out" aria-hidden="true"></span></a>
+        </div>    
     </div>
 		
 </header>

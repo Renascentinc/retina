@@ -166,4 +166,8 @@ export default function() {
     };
   });
     
+    
+    this.put('/transfer', (schema, request) => {
+        console.log( request.requestBody );
+    }); //end post => /token    
 }//end config

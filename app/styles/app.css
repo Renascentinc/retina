@@ -106,6 +106,7 @@ a:hover{
     top: 108px;
 	bottom: 0px;
 	overflow: hidden;
+	width: 100vw;
 }
 
 #login-page{
@@ -277,9 +278,12 @@ a:hover{
 #cart{
 	display: inline-block;
 	width: 30%;
-	height: 150px;
 	text-align: center;
     overflow-y: scroll;
+}
+
+.search{
+	width: 32%;
 }
 
 #list-title{
@@ -315,6 +319,27 @@ a:hover{
 	margin-top: 5px;
 }
 
+
+#specs{
+	margin: 10px;
+	display: inline-block;
+}
+
+#tool-title{
+	color: rgba(0, 0, 0, .87);
+	font-size: 28px;
+}
+
+#tool-details{
+	color: rgba(0, 0, 0, .57);
+	font-size: 18px;
+}
+
+#tool-display-box-full{
+	overflow-y: scroll;
+	height: 100%;
+}
+
 form{
 	margin-left: auto;
 	margin-right: auto;
@@ -322,4 +347,5 @@ form{
 	margin-top: 20px;
 	text-align: center;
 }
+
 

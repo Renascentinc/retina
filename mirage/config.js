@@ -31,10 +31,13 @@ export default function() {
 			type: "tool",
 			id: request.params.id,
 			attributes: {
+				brand: 'Bosch',
 				ownerfirstname: "Shaboygen",
 				ownerlastname: "Cactapuss",
 				datelastcheckout: "Stardate 0.12.4.12",
-				purchasedate: "Stardate 020.2.3.23"
+				purchasedate: "Stardate 020.2.3.23",
+			  	type: 'hammer drill',
+		  		status: 'in use'
 			}
 		  }
 		};

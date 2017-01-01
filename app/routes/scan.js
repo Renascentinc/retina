@@ -6,7 +6,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 		return Ember.RSVP.hash({
 			tools: this.get('store').findAll('tool'),
 			status: Ember.$.getJSON('/status'),
-			owners: Ember.$.getJSON('/owner'),
+			owners: this.get('store').findAll('owner'),
 			types: Ember.$.getJSON('/type')
 		});
 	}

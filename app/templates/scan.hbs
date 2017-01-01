@@ -2,7 +2,7 @@
 	<select class="search-parameter">
 		<option value=""> Status </option>
 		{{#each model.status as |status|}}
-			<option value=status>
+			<option value={{status}}>
 				{{status}}
 			</option>
 		{{/each}}

@@ -89,13 +89,13 @@ export default function() {
     return ['in-use', 'available', 'out of service'];
   	});
 	
-	this.get('/owner', function() {
+	this.get('/owners', function() {
     return {
       data: [{
         type: 'owner',
         id: '1',
         attributes: {
-          id: '12345',
+          ownerid: '12345',
 		  firstname: 'george',
 		  lastname: 'boole'
         }

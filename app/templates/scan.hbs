@@ -1,5 +1,5 @@
 <div class="search-bar">
-	<select class="search-parameter">
+	<select class="search-parameter" id="status">
 		<option value=""> Status </option>
 		{{#each model.status as |status|}}
 			<option value={{status}}>
@@ -8,11 +8,20 @@
 		{{/each}}
 	</select>
 	
-	<select class="search-parameter">
+	<select class="search-parameter" id="type">
 		<option>Type</option>
 		{{#each model.types as |type|}}
 			<option value={{type}}>
 				{{type}}
+			</option>
+		{{/each}}
+	</select>
+	
+	<select class="search-parameter" id="brand">
+		<option>Brand</option>
+		{{#each model.brands as |brand|}}
+			<option value={{brand}}>
+				{{brand}}
 			</option>
 		{{/each}}
 	</select>

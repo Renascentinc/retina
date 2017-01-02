@@ -4,10 +4,10 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
 	model() {
 		return Ember.RSVP.hash({
-			tools: this.get('store').findAll('tool'),
-			status: Ember.$.getJSON('/status'),
-			owners: this.get('store').findAll('owner'),
-			types: Ember.$.getJSON('/type')
+			tools: this.get('store').findRecord('tool', 222222),
+			status: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/status'),
+			owners: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/owners'),
+			types: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/types')
 		});
 	}
 });

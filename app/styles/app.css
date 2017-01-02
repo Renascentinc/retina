@@ -201,7 +201,7 @@ a:hover{
 	font-weight: 200;
 	text-indent: 6px;
 	font-size: 18px;
-	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 #icon-container{
@@ -283,7 +283,7 @@ a:hover{
 }
 
 .search{
-	width: 32%;
+	width: 24%;
 }
 
 #list-title{

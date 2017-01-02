@@ -25,6 +25,16 @@
 			</option>
 		{{/each}}
 	</select>
+	
+		<select class="search-parameter search">
+		<option>Brand</option>
+		{{#each model.brands as |brand|}}
+			<option value={{brand}}>
+				{{brand}}
+			</option>
+		{{/each}}
+	</select>
+	
 </div>
 
 <div id="tool-display-box-full">
@@ -42,11 +52,6 @@
 			{{#link-to 'info' tool.id}}more 
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
 			{{/link-to}}<br>
-            
-			
-			<button {{action 'addToList' tool.id}}>add to list
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			</button>
 		</div>
 	</div>
 {{/each}}

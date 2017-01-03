@@ -70,7 +70,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
               }],
 			status: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/status'),
 			owners: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/owners'),
-			types: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/types')
+			types: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/types'),
+            brands: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/brands')
 		});
 	}
 });

@@ -6,7 +6,11 @@ export default DS.Model.extend({
 	username: DS.attr(),
 	datelastcheckout: DS.attr(),
 	purchasedate: DS.attr(),
+    purchasedfrom: DS.attr(),
     price: DS.attr(),
     modelnumber: DS.attr(),
-    serialnumber: DS.attr()
+    serialnumber: DS.attr(),
+    status: DS.attr(),
+    toolclass: DS.attr(),
+    userid: DS.attr()
 });

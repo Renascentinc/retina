@@ -19,7 +19,7 @@
 	
 	<select class="search-parameter search" id="owner">
 		<option>Owner</option>
-		{{#each model.owners.owners as |owner|}}
+		{{#each model.users.users as |owner|}}
 			<option value={{owner.userid}}>
 				{{owner.username}}
 			</option>

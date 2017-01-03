@@ -63,7 +63,7 @@
 	<div id="cart-actions">
 		<select id="user-to-transfer-to" class="dark-dropdown">
 			<option value="">Transfer to</option>
-			{{#each model.owners.owners as |owner|}}
+			{{#each model.users.users as |owner|}}
 				<option value={{owner.userid}}>
 					{{owner.username}}
 				</option>

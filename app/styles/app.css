@@ -105,7 +105,7 @@ a:hover{
     position: absolute;
     top: 108px;
 	bottom: 0px;
-	overflow: hidden;
+	overflow: scroll;
 	width: 100vw;
 }
 
@@ -155,7 +155,7 @@ a:hover{
 	height: 62px;
 	width: 189px;
 	font-size: 32px;
-	font-weight: 300;
+	font-weight: 400;
 	box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
 }
 
@@ -201,7 +201,6 @@ a:hover{
 	font-weight: 400;
 	text-indent: 6px;
 	font-size: 21px;
-	margin-top: 10px;
 	border: none;
 	box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
 }
@@ -277,37 +276,31 @@ a:hover{
 }
 
 .options{
-	text-align: right;
 	float: right;
+	text-align: center;
 	color: #797979;
-	width: 20px;
+	width: 40px;
 	margin: 0px;
 	height: 100%;
 }
 
 #tool-display-box{
 	overflow-y: scroll;
-	height: 60%;
+	height: calc(100% - 184px);
 	border-bottom-style: solid;
 	border-bottom-width: 4px;
 	border-bottom-color: rgba(76, 90, 96, .49);
 }
 
-.glyphicon-chevron-right{
-	font-size: 20px;
+.search-icon{
+	font-size: 25px;
 	line-height: 69px;
+	color: #363636;
 }
 
 .tool-specs{
-	width: calc(100% - 25px);
+	width: calc(100% - 40px);
 	display: inline-block;
-}
-
-#cart{
-	display: inline-block;
-	width: 30%;
-	text-align: center;
-    overflow-y: scroll;
 }
 
 .search{
@@ -317,7 +310,10 @@ a:hover{
 #list-title{
 	margin: 5px;
 	color: #363636;
+	font-size: 18px;
 	font-weight: 500;
+	margin-top: 2px;
+	
 }
 
 #list{
@@ -325,26 +321,40 @@ a:hover{
 	color: #797979;
 	font-size: 18px;
 	overflow: scroll;
+	height: calc(100% - 33px);
+	margin: 0px;
+}
+
+#cart{
+	float: left;
+	width: 40%;
+	text-align: center;
+	height: 100%;
 }
 
 #cart-actions{
 	text-align: center;
-	width: 65%;
-	display: inline-block;
-    position: absolute;
-    bottom: 75px;
-    right: 10px;
+	width: 60%;
+	float: right;
+	height: 100%;
 }
 
 #menu{
 	width: 100vw;
+	height: 124px;
 }
 
 #transfer-button{
 	width: 80%;
-	font-size: 20px;
+	font-size: 21px;
 	height: 47px;
-	margin-top: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: table-footer-group;;
+}
+
+#user-to-transfer-to{
+	margin-top: 10px;
 }
 
 

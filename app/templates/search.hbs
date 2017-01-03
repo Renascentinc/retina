@@ -1,6 +1,7 @@
 <div class="search-bar">
 	<select class="search-parameter search">
-		<option value=""> Status </option>
+		<option disabled selected hidden> Status </option>
+		<option value=""> any status</option>
 		{{#each model.status as |status|}}
 			<option value={{status}}>
 				{{status}}
@@ -8,8 +9,10 @@
 		{{/each}}
 	</select>
 	
+	
 	<select class="search-parameter search">
-		<option>Type</option>
+		<option disabled selected hidden>Type</option>
+		<option value=""> any type</option>
 		{{#each model.types as |type|}}
 			<option value={{type}}>
 				{{type}}
@@ -18,7 +21,8 @@
 	</select>
 	
 	<select class="search-parameter search">
-		<option>Owner</option>
+		<option disabled selected hidden>Owner</option>
+		<option value=""> any owner</option>
 		{{#each model.owners as |owner|}}
 			<option value={{owner.id}}>
 				{{owner.firstname}} {{owner.lastname}}
@@ -29,25 +33,26 @@
 
 <div id="tool-display-box-full">
 {{#each model.tools as |tool|}}
-	<div class="specs-box">
+	<div class="specs-box"> {{#link-to 'info' tool.id}}
+		<div class="tool-specs">
+		<div class="title"> 
+				{{tool.brand}} 
+				{{tool.type}}<br>
+			</div>
 		<div class="facts">
-			{{tool.brand}} 
-			{{tool.type}}<br>
+			
 			{{tool.id}}<br>
 			{{tool.ownerfirstname}} 
 			{{tool.ownerlastname}}
 		</div>
-		
-		<div class="options">
-			{{#link-to 'info' tool.id}}more 
-				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
-			{{/link-to}}<br>
-            
-			
-			<button {{action 'addToList' tool.id}}>add to list
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			</button>
 		</div>
-	</div>
+		
+		<div class="options"> 
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
+			<br>
+		</div>
+		
+		
+	{{/link-to}} </div>
 {{/each}}
 </div>

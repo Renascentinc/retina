@@ -140,8 +140,8 @@ a:hover{
 	margin-left: 10%;
 	margin-right: 10%;
 	text-indent: 5px;
-	font-size: 19px;
-	font-weight: 300;
+	font-size: 21px;
+	font-weight: 400;
 	border-width: 1px;
 	margin-top: 10px;
 }
@@ -198,10 +198,12 @@ a:hover{
 	width: 80%;
 	background-color: #333333;
 	color: white;
-	font-weight: 200;
+	font-weight: 400;
 	text-indent: 6px;
-	font-size: 18px;
+	font-size: 21px;
 	margin-top: 10px;
+	border: none;
+	box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
 }
 
 #icon-container{
@@ -224,7 +226,7 @@ a:hover{
 	position: relative;
 	top: 0px;
 	width: 100vw;
-	height: 48px;
+	height: 60px;
 	background-color: rgba(76, 90, 96, 0.14);
 	box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.49);
 	border-bottom-style: solid;
@@ -238,8 +240,12 @@ a:hover{
 	display: inline-block;
 	height: 100%;
 	width: 49%;
-	color: rgba(0, 0, 0, .87);
+	color: #797979;
 	font-size: 16px;
+	font-weight: 500;
+	background-color: rgba(0, 0, 0, 0);
+	border-style: none;
+	
 }
 
 .specs-box{
@@ -249,22 +255,34 @@ a:hover{
 	border-bottom-color: #797979;
 	border-bottom-width: 1px;
 	padding: 5px;
-	margin: 5px;
 }
 
 .facts{
-	width: 65%;
+	width: calc(100% - 60px);
 	display: inline-block;
 	top: 0px;
-	height: auto;
+	height: calc(100% - 30px);
+	color: #797979;
+	font-weight: 600;
+	overflow: hidden;
+}
+
+.title{
 	color: #363636;
+	font-size: 20px;
+	height: 30px;
+	overflow: hidden;
+	font-weight: 500;
+	width: 80%;
 }
 
 .options{
 	text-align: right;
-	display: inline-block;
-	width: 33%;
+	float: right;
 	color: #797979;
+	width: 20px;
+	margin: 0px;
+	height: 100%;
 }
 
 #tool-display-box{
@@ -273,6 +291,16 @@ a:hover{
 	border-bottom-style: solid;
 	border-bottom-width: 4px;
 	border-bottom-color: rgba(76, 90, 96, .49);
+}
+
+.glyphicon-chevron-right{
+	font-size: 20px;
+	line-height: 69px;
+}
+
+.tool-specs{
+	width: calc(100% - 25px);
+	display: inline-block;
 }
 
 #cart{
@@ -331,13 +359,14 @@ a:hover{
 }
 
 #tool-details{
-	color: rgba(0, 0, 0, .57);
+	color: rgba(0, 0, 0, .57);  
 	font-size: 18px;
 }
 
 #tool-display-box-full{
-	overflow-y: scroll;
-	height: 100%;
+	overflow: scroll;
+	height: calc(100vh - 168px);
+	width: 100vw;
 }
 
 form{

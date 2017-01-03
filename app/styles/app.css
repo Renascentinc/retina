@@ -201,7 +201,7 @@ a:hover{
 	font-weight: 200;
 	text-indent: 6px;
 	font-size: 18px;
-	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 #icon-container{
@@ -237,7 +237,7 @@ a:hover{
 .search-parameter{
 	display: inline-block;
 	height: 100%;
-	width: 49%;
+	width: 32%;
 	color: rgba(0, 0, 0, .87);
 	font-size: 16px;
 }
@@ -283,7 +283,7 @@ a:hover{
 }
 
 .search{
-	width: 32%;
+	width: 24%;
 }
 
 #list-title{

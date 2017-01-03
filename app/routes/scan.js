@@ -7,7 +7,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 			tools: this.get('store').findAll('tool'),
 			status: Ember.$.getJSON('/status'),
 			owners: this.get('store').findAll('owner'),
-			types: Ember.$.getJSON('/type')
+			types: Ember.$.getJSON('/type'),
+			brands: Ember.$.getJSON('/brands')
 		});
 	}
 });

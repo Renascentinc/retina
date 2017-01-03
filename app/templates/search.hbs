@@ -31,7 +31,10 @@
 	</select>
 </div>
 
-<div id="tool-display-box-full">
+<div id="tool-display-box-full" id="this">
+	<div class="search-block" id="that">
+		<input class="search-box" placeholder="Search ToolID or Serial Number">
+	</div>
 {{#each model.tools as |tool|}}
 	<div class="specs-box"> {{#link-to 'info' tool.id}}
 		<div class="tool-specs">
@@ -56,3 +59,4 @@
 	{{/link-to}} </div>
 {{/each}}
 </div>
+

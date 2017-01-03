@@ -6,8 +6,6 @@ export default OAuth2PasswordGrant.extend({
   session: Ember.inject.service('session'),
     
   makeRequest(url, data) { 
-    console.log( url );
-    console.log( data );
     const options = {
         url: url,
         data: data,
@@ -15,13 +13,13 @@ export default OAuth2PasswordGrant.extend({
         crossDomain: true
     };
 
-//    var $ajaxCall = Ember.$.ajax(options);
-//    var _this = this;
-//      
-//    $ajaxCall.then(function(response) {
-//        _this.get('session').set('data.currentUserID', response.userid);
-//    });
+    var $ajaxCall = Ember.$.ajax(options);
+    var _this = this;
       
-    return Ember.$.ajax( options );
+    $ajaxCall.then(function(response) {
+        _this.get('session').set('data.currentUserID', response.userid);
+    });
+      
+    return $ajaxCall;
   }
 });

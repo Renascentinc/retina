@@ -22,15 +22,14 @@
 {{#each model.tools as |tool|}}
 	<div class="specs-box">
 		<div class="facts">
-			{{tool.brand}} 
-			{{tool.type}}<br>
+			{{tool.attributes.brand}} 
+			{{tool.attributes.type}}<br>
 			{{tool.id}}<br>
-			{{tool.ownerfirstname}} 
-			{{tool.ownerlastname}}
+			{{tool.attributes.username}}
 		</div>
 		
 		<div class="options">
-			{{#link-to 'info' tool.id}}more 
+			{{#link-to 'info' 222222}}more 
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
 			{{/link-to}}<br>
             

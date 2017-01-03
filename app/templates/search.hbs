@@ -1,7 +1,7 @@
 <div class="search-bar">
 	<select class="search-parameter search">
 		<option value=""> Status </option>
-		{{#each model.status as |status|}}
+		{{#each model.status.status as |status|}}
 			<option value={{status}}>
 				{{status}}
 			</option>
@@ -10,7 +10,7 @@
 	
 	<select class="search-parameter search">
 		<option>Type</option>
-		{{#each model.types as |type|}}
+		{{#each model.types.types as |type|}}
 			<option value={{type}}>
 				{{type}}
 			</option>
@@ -19,9 +19,9 @@
 	
 	<select class="search-parameter search">
 		<option>Owner</option>
-		{{#each model.owners as |owner|}}
-			<option value={{owner.id}}>
-				{{owner.firstname}} {{owner.lastname}}
+		{{#each model.owners.owners as |owner|}}
+			<option value={{owner.userid}}>
+				{{owner.username}}
 			</option>
 		{{/each}}
 	</select>
@@ -31,22 +31,16 @@
 {{#each model.tools as |tool|}}
 	<div class="specs-box">
 		<div class="facts">
-			{{tool.brand}} 
-			{{tool.type}}<br>
+			{{tool.attributes.brand}} 
+			{{tool.attributes.type}}<br>
 			{{tool.id}}<br>
-			{{tool.ownerfirstname}} 
-			{{tool.ownerlastname}}
+			{{tool.attributes.username}} 
 		</div>
 		
 		<div class="options">
 			{{#link-to 'info' tool.id}}more 
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
 			{{/link-to}}<br>
-            
-			
-			<button {{action 'addToList' tool.id}}>add to list
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			</button>
 		</div>
 	</div>
 {{/each}}

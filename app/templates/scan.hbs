@@ -1,21 +1,29 @@
 
 
 <div class="search-bar">
-	
-	<select class="search-parameter">
+	<select class="search-parameter" id="status">
 		<option value=""> Status </option>
-		{{#each model.status as |status|}}
+		{{#each model.status.status as |status|}}
 			<option value={{status}}>
 				{{status}}
 			</option>
 		{{/each}}
 	</select>
 	
-	<select class="search-parameter">
+	<select class="search-parameter" id="type">
 		<option>Type</option>
-		{{#each model.types as |type|}}
+		{{#each model.types.types as |type|}}
 			<option value={{type}}>
 				{{type}}
+			</option>
+		{{/each}}
+	</select>
+	
+	<select class="search-parameter" id="brand">
+		<option>Brand</option>
+		{{#each model.brands.brands as |brand|}}
+			<option value={{brand}}>
+				{{brand}}
 			</option>
 		{{/each}}
 	</select>
@@ -65,9 +73,9 @@
 	<div id="cart-actions">
 		<select id="user-to-transfer-to" class="dark-dropdown">
 			<option value="">transfer to:</option>
-			{{#each model.owners as |owner|}}
-				<option value={{owner.id}}>
-					{{owner.firstname}}
+			{{#each model.owners.owners as |owner|}}
+				<option value={{owner.userid}}>
+					{{owner.username}}
 				</option>
 			{{/each}}
 		</select>

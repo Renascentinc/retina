@@ -2,7 +2,7 @@
     <div>
         <select id="brand" class="dark-dropdown add">
             <option value=""> Brand </option>
-            {{#each model.brands as |brand|}}
+            {{#each model.brands.brands as |brand|}}
               <option value={{brand}}> {{brand}} </option>
             {{/each}}
         </select>    
@@ -11,7 +11,7 @@
 	<div>
         <select id="purchasedfrom" class="dark-dropdown add">
             <option value=""> Purchased From </option>
-            {{#each model.providers as |provider|}}
+            {{#each model.providers.stores as |provider|}}
               <option value={{provider}}> {{provider}} </option>
             {{/each}}
         </select>
@@ -20,7 +20,7 @@
 	<div>
         <select id="type" class="dark-dropdown add">
             <option value=""> Type </option>
-            {{#each model.types as |type|}}
+            {{#each model.types.types as |type|}}
               <option value={{type}}> {{type}} </option>
             {{/each}}
         </select>

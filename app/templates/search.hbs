@@ -9,7 +9,6 @@
 		{{/each}}
 	</select>
 	
-	
 	<select class="search-parameter search">
 		<option disabled selected hidden>Type</option>
 		<option value=""> any type</option>
@@ -25,10 +24,20 @@
 		<option value=""> any owner</option>
 		{{#each model.owners as |owner|}}
 			<option value={{owner.id}}>
-				{{owner.firstname}} {{owner.lastname}}
+				{{owner.username}}
 			</option>
 		{{/each}}
 	</select>
+	
+		<select class="search-parameter search" id="brand">
+		<option>Brand</option>
+		{{#each model.brands.brands as |brand|}}
+			<option value={{brand}}>
+				{{brand}}
+			</option>
+		{{/each}}
+	</select>
+	
 </div>
 
 <div id="tool-display-box-full">

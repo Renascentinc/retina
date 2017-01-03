@@ -5,9 +5,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model() {
         return Ember.RSVP.hash({
             tool: this.get('store').createRecord('tool'),
-            brands: Ember.$.getJSON('/brands'),
-            types: Ember.$.getJSON('/type'),
-            providers: Ember.$.getJSON('/providers')
+            brands: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/brands'),
+            types: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/types'),
+            providers: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/store')
         });
     }
 });

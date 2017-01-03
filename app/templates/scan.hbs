@@ -1,3 +1,5 @@
+
+
 <div class="search-bar">
 	<select class="search-parameter" id="status">
 		<option value=""> Status </option>
@@ -28,26 +30,32 @@
 </div>
 
 <div id="tool-display-box">
+	<div class="search-block">
+		<input class="search-box" placeholder="ToolID or Serial Number">
+	</div>
 {{#each model.tools as |tool|}}
-	<div class="specs-box">
-		<div class="facts">
-			{{tool.attributes.brand}} 
-			{{tool.attributes.type}}<br>
-			{{tool.id}}<br>
-			{{tool.attributes.username}}
+	<div class="specs-box"> 
+		<div class="tool-specs" {{action 'addToList' tool.id}}>
+			<div class="title"> 
+					{{tool.brand}} 
+					{{tool.type}}<br>
+			</div>
+			
+			<div class="facts">
+
+				Tool ID: {{tool.id}}<br>
+				Owner: {{tool.ownerfirstname}} 
+				{{tool.ownerlastname}}
+			</div>
 		</div>
 		
 		<div class="options">
-			{{#link-to 'info' 222222}}more 
-				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
+			{{#link-to 'info' tool.id}}
+				<span class="glyphicon glyphicon-info-sign search-icon" aria-hidden="true"></span> 
 			{{/link-to}}<br>
-            
-			
-			<button {{action 'addToList' tool.id}}>add to list
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			</button>
 		</div>
-	</div>
+		</div> 
+	
 {{/each}}
 </div>
 
@@ -56,13 +64,15 @@
 		<div id="list-title">
 			Transfer List
 		</div>
+		
+		<hr style="margin: 0;">
 
 		<div id="list">
 		</div>
 	</div>
 	<div id="cart-actions">
 		<select id="user-to-transfer-to" class="dark-dropdown">
-			<option value="">Transfer to</option>
+			<option value="">transfer to:</option>
 			{{#each model.owners.owners as |owner|}}
 				<option value={{owner.userid}}>
 					{{owner.username}}

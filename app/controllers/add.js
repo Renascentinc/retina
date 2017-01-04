@@ -16,11 +16,14 @@ export default Ember.Controller.extend({
             tool.set('status', status);
             tool.set('userid', assignee);
             
+            let _this = this;
+            
             tool.save().then(function(tool) {
-//                self.transitionTo('info', tool.get('id') );
-                alert( tool.get('id') );
+                let toolid = tool.get('id');
+                _this.get('target').transitionTo('info', toolid);
+                
             }).catch(function(e) {
-                alert( e );
+                console.log( e );
             });
         }
     }

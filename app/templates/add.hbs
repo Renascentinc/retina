@@ -9,13 +9,10 @@
     </div>
 	
 	<div>
-<<<<<<< HEAD
-        <select id="purchasedfrom" class="dark-dropdown add">
-            <option value=""> Purchased From </option>
-=======
+
         <select id="purchasedfrom" class="dark-dropdown" >
             <option selected value=""> Purchased From </option>
->>>>>>> josiahc.add-page-fixes
+
             {{#each model.providers.providers as |provider|}}
               <option value={{provider}}> {{provider}} </option>
             {{/each}}

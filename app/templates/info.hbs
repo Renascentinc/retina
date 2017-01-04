@@ -4,11 +4,23 @@
 	</div>
 	
 	<div id="tool-details">
-		{{model.id}}<br>
-		{{model.ownerfirstname}}
-		{{model.ownerlastname}}<br>
-		{{model.datelastcheckout}}<br>
-		{{model.purchasedate}}
+		Tool ID: {{model.id}}<br>
+		Owner: {{model.username}}<br>
+		Last checked out: {{model.datelastcheckout}}<br>
+		Purchase date: {{model.purchasedate}}<br>
+		Serial number: {{model.serialnumber}}
+	</div>
+	
+	
+	<div id="status-change-box">
+		<select id="brand" class="dark-dropdown ">
+			<option value=""> Status </option>
+			{{#each model.brands.brands as |brand|}}
+			  <option value={{brand}}> {{brand}} </option>
+			{{/each}}
+		</select>
+
+		<button style="margin-top: 20px; font-size: 24px;" class="go"> update status </button>
 	</div>
 </div>
 

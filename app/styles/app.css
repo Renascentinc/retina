@@ -419,4 +419,10 @@ form{
 	font-size: 25px;
 }
 
+#status-change-box{
+	text-align: center;
+	width: 100vw;
+	padding: 40px;
+}
+
 

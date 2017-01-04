@@ -11,7 +11,7 @@
 	<div>
         <select id="purchasedfrom" class="dark-dropdown add">
             <option value=""> Purchased From </option>
-            {{#each model.providers.stores as |provider|}}
+            {{#each model.providers.providers as |provider|}}
               <option value={{provider}}> {{provider}} </option>
             {{/each}}
         </select>

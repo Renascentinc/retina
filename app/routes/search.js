@@ -4,7 +4,8 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
 	model() {
 		return Ember.RSVP.hash({
-			tools: [{
+			tools: { 
+                data: [{
                 type: 'tool',
                 id: '1',
                 attributes: {
@@ -67,9 +68,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                   type: 'reciprocating saw',
                   status: 'available'
                 }
-              }],
+              }]
+            },
 			status: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/status'),
-			owners: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/owners'),
+			users: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/users'),
 			types: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/types'),
             brands: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/brands')
 		});

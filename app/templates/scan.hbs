@@ -33,19 +33,18 @@
 	<div class="search-block">
 		<input class="search-box" placeholder="ToolID or Serial Number">
 	</div>
-{{#each model.tools as |tool|}}
+{{#each model.tools.data as |tool|}}
 	<div class="specs-box"> 
 		<div class="tool-specs" {{action 'addToList' tool.id}}>
 			<div class="title"> 
-					{{tool.brand}} 
-					{{tool.type}}<br>
+					{{tool.attributes.brand}} 
+					{{tool.attributes.type}}<br>
 			</div>
 			
 			<div class="facts">
 
 				Tool ID: {{tool.id}}<br>
-				Owner: {{tool.ownerfirstname}} 
-				{{tool.ownerlastname}}
+				Owner: {{tool.attributes.username}}
 			</div>
 		</div>
 		
@@ -73,9 +72,9 @@
 	<div id="cart-actions">
 		<select id="user-to-transfer-to" class="dark-dropdown">
 			<option value="">transfer to:</option>
-			{{#each model.owners.owners as |owner|}}
-				<option value={{owner.userid}}>
-					{{owner.username}}
+			{{#each model.users.users as |user|}}
+				<option value={{user.userid}}>
+					{{user.username}}
 				</option>
 			{{/each}}
 		</select>

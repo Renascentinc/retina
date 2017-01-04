@@ -1,6 +1,7 @@
 <div class="search-bar">
-	<select class="search-parameter search" id="status">
-		<option value=""> Status </option>
+	<select class="search-parameter search">
+		<option disabled selected hidden> Status </option>
+		<option value=""> any status </option>
 		{{#each model.status.status as |status|}}
 			<option value={{status}}>
 				{{status}}
@@ -8,8 +9,9 @@
 		{{/each}}
 	</select>
 	
-	<select class="search-parameter search" id="type">
-		<option>Type</option>
+	<select class="search-parameter search">
+		<option disabled selected hidden>Type</option>
+		<option value=""> any type</option>
 		{{#each model.types.types as |type|}}
 			<option value={{type}}>
 				{{type}}
@@ -17,11 +19,12 @@
 		{{/each}}
 	</select>
 	
-	<select class="search-parameter search" id="owner">
-		<option>Owner</option>
-		{{#each model.owners.owners as |owner|}}
-			<option value={{owner.userid}}>
-				{{owner.username}}
+	<select class="search-parameter search">
+		<option disabled selected hidden>Owner</option>
+		<option value=""> any owner</option>
+		{{#each model.users.users as |user|}}
+			<option value={{user.userid}}>
+				{{user.username}}
 			</option>
 		{{/each}}
 	</select>
@@ -38,20 +41,29 @@
 </div>
 
 <div id="tool-display-box-full">
-{{#each model.tools as |tool|}}
-	<div class="specs-box">
-		<div class="facts">
-			{{tool.attributes.brand}} 
-			{{tool.attributes.type}}<br>
-			{{tool.id}}<br>
-			{{tool.attributes.username}} 
+	<div class="search-block">
+		<input class="search-box" placeholder="ToolID or Serial Number">
+	</div>
+{{#each model.tools.data as |tool|}}
+	<div class="specs-box"> {{#link-to 'info' tool.id}}
+		<div class="tool-specs">
+			<div class="title"> 
+					{{tool.attributes.brand}} 
+					{{tool.attributes.type}}<br>
+			</div>
+			
+			<div class="facts">
+
+				Tool ID: {{tool.id}}<br>
+				Owner: {{tool.attributes.username}}
+			</div>
 		</div>
 		
-		<div class="options">
-			{{#link-to 'info' tool.id}}more 
-				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 
-			{{/link-to}}<br>
+		<div class="options"> 
+			<span class="glyphicon glyphicon-chevron-right search-icon" aria-hidden="true"></span> 
+			<br>
 		</div>
-	</div>
+	{{/link-to}} </div>
 {{/each}}
 </div>
+

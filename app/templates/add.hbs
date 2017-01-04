@@ -1,6 +1,6 @@
 <form>
     <div>
-        <select id="brand" class="dark-dropdown">
+        <select id="brand" class="dark-dropdown add">
             <option value=""> Brand </option>
             {{#each model.brands.brands as |brand|}}
               <option value={{brand}}> {{brand}} </option>
@@ -9,16 +9,16 @@
     </div>
 	
 	<div>
-        <select id="purchasedfrom" class="dark-dropdown">
+        <select id="purchasedfrom" class="dark-dropdown add">
             <option value=""> Purchased From </option>
-            {{#each model.providers.stores as |provider|}}
+            {{#each model.providers.providers as |provider|}}
               <option value={{provider}}> {{provider}} </option>
             {{/each}}
         </select>
     </div>
 	
 	<div>
-        <select id="type" class="dark-dropdown">
+        <select id="type" class="dark-dropdown add">
             <option value=""> Type </option>
             {{#each model.types.types as |type|}}
               <option value={{type}}> {{type}} </option>
@@ -26,15 +26,15 @@
         </select>
     </div>
 
-    {{input placeholder="$ price" class="text-field"  id="price" type="text"  valueBinding="model.tool.price"}}
+    {{input placeholder="$ price" class="text-field add"  id="price" type="text"  valueBinding="model.tool.price"}}
     
     
     
-    {{input type="text" class="text-field" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
+    {{input type="text" class="text-field add" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
     
     
     
-    {{input type="text" class="text-field" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}<br>
+    {{input type="text" class="text-field add" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}<br>
     
     <button style="margin-top: 20px;"{{action "saveNewTool" model.tool}} class="go"> add </button>
 </form>

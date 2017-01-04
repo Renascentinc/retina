@@ -62,8 +62,8 @@ a:hover{
 }
 
 .icon-btn{
-	width: 48px;
-	height: 48px;
+	width: 60px;
+	height: 60px;
 	border-radius: 8px;
 	display: block;
 	margin-left: auto;
@@ -72,10 +72,9 @@ a:hover{
 
 .glyphicon-main{
 	position: relative;
-	vertical-align: middle;
-	padding: 8px;
+	padding: 10px;
 	color: white;
-	font-size: 32px;
+	font-size: 40px;
 	margin-top: auto;
 	margin-bottom: auto;	
 	margin-left: auto;

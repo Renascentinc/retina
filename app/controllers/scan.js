@@ -16,13 +16,16 @@ export default Ember.Controller.extend({
 		addToList(toolid){
             if( !this.toolList.includes(toolid) ) {
                 this.toolList.push(toolid);
-                Ember.$("#list").append("<span id=z"+toolid+"><span class='glyphicon glyphicon-remove-sign delete-icon' aria-hidden='true' {{action 'deleteToolFromList' z"+toolid+"}}></span>    "+ toolid + "<br></span>");
+				console.log(toolid.toString());
+                Ember.$("#list").append("<div id='"+toolid.toString()+"'><span class='glyphicon glyphicon-remove-sign delete-icon' aria-hidden='true'></span>   "+ toolid + "<br></div>");
             }
 		},
 		
 		deleteToolFromList(id){
-			console.log("howdy");
-			toolList.splice(id);
+			console.log("yoda");
+			console.log(id);
+			
+			this.toolList.splice(id);
 			$("#"+id).remove();
 			console.log(id+"is removed");
 		},

@@ -312,7 +312,9 @@ a:hover{
 	color: #363636;
 	font-size: 18px;
 	font-weight: 500;
-	margin-top: 2px;
+	margin-bottom: 0px;
+	margin-top: 1px;
+	
 	
 }
 
@@ -411,6 +413,11 @@ form{
 
 .add{
 	margin: 5px;
+}
+
+.delete-icon{
+	color: #e30000;
+	font-size: 25px;
 }
 
 

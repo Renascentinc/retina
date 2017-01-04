@@ -13,11 +13,18 @@ export default Ember.Controller.extend({
 			this.get('target').transitionTo('transfer', toolid);
 		},
 		
-		addToList(id){
-            if( !this.toolList.includes(id) ) {
-                this.toolList.push(id);
-                Ember.$("#list").append(id + "<br>");
+		addToList(toolid){
+            if( !this.toolList.includes(toolid) ) {
+                this.toolList.push(toolid);
+                Ember.$("#list").append("<span id=z"+toolid+"><span class='glyphicon glyphicon-remove-sign delete-icon' aria-hidden='true' {{action 'deleteToolFromList' z"+toolid+"}}></span>    "+ toolid + "<br></span>");
             }
+		},
+		
+		deleteToolFromList(id){
+			console.log("howdy");
+			toolList.splice(id);
+			$("#"+id).remove();
+			console.log(id+"is removed");
 		},
         
         transferTools() {

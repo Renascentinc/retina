@@ -23,10 +23,5 @@ export default DS.JSONAPIAdapter.extend({
       };
 
       return hash;
-    },
-    
-    pathForType: function(type) {
-        console.log(type);
-        return Ember.String.underscore(type);
     }
 });

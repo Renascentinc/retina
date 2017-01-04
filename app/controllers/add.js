@@ -7,16 +7,21 @@ export default Ember.Controller.extend({
             let brand = Ember.$('#brand').val();
             let type = Ember.$('#type').val();
             let purchasedfrom = Ember.$('#purchasedfrom').val();
+            let status = Ember.$("#status").val();
+            let assignee = Ember.$("#assignee").val();
             
-            tool.set('ownerfirstname', 'Billy');
-            tool.set('ownerlastname', 'Boyd');
-            tool.set('datelastcheckout', tool.get('purchasedate'));
             tool.set('brand', brand);
             tool.set('type', type);
             tool.set('purchasedfrom', purchasedfrom);
-            tool.set('id', this.get('session').get('data.currentUserID'));
+            tool.set('status', status);
+            tool.set('userid', assignee);
             
-            tool.save();
+            tool.save().then(function(tool) {
+//                self.transitionTo('info', tool.get('id') );
+                alert( tool.get('id') );
+            }).catch(function(e) {
+                alert( e );
+            });
         }
     }
 });

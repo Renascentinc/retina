@@ -71,10 +71,17 @@
 	</div>
 	<div id="cart-actions">
 		<select id="user-to-transfer-to" class="dark-dropdown">
+<<<<<<< HEAD
 			<option value="">transfer to:</option>
 			{{#each model.users.users as |user|}}
 				<option value={{user.userid}}>
 					{{user.username}}
+=======
+			<option value="">Transfer to</option>
+			{{#each model.users.users as |owner|}}
+				<option value={{owner.userid}}>
+					{{owner.username}}
+>>>>>>> josiahc.add-page-fixes
 				</option>
 			{{/each}}
 		</select>

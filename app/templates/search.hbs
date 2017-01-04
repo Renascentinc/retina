@@ -19,12 +19,20 @@
 		{{/each}}
 	</select>
 	
+<<<<<<< HEAD
 	<select class="search-parameter search">
 		<option disabled selected hidden>Owner</option>
 		<option value=""> any owner</option>
 		{{#each model.users.users as |user|}}
 			<option value={{user.userid}}>
 				{{user.username}}
+=======
+	<select class="search-parameter search" id="owner">
+		<option>Owner</option>
+		{{#each model.users.users as |owner|}}
+			<option value={{owner.userid}}>
+				{{owner.username}}
+>>>>>>> josiahc.add-page-fixes
 			</option>
 		{{/each}}
 	</select>

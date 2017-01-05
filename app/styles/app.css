@@ -188,7 +188,8 @@ a:hover{
 #login-btn{
 	background-color: white;
 	color: #e30000;
-	margin-left: calc(50% - 95px);
+	margin-left: auto;
+	margin-right: auto;
 	margin-top: 20px;
 }
 

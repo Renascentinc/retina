@@ -29,7 +29,7 @@ export default Ember.Controller.extend({
             let userid = 0;
             const options = {
                 processData: false,
-                url: '/transfer',
+                url: 'https://retina-app-develop.azurewebsites.net/api/transfer',
                 data: { userid: userid, toolids: this.toolList },
                 method: 'PUT',
                 dataType: 'json',

@@ -12,5 +12,6 @@ export default DS.Model.extend({
     serialnumber: DS.attr(),
     status: DS.attr(),
     toolclass: DS.attr(),
-    userid: DS.attr()
+    userid: DS.attr(),
+    
 });

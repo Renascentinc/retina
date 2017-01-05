@@ -8,8 +8,8 @@ export default Ember.Controller.extend({
             
         },
 		
-		updateStatus() {
-			var newStatus = $("#status").val();
+		updateStatus(tool) {
+			var newStatus = Ember.$("#status").val();
 			
 			tool.set('status', newStatus);
             tool.set('toolid', tool.get('id'));

@@ -1,5 +1,4 @@
 import DS from 'ember-data';
-import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 
 
 export default DS.JSONAPIAdapter.extend({
@@ -7,7 +6,7 @@ export default DS.JSONAPIAdapter.extend({
 	namespace: 'api',
     authorizer: 'authorizer:oauth2',
     
-    ajaxOptions: function ajaxOptions(url, type, options) {
+    ajaxOptions: function ajaxOptions() {
       var hash = this._super.apply(this, arguments);
 
       if (hash.contentType) {

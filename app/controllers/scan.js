@@ -22,11 +22,11 @@ export default Ember.Controller.extend({
 
 		deleteToolList(){
 			this.toolList.splice(0, this.toolList.length);
-			$("#list").html("");
+			Ember.$("#list").html("");
 		},
 
         transferTools() {
-           var userid = parseInt($("#user-to-transfer-to").val());
+           var userid = parseInt(Ember.$("#user-to-transfer-to").val());
 
            const options = {
 

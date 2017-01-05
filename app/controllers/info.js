@@ -6,6 +6,16 @@ export default Ember.Controller.extend({
             console.log(model);
             this.get('model').save();
             
-        }
+        },
+		
+		updateStatus() {
+			var newStatus = $("#status").val();
+			
+			tool.set('status', newStatus);
+            tool.set('toolid', tool.get('id'));
+			tool.set('userid', this.get('session').get('data.currentUserID'));
+            
+            tool.save();
+		}
     }
 });

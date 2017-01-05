@@ -42,15 +42,6 @@ export default function() {
 		  }
 		};
     }); //end get => /tools/:id	
-    
-    this.post('/tools', (schema, request) => {	
-		console.log(request);
-    }); //end post => /tools
-    
-    this.patch('/tools/:id', (schema, request) => {	
-		console.log(request);
-        console.log(params.id);
-    }); //end post => /tools
 	
 	this.get('/tools', function() {
     return {
@@ -174,8 +165,4 @@ export default function() {
   this.get('/brands', function() {
     return ["milwuake", "black & decker", "dewalt", "bosch"];
   });      
-    
-  this.put('/transfer', (schema, request) => {
-    console.log( request.requestBody );
-  }); //end post => /token    
 }//end config

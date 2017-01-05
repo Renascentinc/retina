@@ -1,17 +1,18 @@
-
-
 <div class="search-bar">
-	<select class="search-parameter" id="status">
-		<option value=""> Status </option>
+    
+	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>      
+		<option disabled selected hidden> Status </option>
+		<option value=""> any status </option>
 		{{#each model.status.status as |status|}}
 			<option value={{status}}>
 				{{status}}
 			</option>
 		{{/each}}
 	</select>
-	
-	<select class="search-parameter" id="type">
-		<option>Type</option>
+    
+	<select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
+		<option disabled selected hidden>Type</option>
+		<option value=""> any type </option>
 		{{#each model.types.types as |type|}}
 			<option value={{type}}>
 				{{type}}
@@ -19,22 +20,32 @@
 		{{/each}}
 	</select>
 	
-	<select class="search-parameter" id="brand">
-		<option>Brand</option>
+	<select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
+		<option disabled selected hidden>Owner</option>
+		<option value=""> any owner </option>
+		{{#each model.selectUsers.users as |user|}}
+			<option value={{user.userid}}>
+				{{user.username}}
+			</option>
+		{{/each}}
+	</select>
+	
+		<select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
+		<option disabled selected hidden>Brand</option>
+		<option value=""> any brand </option>
 		{{#each model.brands.brands as |brand|}}
 			<option value={{brand}}>
 				{{brand}}
 			</option>
 		{{/each}}
 	</select>
-	
-	
 </div>
 
 <div id="tool-display-box">
 	<div class="search-block">
-		<input class="search-box" placeholder="ToolID or Serial Number">
+		{{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
 	</div>
+    
 {{#each model.tools.data as |tool|}}
 	<div class="specs-box"> 
 		<div class="tool-specs" {{action 'addToList' tool.id}}>
@@ -59,6 +70,7 @@
 		</div> 
 	
 {{/each}}
+
 </div>
 
 <div id="menu">
@@ -76,7 +88,7 @@
 		<select id="user-to-transfer-to" class="dark-dropdown">
 
 			<option value="">Transfer to</option>
-			{{#each model.users.users as |user|}}
+			{{#each model.allUsers.users as |user|}}
 				<option value={{user.userid}}>
 					{{user.username}}
 

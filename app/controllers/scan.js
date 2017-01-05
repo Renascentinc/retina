@@ -13,11 +13,16 @@ export default Ember.Controller.extend({
 			this.get('target').transitionTo('transfer', toolid);
 		},
 		
-		addToList(id){
-            if( !this.toolList.includes(id) ) {
-                this.toolList.push(id);
-                Ember.$("#list").append(id + "<br>");
+		addToList(toolid){
+            if( !this.toolList.includes(toolid) ) {
+                this.toolList.push(toolid);
+                Ember.$("#list").append(toolid + "<br>");
             }
+		},
+		
+		deleteToolList(){
+			this.toolList.splice(0, this.toolList.length);
+			$("#list").html("");
 		},
         
         transferTools() {

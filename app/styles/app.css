@@ -62,8 +62,8 @@ a:hover{
 }
 
 .icon-btn{
-	width: 48px;
-	height: 48px;
+	width: 60px;
+	height: 60px;
 	border-radius: 8px;
 	display: block;
 	margin-left: auto;
@@ -72,10 +72,9 @@ a:hover{
 
 .glyphicon-main{
 	position: relative;
-	vertical-align: middle;
-	padding: 8px;
+	padding: 10px;
 	color: white;
-	font-size: 32px;
+	font-size: 40px;
 	margin-top: auto;
 	margin-bottom: auto;	
 	margin-left: auto;
@@ -312,7 +311,9 @@ a:hover{
 	color: #363636;
 	font-size: 18px;
 	font-weight: 500;
-	margin-top: 2px;
+	margin-bottom: 0px;
+	margin-top: 1px;
+	
 	
 }
 
@@ -402,7 +403,7 @@ form{
 	height: 40px;
 	border-radius: 20px;
 	border-style: none;
-	text-indent: 7px;
+	text-indent: 10px;
 	font-size: 18px;
 	text-align: left;
 	font-weight: 500;
@@ -411,6 +412,17 @@ form{
 
 .add{
 	margin: 5px;
+}
+
+.delete-icon{
+	color: #e30000;
+	font-size: 25px;
+}
+
+#status-change-box{
+	text-align: center;
+	width: 100vw;
+	padding: 40px;
 }
 
 

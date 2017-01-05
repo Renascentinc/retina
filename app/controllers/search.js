@@ -11,7 +11,6 @@ export default Ember.Controller.extend({
     actions: {
         updateSearch( target ) {
             let params = this.queryParams.get('0');
-            console.log( target.value );
             
             if( target.getAttribute('name') === "status" ) {
                 params.status = target.value;
@@ -26,10 +25,18 @@ export default Ember.Controller.extend({
                 params.userID = target.value;
             }
             
-            console.log( params );
-            
             var set = this.set.bind(this, 'model.tools');
             Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', params ).then(set);
+        },
+        
+        fuzzySearch(value) {
+            var set = this.set.bind(this, 'model.tools');
+            
+            if( value !== "" ) {
+                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', { parameter: value } ).then(set);
+            } else {
+                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?status=&userID=&type=&brand=').then(set);
+            }
         }
     }
 });

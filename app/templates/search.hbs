@@ -1,6 +1,6 @@
 <div class="search-bar">
-	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-            
+    
+	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>      
 		<option disabled selected hidden> Status </option>
 		<option value=""> any status </option>
 		{{#each model.status.status as |status|}}
@@ -44,7 +44,7 @@
 
 <div id="tool-display-box-full">
 	<div class="search-block">
-		<input class="search-box" placeholder="ToolID or Serial Number">
+		{{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
 	</div>
 {{#each model.tools.data as |tool|}}
 	<div class="specs-box"> {{#link-to 'info' tool.id}}

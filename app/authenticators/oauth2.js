@@ -17,7 +17,7 @@ export default OAuth2PasswordGrant.extend({
     var _this = this;
       
     $ajaxCall.then(function(response) {
-        _this.get('session').set('data.currentUserID', response.userid);
+        _this.get('session').set('data.currentUserID', parseInt(response.userid));
     });
       
     return $ajaxCall;

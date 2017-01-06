@@ -34,6 +34,18 @@ export default Ember.Controller.extend({
             }).catch(function(e) {
                 console.log( e );
             });
-        }
+        },
+		
+		addCustomOptions(dropdownid, textfieldid){
+		
+			console.log("yo");
+			Ember.$(dropdownid).change(function(){
+				if(Ember.$(this).val() == '-1'){
+					Ember.$(textfieldid).fadeIn();
+				}else{
+					Ember.$(textfieldid).fadeOut();
+			}//end if
+			}//end function
+		)}
     }
 });

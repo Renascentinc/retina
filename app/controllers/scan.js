@@ -47,11 +47,13 @@ export default Ember.Controller.extend({
                crossDomain: true
            };
 
-			alert("Transfer success. Tool(s) "+this.toolList+" have been transferred.");
+			
 			
             Ember.$.ajax(options);
             Ember.$("#list").html("");
             this.toolList = [];
+			
+			alert("Transfer success. Tool(s) "+this.toolList+" have been transferred.");
 
         },
         

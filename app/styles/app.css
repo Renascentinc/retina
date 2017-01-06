@@ -188,7 +188,8 @@ a:hover{
 #login-btn{
 	background-color: white;
 	color: #e30000;
-	margin-left: calc(50% - 95px);
+	margin-left: auto;
+	margin-right: auto;
 	margin-top: 20px;
 }
 
@@ -237,10 +238,10 @@ a:hover{
 .search-parameter{
 	display: inline-block;
 	height: 100%;
-	width: 30%;
+	width: 24%;
 	color: #797979;
 	font-size: 16px;
-	font-weight: 500;
+	font-weight: 600;
 	background-color: rgba(0, 0, 0, 0);
 	border-style: none;
 	
@@ -252,7 +253,8 @@ a:hover{
 	border-bottom-style: solid;
 	border-bottom-color: #797979;
 	border-bottom-width: 1px;
-	padding: 5px;
+	padding: 0px;
+	padding-left: 5px;
 }
 
 .facts{
@@ -263,6 +265,7 @@ a:hover{
 	color: #797979;
 	font-weight: 600;
 	overflow: hidden;
+	font-size: 17px;
 }
 
 .title{
@@ -285,7 +288,7 @@ a:hover{
 
 #tool-display-box{
 	overflow-y: scroll;
-	height: calc(100% - 184px);
+	height: calc(100% - 210px);
 	border-bottom-style: solid;
 	border-bottom-width: 4px;
 	border-bottom-color: rgba(76, 90, 96, .49);
@@ -302,10 +305,6 @@ a:hover{
 	display: inline-block;
 }
 
-.search{
-	width: 24%;
-}
-
 #list-title{
 	margin: 5px;
 	color: #363636;
@@ -313,6 +312,7 @@ a:hover{
 	font-weight: 500;
 	margin-bottom: 0px;
 	margin-top: 1px;
+	line-height: 25px;
 	
 	
 }
@@ -320,7 +320,8 @@ a:hover{
 #list{
 	margin: 5px;
 	color: #797979;
-	font-size: 18px;
+	font-size: 23px;
+	line-height: 24px;
 	overflow: scroll;
 	height: calc(100% - 33px);
 	margin: 0px;
@@ -342,7 +343,7 @@ a:hover{
 
 #menu{
 	width: 100vw;
-	height: 124px;
+	height: 150px;
 }
 
 #transfer-button{
@@ -350,12 +351,12 @@ a:hover{
 	font-size: 21px;
 	height: 47px;
 	margin-top: 10px;
-	margin-bottom: 10px;
+	margin-bottom: 23px;
 	display: table-footer-group;;
 }
 
 #user-to-transfer-to{
-	margin-top: 10px;
+	margin-top: 23px;
 }
 
 

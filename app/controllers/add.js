@@ -3,6 +3,15 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
     actions: {
+		
+		toggleField(hideObj, showObj) {
+		    hideObj.disabled = true;
+		    hideObj.style.display = 'none';
+		    showObj.disabled = false;
+		    showObj.style.display = 'inline';
+		    showObj.focus();
+		},
+			
         saveNewTool(tool) {
             let brand = Ember.$('#brand').val();
             let type = Ember.$('#type').val();
@@ -25,6 +34,16 @@ export default Ember.Controller.extend({
             }).catch(function(e) {
                 console.log( e );
             });
-        }
+        },
+		
+		addCustomOptions(dropdownid, textfieldid){
+			Ember.$(dropdownid).change(function(){
+				if(Ember.$(this).val() == '-1'){
+					Ember.$(textfieldid).fadeIn();
+				}else{
+					Ember.$(textfieldid).fadeOut();
+			}//end if
+			}//end function
+		)}
     }
 });

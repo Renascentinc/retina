@@ -37,6 +37,10 @@ export default Ember.Controller.extend({
             } else {
                 Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?status=&userID=&type=&brand=').then(set);
             }
-        }
+        },
+		
+		currentUser(){
+			return this.get('session').get('data.currentUserID');
+		}
     }
 });

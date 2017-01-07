@@ -41,22 +41,39 @@ export default Ember.Controller.extend({
 
            const options = {
 
-               url: 'https://retina-api-develop.azurewebsites.net/api/transfer',
+               url: 'https://retina-api-develo.azurewebsites.net/api/transfer',
                data: { userid: userid, toolids: this.toolList},
                type: 'PUT',
-               crossDomain: true
-           };
+               crossDomain: true,
+			   success: function (response) {
+        			alert("Transaction success.");
+			   },
+           
+			   error: function (response) {
+        			alert("Tranaction failed.");
+			   }
+				   
+			};
 
-			
-			
             Ember.$.ajax(options);
+			
             Ember.$("#list").html("");
             this.toolList = [];
-			
-			alert("Transfer success. Tool(s) "+this.toolList+" have been transferred.");
-
         },
         
+		ajaxSuccess(){
+			
+			
+			alert("Transfer success.");
+			
+		},
+		
+		ajaxFailed(){
+			
+			alert("Transfer failed. Why? Who can say...");
+			
+		},
+		
         updateSearch( target ) {
             let params = this.queryParams.get('0');
             params.currentUser = this.get('session').get('data.currentUserID');

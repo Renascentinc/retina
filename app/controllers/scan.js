@@ -5,6 +5,7 @@ export default Ember.Controller.extend({
     
     toolList: [],
     
+
     queryParams: {
         currentUser: 0,
         status: "",
@@ -37,42 +38,46 @@ export default Ember.Controller.extend({
 		},
 
         transferTools() {
-           var userid = parseInt(Ember.$("#user-to-transfer-to").val());
-
-           const options = {
-
-               url: 'https://retina-api-develo.azurewebsites.net/api/transfer',
-               data: { userid: userid, toolids: this.toolList},
-               type: 'PUT',
-               crossDomain: true,
-			   success: function (response) {
-        			alert("Transaction success.");
-			   },
-           
-			   error: function (response) {
-        			alert("Tranaction failed.");
-			   }
-				   
-			};
-
-            Ember.$.ajax(options);
+			Ember.$("#user-to-transfer-to").css("border-style", "none");
+			Ember.$("#list-title").css("border-style", "none");
 			
-            Ember.$("#list").html("");
-            this.toolList = [];
+			if(Ember.$("#user-to-transfer-to").val() == null){
+				Ember.$("#user-to-transfer-to").css("border-style", "solid");
+				Ember.$("#user-to-transfer-to").css("border-color", "#e30000");
+			}
+			
+			if(this.toolList.length == 0){
+				Ember.$("#list-title").css("border-style", "solid");
+				Ember.$("#list-title").css("border-color", "#e30000");
+			}
+			
+			if (Ember.$("#user-to-transfer-to").val() != null
+		        && this.toolList.length != 0){
+				
+				   var userid = parseInt(Ember.$("#user-to-transfer-to").val());
+
+				   const options = {
+
+					   url: 'https://retina-api-develop.azurewebsites.net/api/transfer',
+					   data: { userid: userid, toolids: this.toolList},
+					   type: 'PUT',
+					   crossDomain: true,
+					   success: function (response) {
+							alert("Transaction success.");
+					   },
+
+					   error: function (response) {
+							alert("Tranaction failed.");
+					   }
+
+					};
+
+					Ember.$.ajax(options);
+
+					Ember.$("#list").html("");
+					this.toolList = [];
+			}
         },
-        
-		ajaxSuccess(){
-			
-			
-			alert("Transfer success.");
-			
-		},
-		
-		ajaxFailed(){
-			
-			alert("Transfer failed. Why? Who can say...");
-			
-		},
 		
         updateSearch( target ) {
             let params = this.queryParams.get('0');
@@ -104,7 +109,9 @@ export default Ember.Controller.extend({
             } else {
                 Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);
             }
-        }        
+        }
+		
+
     }
 
 });

@@ -4,7 +4,6 @@ export default DS.Model.extend({
 	brand: DS.attr(),
 	type: DS.attr(),
 	username: DS.attr(),
-	datelastcheckout: DS.attr(),
 	purchasedate: DS.attr(),
     purchasedfrom: DS.attr(),
     price: DS.attr(),
@@ -13,5 +12,6 @@ export default DS.Model.extend({
     status: DS.attr(),
     toolclass: DS.attr(),
     userid: DS.attr(),
-    
+    email: DS.attr(),
+    phonenumber: DS.attr()
 });

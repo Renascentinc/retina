@@ -4,21 +4,20 @@ export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
     
     actions: {
-        save(model) {
-            console.log(model);
-            this.get('model').save();
-            
-        },
-		
 		updateStatus(tool) {
 			var newStatus = Ember.$("#status").val();
-			alert( "feature in progress" );
-//			tool.set('status', newStatus);
-//            console.log( tool.get('hasDirtyAttributes') );
-//            console.log( tool );
-//            tool.set('toolid', tool.get('id'));
-//			tool.set('userid', this.get('session').get('data.currentUserID'));
-//            this.get('model.tool').save();
+
+            if( newStatus !== "" ) {
+                tool.set('status', newStatus);
+                tool.save();
+            }
 		}
-    }
+    },
+    
+    ableToTransfer: Ember.computed('model', function() {
+        let isOwnedByUser = this.get('session').get('data.currentUserID') === this.get('model.tool').get('userid');
+        let isShopManager = this.get('session').get('data.currentUserRole') === "Shop Manager";
+        
+        return( isOwnedByUser || isShopManager );
+    })
 });

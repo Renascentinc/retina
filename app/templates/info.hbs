@@ -1,27 +1,33 @@
+<div class="back">
+    <button onclick=window.history.back()><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>back</button>
+</div>
 <div id="specs">
 	<div id="tool-title">
-		 {{model.tools.data.attributes.brand}} {{model.tools.data.attributes.type}}
+		 {{model.tool.brand}} {{model.tool.type}}
 	</div>
 	
 	<div id="tool-details">
-		{{model.tools.data.attributes.status}}<br>
-		Tool ID: {{model.tools.data.id}}<br>
-		Owner: {{model.tools.data.attributes.username}}<br>
-		Last checked out: {{model.tools.data.attributes.datelastcheckout}}<br>
-		Purchase date: {{model.tools.data.attributes.purchasedate}}<br>
-		Serial number: {{model.tools.data.attributes.serialnumber}}
+		{{model.tool.status}} <br>
+		Tool ID: {{model.tool.id}}<br>
+		Owner: {{model.tool.username}}<br>
+        Contact: <br> 
+        {{model.tool.phonenumber}} <br>
+        {{model.tool.email}}<br><br>
+		Purchase date: {{model.toolpurchasedate}}<br>
+		Serial number: {{model.tool.serialnumber}}
 	</div>
 	
-	
+	{{#if ableToTransfer }}
 	<div id="status-change-box">
 		<select id="status" class="dark-dropdown ">
 			<option value=""> Status </option>
 			{{#each model.status.status as |status|}}
-			  <option value={{status}}> {{status}} </option>
+			     <option value={{status}}> {{status}} </option>
 			{{/each}}
 		</select>
 
 		<button style="margin-top: 20px; font-size: 24px;" class="go" {{action 'updateStatus' model.tool}}> update status </button>
 	</div>
+    {{/if}}
 </div>
 

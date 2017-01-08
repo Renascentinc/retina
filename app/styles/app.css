@@ -427,3 +427,9 @@ form{
 }
 
 
+.back{
+	font-size: 25px;
+	padding: 5px;
+	padding-top: 10px;
+	color: #e30000;
+}

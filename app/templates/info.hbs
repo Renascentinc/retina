@@ -1,6 +1,4 @@
-<div class="back">
-    <button onclick=window.history.back()><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>back</button>
-</div>
+<button class="back" onclick=window.history.back()><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>back</button>
 <div id="specs">
 	<div id="tool-title">
 		 {{model.tool.brand}} {{model.tool.type}}
@@ -13,6 +11,7 @@
         Contact: <br> 
         {{model.tool.phonenumber}} <br>
         {{model.tool.email}}<br><br>
+		Year: {{model.tool.year}} <br>
 		Purchase date: {{model.toolpurchasedate}}<br>
 		Serial number: {{model.tool.serialnumber}}
 	</div>
@@ -29,5 +28,7 @@
 		<button style="margin-top: 20px; font-size: 24px;" class="go" {{action 'updateStatus' model.tool}}> update status </button>
 	</div>
     {{/if}}
+	
+
 </div>
 

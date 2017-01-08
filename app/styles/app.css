@@ -303,6 +303,7 @@ a:hover{
 .tool-specs{
 	width: calc(100% - 40px);
 	display: inline-block;
+	text-align: left;
 }
 
 #list-title{
@@ -426,4 +427,10 @@ form{
 	padding: 40px;
 }
 
+button{
+	border-style: none;
+	padding: 0px;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0);
+}
 

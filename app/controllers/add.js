@@ -12,20 +12,7 @@ export default Ember.Controller.extend({
 		    showObj.focus();
 		},
 			
-        saveNewTool(tool) {
-//		   Ember.$("#form").validate({
-//				rules: {
-//					test: {
-//						required: true
-//					}
-//				},// end rules
-//				messages: {
-//					test: {
-//						required: "Please enter your degree program"
-//					}
-//				}// end messages
-//			});        
-        
+        saveNewTool(tool) {   
             let brand = Ember.$('#brand').val();
             let type = Ember.$('#type').val();
             let purchasedfrom = Ember.$('#purchasedfrom').val();
@@ -40,15 +27,15 @@ export default Ember.Controller.extend({
             
             let _this = this;
             
-            console.log("saveNewTool");
+            tool.save().then(function(tool) {
+                let toolid = tool.get('id');
+                _this.get('target').transitionTo('info', toolid);
+                
+            }).catch(function(e) {
+                console.log( e );
+            });
+            
             return( false );
-//            tool.save().then(function(tool) {
-//                let toolid = tool.get('id');
-//                _this.get('target').transitionTo('info', toolid);
-//                
-//            }).catch(function(e) {
-//                console.log( e );
-//            });
         },
 		
 		addCustomOptions(dropdownid, textfieldid){
@@ -57,7 +44,7 @@ export default Ember.Controller.extend({
 					Ember.$(textfieldid).fadeIn();
 				}else{
 					Ember.$(textfieldid).fadeOut();
-			}//end if
+			    }//end if
 			}//end function
 		)}
     }

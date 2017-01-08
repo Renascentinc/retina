@@ -11,5 +11,21 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             status: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/status'),
             users: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/users')
         });
+    },
+    
+    afterModel() {
+        Ember.$(document).ready(function() {
+ 		   Ember.$("#form").validate({
+ 				rules: {
+ 					test: {
+ 						required: true
+ 					}
+ 				}, messages: {
+ 					test: {
+ 						required: "Please enter your degree program"
+ 					}
+ 				}
+ 			});
+        });
     }
 });

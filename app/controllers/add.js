@@ -12,7 +12,7 @@ export default Ember.Controller.extend({
 		    showObj.focus();
 		},
 			
-        saveNewTool(tool) {
+        saveNewTool(tool) {   
             let brand = Ember.$('#brand').val();
             let type = Ember.$('#type').val();
             let purchasedfrom = Ember.$('#purchasedfrom').val();
@@ -34,6 +34,8 @@ export default Ember.Controller.extend({
             }).catch(function(e) {
                 console.log( e );
             });
+            
+            return( false );
         },
 		
 		addCustomOptions(dropdownid, textfieldid){
@@ -42,7 +44,7 @@ export default Ember.Controller.extend({
 					Ember.$(textfieldid).fadeIn();
 				}else{
 					Ember.$(textfieldid).fadeOut();
-			}//end if
+			    }//end if
 			}//end function
 		)}
     }

@@ -46,13 +46,12 @@ export default Ember.Controller.extend({
 				Ember.$("#user-to-transfer-to").css("border-color", "#e30000");
 			}
 			
-			if(this.toolList.length == 0){
+			if(this.toolList.length === 0){
 				Ember.$("#list-title").css("border-style", "solid");
 				Ember.$("#list-title").css("border-color", "#e30000");
 			}
 			
-			if (Ember.$("#user-to-transfer-to").val() != null
-		        && this.toolList.length != 0){
+			if (Ember.$("#user-to-transfer-to").val() != null && this.toolList.length !== 0){
 				
 				   var userid = parseInt(Ember.$("#user-to-transfer-to").val());
 
@@ -62,11 +61,11 @@ export default Ember.Controller.extend({
 					   data: { userid: userid, toolids: this.toolList},
 					   type: 'PUT',
 					   crossDomain: true,
-					   success: function (response) {
+					   success: function () {
 							alert("Transaction success.");
 					   },
 
-					   error: function (response) {
+					   error: function () {
 							alert("Tranaction failed.");
 					   }
 

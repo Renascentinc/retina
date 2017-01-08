@@ -31,7 +31,7 @@
 	{{input type="text" class="text-field add" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}
 
     {{input type="text" class="text-field" placeholder="Serial Number" valueBinding="model.tool.serialnumber" name="degreeProgram"}}<hr>
-	    
+
     <div>
 
 
@@ -68,15 +68,9 @@
               <option value={{user.userid}}> {{user.username}} </option>
             {{/each}}
         </select>
-<<<<<<< HEAD
-    </div>
 
-    <button style="margin: 20px;"{{action "saveNewTool" model.tool}} class="go"> add </button>
-
-=======
     </div>
 
     <button style="margin: 20px;" type="submit" class="go"> add </button>
 
->>>>>>> eliask.validation
 </form>

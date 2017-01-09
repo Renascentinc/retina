@@ -14,6 +14,7 @@
 		Year: {{model.tool.year}} <br>
 		Purchase date: {{model.toolpurchasedate}}<br>
 		Serial number: {{model.tool.serialnumber}}
+		Model number: {{model.tool.modelnumber}}
 	</div>
 	
 	{{#if ableToTransfer }}
@@ -25,7 +26,7 @@
 			{{/each}}
 		</select>
 
-		<button style="margin-top: 20px; font-size: 24px;" class="go" {{action 'updateStatus' model.tool}}> update status </button>
+		<button style="margin-top: 20px; font-size: 24px;" class="go" {{action 'updateStatus' model.tool}}> Update Status </button>
 	</div>
     {{/if}}
 	

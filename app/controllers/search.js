@@ -10,6 +10,7 @@ export default Ember.Controller.extend({
     
     actions: {
         updateSearch( target ) {
+			Ember.$(".search-box").val('');
             let params = this.queryParams.get('0');
             
             if( target.getAttribute('name') === "status" ) {

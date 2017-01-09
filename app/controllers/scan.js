@@ -80,6 +80,7 @@ export default Ember.Controller.extend({
         },
 		
         updateSearch( target ) {
+			Ember.$(".search-box").val('');
             let params = this.queryParams.get('0');
             params.currentUser = this.get('session').get('data.currentUserID');
             

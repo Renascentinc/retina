@@ -1,22 +1,22 @@
-<div class="back">
-    <button onclick=window.history.back()><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>back</button>
-</div>
+<button class="back" onclick=window.history.back()><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>back</button>
 <div id="specs">
 	<div id="tool-title">
 		 {{model.tool.brand}} {{model.tool.type}}
 	</div>
-	
+
 	<div id="tool-details">
-		{{model.tool.status}} <br>
+		Status: {{model.tool.status}} <br>
 		Tool ID: {{model.tool.id}}<br>
 		Owner: {{model.tool.username}}<br>
-        Contact: <br> 
+        Contact: <br>
         {{model.tool.phonenumber}} <br>
         {{model.tool.email}}<br><br>
-		Purchase date: {{model.toolpurchasedate}}<br>
-		Serial number: {{model.tool.serialnumber}}
+		Model year: {{model.tool.year}} <br>
+		Purchase date: {{model.tool.purchasedate}}<br>
+		Serial number: {{model.tool.serialnumber}}<br>
+		Model number: {{model.tool.modelnumber}}
 	</div>
-	
+
 	{{#if ableToTransfer }}
 	<div id="status-change-box">
 		<select id="status" class="dark-dropdown ">
@@ -26,8 +26,9 @@
 			{{/each}}
 		</select>
 
-		<button style="margin-top: 20px; font-size: 24px;" class="go" {{action 'updateStatus' model.tool}}> update status </button>
+		<button style="margin-top: 20px; font-size: 24px;" class="go" {{action 'updateStatus' model.tool}}> Update Status </button>
 	</div>
     {{/if}}
-</div>
+	
 
+</div>

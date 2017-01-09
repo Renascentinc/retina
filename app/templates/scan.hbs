@@ -2,7 +2,7 @@
     
 	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>      
 		<option disabled selected hidden> Status </option>
-		<option value=""> any status </option>
+		<option value=""> Any Status </option>
 		{{#each model.status.status as |status|}}
 			<option value={{status}}>
 				{{status}}
@@ -12,7 +12,7 @@
     
 	<select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
 		<option disabled selected hidden>Type</option>
-		<option value=""> any type </option>
+		<option value=""> Any Type </option>
 		{{#each model.types.types as |type|}}
 			<option value={{type}}>
 				{{type}}
@@ -22,7 +22,7 @@
 	
 	<select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
 		<option disabled selected hidden>Owner</option>
-		<option value=""> any owner </option>
+		<option value=""> Any Owner </option>
 		{{#each model.selectUsers.users as |user|}}
 			<option value={{user.userid}}>
 				{{user.username}}
@@ -32,7 +32,7 @@
 	
 		<select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
 		<option disabled selected hidden>Brand</option>
-		<option value=""> any brand </option>
+		<option value=""> Any Band </option>
 		{{#each model.brands.brands as |brand|}}
 			<option value={{brand}}>
 				{{brand}}
@@ -57,7 +57,7 @@
 			<div class="facts">
 
 				Tool ID: {{tool.id}}<br>
-				Owner: {{tool.attributes.username}}
+				<span class="glyphicon glyphicon-user"></span> {{tool.attributes.username}}
 			</div>
 		</div>
 		
@@ -96,7 +96,7 @@
 			{{/each}}
 		</select>
 		
-		<button {{action "transferTools"}} class="go" id="transfer-button">transfer</button>
+		<button {{action "transferTools"}} class="go" id="transfer-button">Transfer</button>
 	</div>
 </div>
 

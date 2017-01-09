@@ -13,7 +13,6 @@ Router.map(function() {
   this.route('scan');
   this.route('login');
   this.route('info', { path: "tool/:id" });
-  this.route('transfer', { path: "transfer/:id" });
 });
 
 export default Router;

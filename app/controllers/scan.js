@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import config from '../config/environment';
 
 export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
@@ -41,32 +42,31 @@ export default Ember.Controller.extend({
 			Ember.$("#user-to-transfer-to").css("border-style", "none");
 			Ember.$("#list-title").css("border-style", "none");
 			
-			if(Ember.$("#user-to-transfer-to").val() == null){
+			if(Ember.$("#user-to-transfer-to").val() === null){
 				Ember.$("#user-to-transfer-to").css("border-style", "solid");
 				Ember.$("#user-to-transfer-to").css("border-color", "#e30000");
 			}
 			
-			if(this.toolList.length == 0){
+			if(this.toolList.length === 0){
 				Ember.$("#list-title").css("border-style", "solid");
 				Ember.$("#list-title").css("border-color", "#e30000");
 			}
 			
-			if (Ember.$("#user-to-transfer-to").val() != null
-		        && this.toolList.length != 0){
+			if (Ember.$("#user-to-transfer-to").val() !== null && this.toolList.length !== 0){
 				
 				   var userid = parseInt(Ember.$("#user-to-transfer-to").val());
 
 				   const options = {
 
-					   url: 'https://retina-api-develop.azurewebsites.net/api/transfer',
+					   url: config.APP.api_url + config.APP.api_namespace + '/transfer',
 					   data: { userid: userid, toolids: this.toolList},
 					   type: 'PUT',
 					   crossDomain: true,
-					   success: function (response) {
+					   success: function() {
 							alert("Transaction success.");
 					   },
 
-					   error: function (response) {
+					   error: function() {
 							alert("Tranaction failed.");
 					   }
 
@@ -76,10 +76,12 @@ export default Ember.Controller.extend({
 
 					Ember.$("#list").html("");
 					this.toolList = [];
+                    
 			}
         },
 		
         updateSearch( target ) {
+			Ember.$(".search-box").val('');
             let params = this.queryParams.get('0');
             params.currentUser = this.get('session').get('data.currentUserID');
             
@@ -97,7 +99,7 @@ export default Ember.Controller.extend({
             }
             
             var set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', params ).then(set);
+            Ember.$.getJSON( config.APP.api_url + config.APP.api_namespace + '/search', params ).then(set);
         },
         
         fuzzySearch(value) {
@@ -105,9 +107,9 @@ export default Ember.Controller.extend({
             let currentUser = this.get('session').get('data.currentUserID');
             
             if( value !== "" ) {
-                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', { currentUser: currentUser, parameter: value } ).then(set);
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { currentUser: currentUser, parameter: value } ).then(set);
             } else {
-                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);
             }
         }
 		

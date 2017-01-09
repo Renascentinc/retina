@@ -5,18 +5,18 @@
 	<div id="tool-title">
 		 {{model.tool.brand}} {{model.tool.type}}
 	</div>
-	
+
 	<div id="tool-details">
 		{{model.tool.status}} <br>
 		Tool ID: {{model.tool.id}}<br>
 		Owner: {{model.tool.username}}<br>
-        Contact: <br> 
+        Contact: <br>
         {{model.tool.phonenumber}} <br>
         {{model.tool.email}}<br><br>
 		Purchase date: {{model.toolpurchasedate}}<br>
 		Serial number: {{model.tool.serialnumber}}
 	</div>
-	
+
 	{{#if ableToTransfer }}
 	<div id="status-change-box">
 		<select id="status" class="dark-dropdown ">
@@ -30,4 +30,3 @@
 	</div>
     {{/if}}
 </div>
-

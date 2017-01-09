@@ -13,6 +13,10 @@ export default Ember.Controller.extend({
 		},
 
         saveNewTool(tool) {
+
+            var price = tool.get('price').replace(/\$/g, "");
+            tool.set('price', price);
+
             let brand = Ember.$('#brand').val();
             let type = Ember.$('#type').val();
             let purchasedfrom = Ember.$('#purchasedfrom').val();
@@ -22,11 +26,11 @@ export default Ember.Controller.extend({
             if(brand === '-1') {
                 brand = Ember.$('#custom-brand').val();
             }
-            
+
             if(purchasedfrom === '-1') {
                 purchasedfrom = Ember.$('#custom-purchasedfrom').val();
             }
-            
+
             tool.set('brand', brand);
             tool.set('type', type);
             tool.set('purchasedfrom', purchasedfrom);

@@ -15,11 +15,24 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     afterModel() {
         Ember.$(document).ready(function() {
-<<<<<<< HEAD
 
-=======
-           let currentYear = new Date().getFullYear();
->>>>>>> f9b91241e863e553ad53ef28418fb0546aed7364
+        let currentYear = new Date().getFullYear();
+
+        $.validator.addMethod("maxDate", function(value, element) {
+            var curDate = new Date();
+            var inputDate = new Date(value);
+
+            if (value.toString() == ""){
+               return true;
+            } else if (inputDate > curDate){
+               return false;
+            } else {
+               return true;
+            }
+
+        });
+
+
  		   Ember.$("#form").validate({
                rules: {
                    type: {
@@ -37,6 +50,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                    modelnumber: {
                       required: true,
                       minlength: 3
+                   },
+
+                   purchasedate:{
+                      maxDate: true
                    },
 
                    serialnumber: {
@@ -87,6 +104,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                    serialnumber: {
                       required: "Enter Serial Number",
                       minlength: "Enter Valid Serial Number"
+                   },
+
+                   purchasedate:{
+                      maxDate: "Must Enter Valid Date"
                    },
 
                    status: {

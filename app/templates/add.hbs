@@ -47,12 +47,12 @@
 
 	<input id="custom-purchasedfrom" style="display: none;" type="text" class="text-field add" placeholder="Enter purchased from" />
 
-	{{input placeholder="price (##.##)" name="price" class="text-field add"  id="price" type="text"  valueBinding="model.tool.price"}}
+	{{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding="model.tool.price"}}
 
-   {{input type="date" class="text-field add" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
+   {{input type="date" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
 
 	{{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding="model.tool.makeyear"}}<hr>
-
+<input type="number" name="time" id="time" value="0" style="width: 150px;" />
 	<div>
         <select id="status" name="status" class="dark-dropdown add" >
             <option disabled selected hidden> Status </option>

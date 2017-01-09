@@ -426,4 +426,7 @@ form{
 	padding: 40px;
 }
 
+.error {
+    color: #F00;
+}
 

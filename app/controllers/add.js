@@ -19,6 +19,14 @@ export default Ember.Controller.extend({
             let status = Ember.$("#status").val();
             let assignee = Ember.$("#assignee").val();
 
+            if(brand === '-1') {
+                brand = Ember.$('#custom-brand').val();
+            }
+            
+            if(purchasedfrom === '-1') {
+                purchasedfrom = Ember.$('#custom-purchasedfrom').val();
+            }
+            
             tool.set('brand', brand);
             tool.set('type', type);
             tool.set('purchasedfrom', purchasedfrom);

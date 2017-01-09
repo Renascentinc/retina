@@ -1,12 +1,11 @@
 
 <form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>
 	<div>
-        <select id="type" name="type" class="dark-dropdown add" {{action 'addCustomOptions' '#type' '#custom-type'}}>
+        <select id="type" name="type" class="dark-dropdown add">
             <option disabled selected hidden> Type </option>
             {{#each model.types.types as |type|}}
               <option value={{type}}> {{type}} </option>
             {{/each}}
-			<option value='-1'>other</option>
 
         </select>
 

@@ -27,9 +27,9 @@
 
     </div>
 
-	{{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}
+	{{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" valueBinding=model.tool.modelnumber}}
 
-    {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" valueBinding="model.tool.serialnumber"}}<hr>
+    {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" valueBinding=model.tool.serialnumber}}<hr>
 
     <div>
 
@@ -47,11 +47,11 @@
 
 	<input id="custom-purchasedfrom" style="display: none;" type="text" class="text-field add" placeholder="Enter purchased from" />
 
-	{{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding="model.tool.price"}}
+	{{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding=model.tool.price}}
 
-   {{input type="date" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
+   {{input type="date" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}
 
-	{{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding="model.tool.makeyear"}}<hr>
+	{{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.makeyear}}<hr>
 
 	<div>
         <select id="status" name="status" class="dark-dropdown add" >
@@ -72,6 +72,6 @@
 
     </div>       
     
-    <button style="margin: 20px;"{{action "saveNewTool" model.tool}} class="go"> Add </button>
+    <button type="submit" style="margin: 20px;" class="go"> Add </button>
 	
 </form>

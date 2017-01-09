@@ -46,7 +46,7 @@ module.exports = function(environment) {
   if (environment === 'production') {
       ENV.APP.api_url = 'https://retina-api.azurewebsites.net/'; 
   }
-	
+
   ENV.contentSecurityPolicy = {
   'default-src': "'none'",
   'script-src': ["'self'"],
@@ -56,10 +56,10 @@ module.exports = function(environment) {
   'style-src': ["'self'"],
   'media-src': null
 }
-  
+
   ENV['ember-cli-mirage'] = {
       enabled: false
   };
-  
+
   return ENV;
 };

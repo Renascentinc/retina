@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
       this.get('session').invalidate();
     }
   },
-  
+
   isLoginRoute: Ember.computed('currentRouteName', {
     get() {
         return (this.get('currentRouteName') === 'login');

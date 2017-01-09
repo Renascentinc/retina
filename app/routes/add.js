@@ -49,7 +49,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
                    modelnumber: {
                       required: true,
-                      minlength: 3
+                      minlength: 3,
+                      alphanumeric: true
                    },
 
                    purchasedate:{
@@ -58,7 +59,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
                    serialnumber: {
                       required: true,
-                      minlength: 4
+                      minlength: 4,
+                      alphanumeric: true
                    },
 
                    status: {
@@ -98,12 +100,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
                    modelnumber: {
                       required: "Must Enter Model Number",
-                      minlength: "Must Enter Valid Model Number"
+                      minlength: "Must Enter Valid Model Number",
+                      alphanumeric: "Only numbers and letters allowed"
                    },
 
                    serialnumber: {
                       required: "Enter Serial Number",
-                      minlength: "Enter Valid Serial Number"
+                      minlength: "Enter Valid Serial Number",
+                      alphanumeric: "Only numbers and letters allowed"
                    },
 
                    purchasedate:{

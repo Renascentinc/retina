@@ -15,85 +15,93 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     afterModel() {
         Ember.$(document).ready(function() {
-
-
+           let currentYear = new Date().getFullYear();
  		   Ember.$("#form").validate({
- 				rules: {
- 					type: {
- 						required: true
+               rules: {
+                   type: {
+                       required: true
+                   },
+
+                   brand: {
+                      required:true
+                   },
+
+                   custombrand: {
+                      required: true
+                   },
+
+                   modelnumber: {
+                      required: true,
+                      minlength: 3
+                   },
+
+                   serialnumber: {
+                      required: true,
+                      minlength: 4
+                   },
+
+                   status: {
+                      required: true
+                   },
+
+                   assignee: {
+                      required: true
+                   },
+
+                   price:{
+                      currency: ["$", false]
+                   },
+
+                   year: {
+                      digits: true,
+                      maxlength: 4,
+                      minlength: 4,
+                      range: [1975, currentYear]
+                   }
+
+                },
+
+               messages: {
+
+                   type: {
+ 						required: "Must Select Type"
  					},
 
-               brand: {
-                  required:true
-               },
+                   brand: {
+                      required: "Must Select Brand"
+                   },
 
-               custombrand: {
-                  required: true
-               },
+                   custombrand: {
+                      required: "Must Specify Other"
+                   },
 
-               modelnumber: {
-                  required: true
-               },
+                   modelnumber: {
+                      required: "Must Enter Model Number",
+                      minlength: "Must Enter Valid Model Number"
+                   },
 
-               serialnumber: {
-                  required: true
-               },
+                   serialnumber: {
+                      required: "Enter Serial Number",
+                      minlength: "Enter Valid Serial Number"
+                   },
 
-               status: {
-                  required: true
-               },
+                   status: {
+                      required: "Must Assign Status"
+                   },
 
-               assignee: {
-                  required: true
-               },
+                   assignee: {
+                      required: "Must Assign Tool"
+                   },
 
-               price:{
-                  currency: ["$", true]
-               },
+                   price: {
+                      currency: "Must Be Valid Price"
+                   },
 
-               year: {
-                  digits: true
-               }
-
- 				},
-
-            messages: {
-
-               type: {
- 						required: "Select type"
- 					},
-
-               brand: {
-                  required: "Select brand"
-               },
-
-               custombrand: {
-                  required: "Specify other"
-               },
-
-               modelnumber: {
-                  required: "Enter model number"
-               },
-
-               serialnumber: {
-                  required: 'Enter serial number (type 0 if not known)'
-               },
-
-               status: {
-                  required: "Select status"
-               },
-
-               assignee: {
-                  required: "Assign tool"
-               },
-
-               price:{
-                  currency: "dls;kfjdsaf"
-               },
-
-               year: {
-                  digits: "Digits only"
-               }
+                   year: {
+                      digits: "Must Be Valid Year",
+                      maxlength: "Must Be Valid 4 Digit Year",
+                      minlength: "Must Be Valid 4 Digit Year"
+                   }
  				}
  			});
         });

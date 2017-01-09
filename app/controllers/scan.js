@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import config from '../config/environment';
 
 export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
@@ -58,7 +59,7 @@ export default Ember.Controller.extend({
 
 				   const options = {
 
-					   url: 'https://retina-api-develop.azurewebsites.net/api/transfer',
+					   url: config.APP.api_url + config.APP.api_namespace + '/transfer',
 					   data: { userid: userid, toolids: this.toolList},
 					   type: 'PUT',
 					   crossDomain: true,
@@ -97,7 +98,7 @@ export default Ember.Controller.extend({
             }
             
             var set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', params ).then(set);
+            Ember.$.getJSON( config.APP.api_url + config.APP.api_namespace + '/search', params ).then(set);
         },
         
         fuzzySearch(value) {
@@ -105,9 +106,9 @@ export default Ember.Controller.extend({
             let currentUser = this.get('session').get('data.currentUserID');
             
             if( value !== "" ) {
-                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', { currentUser: currentUser, parameter: value } ).then(set);
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { currentUser: currentUser, parameter: value } ).then(set);
             } else {
-                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);
             }
         }
 		

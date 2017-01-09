@@ -6,7 +6,7 @@
             {{#each model.types.types as |type|}}
               <option value={{type}}> {{type}} </option>
             {{/each}}
-			<option value='-1'>other</option>
+
 			
         </select>
 		
@@ -69,6 +69,6 @@
         </select>
     </div>       
     
-    <button style="margin: 20px;"{{action "saveNewTool" model.tool}} class="go"> add </button>
+    <button style="margin: 20px;"{{action "saveNewTool" model.tool}} class="go"> Add </button>
 	
 </form>

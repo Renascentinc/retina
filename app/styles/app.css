@@ -255,16 +255,17 @@ a:hover{
 	border-bottom-width: 1px;
 	padding: 0px;
 	padding-left: 5px;
+	overflow: hidden;
 }
 
 .facts{
-	width: calc(100% - 60px);
+	width: 100%;
 	display: inline-block;
 	top: 0px;
-	height: calc(100% - 30px);
+	height: 42px;
 	color: #797979;
 	font-weight: 600;
-	overflow: hidden;
+	overflow: visible;
 	font-size: 17px;
 }
 
@@ -427,3 +428,9 @@ form{
 }
 
 
+.back{
+	font-size: 25px;
+	padding: 5px;
+	padding-top: 10px;
+	color: #e30000;
+}

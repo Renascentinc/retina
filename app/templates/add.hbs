@@ -1,7 +1,7 @@
 
 <form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>
 	<div>
-        <select id="type" class="dark-dropdown add" {{action 'addCustomOptions' '#type' '#custom-type'}}>
+        <select id="type" name="type" class="dark-dropdown add" {{action 'addCustomOptions' '#type' '#custom-type'}}>
             <option disabled selected hidden> Type </option>
             {{#each model.types.types as |type|}}
               <option value={{type}}> {{type}} </option>
@@ -15,7 +15,7 @@
     </div>
 
     <div>
-        <select id="brand" class="dark-dropdown add" {{action 'addCustomOptions' '#brand' '#custom-brand'}} >
+        <select id="brand" name = "brand" class="dark-dropdown add" {{action 'addCustomOptions' '#brand' '#custom-brand'}} >
             <option disabled selected hidden> Brand </option>
             {{#each model.brands.brands as |brand|}}
               <option value={{brand}}> {{brand}} </option>
@@ -24,13 +24,13 @@
 			<option value='-1'>other</option>
         </select>
 
-		<input id="custom-brand" style="display: none;" type="text" class="text-field add" placeholder=" Enter brand" />
+		<input id="custom-brand" name = "custombrand" style="display: none;" type="text" class="text-field add" placeholder=" Enter brand" />
 
     </div>
 
-	{{input type="text" class="text-field add" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}
+	{{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" valueBinding="model.tool.modelnumber"}}
 
-    {{input type="text" class="text-field" placeholder="Serial Number" valueBinding="model.tool.serialnumber" name="degreeProgram"}}<hr>
+    {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" valueBinding="model.tool.serialnumber"}}<hr>
 
     <div>
 
@@ -48,12 +48,14 @@
 
 	<input id="custom-purchasedfrom" style="display: none;" type="text" class="text-field add" placeholder="Enter purchased from" />
 
-	{{input placeholder="$ price" class="text-field add"  id="price" type="text"  valueBinding="model.tool.price" name="test"}}
+	{{input placeholder="price (##.##)" name="price" class="text-field add"  id="price" type="text"  valueBinding="model.tool.price"}}
 
-    {{input type="text" class="text-field add" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}<hr>
+   {{input type="date" class="text-field add" placeholder="Purchase Date" valueBinding="model.tool.purchasedate"}}
+
+	{{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding="model.tool.makeyear"}}<hr>
 
 	<div>
-        <select id="status" class="dark-dropdown add" >
+        <select id="status" name="status" class="dark-dropdown add" >
             <option disabled selected hidden> Status </option>
             {{#each model.status.status as |status|}}
               <option value={{status}}> {{status}} </option>
@@ -62,7 +64,7 @@
     </div>
 
 	<div>
-        <select id="assignee" class="dark-dropdown add" >
+        <select id="assignee" name="assignee" class="dark-dropdown add" >
             <option disabled selected hidden> Assign To </option>
             {{#each model.users.users as |user|}}
               <option value={{user.userid}}> {{user.username}} </option>

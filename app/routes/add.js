@@ -12,18 +12,88 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             users: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/users')
         });
     },
-    
+
     afterModel() {
         Ember.$(document).ready(function() {
+
+
  		   Ember.$("#form").validate({
  				rules: {
- 					test: {
+ 					type: {
  						required: true
- 					}
- 				}, messages: {
- 					test: {
- 						required: "Please enter your degree program"
- 					}
+ 					},
+
+               brand: {
+                  required:true
+               },
+
+               custombrand: {
+                  required: true
+               },
+
+               modelnumber: {
+                  required: true
+               },
+
+               serialnumber: {
+                  required: true
+               },
+
+               status: {
+                  required: true
+               },
+
+               assignee: {
+                  required: true
+               },
+
+               price:{
+                  currency: ["$", true]
+               },
+
+               year: {
+                  digits: true
+               }
+
+ 				},
+
+            messages: {
+
+               type: {
+ 						required: "Select type"
+ 					},
+
+               brand: {
+                  required: "Select brand"
+               },
+
+               custombrand: {
+                  required: "Specify other"
+               },
+
+               modelnumber: {
+                  required: "Enter model number"
+               },
+
+               serialnumber: {
+                  required: 'Enter serial number (type 0 if not known)'
+               },
+
+               status: {
+                  required: "Select status"
+               },
+
+               assignee: {
+                  required: "Assign tool"
+               },
+
+               price:{
+                  currency: "dls;kfjdsaf"
+               },
+
+               year: {
+                  digits: "Digits only"
+               }
  				}
  			});
         });

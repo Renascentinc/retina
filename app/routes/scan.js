@@ -13,5 +13,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 			types: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/types'),
             brands: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/brands')
 		});
-	}
+	},
+    
+    deactivate() {
+        this.controller.toolList = [];
+    }
 });

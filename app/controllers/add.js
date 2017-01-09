@@ -37,13 +37,14 @@ export default Ember.Controller.extend({
         },
 		
 		addCustomOptions(dropdownid, textfieldid){
-			Ember.$(dropdownid).change(function(){
-				if(Ember.$(this).val() == '-1'){
+			Ember.$(dropdownid).change(function() {
+				if(Ember.$(this).val() === '-1'){
 					Ember.$(textfieldid).fadeIn();
-				}else{
+                    
+				} else {
 					Ember.$(textfieldid).fadeOut();
-			}//end if
-			}//end function
-		)}
+			    }
+			});
+        }
     }
 });

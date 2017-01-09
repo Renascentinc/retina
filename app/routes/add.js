@@ -16,7 +16,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     afterModel() {
         Ember.$(document).ready(function() {
 
-
  		   Ember.$("#form").validate({
  				rules: {
  					type: {

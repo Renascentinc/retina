@@ -13,6 +13,5 @@ export default DS.Model.extend({
     toolclass: DS.attr(),
     userid: DS.attr(),
     email: DS.attr(),
-    phonenumber: DS.attr(),
-	 makeyear: DS.attr()
+    phonenumber: DS.attr()
 });

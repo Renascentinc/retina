@@ -49,7 +49,7 @@ export default Ember.Controller.extend({
         },
 
 		addCustomOptions(dropdownid, textfieldid){
-			Ember.$(dropdownid).change(function() {
+			Ember.$(dropdownid).change(function(){
 				if(Ember.$(this).val() === '-1'){
 					Ember.$(textfieldid).fadeIn();
                     

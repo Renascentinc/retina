@@ -53,6 +53,7 @@ export default Ember.Controller.extend({
 			}
 			
 			if (Ember.$("#user-to-transfer-to").val() !== null && this.toolList.length !== 0){
+
 				
 				   var userid = parseInt(Ember.$("#user-to-transfer-to").val());
 

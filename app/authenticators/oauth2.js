@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import OAuth2PasswordGrant from 'ember-simple-auth/authenticators/oauth2-password-grant';
+import config from '../config/environment';
 
 export default OAuth2PasswordGrant.extend({
-  serverTokenEndpoint: 'https://retina-api-develop.azurewebsites.net/api/token',
+  serverTokenEndpoint: config.APP.api_url + config.APP.api_namespace + '/token',
   session: Ember.inject.service('session'),
     
   makeRequest(url, data) { 

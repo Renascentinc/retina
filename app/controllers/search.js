@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import config from '../config/environment';
 
 export default Ember.Controller.extend({	
     queryParams: {
@@ -27,18 +28,16 @@ export default Ember.Controller.extend({
             }
             
             var set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', params ).then(set);
+            Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', params ).then(set);
         },
         
         fuzzySearch(value) {
             var set = this.set.bind(this, 'model.tools');
             
             if( value !== "" ) {
-				Ember.$(".search-parameter").val( '' );
-                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', { parameter: value } ).then(set);
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
             } else {
-				
-                Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?status=&userID=&type=&brand=').then(set);
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);
             }
         },
 		

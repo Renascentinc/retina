@@ -1,15 +1,16 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import config from '../config/environment';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model() {
         return Ember.RSVP.hash({
             tool: this.get('store').createRecord('tool'),
-            brands: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/brands'),
-            types: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/types'),
-            providers: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/providers'),
-            status: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/status'),
-            users: Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/users')
+            brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands'),
+            types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
+            providers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/providers'),
+            status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
+            users: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users')
         });
     }
 });

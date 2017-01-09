@@ -1,9 +1,9 @@
 import DS from 'ember-data';
-
+import config from '../config/environment';
 
 export default DS.JSONAPIAdapter.extend({
-	host: 'https://retina-api-develop.azurewebsites.net',
-	namespace: 'api',
+	host: config.APP.api_url,
+	namespace: config.APP.api_namespace,
     authorizer: 'authorizer:oauth2',
     
     ajaxOptions: function ajaxOptions() {

@@ -2,6 +2,7 @@ import DS from 'ember-data';
 
 export default DS.Model.extend({
 	brand: DS.attr(),
+	year: DS.attr(),
 	type: DS.attr(),
 	username: DS.attr(),
 	purchasedate: DS.attr(),

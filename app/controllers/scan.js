@@ -80,6 +80,7 @@ export default Ember.Controller.extend({
         },
 		
         updateSearch( target ) {
+			Ember.$(".search-box").val('');
             let params = this.queryParams.get('0');
             params.currentUser = this.get('session').get('data.currentUserID');
             
@@ -105,6 +106,7 @@ export default Ember.Controller.extend({
             let currentUser = this.get('session').get('data.currentUserID');
             
             if( value !== "" ) {
+				Ember.$(".search-parameter").val( '' );
                 Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', { currentUser: currentUser, parameter: value } ).then(set);
             } else {
                 Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);

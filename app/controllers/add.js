@@ -13,9 +13,11 @@ export default Ember.Controller.extend({
 		},
 
         saveNewTool(tool) {
-
-            var price = tool.get('price').replace(/\$/g, "");
-            tool.set('price', price);
+            
+            if( tool.get('price') != null) {
+                var price = tool.get('price').replace(/\$/g, "");
+                tool.set('price', price);
+            }
 
             let brand = Ember.$('#brand').val();
             let type = Ember.$('#type').val();

@@ -107,7 +107,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                    },
 
                    purchasedate:{
-                      maxDate: "Must Enter Valid Date"
+                      maxDate: "Purchase Dates Must Be In The Past"
                    },
 
                    status: {

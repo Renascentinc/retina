@@ -107,7 +107,6 @@ export default Ember.Controller.extend({
             if( value !== "" ) {
                 Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search', { currentUser: currentUser, parameter: value } ).then(set);
             } else {
-                alert("reset");
                 Ember.$.getJSON('https://retina-api-develop.azurewebsites.net/api/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);
             }
         }

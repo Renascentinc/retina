@@ -19,11 +19,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
         let currentYear = new Date().getFullYear();
 
-        $.validator.addMethod("maxDate", function(value, element) {
+        Ember.$.validator.addMethod("maxDate", function(value) {
             var curDate = new Date();
             var inputDate = new Date(value);
 
-            if (value.toString() == ""){
+            if (value.toString() === ""){
                return true;
             } else if (inputDate > curDate){
                return false;

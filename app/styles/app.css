@@ -434,6 +434,7 @@ button{
 	padding: 0px;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0);
+}
 
 .error {
     color: #e30000;
@@ -442,6 +443,7 @@ button{
 .back{
 	font-size: 25px;
 	padding: 5px;
+	height: auto;
 	padding-top: 10px;
 	color: #e30000;
 }

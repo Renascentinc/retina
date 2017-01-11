@@ -17,6 +17,27 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     afterModel() {
         Ember.$(document).ready(function() {
 
+        var dateInput = $("[name=purchasedate]");
+        //Change Purchase date field to "date" type onfocus
+        dateInput.on("focus",function(){
+           dateInput.attr("type","date");
+        });
+
+        dateInput.on("blur",function(){
+           //Get date from input and change input type
+           //If originalDate is not empty, format date properly and
+           //insert it into the input field
+           var originalDate = dateInput.val();
+
+           dateInput.attr("type","text");
+
+           if(originalDate != ""){
+             var fomattedDate = (new Date(originalDate)).toLocaleDateString();
+             dateInput.val(date);
+           }
+
+        });
+
         let currentYear = new Date().getFullYear();
 
         Ember.$.validator.addMethod("maxDate", function(value) {

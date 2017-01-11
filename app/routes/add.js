@@ -17,23 +17,32 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     afterModel() {
         Ember.$(document).ready(function() {
 
+        //take date from input field, convert it into a date object, and format
+        //it properly
+        function parseDate(str){
+          var dateItems = str.split("-");
+          var createdDate = dateItems[1] + "/" + dateItems[2] + "/" + dateItems[0];
+          return createdDate;
+        }
+
         var dateInput = $("[name=purchasedate]");
-        //Change Purchase date field to "date" type onfocus
+
+        //Change Purchase date field to "date" type on focus
         dateInput.on("focus",function(){
            dateInput.attr("type","date");
         });
 
+        //Change Purchase date field to "text" type on blur and
+        //if the input date is not "", convert the input date into
+        //a nicer formate
         dateInput.on("blur",function(){
-           //Get date from input and change input type
-           //If originalDate is not empty, format date properly and
-           //insert it into the input field
            var originalDate = dateInput.val();
 
            dateInput.attr("type","text");
 
            if(originalDate != ""){
-             var fomattedDate = (new Date(originalDate)).toLocaleDateString();
-             dateInput.val(date);
+              var finalDate = parseDate(originalDate);
+              dateInput.val(finalDate);
            }
 
         });
@@ -41,12 +50,29 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         let currentYear = new Date().getFullYear();
 
         Ember.$.validator.addMethod("maxDate", function(value) {
-            var curDate = new Date();
-            var inputDate = new Date(value);
 
+           var inputType = $("[name=purchasedate]").attr("type");
+           if (inputType == "date"){
+             var inputDateArray = value.split("-");
+           } else if(inputType == "text"){
+             var inputDateArray = value.split("/");
+           }else{
+             console.log("Something broke")
+           }
+            var curDate = new Date();
+
+            //Sum the numerical values of both dates in order to compare
+            var inputDateSum = parseInt(inputDateArray[0]) + parseInt(inputDateArray[1]) + parseInt(inputDateArray[2]);
+
+            //getMonth returns values from 0 to 11, so add 1 to it
+            var curDateSum = curDate.getFullYear() + curDate.getMonth() + 1 + curDate.getDate();
+
+            //If the input values is empty, return true.
+            //Else, check for valid date.
+            //If the check passes, return true
             if (value.toString() === ""){
                return true;
-            } else if (inputDate > curDate){
+            } else if (inputDateSum > curDateSum){
                return false;
             } else {
                return true;

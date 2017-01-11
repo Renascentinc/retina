@@ -17,6 +17,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     afterModel() {
         Ember.$(document).ready(function() {
 
+        //------Helper functions------------
+
         //take date from input field, convert it into a date object, and format
         //it properly
         function parseDate(str){
@@ -25,6 +27,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           return createdDate;
         }
 
+        //-------End Helper Functions------
+
+
+
+        //----------Event handlers-----------
         var dateInput = $("[name=purchasedate]");
 
         //Change Purchase date field to "date" type on focus
@@ -47,7 +54,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
         });
 
-        let currentYear = new Date().getFullYear();
+        //-------End event handlers----------
+
+
+
+        //------Begin Validation-------------
+
 
         Ember.$.validator.addMethod("maxDate", function(value) {
 
@@ -80,8 +92,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
         });
 
-
- 		   Ember.$("#form").validate({
+        let currentYear = new Date().getFullYear();
+        
+ 		  Ember.$("#form").validate({
                rules: {
                    type: {
                        required: true
@@ -181,6 +194,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                    }
  				}
  			});
-        });
+      //----------End validation--------------
+      });
     }
 });

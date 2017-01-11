@@ -35,6 +35,7 @@ export default Ember.Controller.extend({
             var set = this.set.bind(this, 'model.tools');
             
             if( value !== "" ) {
+				Ember.$(".search-parameter").val('');
                 Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
             } else {
                 Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);

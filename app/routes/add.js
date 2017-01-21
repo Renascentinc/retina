@@ -63,6 +63,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
         Ember.$.validator.addMethod("maxDate", function(value) {
 
+           //Per my event handlers above, dates have different formats (##/##/## vs ##-##-##)
+           //depending on the type of the input
            var inputType = $("[name=purchasedate]").attr("type");
            if (inputType == "date"){
              var inputDateArray = value.split("-");
@@ -73,27 +75,53 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
            }
             var curDate = new Date();
 
-            //Sum the numerical values of both dates in order to compare
-            var inputDateSum = parseInt(inputDateArray[0]) + parseInt(inputDateArray[1]) + parseInt(inputDateArray[2]);
-
-            //getMonth returns values from 0 to 11, so add 1 to it
-            var curDateSum = curDate.getFullYear() + curDate.getMonth() + 1 + curDate.getDate();
-
             //If the input values is empty, return true.
             //Else, check for valid date.
             //If the check passes, return true
-            if (value.toString() === ""){
+            var validDate = true
+            if (value.toString() === "")
+            {
                return true;
-            } else if (inputDateSum > curDateSum){
+            }
+            else if (parseInt(inputDateArray[0]) < curDate.getFullYear())
+            {
+               return true;
+            }
+            else if (parseInt(inputDateArray[0]) == curDate.getFullYear())
+            {
+               if (parseInt(inputDateArray[1]) < curDate.getMonth() + 1)
+               {
+                  return true;
+               }
+               else if (parseInt(inputDateArray[1]) == curDate.getMonth() + 1)
+               {
+                  if(parseInt(inputDateArray[2]) < curDate.getDate())
+                  {
+                     return true;
+                  }
+                  else if (parseInt(inputDateArray[2]) == curDate.getDate())
+                  {
+                     return true;
+                  }
+                  else
+                  {
+                     return false;
+                  }
+               }
+               else
+               {
+                  return false;
+               }
+            }
+            else
+            {
                return false;
-            } else {
-               return true;
             }
 
         });
 
         let currentYear = new Date().getFullYear();
-        
+
  		  Ember.$("#form").validate({
                rules: {
                    type: {

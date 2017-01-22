@@ -57,9 +57,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         //-------End event handlers----------
 
 
-
         //------Begin Validation-------------
-
 
         Ember.$.validator.addMethod("maxDate", function(value) {
 

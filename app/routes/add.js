@@ -17,24 +17,110 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     afterModel() {
         Ember.$(document).ready(function() {
 
-        let currentYear = new Date().getFullYear();
+        //------Helper functions------------
+
+        //take date from input field, convert it into a date object, and format
+        //it properly
+        function parseDate(str){
+          var dateItems = str.split("-");
+          var createdDate = dateItems[1] + "/" + dateItems[2] + "/" + dateItems[0];
+          return createdDate;
+        }
+
+        //-------End Helper Functions------
+
+
+
+        //----------Event handlers-----------
+        var dateInput = $("[name=purchasedate]");
+
+        //Change Purchase date field to "date" type on focus
+        dateInput.on("focus",function(){
+           dateInput.attr("type","date");
+        });
+
+        //Change Purchase date field to "text" type on blur and
+        //if the input date is not "", convert the input date into
+        //a nicer formate
+        dateInput.on("blur",function(){
+           var originalDate = dateInput.val();
+
+           dateInput.attr("type","text");
+
+           if(originalDate != ""){
+              var finalDate = parseDate(originalDate);
+              dateInput.val(finalDate);
+           }
+
+        });
+
+        //-------End event handlers----------
+
+
+        //------Begin Validation-------------
 
         Ember.$.validator.addMethod("maxDate", function(value) {
-            var curDate = new Date();
-            var inputDate = new Date(value);
 
-            if (value.toString() === ""){
+           //Per my event handlers above, dates have different formats (##/##/## vs ##-##-##)
+           //depending on the type of the input
+           var inputType = $("[name=purchasedate]").attr("type");
+           if (inputType == "date"){
+             var inputDateArray = value.split("-");
+           } else if(inputType == "text"){
+             var inputDateArray = value.split("/");
+           }else{
+             console.log("Something broke")
+           }
+            var curDate = new Date();
+
+            //If the input values is empty, return true.
+            //Else, check for valid date.
+            //If the check passes, return true
+            var validDate = true
+            if (value.toString() === "")
+            {
                return true;
-            } else if (inputDate > curDate){
+            }
+            else if (parseInt(inputDateArray[0]) < curDate.getFullYear())
+            {
+               return true;
+            }
+            else if (parseInt(inputDateArray[0]) == curDate.getFullYear())
+            {
+               if (parseInt(inputDateArray[1]) < curDate.getMonth() + 1)
+               {
+                  return true;
+               }
+               else if (parseInt(inputDateArray[1]) == curDate.getMonth() + 1)
+               {
+                  if(parseInt(inputDateArray[2]) < curDate.getDate())
+                  {
+                     return true;
+                  }
+                  else if (parseInt(inputDateArray[2]) == curDate.getDate())
+                  {
+                     return true;
+                  }
+                  else
+                  {
+                     return false;
+                  }
+               }
+               else
+               {
+                  return false;
+               }
+            }
+            else
+            {
                return false;
-            } else {
-               return true;
             }
 
         });
 
+        let currentYear = new Date().getFullYear();
 
- 		   Ember.$("#form").validate({
+ 		  Ember.$("#form").validate({
                rules: {
                    type: {
                        required: true
@@ -134,6 +220,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                    }
  				}
  			});
-        });
+      //----------End validation--------------
+      });
     }
 });

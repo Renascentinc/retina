@@ -49,7 +49,7 @@
 
 	{{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding=model.tool.price}}
 
-   {{input type="date" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}
+   {{input type="text" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}
 
 	{{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.makeyear}}<hr>
 
@@ -70,8 +70,8 @@
             {{/each}}
         </select>
 
-    </div>       
-    
+    </div>
+
     <button type="submit" style="margin: 20px;" class="go"> Add </button>
-	
+
 </form>

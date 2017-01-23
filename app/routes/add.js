@@ -32,7 +32,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
 
         //----------Event handlers-----------
-        var dateInput = $("[name=purchasedate]");
+        var dateInput = Ember.$("[name=purchasedate]");
 
         //Change Purchase date field to "date" type on focus
         dateInput.on("focus",function(){
@@ -47,7 +47,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
            dateInput.attr("type","text");
 
-           if(originalDate != ""){
+           if(originalDate !== ""){
               var finalDate = parseDate(originalDate);
               dateInput.val(finalDate);
            }
@@ -63,20 +63,20 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
            //Per my event handlers above, dates have different formats (##/##/## vs ##-##-##)
            //depending on the type of the input
-           var inputType = $("[name=purchasedate]").attr("type");
-           if (inputType == "date"){
-             var inputDateArray = value.split("-");
-           } else if(inputType == "text"){
-             var inputDateArray = value.split("/");
-           }else{
-             console.log("Something broke")
+           var inputType = Ember.$("[name=purchasedate]").attr("type");
+           var inputDateArray;
+           if (inputType === "date"){
+             inputDateArray = value.split("-");
+           } else if(inputType === "text"){
+             inputDateArray = value.split("/");
+           } else {
+             console.log("Something broke");
            }
             var curDate = new Date();
 
             //If the input values is empty, return true.
             //Else, check for valid date.
             //If the check passes, return true
-            var validDate = true
             if (value.toString() === "")
             {
                return true;
@@ -85,19 +85,19 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             {
                return true;
             }
-            else if (parseInt(inputDateArray[0]) == curDate.getFullYear())
+            else if (parseInt(inputDateArray[0]) === curDate.getFullYear())
             {
                if (parseInt(inputDateArray[1]) < curDate.getMonth() + 1)
                {
                   return true;
                }
-               else if (parseInt(inputDateArray[1]) == curDate.getMonth() + 1)
+               else if (parseInt(inputDateArray[1]) === curDate.getMonth() + 1)
                {
                   if(parseInt(inputDateArray[2]) < curDate.getDate())
                   {
                      return true;
                   }
-                  else if (parseInt(inputDateArray[2]) == curDate.getDate())
+                  else if (parseInt(inputDateArray[2]) === curDate.getDate())
                   {
                      return true;
                   }

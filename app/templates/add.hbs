@@ -1,9 +1,8 @@
-
 <form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>
 	<div>
         <select id="type" name="type" class="dark-dropdown add">
             <option disabled selected hidden> Type </option>
-            {{#each model.types.types as |type|}}
+            {{#each model.dropdown.type as |type|}}
               <option value={{type}}> {{type}} </option>
             {{/each}}
 
@@ -16,7 +15,7 @@
     <div>
         <select id="brand" name = "brand" class="dark-dropdown add" {{action 'addCustomOptions' '#brand' '#custom-brand'}} >
             <option disabled selected hidden> Brand </option>
-            {{#each model.brands.brands as |brand|}}
+            {{#each model.dropdown.brand as |brand|}}
               <option value={{brand}}> {{brand}} </option>
             {{/each}}
 
@@ -37,7 +36,7 @@
         <select id="purchasedfrom" class="dark-dropdown add" {{action 'addCustomOptions' '#purchasedfrom' '#custom-purchasedfrom'}}>
             <option selected value=""> Purchased From </option>
 
-            {{#each model.providers.providers as |provider|}}
+            {{#each model.dropdown.provider as |provider|}}
               <option value={{provider}}> {{provider}} </option>
             {{/each}}
 
@@ -56,7 +55,7 @@
 	<div>
         <select id="status" name="status" class="dark-dropdown add" >
             <option disabled selected hidden> Status </option>
-            {{#each model.status.status as |status|}}
+            {{#each model.dropdown.status as |status|}}
               <option value={{status}}> {{status}} </option>
             {{/each}}
         </select>
@@ -65,7 +64,7 @@
 	<div>
         <select id="assignee" name="assignee" class="dark-dropdown add" >
             <option disabled selected hidden> Assign To </option>
-            {{#each model.users.users as |user|}}
+            {{#each model.dropdown.user as |user|}}
               <option value={{user.userid}}> {{user.username}} </option>
             {{/each}}
         </select>

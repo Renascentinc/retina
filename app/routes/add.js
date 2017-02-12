@@ -1,38 +1,24 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-import config from '../config/environment';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model() {
         return Ember.RSVP.hash({
             tool: this.get('store').createRecord('tool'),
-            brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands'),
-            types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
-            providers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/providers'),
-            status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
-            users: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users')
+            dropdown: this.get('store').queryRecord('dropdown', {currentUser: 0, brand: true, type: true, provider: true, status: true, user: true, restricteduser: false})
         });
     },
 
     afterModel() {
         Ember.$(document).ready(function() {
-
-        //------Helper functions------------
-
         //take date from input field, convert it into a date object, and format
         //it properly
-        function parseDate(str){
-          var dateItems = str.split("-");
-          var createdDate = dateItems[1] + "/" + dateItems[2] + "/" + dateItems[0];
-          return createdDate;
+        function parseDate(str) {
+          let dateItems = str.split("-");
+          return dateItems[1] + "/" + dateItems[2] + "/" + dateItems[0];
         }
 
-        //-------End Helper Functions------
-
-
-
-        //----------Event handlers-----------
-        var dateInput = Ember.$("[name=purchasedate]");
+        let dateInput = Ember.$("[name=purchasedate]");
 
         //Change Purchase date field to "date" type on focus
         dateInput.on("focus",function(){
@@ -43,12 +29,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         //if the input date is not "", convert the input date into
         //a nicer formate
         dateInput.on("blur",function(){
-           var originalDate = dateInput.val();
+           let originalDate = dateInput.val();
 
            dateInput.attr("type","text");
 
            if(originalDate !== ""){
-              var finalDate = parseDate(originalDate);
+              let finalDate = parseDate(originalDate);
               dateInput.val(finalDate);
            }
 
@@ -63,8 +49,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
            //Per my event handlers above, dates have different formats (##/##/## vs ##-##-##)
            //depending on the type of the input
-           var inputType = Ember.$("[name=purchasedate]").attr("type");
-           var inputDateArray;
+           let inputType = Ember.$("[name=purchasedate]").attr("type");
+           let inputDateArray;
            if (inputType === "date"){
              inputDateArray = value.split("-");
            } else if(inputType === "text"){
@@ -72,7 +58,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
            } else {
              console.log("Something broke");
            }
-            var curDate = new Date();
+           let curDate = new Date();
 
             //If the input values is empty, return true.
             //Else, check for valid date.
@@ -115,7 +101,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             {
                return false;
             }
-
         });
 
         let currentYear = new Date().getFullYear();

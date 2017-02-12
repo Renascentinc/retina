@@ -16,16 +16,16 @@ export default function() {
 
     http://www.ember-cli-mirage.com/docs/v0.2.x/shorthands/
   */
-    
+
     this.post('/token', (schema, request) => {
         let params = request.requestBody;
-        
+
         if (params.username === 'letme' && params.password === 'in') {
             return { "access_token": "567k345jsd1o34sdklsdf34534", userid: 189823748 };
         }
     }); //end post => /token
-	
-    this.get('/tools/:id', (schema, request) => {	
+
+    this.get('/tools/:id', (schema, request) => {
 		return {
 		  data: {
 			type: "tool",
@@ -41,8 +41,8 @@ export default function() {
 			}
 		  }
 		};
-    }); //end get => /tools/:id	
-	
+    }); //end get => /tools/:id
+
 	this.get('/tools', function() {
     return {
       data: [{
@@ -118,11 +118,11 @@ export default function() {
       }]
     };
   });
-	
+
 	this.get('/status', function() {
     return ['in-use', 'available', 'out of service'];
   	});
-	
+
 	this.get('/owners', function() {
     return {
       data: [{
@@ -153,16 +153,41 @@ export default function() {
       }]
     };
   });
-	
+
   this.get('/type', function() {
     return ["hammer drill", "reciprocating saw", "impact driver"];
   });
-    
+
   this.get('/providers', function() {
     return ["jobsite supply", "home depot", "ace hardware", "lowes"];
-  });  
-    
+  });
+
   this.get('/brands', function() {
     return ["milwuake", "black & decker", "dewalt", "bosch"];
-  });      
+  });
+
+  this.get('/dropdowns/:id', function() {
+    return {
+      data: {
+        type: 'dropdown',
+        id: '1',
+        attributes: {
+          user: ['boole', 'george', 'ted', 'haha']
+        }
+      }
+    };
+  });
+
+  this.get('/dropdowns', (schema, request) => {
+    return {
+      data: {
+        type: 'dropdown',
+        id: '1',
+        attributes: {
+          user: ['boole', 'george', 'ted', 'haha']
+        }
+      }
+    };
+  }); //end get => /tools/:id
+
 }//end config

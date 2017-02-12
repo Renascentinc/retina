@@ -4,9 +4,9 @@ import config from '../config/environment';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
 	model(params) {
-		return Ember.RSVP.hash({ 
-            tool: this.get('store').findRecord('tool', params.id),
-			status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status')
+		return Ember.RSVP.hash({
+		  tool: this.get('store').findRecord('tool', params.id),
+      dropdown: this.get('store').queryRecord('dropdown', {currentUser: 0, brand: false, type: false, provider: false, status: true, user: false, restricteduser: false})
 		});
 	}
 });

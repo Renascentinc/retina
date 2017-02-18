@@ -13,7 +13,7 @@
 	<select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
 		<option disabled selected hidden>Type</option>
 		<option value=""> Any Type </option>
-		{{#each model.dropdown.types as |type|}}
+		{{#each model.dropdown.type as |type|}}
 			<option value={{type}}>
 				{{type}}
 			</option>
@@ -46,18 +46,18 @@
 	<div class="search-block">
 		{{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
 	</div>
-{{#each model.tools.data as |tool|}}
+{{#each model.tool as |tool|}}
 	<div class="specs-box"> {{#link-to 'info' tool.id}}
 		<div class="tool-specs">
 			<div class="title">
-					{{tool.attributes.brand}}
-					{{tool.attributes.type}}<br>
+					{{tool.brand}}
+					{{tool.type}}<br>
 			</div>
 
 			<div class="facts">
 
 				Tool ID: {{tool.id}}<br>
-				<span class="glyphicon glyphicon-user"></span> {{tool.attributes.username}}, {{tool.attributes.status}}
+				<span class="glyphicon glyphicon-user"></span> {{tool.username}}, {{tool.status}}
 			</div>
 		</div>
 

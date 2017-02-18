@@ -27,19 +27,26 @@ export default Ember.Controller.extend({
                 params.userID = target.value;
             }
 
-            let set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', params ).then(set);
+            let set = this.set.bind(this, 'model.tool');
+            // Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', params ).then(set);
+            this.get('store').query('tool', params).then(set);
         },
 
         fuzzySearch(value) {
-            let set = this.set.bind(this, 'model.tools');
+            let set = this.set.bind(this, 'model.tool');
+            //
+            // if( value !== "" ) {
+				// Ember.$(".search-parameter").val('');
+            //     Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
+            // } else {
+            //     Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);
+            // }
+          if( value !== "" ) {
+            this.get('store').query('tool', {parameter: value}).then(set);
 
-            if( value !== "" ) {
-				Ember.$(".search-parameter").val('');
-                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
-            } else {
-                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);
-            }
+          } else {
+            this.get('store').query('tool', {status: '', userID: '', type: '', brand: ''}).then(set);
+          }
         },
 
 		    currentUser() {

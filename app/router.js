@@ -13,6 +13,7 @@ Router.map(function() {
   this.route('scan');
   this.route('login');
   this.route('info', { path: "tool/:id" });
+  this.route('loading');
 });
 
 export default Router;

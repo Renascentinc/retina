@@ -1,6 +1,5 @@
 import DS from 'ember-data';
 import config from '../config/environment';
-// import LFAdapter from 'ember-localforage-adapter/adapters/localforage';
 
 export default DS.JSONAPIAdapter.extend({
 // 	host: config.APP.api_url,

@@ -1,0 +1,76 @@
+<form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>
+  {{#power-select-with-create
+    options = model.dropdown.type
+    searchField = "Type"
+    selected = model.tool.type
+    onchange=(action (mut model.tool.type))
+    oncreate = (action (mut model.tool.type))
+    showCreateWhen = (action "hideCreateOptionOnSameName") as |type|
+  }}
+    {{type}}
+  {{/power-select-with-create}}
+
+
+  {{#power-select-with-create
+    options = model.dropdown.brand
+    searchField = "Brand"
+    selected = model.tool.brand
+    onchange=(action (mut model.tool.brand))
+    oncreate = (action (mut model.tool.brand)) as |brand|
+  }}
+    {{brand}}
+  {{/power-select-with-create}}
+
+
+  {{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" valueBinding=model.tool.modelnumber}}
+
+
+  {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" valueBinding=model.tool.serialnumber}}<hr>
+
+
+  {{#power-select-with-create
+    options = model.dropdown.provider
+    searchField = "Purchased From"
+    selected = model.tool.provider
+    onchange=(action (mut model.tool.provider))
+    oncreate = (action (mut model.tool.provider)) as |provider|
+  }}
+    {{provider}}
+  {{/power-select-with-create}}
+
+
+  {{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding=model.tool.price}}
+
+
+  {{input type="text" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}
+
+
+  {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.year}}<hr>
+
+
+  {{#power-select-with-create
+    options = model.dropdown.status
+    searchField = "Status"
+    selected = model.tool.status
+    onchange=(action (mut model.tool.status))
+    oncreate = (action (mut model.tool.status)) as |status|
+  }}
+    {{status}}
+  {{/power-select-with-create}}
+
+
+  {{#power-select-with-create
+    options = model.dropdown.user
+    searchField = "Assignee"
+    selected = model.tool.userid
+    onchange=(action (mut model.tool.userid))
+    oncreate = (action (mut model.tool.userid)) as |assignee|
+  }}
+    {{assignee.username }}
+  {{/power-select-with-create}}
+
+
+  <button type="submit" style="margin: 20px;" class="go"> Add </button>
+</form>
+
+{{yield}}

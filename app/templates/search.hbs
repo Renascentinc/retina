@@ -1,71 +1,71 @@
 <div class="search-bar">
 
-	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-		<option disabled selected hidden> Status </option>
-		<option value=""> Any Status </option>
-		{{#each model.dropdown.status as |status|}}
-			<option value={{status}}>
-				{{status}}
-			</option>
-		{{/each}}
-	</select>
+  <select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
+    <option disabled selected hidden> Status</option>
+    <option value=""> Any Status</option>
+    {{#each model.dropdown.status as |status|}}
+      <option value={{status}}>
+        {{status}}
+      </option>
+    {{/each}}
+  </select>
 
-	<select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-		<option disabled selected hidden>Type</option>
-		<option value=""> Any Type </option>
-		{{#each model.dropdown.type as |type|}}
-			<option value={{type}}>
-				{{type}}
-			</option>
-		{{/each}}
-	</select>
+  <select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
+    <option disabled selected hidden>Type</option>
+    <option value=""> Any Type</option>
+    {{#each model.dropdown.type as |type|}}
+      <option value={{type}}>
+        {{type}}
+      </option>
+    {{/each}}
+  </select>
 
-	<select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-		<option disabled selected hidden>Owner</option>
-		<option value=""> Any Owner </option>
-		{{#each model.dropdown.user as |user|}}
-			<option value={{user.userid}}>
-				{{user.username}}
-			</option>
-		{{/each}}
-	</select>
+  <select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
+    <option disabled selected hidden>Owner</option>
+    <option value=""> Any Owner</option>
+    {{#each model.dropdown.user as |user|}}
+      <option value={{user.userid}}>
+        {{user.username}}
+      </option>
+    {{/each}}
+  </select>
 
-		<select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
-		<option disabled selected hidden>Brand</option>
-		<option value=""> Any Brand </option>
-		{{#each model.dropdown.brand as |brand|}}
-			<option value={{brand}}>
-				{{brand}}
-			</option>
-		{{/each}}
-	</select>
+  <select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
+    <option disabled selected hidden>Brand</option>
+    <option value=""> Any Brand</option>
+    {{#each model.dropdown.brand as |brand|}}
+      <option value={{brand}}>
+        {{brand}}
+      </option>
+    {{/each}}
+  </select>
 
 </div>
 
 <div id="tool-display-box-full">
-	<div class="search-block">
-		{{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
-	</div>
-{{#each model.tool as |tool|}}
-	<div class="specs-box"> {{#link-to 'info' tool.id}}
-		<div class="tool-specs">
-			<div class="title">
-					{{tool.brand}}
-					{{tool.type}}<br>
-			</div>
+  <div class="search-block">
+    {{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
+  </div>
+  {{#each model.tool as |tool|}}
+    <div class="specs-box"> {{#link-to 'info' tool.id}}
+      <div class="tool-specs">
+        <div class="title">
+          {{tool.brand}}
+          {{tool.type}}<br>
+        </div>
 
-			<div class="facts">
+        <div class="facts">
 
-				Tool ID: {{tool.id}}<br>
-				<span class="glyphicon glyphicon-user"></span> {{tool.username}}, {{tool.status}}
-			</div>
-		</div>
+          Tool ID: {{tool.id}}<br>
+          <span class="glyphicon glyphicon-user"></span> {{tool.username}}, {{tool.status}}
+        </div>
+      </div>
 
-		<div class="options">
-			<span class="glyphicon glyphicon-chevron-right search-icon" aria-hidden="true"></span>
-			<br>
-		</div>
-	{{/link-to}} </div>
-{{/each}}
+      <div class="options">
+        <span class="glyphicon glyphicon-chevron-right search-icon" aria-hidden="true"></span>
+        <br>
+      </div>
+    {{/link-to}} </div>
+  {{/each}}
 </div>
 

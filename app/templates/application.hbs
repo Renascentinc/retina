@@ -1,51 +1,43 @@
 
-{{#if isLoginRoute}}
-    {{outlet}}
-{{else}}
-
+{{#unless isLoginRoute}}
 <header>
-    <div id="titlebar" class="container-fluid">
-		<div class="nav-container">
-			{{#link-to "add" class="icon-btn" id="add-icon"}}<span class="glyphicon glyphicon-main glyphicon-plus" aria-hidden="true"></span>{{/link-to}} 
-		</div>
-        
-		<div class="nav-container">
-	        {{#link-to "search" class="icon-btn" id="search-icon"}}<span  class="glyphicon glyphicon-main glyphicon-search" aria-hidden="true"></span>{{/link-to}} 
-		</div>
-		
-		<div class="nav-container">
-			{{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-main glyphicon-wrench" aria-hidden="true"></span>{{/link-to}} 
-		</div>
-        
-        <div class="nav-container">
-            <button {{action 'invalidateSession'}} class="icon-btn"><span  class="glyphicon glyphicon-main glyphicon-log-out" aria-hidden="true"></span></button>
-        </div>    
+  <div id="titlebar" class="container-fluid">
+    <div class="nav-container">
+      {{#link-to "add" class="icon-btn" id="add-icon"}}<span class="glyphicon glyphicon-main glyphicon-plus" aria-hidden="true"></span>{{/link-to}}
     </div>
-		
+
+    <div class="nav-container">
+          {{#link-to "search" class="icon-btn" id="search-icon"}}<span  class="glyphicon glyphicon-main glyphicon-search" aria-hidden="true"></span>{{/link-to}}
+    </div>
+
+    <div class="nav-container">
+      {{#link-to "scan" class="icon-btn" id="tool-icon"}}<span  class="glyphicon glyphicon-main glyphicon-wrench" aria-hidden="true"></span>{{/link-to}}
+    </div>
+
+    <div class="nav-container">
+        <button {{action 'invalidateSession'}} class="icon-btn"><span  class="glyphicon glyphicon-main glyphicon-log-out" aria-hidden="true"></span></button>
+    </div>
+  </div>
 </header>
 <nav>
 	<div class="subtitle" id="add">
 		ADD
 	</div>
-	
+
 	<div class="subtitle" id="search">
 		SEARCH
 	</div>
-	
+
 	<div class="subtitle" id="tool">
 		TRANSFER
 	</div>
-	
+
 	<div class="subtitle" id="logout">
 		LOGOUT
 	</div>
-	
-	
-	
 </nav>
+{{/unless}}
 
 <div id="screen-view">
-        {{outlet}} 
+  {{outlet}}
 </div>
-
-{{/if}}

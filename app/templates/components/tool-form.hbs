@@ -1,4 +1,3 @@
-{{!--<form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>--}}
 <div id="form">
   {{#power-select-with-create
     placeholder = "Type"
@@ -10,6 +9,12 @@
   }}
     {{type}}
   {{/power-select-with-create}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'type' 'message'}}
+    </div>
+  {{/if}}
 
 
   {{#power-select-with-create
@@ -23,12 +28,31 @@
     {{brand}}
   {{/power-select-with-create}}
 
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'brand' 'message'}}
+    </div>
+  {{/if}}
+
 
   {{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" valueBinding=model.tool.modelnumber}}
 
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'modelnumber' 'message'}}
+    </div>
+  {{/if}}
 
-  {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" valueBinding=model.tool.serialnumber}}<hr>
 
+  {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" valueBinding=model.tool.serialnumber}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'serialnumber' 'message'}}
+    </div>
+  {{/if}}
+
+  <hr>
 
   {{#power-select-with-create
     placeholder = "Provider"
@@ -41,15 +65,40 @@
     {{provider}}
   {{/power-select-with-create}}
 
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'provider' 'message'}}
+    </div>
+  {{/if}}
+
 
   {{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding=model.tool.price}}
 
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'price' 'message'}}
+    </div>
+  {{/if}}
 
-  {{!--{{input type="text" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}--}}
-  {{pikaday-input placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="2000,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 
-  {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.year}}<hr>
+  {{pikaday-input placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'purchasedate' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.year}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'year' 'message'}}
+    </div>
+  {{/if}}
+
+  <hr>
 
   {{#power-select
     placeholder = "Status"
@@ -60,6 +109,12 @@
   }}
     {{status}}
   {{/power-select}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'status' 'message'}}
+    </div>
+  {{/if}}
 
 
   {{#power-select
@@ -73,10 +128,14 @@
     {{assignee.username }}
   {{/power-select}}
 
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'userid' 'message'}}
+    </div>
+  {{/if}}
 
-  {{!--<button type="submit" style="margin: 20px;" class="go"> Add </button>--}}
+
   {{async-button action=(action "saveNewTool" model.tool) style="margin: 20px;" class="go" default="Add" pending="Saving..."}}
-{{!--</form>--}}
 </div>
 
 {{yield}}

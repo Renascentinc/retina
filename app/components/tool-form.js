@@ -6,7 +6,7 @@ export default Ember.Component.extend({
     saveNewTool(tool) {
         let _this = this;
 
-        tool.save().then(function (tool) {
+        return tool.save().then(function (tool) {
           let toolid = tool.get('id');
           _this.get('target').transitionTo('info', toolid);
 
@@ -15,8 +15,8 @@ export default Ember.Component.extend({
         });
     },
 
-    hideCreateOptionOnSameName(term) {
-      let existingOption = this.get('model.dropdown.type').includes(term);
+    hideCreateOptionOnSameName(whichModel, term) {
+      let existingOption = this.get(`model.dropdown.${whichModel}`).includes(term);
       return !existingOption;
     }
   }

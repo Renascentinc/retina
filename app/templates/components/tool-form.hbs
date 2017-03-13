@@ -1,11 +1,11 @@
-<form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>
+{{!--<form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>--}}
   {{#power-select-with-create
     options = model.dropdown.type
-    searchField = "Type"
     selected = model.tool.type
+    placeholder = "Type"
     onchange=(action (mut model.tool.type))
     oncreate = (action (mut model.tool.type))
-    showCreateWhen = (action "hideCreateOptionOnSameName") as |type|
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'type') as |type|
   }}
     {{type}}
   {{/power-select-with-create}}
@@ -13,10 +13,11 @@
 
   {{#power-select-with-create
     options = model.dropdown.brand
-    searchField = "Brand"
     selected = model.tool.brand
+    placeholder = "Brand"
     onchange=(action (mut model.tool.brand))
-    oncreate = (action (mut model.tool.brand)) as |brand|
+    oncreate = (action (mut model.tool.brand))
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'brand')as |brand|
   }}
     {{brand}}
   {{/power-select-with-create}}
@@ -30,10 +31,11 @@
 
   {{#power-select-with-create
     options = model.dropdown.provider
-    searchField = "Purchased From"
     selected = model.tool.provider
+    placeholder = "Provider"
     onchange=(action (mut model.tool.provider))
-    oncreate = (action (mut model.tool.provider)) as |provider|
+    oncreate = (action (mut model.tool.provider))
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'provider')as |provider|
   }}
     {{provider}}
   {{/power-select-with-create}}
@@ -48,29 +50,31 @@
   {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.year}}<hr>
 
 
-  {{#power-select-with-create
+  {{#power-select
     options = model.dropdown.status
-    searchField = "Status"
     selected = model.tool.status
+    placeholder = "Status"
     onchange=(action (mut model.tool.status))
     oncreate = (action (mut model.tool.status)) as |status|
   }}
     {{status}}
-  {{/power-select-with-create}}
+  {{/power-select}}
 
 
-  {{#power-select-with-create
+  {{#power-select
     options = model.dropdown.user
-    searchField = "Assignee"
+    searchField = "username"
     selected = model.tool.userid
-    onchange=(action (mut model.tool.userid))
+    placeholder = "Assignee"
+    onchange = (action (mut model.tool.userid))
     oncreate = (action (mut model.tool.userid)) as |assignee|
   }}
     {{assignee.username }}
-  {{/power-select-with-create}}
+  {{/power-select}}
 
 
-  <button type="submit" style="margin: 20px;" class="go"> Add </button>
-</form>
+  {{!--<button type="submit" style="margin: 20px;" class="go"> Add </button>--}}
+  {{async-button action=(action "saveNewTool" model.tool) style="margin: 20px;" class="go" default="Add" pending="Saving..."}}
+{{!--</form>--}}
 
 {{yield}}

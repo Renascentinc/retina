@@ -104,8 +104,7 @@
     placeholder = "Status"
     options = model.dropdown.status
     selected = model.tool.status
-    onchange=(action (mut model.tool.status))
-    oncreate = (action (mut model.tool.status)) as |status|
+    onchange=(action (mut model.tool.status)) as |status|
   }}
     {{status}}
   {{/power-select}}
@@ -122,8 +121,7 @@
     options = model.dropdown.user
     searchField = "username"
     selected = model.tool.userid
-    onchange = (action (mut model.tool.userid))
-    oncreate = (action (mut model.tool.userid)) as |assignee|
+    onchange = (action 'updateUserID') as |assignee|
   }}
     {{assignee.username }}
   {{/power-select}}
@@ -137,5 +135,3 @@
 
   {{async-button action=(action "saveNewTool" model.tool) style="margin: 20px;" class="go" default="Add" pending="Saving..."}}
 </div>
-
-{{yield}}

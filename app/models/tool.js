@@ -75,16 +75,6 @@ const Validations = buildValidations({
     ]
   },
 
-  email: {
-    description: 'Email',
-    validators: [
-      validator('presence', true),
-      validator('format', {
-        type: 'email'
-      })
-    ]
-  },
-
   userid: {
     description: 'Assignee',
     validators: [

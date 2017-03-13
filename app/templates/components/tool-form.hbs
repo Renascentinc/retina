@@ -1,8 +1,9 @@
 {{!--<form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>--}}
+<div id="form">
   {{#power-select-with-create
+    placeholder = "Type"
     options = model.dropdown.type
     selected = model.tool.type
-    placeholder = "Type"
     onchange=(action (mut model.tool.type))
     oncreate = (action (mut model.tool.type))
     showCreateWhen = (action 'hideCreateOptionOnSameName' 'type') as |type|
@@ -12,9 +13,9 @@
 
 
   {{#power-select-with-create
+    placeholder = "Brand"
     options = model.dropdown.brand
     selected = model.tool.brand
-    placeholder = "Brand"
     onchange=(action (mut model.tool.brand))
     oncreate = (action (mut model.tool.brand))
     showCreateWhen = (action 'hideCreateOptionOnSameName' 'brand')as |brand|
@@ -30,9 +31,9 @@
 
 
   {{#power-select-with-create
+    placeholder = "Provider"
     options = model.dropdown.provider
     selected = model.tool.provider
-    placeholder = "Provider"
     onchange=(action (mut model.tool.provider))
     oncreate = (action (mut model.tool.provider))
     showCreateWhen = (action 'hideCreateOptionOnSameName' 'provider')as |provider|
@@ -44,16 +45,16 @@
   {{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding=model.tool.price}}
 
 
-  {{input type="text" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}
-
+  {{!--{{input type="text" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}--}}
+  {{pikaday-input placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="2000,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 
   {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.year}}<hr>
 
 
   {{#power-select
+    placeholder = "Status"
     options = model.dropdown.status
     selected = model.tool.status
-    placeholder = "Status"
     onchange=(action (mut model.tool.status))
     oncreate = (action (mut model.tool.status)) as |status|
   }}
@@ -62,10 +63,10 @@
 
 
   {{#power-select
+    placeholder = "Assignee"
     options = model.dropdown.user
     searchField = "username"
     selected = model.tool.userid
-    placeholder = "Assignee"
     onchange = (action (mut model.tool.userid))
     oncreate = (action (mut model.tool.userid)) as |assignee|
   }}
@@ -76,5 +77,6 @@
   {{!--<button type="submit" style="margin: 20px;" class="go"> Add </button>--}}
   {{async-button action=(action "saveNewTool" model.tool) style="margin: 20px;" class="go" default="Add" pending="Saving..."}}
 {{!--</form>--}}
+</div>
 
 {{yield}}

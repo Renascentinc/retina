@@ -380,7 +380,7 @@ a:hover {
   width: 100vw;
 }
 
-form {
+#form {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   margin-left: auto;

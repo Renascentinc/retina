@@ -165,7 +165,7 @@ a:hover{
 	overflow: hidden;
 	width: 300px;
 	box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
-	bottom: 0px;
+	bottom: 0;
 
 
 }
@@ -439,4 +439,16 @@ button{
   margin: auto;
   line-height: 100vw;
   font-size: 112px;
+}
+
+#cart-title{
+  display: inline-block;
+  width: 70%;
+  margin: 0;
+  padding: 0;
+}
+
+#trash-icon{
+  display: inline-block;
+  text-align: left;
 }

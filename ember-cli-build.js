@@ -12,7 +12,6 @@ module.exports = function(defaults) {
   app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', { destDir: 'fonts' });
   app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff2', { destDir: 'fonts' });
   app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', { destDir: 'fonts' });
-  app.import('bower_components/jquery-validation/dist/jquery.validate.min.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

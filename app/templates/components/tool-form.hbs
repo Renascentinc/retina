@@ -121,7 +121,7 @@
     options = model.dropdown.user
     searchField = "username"
     selected = model.tool.userid
-    onchange = (action 'updateUserID') as |assignee|
+    onchange = (action (mut model.tool.userid)) as |assignee|
   }}
     {{assignee.username }}
   {{/power-select}}

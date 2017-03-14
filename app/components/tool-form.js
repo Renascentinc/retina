@@ -9,13 +9,13 @@ export default Ember.Component.extend({
         return new Promise(function(resolve, reject) {
           tool.validate().then(({validations}) => {
             if (validations.get('isValid')) {
+              _this.set('model.tool.userid', _this.get('model.tool.userid').userid);
               _this.set('showErrorMessage', false);
 
               tool.save().then(function (tool) {
-                console.log("success");
                 resolve('save successful');
                 let toolid = tool.get('id');
-                // _this.get('target').transitionTo('info', toolid);
+                _this.get('successfulAdd')(toolid);
 
               }).catch(function (e) {
                 reject('save failed');
@@ -33,10 +33,6 @@ export default Ember.Component.extend({
     hideCreateOptionOnSameName (whichModel, term) {
       let existingOption = this.get(`model.dropdown.${whichModel}`).includes(term);
       return !existingOption;
-    },
-
-    updateUserID (user) {
-      this.set('model.tool.userid', user.userid);
     }
   }
 });

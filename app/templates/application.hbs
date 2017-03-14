@@ -1,5 +1,7 @@
 
-{{#unless isLoginRoute}}
+{{#if isLoginRoute}}
+  {{outlet}}
+{{else}}
 <header>
   <div id="titlebar" class="container-fluid">
     <div class="nav-container">
@@ -36,8 +38,9 @@
 		LOGOUT
 	</div>
 </nav>
-{{/unless}}
 
 <div id="screen-view">
   {{outlet}}
 </div>
+
+{{/if}}

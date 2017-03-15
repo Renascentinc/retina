@@ -1,55 +1,55 @@
 #titlebar{
-    position: absolute;
-    height: 78px;
-    margin 0px 0px;
-    width: 100%;
-    background-color: #363636;
-    box-shadow: 0px 3px 4px rgba(0, 0, 0, .49);
-    z-index: 2;
-    top: 0px;
+  position: absolute;
+  height: 78px;
+  margin: 0px 0px;
+  width: 100%;
+  background-color: #363636;
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, .49);
+  z-index: 2;
+  top: 0px;
 	display: inline-flex;
 	text-align: center;
 	padding: 0px 0px;
 }
 
 nav{
-    height: 30px;
-    position: absolute;
-    margin 0px 0px;
-    background-color: #E30000;
-    top: 78px;
-    width: 100%;
-    z-index: 1;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, .49);
+  height: 30px;
+  position: absolute;
+  margin: 0px 0px;
+  background-color: #E30000;
+  top: 78px;
+  width: 100%;
+  z-index: 1;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, .49);
 	color: white;
 	text-align: center;
 }
 
 .container.nav-cont{
-    text-align: center;
-    width: calc(50% - 2px);
-    display: inline-block;
-    height: 100%;
-    line-height: 65px;
-    font-size: 30px;
-    font-family: "Helvetica Neue";
-    font-weight: 300;
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
-    overflow-x: hidden;
+  text-align: center;
+  width: calc(50% - 2px);
+  display: inline-block;
+  height: 100%;
+  line-height: 65px;
+  font-size: 30px;
+  font-family: "Helvetica Neue";
+  font-weight: 300;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  overflow-x: hidden;
 }
 
 #title{
-    color: white;
-    font-family: "Helvetica Neue";
-    font-weight: 100;
-    font-size: 38px;
-    text-align: center;
+  color: white;
+  font-family: "Helvetica Neue";
+  font-weight: 100;
+  font-size: 38px;
+  text-align: center;
 	width: 200px;
 	position: relative;
 	margin-top: auto;
 	margin-bottom: auto;
-    
+
 }
 
 .active{
@@ -70,16 +70,13 @@ a:hover{
 	margin-right: auto;
 }
 
-.glyphicon-main{
+.fa-main{
 	position: relative;
 	padding: 10px;
 	color: white;
 	font-size: 40px;
-	margin-top: auto;
-	margin-bottom: auto;	
-	margin-left: auto;
-	margin-right: auto;
-	
+  margin: auto;
+
 }
 
 .subtitle{
@@ -101,8 +98,8 @@ a:hover{
 }
 
 #screen-view {
-    position: absolute;
-    top: 108px;
+  position: absolute;
+  top: 108px;
 	bottom: 0px;
 	overflow: scroll;
 	width: 100vw;
@@ -168,9 +165,9 @@ a:hover{
 	overflow: hidden;
 	width: 300px;
 	box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
-	bottom: 0px;
-	
-	
+	bottom: 0;
+
+
 }
 
 #info-btn, #transfer-btn{
@@ -228,11 +225,9 @@ a:hover{
 	height: 60px;
 	background-color: rgba(76, 90, 96, 0.14);
 	box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.49);
-	border-bottom-style: solid;
-	border-bottom-width: 4px;
-	border-bottom-color: rgba(76, 90, 96, .49);
-	text-align: center;
-	
+  border-bottom: 4px solid rgba(76, 90, 96, .49);
+  text-align: center;
+
 }
 
 .search-parameter{
@@ -244,18 +239,15 @@ a:hover{
 	font-weight: 600;
 	background-color: rgba(0, 0, 0, 0);
 	border-style: none;
-	
+
 }
 
 .specs-box{
 	height: 80px;
 	width: 100vw;
-	border-bottom-style: solid;
-	border-bottom-color: #797979;
-	border-bottom-width: 1px;
-	padding: 0px;
-	padding-left: 5px;
-	overflow: hidden;
+  border-bottom: 1px solid #797979;
+  padding: 0px 0px 0px 5px;
+  overflow: hidden;
 }
 
 .facts{
@@ -290,14 +282,12 @@ a:hover{
 #tool-display-box{
 	overflow-y: scroll;
 	height: calc(100% - 210px);
-	border-bottom-style: solid;
-	border-bottom-width: 4px;
-	border-bottom-color: rgba(76, 90, 96, .49);
+  border-bottom: 4px solid rgba(76, 90, 96, .49);
 }
 
 .search-icon{
 	font-size: 25px;
-	line-height: 69px;
+	line-height: 79px;
 	color: #363636;
 }
 
@@ -308,15 +298,13 @@ a:hover{
 }
 
 #list-title{
-	margin: 5px;
-	color: #363636;
+  color: #363636;
 	font-size: 18px;
 	font-weight: 500;
-	margin-bottom: 0px;
-	margin-top: 1px;
-	line-height: 25px;
-	
-	
+  margin: 1px 5px 0px;
+  line-height: 25px;
+
+
 }
 
 #list{
@@ -373,7 +361,7 @@ a:hover{
 }
 
 #tool-details{
-	color: rgba(0, 0, 0, .57);  
+	color: rgba(0, 0, 0, .57);
 	font-size: 18px;
 }
 
@@ -402,7 +390,6 @@ form{
 	margin-left: 10px;
 	margin-right: 10px;
 	margin-top: 10px;
-	margin-top: 10px;
 	height: 40px;
 	border-radius: 20px;
 	border-style: none;
@@ -410,7 +397,7 @@ form{
 	font-size: 18px;
 	text-align: left;
 	font-weight: 500;
-	letter-spacing: 1.5px;	
+	letter-spacing: 1.5px;
 }
 
 .add{
@@ -442,8 +429,26 @@ button{
 
 .back{
 	font-size: 25px;
-	padding: 5px;
-	height: auto;
-	padding-top: 10px;
-	color: #e30000;
+  height: auto;
+  padding: 10px 5px 5px;
+  color: #e30000;
+}
+
+.loading{
+  display: block;
+  margin: auto;
+  line-height: 100vw;
+  font-size: 112px;
+}
+
+#cart-title{
+  display: inline-block;
+  width: 70%;
+  margin: 0;
+  padding: 0;
+}
+
+#trash-icon{
+  display: inline-block;
+  text-align: left;
 }

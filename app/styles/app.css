@@ -26,17 +26,17 @@ nav{
 }
 
 .container.nav-cont{
-    text-align: center;
-    width: calc(50% - 2px);
-    display: inline-block;
-    height: 100%;
-    line-height: 65px;
-    font-size: 30px;
-    font-family: "Helvetica Neue";
-    font-weight: 300;
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
-    overflow-x: hidden;
+  text-align: center;
+  width: calc(50% - 2px);
+  display: inline-block;
+  height: 100%;
+  line-height: 65px;
+  font-size: 30px;
+  font-family: "Helvetica Neue";
+  font-weight: 300;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  overflow-x: hidden;
 }
 
 #title{

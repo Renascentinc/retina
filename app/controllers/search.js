@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import config from '../config/environment';
 
 export default Ember.Controller.extend({
     queryParams: {
@@ -33,14 +32,7 @@ export default Ember.Controller.extend({
         },
 
         fuzzySearch(value) {
-            let set = this.set.bind(this, 'model.tool');
-            //
-            // if( value !== "" ) {
-				// Ember.$(".search-parameter").val('');
-            //     Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
-            // } else {
-            //     Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);
-            // }
+          let set = this.set.bind(this, 'model.tool');
           if( value !== "" ) {
             this.get('store').query('tool', {parameter: value}).then(set);
 

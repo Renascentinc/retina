@@ -178,7 +178,7 @@ export default function() {
     };
   });
 
-  this.get('/dropdowns', (schema, request) => {
+  this.get('/dropdowns', function() {
     return {
       data: {
         type: 'dropdown',

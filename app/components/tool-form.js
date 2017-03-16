@@ -6,7 +6,7 @@ export default Ember.Component.extend({
     saveNewTool (tool) {
         let _this = this;
 
-        return new Promise(function(resolve, reject) {
+        return new Ember.RSVP.Promise(function(resolve, reject) {
           tool.validate().then(({validations}) => {
             if (validations.get('isValid')) {
               _this.set('model.tool.userid', _this.get('model.tool.userid').userid);

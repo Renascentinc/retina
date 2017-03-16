@@ -41,6 +41,7 @@
     "ember-cp-validations": "3.2.4",
     "ember-data": "^2.8.0",
     "ember-export-application-global": "^1.0.5",
+    "ember-font-awesome": "3.0.4",
     "ember-load-initializers": "^0.5.1",
     "ember-pikaday": "2.2.1",
     "ember-power-select": "1.5.0",

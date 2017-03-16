@@ -57,13 +57,13 @@
 			<div class="facts">
 
 				Tool ID: {{tool.id}}<br>
-				<span class="glyphicon glyphicon-user"></span> {{tool.username}}
+				<span class="fa fa-user"></span> {{tool.username}}
 			</div>
 		</button>
 
 		<div class="options">
 			{{#link-to 'info' tool.id}}
-				<span class="glyphicon glyphicon-info-sign search-icon" aria-hidden="true" ></span>
+				<span class="fa fa-info-circle search-icon" aria-hidden="true" ></span>
 			{{/link-to}}
 			<br>
 		</div>
@@ -76,7 +76,12 @@
 <div id="menu">
 	<div id="cart">
 		<div id="list-title">
-			<button class='glyphicon glyphicon-remove-sign delete-icon' aria-hidden='true' {{action 'deleteToolList'}}></button> Cart
+      <div id="trash-icon">
+			  <button class='fa fa-trash delete-icon' aria-hidden='true' {{action 'deleteToolList'}}></button>
+      </div>
+      <div id="cart-title">
+        Cart
+      </div>
 		</div>
 
 		<hr style="margin: 0;">

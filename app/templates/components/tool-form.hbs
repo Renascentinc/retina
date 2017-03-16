@@ -1,0 +1,137 @@
+<div id="form">
+  {{#power-select-with-create
+    placeholder = "Type"
+    options = model.dropdown.type
+    selected = model.tool.type
+    onchange=(action (mut model.tool.type))
+    oncreate = (action (mut model.tool.type))
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'type') as |type|
+  }}
+    {{type}}
+  {{/power-select-with-create}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'type' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{#power-select-with-create
+    placeholder = "Brand"
+    options = model.dropdown.brand
+    selected = model.tool.brand
+    onchange=(action (mut model.tool.brand))
+    oncreate = (action (mut model.tool.brand))
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'brand')as |brand|
+  }}
+    {{brand}}
+  {{/power-select-with-create}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'brand' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" value=model.tool.modelnumber}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'modelnumber' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" value=model.tool.serialnumber}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'serialnumber' 'message'}}
+    </div>
+  {{/if}}
+
+  <hr>
+
+  {{#power-select-with-create
+    placeholder = "Provider"
+    options = model.dropdown.provider
+    selected = model.tool.provider
+    onchange=(action (mut model.tool.provider))
+    oncreate = (action (mut model.tool.provider))
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'provider')as |provider|
+  }}
+    {{provider}}
+  {{/power-select-with-create}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'provider' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  value=model.tool.price}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'price' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{pikaday-input placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'purchasedate' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" value=model.tool.year}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'year' 'message'}}
+    </div>
+  {{/if}}
+
+  <hr>
+
+  {{#power-select
+    placeholder = "Status"
+    options = model.dropdown.status
+    selected = model.tool.status
+    onchange=(action (mut model.tool.status)) as |status|
+  }}
+    {{status}}
+  {{/power-select}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'status' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{#power-select
+    placeholder = "Assignee"
+    options = model.dropdown.user
+    searchField = "username"
+    selected = model.tool.userid
+    onchange = (action (mut model.tool.userid)) as |assignee|
+  }}
+    {{assignee.username }}
+  {{/power-select}}
+
+  {{#if showErrorMessage}}
+    <div class='error'>
+      {{v-get model.tool 'userid' 'message'}}
+    </div>
+  {{/if}}
+
+
+  {{async-button action=(action "saveNewTool" model.tool) style="margin: 20px;" class="go" default="Add" pending="Saving..."}}
+</div>

@@ -7,10 +7,6 @@ module.exports = function(defaults) {
     // Add options here
   });
 
-  app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', { destDir: 'fonts' });
-  app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff2', { destDir: 'fonts' });
-  app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', { destDir: 'fonts' });
-  app.import('bower_components/jquery-validation/dist/jquery.validate.min.js');
   app.import('bower_components/font-awesome/fontawesome-webfont.ttf');
   app.import('bower_components/font-awesome/fontawesome-webfont.woff');
   app.import('bower_components/font-awesome/fontawesome-webfont.woff2');

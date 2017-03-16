@@ -25,7 +25,7 @@ export default DS.JSONAPIAdapter.extend({
     return hash;
   },
 
-  urlForQuery (query, modelName) {
+  urlForQuery () {
     return 'https://retina-api-testing.azurewebsites.net/api/search';
   }
 });

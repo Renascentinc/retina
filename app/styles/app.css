@@ -1,3 +1,10 @@
+.ember-application {
+	font-family: "Helvetica Neue";
+	height: 100%;
+	width: 100%;
+	margin: 0;
+}
+
 #titlebar{
   position: absolute;
   height: 78px;

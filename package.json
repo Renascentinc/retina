@@ -1,7 +1,7 @@
 {
   "name": "retina-app",
-  "version": "0.0.0",
-  "description": "Small description for retina-app goes here",
+  "version": "2.1.0",
+  "description": "Renascent inc. Tool Inventory Application",
   "private": true,
   "directories": {
     "doc": "doc",
@@ -42,7 +42,6 @@
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
     "ember-simple-auth": "1.2.0-beta.1",
-    "ember-welcome-page": "^1.0.1",
     "loader.js": "^4.0.1"
   }
 }

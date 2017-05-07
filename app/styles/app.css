@@ -1,3 +1,13 @@
+html .ember-application {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.ember-power-select-trigger {
+  max-width: 75%;
+}
+
 #titlebar{
   position: absolute;
   height: 78px;
@@ -133,8 +143,9 @@ a:hover{
   border-radius: 14px;
   height: 47px;
   width: 80%;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: 0;
+  /*margin-left: 10%;*/
+  /*margin-right: 10%;*/
   text-indent: 5px;
   font-size: 21px;
   font-weight: 400;
@@ -373,13 +384,16 @@ a:hover{
   width: 100vw;
 }
 
-#form{
+#form {
   -webkit-overflow-scrolling: touch;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   margin-top: 20px;
   text-align: center;
+  /*display: flex;*/
+  /*justify-content: center;*/
+  /*align-content: center;*/
+  /*flex-direction: column;*/
 }
 
 .search-block{
@@ -403,9 +417,9 @@ a:hover{
   letter-spacing: 1.5px;
 }
 
-.add{
+/*.add{
   margin: 5px;
-}
+}*/
 
 .delete-icon{
   color: #e30000;

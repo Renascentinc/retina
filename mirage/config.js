@@ -26,21 +26,21 @@ export default function() {
     }); //end post => /token
 
     this.get('/tools/:id', (schema, request) => {
-		return {
-		  data: {
-			type: "tool",
-			id: request.params.id,
-			attributes: {
-				brand: 'Bosch',
-				ownerfirstname: "Shaboygen",
-				ownerlastname: "Cactapuss",
-				datelastcheckout: "Stardate 0.12.4.12",
-				purchasedate: "Stardate 020.2.3.23",
-			  	type: 'hammer drill',
-		  		status: 'in use'
-			}
-		  }
-		};
+      return {
+        data: {
+          type: "tool",
+          id: request.params.id,
+          attributes: {
+            brand: 'Bosch',
+            ownerfirstname: "Shaboygen",
+            ownerlastname: "Cactapuss",
+            datelastcheckout: "Stardate 0.12.4.12",
+            purchasedate: "Stardate 020.2.3.23",
+            type: 'hammer drill',
+            status: 'in use'
+          }
+        }
+      };
     }); //end get => /tools/:id
 
 	this.get('/tools', function() {
@@ -52,18 +52,18 @@ export default function() {
           brand: 'Bosch',
           ownerfirstname: 'George',
           ownerlastname: 'Boole',
-		  type: 'hammer drill',
-		  status: 'in use'
+          type: 'hammer drill',
+          status: 'in use'
         }
       }, {
         type: 'tool',
         id: '2',
         attributes: {
-          brand: 'DeWalt',
-          ownerfirstname: 'Mike',
-          ownerlastname: 'Flag',
-		  type: 'impact driver',
-		  status: 'in use'
+        brand: 'DeWalt',
+        ownerfirstname: 'Mike',
+        ownerlastname: 'Flag',
+        type: 'impact driver',
+        status: 'in use'
         }
       }, {
         type: 'tool',
@@ -72,8 +72,8 @@ export default function() {
           brand: 'Milwaukee',
           ownerfirstname: 'Charlie',
           ownerlastname: 'Delta',
-		  type: 'reciprocating saw',
-		  status: 'available'
+          type: 'reciprocating saw',
+          status: 'available'
         }
       }, {
         type: 'tool',
@@ -82,8 +82,8 @@ export default function() {
           brand: 'Milwaukee',
           ownerfirstname: 'Charlie',
           ownerlastname: 'Delta',
-		  type: 'reciprocating saw',
-		  status: 'available'
+          type: 'reciprocating saw',
+          status: 'available'
         }
       }, {
         type: 'tool',
@@ -92,8 +92,8 @@ export default function() {
           brand: 'Milwaukee',
           ownerfirstname: 'Charlie',
           ownerlastname: 'Delta',
-		  type: 'reciprocating saw',
-		  status: 'available'
+          type: 'reciprocating saw',
+          status: 'available'
         }
       }, {
         type: 'tool',
@@ -102,8 +102,8 @@ export default function() {
           brand: 'Milwaukee',
           ownerfirstname: 'Charlie',
           ownerlastname: 'Delta',
-		  type: 'reciprocating saw',
-		  status: 'available'
+          type: 'reciprocating saw',
+          status: 'available'
         }
       }, {
         type: 'tool',
@@ -112,8 +112,8 @@ export default function() {
           brand: 'Milwaukee',
           ownerfirstname: 'Charlie',
           ownerlastname: 'Delta',
-		  type: 'reciprocating saw',
-		  status: 'available'
+          type: 'reciprocating saw',
+          status: 'available'
         }
       }]
     };
@@ -121,7 +121,7 @@ export default function() {
 
 	this.get('/status', function() {
     return ['in-use', 'available', 'out of service'];
-  	});
+  });
 
 	this.get('/owners', function() {
     return {
@@ -130,25 +130,25 @@ export default function() {
         id: '1',
         attributes: {
           ownerid: '12345',
-		  firstname: 'george',
-		  lastname: 'boole'
+          firstname: 'george',
+          lastname: 'boole'
         }
       }, {
         type: 'owner',
         id: '2',
         attributes: {
           id: '43215',
-		  firstname: 'charlie',
-		  lastname: 'delta'
+          firstname: 'charlie',
+          lastname: 'delta'
         }
-	  },
-	  {
+    },
+    {
         type: 'owner',
         id: '3',
         attributes: {
           id: '54326',
-		  firstname: 'mike',
-		  lastname: 'flag'
+          firstname: 'mike',
+          lastname: 'flag'
         }
       }]
     };

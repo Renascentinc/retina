@@ -10,7 +10,7 @@ export default Ember.Controller.extend({
 
     actions: {
         updateSearch( target ) {
-			    Ember.$(".search-box").val('');
+            Ember.$(".search-box").val('');
             let params = this.queryParams.get('0');
 
             if( target.getAttribute('name') === "status" ) {
@@ -41,8 +41,8 @@ export default Ember.Controller.extend({
           }
         },
 
-		    currentUser() {
-			    return this.get('session').get('data.currentUserID');
-		    }
+        currentUser() {
+            return this.get('session').get('data.currentUserID');
+        }
     }
 });

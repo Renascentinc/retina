@@ -55,22 +55,22 @@ export default Ember.Controller.extend({
 			if (Ember.$("#user-to-transfer-to").val() !== null && this.toolList.length !== 0){
 
 
-				   let userid = parseInt(Ember.$("#user-to-transfer-to").val());
+                let userid = parseInt(Ember.$("#user-to-transfer-to").val());
 
-				   const options = {
-					   url: config.APP.api_url + config.APP.api_namespace + '/transfer',
-					   data: { userid: userid, toolids: this.toolList},
-					   type: 'PUT',
-					   crossDomain: true,
-					   success: function() {
-							alert("Transaction success.");
-					   },
+                const options = {
+                    url: config.APP.api_url + config.APP.api_namespace + '/transfer',
+                    data: { userid: userid, toolids: this.toolList},
+                    type: 'PUT',
+                    crossDomain: true,
+                    success: function() {
+                        alert("Transaction success.");
+                    },
 
-					   error: function() {
-							alert("Tranaction failed.");
-					   }
+                    error: function() {
+                        alert("Tranaction failed.");
+                    }
 
-					};
+                };
 
 					Ember.$.ajax(options);
 

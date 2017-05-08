@@ -1,4 +1,14 @@
-#titlebar{
+html, .ember-application {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+}
+
+*:focus {
+  outline: none;
+}
+
+#titlebar {
   position: absolute;
   height: 78px;
   margin: 0px 0px;
@@ -12,7 +22,7 @@
   padding: 0px 0px;
 }
 
-nav{
+nav {
   height: 30px;
   position: absolute;
   margin: 0px 0px;
@@ -25,7 +35,7 @@ nav{
   text-align: center;
 }
 
-.container.nav-cont{
+.container.nav-cont {
   text-align: center;
   width: calc(50% - 2px);
   display: inline-block;
@@ -39,7 +49,7 @@ nav{
   overflow-x: hidden;
 }
 
-#title{
+#title {
   color: white;
   font-family: "Helvetica Neue";
   font-weight: 100;
@@ -52,16 +62,16 @@ nav{
 
 }
 
-.active{
+.active {
   background-color: rgba(255, 255, 255, 0.42);
 }
 
-a:hover{
+a:hover {
   color: white;
   text-decoration: none;
 }
 
-.icon-btn{
+.icon-btn {
   width: 60px;
   height: 60px;
   border-radius: 8px;
@@ -70,7 +80,7 @@ a:hover{
   margin-right: auto;
 }
 
-.fa-main{
+.fa-main {
   position: relative;
   padding: 10px;
   color: white;
@@ -79,7 +89,7 @@ a:hover{
 
 }
 
-.subtitle{
+.subtitle {
   position: relative;
   display: inline-block;
   width: 24%;
@@ -89,7 +99,7 @@ a:hover{
 }
 
 
-.nav-container{
+.nav-container {
   position: relative;
   display: inline-block;
   width: 25%;
@@ -105,12 +115,12 @@ a:hover{
   width: 100vw;
 }
 
-#login-page{
+#login-page {
   min-height: 100vh;
   background-color: #e30000;
 }
 
-#splash-title{
+#splash-title {
   font-family: "Helvetica Neue";
   color: white;
   text-align: center;
@@ -120,7 +130,7 @@ a:hover{
   padding-top: 30px;
 }
 
-#splash-subtitle{
+#splash-subtitle {
   font-family: "Helvetica Neue";
   color: white;
   text-align: center;
@@ -129,12 +139,11 @@ a:hover{
   margin-bottom: 30px;
 }
 
-.text-field{
+.text-field {
   border-radius: 14px;
   height: 47px;
   width: 80%;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: 0;
   text-indent: 5px;
   font-size: 21px;
   font-weight: 400;
@@ -142,7 +151,7 @@ a:hover{
   margin-top: 10px;
 }
 
-.go{
+.go {
   position: relative;
   background-color: #e30000;
   border: none;
@@ -153,9 +162,11 @@ a:hover{
   font-size: 32px;
   font-weight: 400;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-#scan-group{
+#scan-group {
   position: relative;
   margin-top: 31px;
   margin-left: auto;
@@ -166,11 +177,9 @@ a:hover{
   width: 300px;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
   bottom: 0;
-
-
 }
 
-#info-btn, #transfer-btn{
+#info-btn, #transfer-btn {
   width: calc(50% - 2px);
   display: inline-block;
   border-radius: 0px;
@@ -182,7 +191,7 @@ a:hover{
 }
 
 
-#login-btn{
+#login-btn {
   background-color: white;
   color: #e30000;
   margin-left: auto;
@@ -190,7 +199,7 @@ a:hover{
   margin-top: 20px;
 }
 
-.dark-dropdown{
+.dark-dropdown {
   height: 47px;
   width: 80%;
   background-color: #333333;
@@ -202,7 +211,7 @@ a:hover{
   box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
 }
 
-#icon-container{
+#icon-container {
   margin-top: 15px;
   margin-bottom: 15px;
   width: 100vw;
@@ -211,14 +220,14 @@ a:hover{
   height: 150px;
 }
 
-.description{
+.description {
   width: 100%;
   text-align: center;
   color: #797979;
   font-size: 18px;
 }
 
-.search-bar{
+.search-bar {
   position: relative;
   top: 0px;
   width: 100vw;
@@ -227,10 +236,9 @@ a:hover{
   box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.49);
   border-bottom: 4px solid rgba(76, 90, 96, .49);
   text-align: center;
-
 }
 
-.search-parameter{
+.search-parameter {
   display: inline-block;
   height: 100%;
   width: 24%;
@@ -239,10 +247,9 @@ a:hover{
   font-weight: 600;
   background-color: rgba(0, 0, 0, 0);
   border-style: none;
-
 }
 
-.specs-box{
+.specs-box {
   height: 80px;
   width: 100vw;
   border-bottom: 1px solid #797979;
@@ -250,7 +257,7 @@ a:hover{
   overflow: hidden;
 }
 
-.facts{
+.facts {
   width: 100%;
   display: inline-block;
   top: 0px;
@@ -261,7 +268,7 @@ a:hover{
   font-size: 17px;
 }
 
-.title{
+.title {
   color: #363636;
   font-size: 20px;
   height: 30px;
@@ -270,7 +277,7 @@ a:hover{
   width: 100%;
 }
 
-.options{
+.options {
   float: right;
   text-align: center;
   color: #797979;
@@ -279,36 +286,34 @@ a:hover{
   height: 100%;
 }
 
-#tool-display-box{
+#tool-display-box {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   height: calc(100% - 210px);
   border-bottom: 4px solid rgba(76, 90, 96, .49);
 }
 
-.search-icon{
+.search-icon {
   font-size: 25px;
   line-height: 79px;
   color: #363636;
 }
 
-.tool-specs{
+.tool-specs {
   width: calc(100% - 40px);
   display: inline-block;
   text-align: left;
 }
 
-#list-title{
+#list-title {
   color: #363636;
   font-size: 18px;
   font-weight: 500;
   margin: 1px 5px 0px;
   line-height: 25px;
-
-
 }
 
-#list{
+#list {
   margin: 5px;
   color: #797979;
   font-size: 23px;
@@ -318,26 +323,26 @@ a:hover{
   margin: 0px;
 }
 
-#cart{
+#cart {
   float: left;
   width: 40%;
   text-align: center;
   height: 100%;
 }
 
-#cart-actions{
+#cart-actions {
   text-align: center;
   width: 60%;
   float: right;
   height: 100%;
 }
 
-#menu{
+#menu {
   width: 100vw;
   height: 150px;
 }
 
-#transfer-button{
+#transfer-button {
   width: 80%;
   font-size: 21px;
   height: 47px;
@@ -346,49 +351,124 @@ a:hover{
   display: table-footer-group;;
 }
 
-#user-to-transfer-to{
+#user-to-transfer-to {
   margin-top: 23px;
 }
 
-
-#specs{
+#specs {
   margin: 10px;
   display: inline-block;
 }
 
-#tool-title{
+#tool-title {
   color: rgba(0, 0, 0, .87);
   font-size: 28px;
 }
 
-#tool-details{
+#tool-details {
   color: rgba(0, 0, 0, .57);
   font-size: 18px;
 }
 
-#tool-display-box-full{
+#tool-display-box-full {
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
   height: calc(100vh - 168px);
   width: 100vw;
 }
 
-#form{
+#form {
   -webkit-overflow-scrolling: touch;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   margin-top: 20px;
   text-align: center;
 }
 
-.search-block{
+.ember-power-select-trigger {
+  height: 47px;
+  width: calc(80% - 16px);
+  background-color: #333333;
+  color: white;
+  font-weight: 400;
+  font-size: 21px;
+  border: none;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
+  margin-left: 10%;
+  margin-top: 10px;
+}
+
+.ember-power-select-trigger:focus,
+.ember-power-select-trigger--active
+{
+  border: none;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
+}
+
+.ember-power-select-placeholder {
+  color: white;
+}
+
+.pika-lendar {
+  width: 95%;
+}
+
+.pika-single.dark-theme {
+    color: #fff;
+    background-color: #333;
+    border: 1px solid #666;
+    border-bottom-color: #999;
+    height: 200px;
+    width: 80%;
+}
+
+.dark-theme .pika-label {
+    background-color: #333;
+}
+
+.dark-theme .pika-prev {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAQAAACGG/bgAAAAQ0lEQVR4Ae3KIQ4AIBTD0N0/IeHGI3UIRA3ut/Zl+ltXc5++htVAmIAwAWECwgSEKbgthEoIlRAqIVRCqINQB9nDgQd7ktwFo6UpWQAAAABJRU5ErkJggg==');
+}
+
+.dark-theme .pika-next {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAQAAACGG/bgAAAAP0lEQVQ4y+3TMQoAMAgEwfwfAvvjTZ1uGzuvHhBPPGczEG+FRqqRaqQaqUaqkX6QBmmjacvQ6qEVTjsh+xizebvlaWptGXZAAAAAAElFTkSuQmCC');
+}
+
+.dark-theme .pika-table th {
+    color: #fff;
+}
+
+.dark-theme .pika-button {
+    color: #fff;
+    background: #222;
+}
+
+.dark-theme .pika-week {
+    color: #fff;
+}
+
+.dark-theme .is-today .pika-button {
+    color: #33aaff;
+}
+
+.dark-theme .is-selected .pika-button {
+    color: #fff;
+    background: #33aaff;
+    box-shadow: inset 0 1px 3px #178fe5;
+}
+
+.dark-theme .is-disabled .pika-button {
+    color: #999;
+    opacity: .3;
+}
+
+.search-block {
   width: 100vw;
   background-color: #797979;
   height: 60px;
 }
 
-.search-box{
+.search-box {
   width: calc(100% - 20px);
   margin-left: 10px;
   margin-right: 10px;
@@ -403,11 +483,7 @@ a:hover{
   letter-spacing: 1.5px;
 }
 
-.add{
-  margin: 5px;
-}
-
-.delete-icon{
+.delete-icon {
   color: #e30000;
   font-size: 25px;
 }
@@ -418,8 +494,7 @@ a:hover{
   padding: 40px;
 }
 
-
-button{
+button {
   border-style: none;
   padding: 0px;
   height: 100%;
@@ -428,30 +503,31 @@ button{
 
 .error {
   color: #e30000;
+  margin: 5px;
 }
 
-.back{
+.back {
   font-size: 25px;
   height: auto;
   padding: 10px 5px 5px;
   color: #e30000;
 }
 
-.loading{
+.loading {
   display: block;
   margin: auto;
   line-height: 100vw;
   font-size: 112px;
 }
 
-#cart-title{
+#cart-title {
   display: inline-block;
   width: 70%;
   margin: 0;
   padding: 0;
 }
 
-#trash-icon{
+#trash-icon {
   display: inline-block;
   text-align: left;
 }

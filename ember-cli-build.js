@@ -8,6 +8,7 @@ module.exports = function(defaults) {
   });
 
   app.import('bower_components/jquery-validation/dist/jquery.validate.min.js');
+  app.import('bower_components/jquery-validation/dist/additional-methods.min.js');
   app.import('bower_components/font-awesome/fontawesome-webfont.ttf');
   app.import('bower_components/font-awesome/fontawesome-webfont.woff');
   app.import('bower_components/font-awesome/fontawesome-webfont.woff2');

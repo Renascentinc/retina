@@ -27,7 +27,6 @@ export default Ember.Controller.extend({
             }
 
             let set = this.set.bind(this, 'model.tool');
-            // Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', params ).then(set);
             this.get('store').query('tool', params).then(set);
         },
 

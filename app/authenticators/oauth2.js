@@ -20,7 +20,6 @@ export default OAuth2PasswordGrant.extend({
     $ajaxCall.then(function(response) {
         _this.get('session').set('data.currentUserID', parseInt(response.userid));
         _this.get('session').set('data.currentUserRole', response.role);
-        Ember.Logger.info(response.role);
     });
       
     return $ajaxCall;

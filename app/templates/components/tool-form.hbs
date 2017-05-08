@@ -81,7 +81,7 @@
   {{/if}}
 
 
-  {{pikaday-input class="text-field" id="purchase-date" placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
+  {{pikaday-input theme="dark-theme" class="text-field" id="purchase-date" placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 
   {{#if showErrorMessage}}
     <div class='error'>

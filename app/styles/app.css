@@ -1,11 +1,20 @@
-html .ember-application {
+.ember-application {
   height: 100%;
   width: 100%;
   margin: 0;
 }
 
 .ember-power-select-trigger {
-  max-width: 75%;
+  height: 47px;
+  width: calc(80% - 16px);
+  background-color: #333333;
+  color: white;
+  font-weight: 400;
+  font-size: 21px;
+  border: none;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
+  margin-left: 10%;
+  margin-top: 10px;
 }
 
 #titlebar{
@@ -144,8 +153,6 @@ a:hover{
   height: 47px;
   width: 80%;
   margin: 0;
-  /*margin-left: 10%;*/
-  /*margin-right: 10%;*/
   text-indent: 5px;
   font-size: 21px;
   font-weight: 400;
@@ -164,6 +171,8 @@ a:hover{
   font-size: 32px;
   font-weight: 400;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 #scan-group{

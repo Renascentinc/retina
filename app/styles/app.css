@@ -12,6 +12,10 @@
 	padding: 0px 0px;
 }
 
+.login-fail {
+	color: #fff;
+}
+
 nav{
   height: 30px;
   position: absolute;

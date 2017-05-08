@@ -1,7 +1,11 @@
 html, .ember-application {
   height: 100%;
   width: 100%;
-  margin: 0;
+  margin: 0px;
+}
+
+*:focus {
+  outline: none;
 }
 
 #titlebar {
@@ -392,6 +396,13 @@ a:hover {
   box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
   margin-left: 10%;
   margin-top: 10px;
+}
+
+.ember-power-select-trigger:focus,
+.ember-power-select-trigger--active
+{
+  border: none;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, .28);
 }
 
 .ember-power-select-placeholder {

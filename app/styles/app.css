@@ -17,9 +17,22 @@ html, .ember-application {
   margin-top: 10px;
 }
 
+.ember-power-select-placeholder {
+  color: white;
+}
+
 .dark-theme {
   height: 200px;
   width: 80%;
+}
+
+.pika-lendar {
+  width: 95%;
+}
+
+.dark-theme .pika-table {
+  /*height: 200px;*/
+  width: 100%;
 }
 
 .pika-single.dark-theme {
@@ -510,6 +523,7 @@ button{
 
 .error {
   color: #e30000;
+  margin: 5px;
 }
 
 .back{

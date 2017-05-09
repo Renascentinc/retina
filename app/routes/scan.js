@@ -17,6 +17,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 	},
     
     deactivate() {
-        this.controller.toolList = [];
+        this.controller.set('toolList', []);
     }
 });

@@ -57,7 +57,7 @@
 			<div class="facts">
 
 				Tool ID: {{tool.id}}<br>
-				<span class="fa fa-user"></span> {{tool.username}}
+				<span class="fa fa-user"></span> {{tool.attributes.username}}
 			</div>
 		</button>
 		
@@ -87,20 +87,21 @@
 		<hr style="margin: 0;">
 
 		<div id="list">
+			{{#each toolList key="@index" as |tool|}}
+				{{tool}}<br>
+			{{/each}}
 		</div>
 	</div>
 	<div id="cart-actions">
-		<select id="user-to-transfer-to" class="dark-dropdown">
-
+		<select id="user-to-transfer-to" class="dark-dropdown">--}}
 			<option disabled selected hidden>Transfer to</option>
 			{{#each model.allUsers.users as |user|}}
 				<option value={{user.userid}}>
 					{{user.username}}
-
 				</option>
 			{{/each}}
 		</select>
-		
+
 		<button {{action "transferTools"}} class="go" id="transfer-button">Transfer</button>
 	</div>
 </div>

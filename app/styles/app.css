@@ -13,7 +13,18 @@
 }
 
 .login-fail {
-	color: #fff;
+  font-family: "Helvetica Neue";
+  font-weight: 300;
+  margin-left: auto;
+  margin-right: auto;
+  color: #fff;
+  padding: 5px;
+  border: solid;
+  border-color: white;
+  border-radius: 6px;
+  border-width: 1px;
+  margin-top: 15px;
+  width: 250px;
 }
 
 nav{

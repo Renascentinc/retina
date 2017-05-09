@@ -2,7 +2,7 @@
 	font-family: "Helvetica Neue";
 	height: 100%;
 	width: 100%;
-	margin: 0;
+	margin: 0px;
 }
 
 #titlebar{
@@ -113,7 +113,7 @@ a:hover{
 }
 
 #login-page{
-	min-height: 100vh;
+	height: 100vh;
 	background-color: #e30000;
 }
 
@@ -302,6 +302,7 @@ a:hover{
 	width: calc(100% - 40px);
 	display: inline-block;
 	text-align: left;
+
 }
 
 #list-title{
@@ -310,8 +311,6 @@ a:hover{
 	font-weight: 500;
   margin: 1px 5px 0px;
   line-height: 25px;
-
-
 }
 
 #list{

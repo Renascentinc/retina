@@ -68,6 +68,10 @@ a:hover{
     text-decoration: none;
 }
 
+a:-webkit-any-link {
+  text-decoration: none;
+}
+
 .icon-btn{
 	width: 60px;
 	height: 60px;

@@ -140,8 +140,6 @@ a:hover{
 	border-radius: 14px;
 	height: 47px;
 	width: 80%;
-	margin-left: 10%;
-	margin-right: 10%;
 	text-indent: 5px;
 	font-size: 21px;
 	font-weight: 400;
@@ -251,9 +249,10 @@ a:hover{
 
 .specs-box{
 	height: 80px;
-	width: 100vw;
+	width: calc(100vw - 5px);
   border-bottom: 1px solid #797979;
   padding: 0px 0px 0px 5px;
+  margin: 0px;
   overflow: hidden;
 }
 
@@ -393,8 +392,8 @@ form{
 
 .search-box{
 	width: calc(100% - 20px);
-	margin-left: 10px;
-	margin-right: 10px;
+	margin-left: 9px;
+	margin-right: 9px;
 	margin-top: 10px;
 	height: 40px;
 	border-radius: 20px;

@@ -1,3 +1,10 @@
+.ember-application {
+	font-family: "Helvetica Neue";
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+}
+
 #titlebar{
   position: absolute;
   height: 78px;
@@ -77,6 +84,10 @@ a:hover{
     text-decoration: none;
 }
 
+a:-webkit-any-link {
+  text-decoration: none;
+}
+
 .icon-btn{
 	width: 60px;
 	height: 60px;
@@ -122,7 +133,7 @@ a:hover{
 }
 
 #login-page{
-	min-height: 100vh;
+	height: 100vh;
 	background-color: #e30000;
 }
 
@@ -149,8 +160,6 @@ a:hover{
 	border-radius: 14px;
 	height: 47px;
 	width: 80%;
-	margin-left: 10%;
-	margin-right: 10%;
 	text-indent: 5px;
 	font-size: 21px;
 	font-weight: 400;
@@ -260,9 +269,10 @@ a:hover{
 
 .specs-box{
 	height: 80px;
-	width: 100vw;
+	width: calc(100vw - 5px);
   border-bottom: 1px solid #797979;
   padding: 0px 0px 0px 5px;
+  margin: 0px;
   overflow: hidden;
 }
 
@@ -311,6 +321,7 @@ a:hover{
 	width: calc(100% - 40px);
 	display: inline-block;
 	text-align: left;
+
 }
 
 #list-title{
@@ -319,8 +330,6 @@ a:hover{
 	font-weight: 500;
   margin: 1px 5px 0px;
   line-height: 25px;
-
-
 }
 
 #list{
@@ -403,8 +412,8 @@ form{
 
 .search-box{
 	width: calc(100% - 20px);
-	margin-left: 10px;
-	margin-right: 10px;
+	margin-left: 9px;
+	margin-right: 9px;
 	margin-top: 10px;
 	height: 40px;
 	border-radius: 20px;

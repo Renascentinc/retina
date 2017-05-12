@@ -174,8 +174,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                messages: {
 
                    type: {
- 						required: "Must Select Type"
- 					},
+ 						          required: "Must Select Type"
+                   },
 
                    brand: {
                       required: "Must Select Brand"

@@ -477,3 +477,11 @@ button{
   display: inline-block;
   text-align: left;
 }
+
+.error{
+  color: #e30000;
+  display: block;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}

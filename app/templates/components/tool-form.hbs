@@ -1,14 +1,14 @@
 <div id="form">
-  {{#power-select-with-create
+  {{#power-select
     placeholder = "Type"
     options = model.dropdown.type
     selected = model.tool.type
-    onchange=(action (mut model.tool.type))
+    onchange = (action (mut model.tool.type))
     oncreate = (action (mut model.tool.type))
     showCreateWhen = (action 'hideCreateOptionOnSameName' 'type') as |type|
   }}
     {{type}}
-  {{/power-select-with-create}}
+  {{/power-select}}
 
   {{#if showErrorMessage}}
     <div class='error'>
@@ -21,9 +21,9 @@
     placeholder = "Brand"
     options = model.dropdown.brand
     selected = model.tool.brand
-    onchange=(action (mut model.tool.brand))
+    onchange = (action (mut model.tool.brand))
     oncreate = (action (mut model.tool.brand))
-    showCreateWhen = (action 'hideCreateOptionOnSameName' 'brand')as |brand|
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'brand') as |brand|
   }}
     {{brand}}
   {{/power-select-with-create}}
@@ -58,9 +58,9 @@
     placeholder = "Provider"
     options = model.dropdown.provider
     selected = model.tool.provider
-    onchange=(action (mut model.tool.provider))
+    onchange = (action (mut model.tool.provider))
     oncreate = (action (mut model.tool.provider))
-    showCreateWhen = (action 'hideCreateOptionOnSameName' 'provider')as |provider|
+    showCreateWhen = (action 'hideCreateOptionOnSameName' 'provider') as |provider|
   }}
     {{provider}}
   {{/power-select-with-create}}

@@ -378,11 +378,13 @@ a:-webkit-any-link {
 #specs{
 	margin: 10px;
 	display: inline-block;
+  width: calc(100vw - 10px)
 }
 
 #tool-title{
 	color: rgba(0, 0, 0, .87);
 	font-size: 28px;
+  width: 100%;
 }
 
 #tool-details{
@@ -436,7 +438,7 @@ form{
 
 #status-change-box{
 	text-align: center;
-	width: 100vw;
+	width: calc(100% - 80px);
 	padding: 40px;
 }
 

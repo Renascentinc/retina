@@ -36,6 +36,7 @@
 }
 
 nav{
+  font-family: "Helvetica Neue";
   height: 30px;
   position: absolute;
   margin: 0px 0px;
@@ -130,6 +131,7 @@ a:-webkit-any-link {
 	bottom: 0px;
 	overflow: scroll;
 	width: 100vw;
+  font-family: "Helvetica Neue";
 }
 
 #login-page{
@@ -376,9 +378,9 @@ a:-webkit-any-link {
 
 
 #specs{
-	margin: 10px;
+	padding: 10px;
 	display: inline-block;
-  width: calc(100vw - 10px)
+  width: calc(100vw - 20px)
 }
 
 #tool-title{

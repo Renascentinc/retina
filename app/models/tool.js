@@ -54,7 +54,7 @@ const Validations = buildValidations({
         message: '{description} must be valid'
       }),
       validator('format', {
-        regex: '(\w)*',
+        regex: '^[0-9A-Za-z]*$',
         message: '{description} must have only letters and numbers'
       })
     ]
@@ -69,7 +69,7 @@ const Validations = buildValidations({
         message: '{description} must be valid'
       }),
       validator('format', {
-        regex: '(\w)*',
+        regex: '^[0-9A-Za-z]*$',
         message: '{description} must have only letters and numbers'
       })
     ]

@@ -42,6 +42,7 @@ header {
 }
 
 nav{
+  font-family: "Helvetica Neue";
   height: 30px;
   position: relative;
   margin: 0px 0px;
@@ -133,6 +134,7 @@ a:-webkit-any-link {
   position: relative;
   height: calc(100vh - 108px);
 	width: 100vw;
+  font-family: "Helvetica Neue";
 }
 
 #login-page{
@@ -379,13 +381,15 @@ a:-webkit-any-link {
 
 
 #specs{
-	margin: 10px;
+	padding: 10px;
 	display: inline-block;
+  width: calc(100vw - 20px)
 }
 
 #tool-title{
 	color: rgba(0, 0, 0, .87);
 	font-size: 28px;
+  width: 100%;
 }
 
 #tool-details{
@@ -439,7 +443,7 @@ form{
 
 #status-change-box{
 	text-align: center;
-	width: 100vw;
+	width: calc(100% - 80px);
 	padding: 40px;
 }
 

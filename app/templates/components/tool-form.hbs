@@ -1,4 +1,4 @@
-<div id="form">
+<form id="form">
   {{#power-select
     placeholder = "Type"
     options = model.dropdown.type
@@ -134,4 +134,4 @@
 
 
   {{async-button action=(action "saveNewTool" model.tool) style="margin: 20px;" class="go" default="Add" pending="Saving..."}}
-</div>
+</form>

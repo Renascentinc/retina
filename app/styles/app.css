@@ -3,6 +3,7 @@
 	height: 100%;
 	width: 100%;
 	margin: 0px;
+  overflow: hidden;
 }
 
 #titlebar{
@@ -195,7 +196,7 @@ a:-webkit-any-link {
 
 }
 
-#info-btn, #transfer-btn{
+#transfer-btn{
 	width: calc(50% - 2px);
 	display: inline-block;
 	border-radius: 0px;

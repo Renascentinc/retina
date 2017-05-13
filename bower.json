@@ -3,7 +3,6 @@
   "dependencies": {
     "ember": "~2.8.0",
     "ember-cli-shims": "0.1.1",
-    "bootstrap": "^3.3.7",
-    "jquery-validation": "^1.16.0"
+    "font-awesome": "^4.7.0"
   }
 }

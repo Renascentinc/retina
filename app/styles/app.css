@@ -1,8 +1,9 @@
-.ember-application {
+html, .ember-application {
 	font-family: "Helvetica Neue";
 	height: 100%;
 	width: 100%;
 	margin: 0px;
+  overflow: hidden;
 }
 
 #titlebar{
@@ -17,6 +18,11 @@
 	display: inline-flex;
 	text-align: center;
 	padding: 0px 0px;
+}
+
+header {
+  height: 78px;
+  position: relative;
 }
 
 .login-fail {
@@ -37,10 +43,9 @@
 
 nav{
   height: 30px;
-  position: absolute;
+  position: relative;
   margin: 0px 0px;
   background-color: #E30000;
-  top: 78px;
   width: 100%;
   z-index: 1;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, .49);
@@ -125,10 +130,8 @@ a:-webkit-any-link {
 }
 
 #screen-view {
-  position: absolute;
-  top: 108px;
-	bottom: 0px;
-	overflow: scroll;
+  position: relative;
+  height: calc(100vh - 108px);
 	width: 100vw;
 }
 
@@ -356,7 +359,7 @@ a:-webkit-any-link {
 	height: 100%;
 }
 
-#menu{
+#cart-menu{
 	width: 100vw;
 	height: 150px;
 }

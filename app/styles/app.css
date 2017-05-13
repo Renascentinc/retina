@@ -534,6 +534,6 @@ button {
   text-align: left;
 }
 
-.ember-power-select-placeholder{
+.ember-power-select-placeholder, .ember-power-select-selected-item{
   line-height: 47px;
 }

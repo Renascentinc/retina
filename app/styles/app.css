@@ -198,7 +198,7 @@ a:-webkit-any-link {
 
 }
 
-#info-btn, #transfer-btn{
+#transfer-btn{
 	width: calc(50% - 2px);
 	display: inline-block;
 	border-radius: 0px;
@@ -479,4 +479,12 @@ button{
 #trash-icon{
   display: inline-block;
   text-align: left;
+}
+
+.error{
+  color: #e30000;
+  display: block;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }

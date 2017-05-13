@@ -533,3 +533,7 @@ button {
   display: inline-block;
   text-align: left;
 }
+
+.ember-power-select-placeholder{
+  line-height: 47px;
+}

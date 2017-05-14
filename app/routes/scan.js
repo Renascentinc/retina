@@ -14,9 +14,5 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 			types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
             brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
 		});
-	},
-    
-    deactivate() {
-        this.controller.set('toolList', []);
-    }
+	}
 });

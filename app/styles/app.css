@@ -115,9 +115,10 @@ a:-webkit-any-link {
 .subtitle{
 	position: relative;
 	display: inline-block;
-	width: 24%;
+	width: 23%;
 	vertical-align: middle;
 	height: 100%;
+  font-size: 15px;
 	line-height: 30px;
 }
 
@@ -260,7 +261,7 @@ a:-webkit-any-link {
 .search-parameter{
 	display: inline-block;
 	height: 100%;
-	width: 24%;
+	width: 23%;
 	color: #797979;
 	font-size: 16px;
 	font-weight: 600;

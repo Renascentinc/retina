@@ -76,7 +76,6 @@ export default Ember.Controller.extend({
                         Ember.$.getJSON(`${config.APP.api_url}${config.APP.api_namespace}/search`, _this.queryParams.get('0')).then(set);
                     });
 
-					Ember.$("#list").html("");
 					this.set('toolList', []);
 			}
         },

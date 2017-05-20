@@ -487,13 +487,15 @@ button{
   text-align: left;
 }
 
-.error{
+.error {
   color: #e30000;
   display: block;
   width: 80%;
   margin-left: auto;
   margin-right: auto;
+}
 
-.ember-power-select-placeholder, .ember-power-select-selected{
+.ember-power-select-placeholder, .ember-power-select-selected {
   line-height: 47px;
 }
+

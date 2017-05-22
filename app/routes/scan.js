@@ -7,12 +7,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
 	model() {
 		return Ember.RSVP.hash({
-            tools: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?currentUser=' + this.get('session').get('data.currentUserID') + '&status=&userID=&type=&brand='),
-			status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
+      tools: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?currentUser=' + this.get('session').get('data.currentUserID') + '&status=&userID=&type=&brand='),
+      status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
 			selectUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users?currentUser=' + this.get('session').get('data.currentUserID')),
-            allUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
+      allUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
 			types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
-            brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
+      brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
 		});
 	}
 });

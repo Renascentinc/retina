@@ -1,40 +1,36 @@
 <div class="search-bar">
     
 	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>      
-		<option disabled selected hidden> Status </option>
-		<option value=""> Any Status </option>
+		<option value=""> Status </option>
 		{{#each model.status.status as |status|}}
-			<option value={{status}}>
+			<option value={{status}} selected={{eq status _status}}>
 				{{status}}
 			</option>
 		{{/each}}
 	</select>
     
 	<select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-		<option disabled selected hidden>Type</option>
-		<option value=""> Any Type </option>
+		<option value=""> Type </option>
 		{{#each model.types.types as |type|}}
-			<option value={{type}}>
+			<option value={{type}} selected={{eq type _type}}>
 				{{type}}
 			</option>
 		{{/each}}
 	</select>
 	
 	<select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-		<option disabled selected hidden>Owner</option>
-		<option value=""> Any Owner </option>
+		<option value=""> Owner </option>
 		{{#each model.users.users as |user|}}
-			<option value={{user.userid}}>
+			<option value={{user.userid}} selected={{eq user.userid _userID}}>
 				{{user.username}}
 			</option>
 		{{/each}}
 	</select>
 	
 		<select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
-		<option disabled selected hidden>Brand</option>
-		<option value=""> Any Brand </option>
+		<option value=""> Brand </option>
 		{{#each model.brands.brands as |brand|}}
-			<option value={{brand}}>
+			<option value={{brand}} selected={{eq brand _brand}}>
 				{{brand}}
 			</option>
 		{{/each}}

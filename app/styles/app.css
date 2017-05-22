@@ -171,6 +171,7 @@ a:-webkit-any-link {
 	font-weight: 400;
 	border-width: 1px;
 	margin-top: 10px;
+  padding: 0px;
 }
 
 .go{
@@ -223,6 +224,7 @@ a:-webkit-any-link {
 	height: 47px;
 	width: 80%;
 	background-color: #333333;
+  -webkit-appearance: none;
 	color: white;
 	font-weight: 400;
 	text-indent: 6px;

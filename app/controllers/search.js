@@ -19,6 +19,13 @@ export default Ember.Controller.extend({
                };
     }).volatile(),
 
+    clearFilterParams() {
+        this.set('_status', null);
+        this.set('_brand', null);
+        this.set('_type', null);
+        this.set('_userID', null);
+    },
+
     actions: {
         updateSearch(target) {
 			Ember.$(".search-box").val('');
@@ -41,10 +48,10 @@ export default Ember.Controller.extend({
         },
 
         fuzzySearch(value) {
+            this.clearFilterParams();
             var set = this.set.bind(this, 'model.tools');
 
             if( value !== "" ) {
-				Ember.$(".search-parameter").val('');
                 Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
             } else {
                 Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);

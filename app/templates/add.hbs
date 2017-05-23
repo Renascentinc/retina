@@ -49,7 +49,7 @@
 
         {{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  valueBinding=model.tool.price}}
 
-    {{input type="text" class="text-field add" name="purchasedate" placeholder="Purchase Date" valueBinding=model.tool.purchasedate}}
+        {{pikaday-input theme="dark-theme" class="text-field add" readonly="readonly" id="purchase-date" placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 
         {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" valueBinding=model.tool.year}}<hr>
 

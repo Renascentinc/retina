@@ -35,9 +35,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         var dateInput = Ember.$("[name=purchasedate]");
 
         //Change Purchase date field to "date" type on focus
-        dateInput.on("focus",function(){
-           dateInput.attr("type","date");
-        });
+        // dateInput.on("focus",function(){
+        //    dateInput.attr("type","date");
+        // });
 
         //Change Purchase date field to "text" type on blur and
         //if the input date is not "", convert the input date into

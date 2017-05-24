@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
+    _maxdate: new Date(),
     actions: {
 
       toggleField(hideObj, showObj) {

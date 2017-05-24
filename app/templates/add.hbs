@@ -49,7 +49,7 @@
 
         {{input placeholder="Price" name="price" class="text-field add"  id="price" type="text"  value=model.tool.price}}
 
-        {{pikaday-input theme="dark-theme" class="text-field add" readonly="readonly" id="purchase-date" placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
+        {{pikaday-input maxDate=_maxdate theme="dark-theme" class="text-field add" readonly="readonly" id="purchase-date" placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 
         {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" value=model.tool.year}}<hr>
 

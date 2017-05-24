@@ -116,7 +116,6 @@ export default Ember.Controller.extend({
             let currentUser = this.get('session').get('data.currentUserID');
 
             if (value !== "") {
-                Ember.$(".search-parameter").val('');
                 Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { currentUser: currentUser, parameter: value } ).then(set);
             } else {
                 Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?currentUser=' + currentUser + '&status=&userID=&type=&brand=').then(set);

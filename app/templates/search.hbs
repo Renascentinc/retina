@@ -1,14 +1,15 @@
 <div class="search-bar">
-    
+
 	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>      
 		<option value=""> Status </option>
+
 		{{#each model.status.status as |status|}}
 			<option value={{status}} selected={{eq status _status}}>
 				{{status}}
 			</option>
 		{{/each}}
 	</select>
-    
+
 	<select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
 		<option value=""> Type </option>
 		{{#each model.types.types as |type|}}
@@ -17,7 +18,7 @@
 			</option>
 		{{/each}}
 	</select>
-	
+
 	<select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
 		<option value=""> Owner </option>
 		{{#each model.users.users as |user|}}
@@ -26,7 +27,7 @@
 			</option>
 		{{/each}}
 	</select>
-	
+
 		<select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
 		<option value=""> Brand </option>
 		{{#each model.brands.brands as |brand|}}
@@ -35,7 +36,7 @@
 			</option>
 		{{/each}}
 	</select>
-	
+
 </div>
 
 <div id="tool-display-box-full">
@@ -45,11 +46,11 @@
 {{#each model.tools.data as |tool|}}
 	<div class="specs-box"> {{#link-to 'info' tool.id}}
 		<div class="tool-specs">
-			<div class="title"> 
-					{{tool.attributes.brand}} 
+			<div class="title">
+					{{tool.attributes.brand}}
 					{{tool.attributes.type}}<br>
 			</div>
-			
+
 			<div class="facts">
 
 				Tool ID: {{tool.id}}<br>

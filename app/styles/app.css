@@ -555,11 +555,9 @@ button{
 }
 
 #tool-details a:-webkit-any-link {
-  color: white;
-  background-color: #363636;
-  border-radius: 7px;
-  margin: 0px;
-  padding-left: 3px;
-  padding-right: 3px;
-  font-weight: 300;
+  color: #363636;
+}
+
+#tool-details .fa {
+  color: #363636;
 }

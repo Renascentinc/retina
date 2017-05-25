@@ -132,6 +132,7 @@ a:-webkit-any-link {
 }
 
 #screen-view {
+  overflow: scroll;
   position: relative;
   height: calc(100vh - 108px);
 	width: 100vw;
@@ -550,4 +551,8 @@ button{
   width: 80%;
   margin-left: auto;
   margin-right: auto;
+}
+
+a:-webkit-any-link {
+  color: #e30000;
 }

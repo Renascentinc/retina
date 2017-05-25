@@ -2,16 +2,16 @@ import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import config from '../config/environment';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Ember.Route.extend(/*AuthenticatedRouteMixin, */{
     model() {
         return Ember.RSVP.hash({
-            tool: this.get('store').createRecord('tool'),
+/*            tool: this.get('store').createRecord('tool'),
             brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands'),
             types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
             providers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/providers'),
             status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
             users: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users')
-        });
+ */       });
     },
 
     afterModel() {
@@ -33,11 +33,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
         //----------Event handlers-----------
         var dateInput = Ember.$("[name=purchasedate]");
-
-        //Change Purchase date field to "date" type on focus
-        dateInput.on("focus",function(){
-           dateInput.attr("type","date");
-        });
 
         //Change Purchase date field to "text" type on blur and
         //if the input date is not "", convert the input date into

@@ -19,11 +19,20 @@
 
 	<select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
 		<option value=""> Owner </option>
-		{{#each model.selectUsers.users as |user|}}
-			<option value={{user.userid}} selected={{eq user.userid _userID}}>
-				{{user.username}}
-			</option>
-		{{/each}}
+    {{#if isAdministrator }}
+		  {{#each model.allUsers.users as |user|}}
+          <option value={{user.userid}} selected={{eq user.userid _userID}}>
+            {{user.username}}
+          </option>
+      {{/each}}
+    {{else}}
+      {{#each model.selectUsers.users as |user|}}
+        <option value={{user.userid}} selected={{eq user.userid _userID}}>
+          {{user.username}}
+        </option>
+      {{/each}}
+    {{/if}}
+
 	</select>
 
 	<select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>

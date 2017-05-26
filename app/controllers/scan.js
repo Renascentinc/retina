@@ -7,19 +7,19 @@ export default Ember.Controller.extend({
     toolList: [],
 
     _transferTo: "",
-    
+
     _status: null,
-    
+
     _brand: null,
-    
+
     _type: null,
-    
+
     _userID: null,
 
     _query: Ember.computed(function () {
-        return { 
-                currentUser: this.get('session').get('data.currentUserID'), 
-                status: this.getWithDefault('_status', ''), 
+        return {
+                currentUser: this.get('session').get('data.currentUserID'),
+                status: this.getWithDefault('_status', ''),
                 brand: this.getWithDefault('_brand', ''),
                 type: this.getWithDefault('_type', ''),
                 userID: this.getWithDefault('_userID', '')
@@ -34,6 +34,12 @@ export default Ember.Controller.extend({
     },
 
     actions: {
+
+      isAdministrator() {
+        console.log("whatip");
+        return this.get('session').get('data.currentUserRole') === 'Administrator';
+      },
+
         goToInfoPage() {
             let toolid = Ember.$("#toolid").val();
             this.get('target').transitionTo('info', toolid);

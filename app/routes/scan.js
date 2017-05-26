@@ -14,10 +14,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 		}
 		
 		return Ember.RSVP.hash({
-       tools: _tools,
+      tools: _tools,
 			status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
-
-			selectUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users?currentUser=' + this.get('session').get('data.currentUserID')),
+			selectUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
       allUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
 			types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
       brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')

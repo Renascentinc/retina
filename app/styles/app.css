@@ -132,6 +132,7 @@ a:-webkit-any-link {
 }
 
 #screen-view {
+  overflow: scroll;
   position: relative;
   height: calc(100vh - 108px);
 	width: 100vw;
@@ -359,11 +360,13 @@ a:-webkit-any-link {
 	width: 60%;
 	float: right;
 	height: 100%;
+  margin: 0px;
 }
 
 #cart-menu{
 	width: 100vw;
-	height: 150px;
+	height: 140px;
+  margin: 0px;
 }
 
 #transfer-button{
@@ -371,7 +374,6 @@ a:-webkit-any-link {
 	font-size: 21px;
 	height: 47px;
 	margin-top: 10px;
-	margin-bottom: 23px;
 	display: table-footer-group;;
 }
 
@@ -550,4 +552,12 @@ button{
   width: 80%;
   margin-left: auto;
   margin-right: auto;
+}
+
+#tool-details a:-webkit-any-link {
+  color: #363636;
+}
+
+#tool-details .fa {
+  color: #363636;
 }

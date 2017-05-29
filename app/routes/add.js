@@ -17,7 +17,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     afterModel() {
         Ember.$(document).ready(function() {
             let currentYear = new Date().getFullYear();
-     		Ember.$("#form").validate({
+            Ember.$("#form").validate({
                 rules: {
                     type: {
                         required: true

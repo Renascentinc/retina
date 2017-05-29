@@ -14,11 +14,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 		return Ember.RSVP.hash({
 			dropdown: this.get('store').queryRecord('dropdown', {currentUser: 0, brand: true, type: true, provider: false, status: true, user: true, restricteduser: false}),
             tools: _tools
-            // ,
-			// status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
-			// users: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
-			// types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
-            // brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
 		});
 	}
 });

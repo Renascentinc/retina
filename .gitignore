@@ -2,7 +2,10 @@
 .DS_Store
 .idea/
 cordova/
+<<<<<<< HEAD
 
+=======
+>>>>>>> release_2.1.0_back_to_develop
 
 # compiled output
 /dist

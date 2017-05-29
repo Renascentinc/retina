@@ -101,18 +101,18 @@ const Validations = buildValidations({
 });
 
 export default DS.Model.extend(Validations, {
-	brand: attr(),
-	year: attr(),
-	type: attr(),
-	username: attr(),
-	purchasedate: attr(),
-  purchasedfrom: attr(),
-  price: attr(),
-  modelnumber: attr(),
-  serialnumber: attr(),
-  status: attr(),
-  toolclass: attr(),
-  userid: attr(),
-  email: attr(),
-  phonenumber: attr()
+    brand: attr(),
+    year: attr(),
+    type: attr(),
+    username: attr(),
+    purchasedate: attr(),
+    purchasedfrom: attr(),
+    price: attr(),
+    modelnumber: attr(),
+    serialnumber: attr(),
+    status: attr(),
+    toolclass: attr(),
+    userid: attr(),
+    email: attr(),
+    phonenumber: attr()
 });

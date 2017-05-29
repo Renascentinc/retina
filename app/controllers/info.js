@@ -16,8 +16,8 @@ export default Ember.Controller.extend({
 
     ableToTransfer: Ember.computed('model', function() {
         let isOwnedByUser = this.get('session').get('data.currentUserID') === this.get('model.tool').get('userid');
-        let isShopManager = this.get('session').get('data.currentUserRole') === "Shop Manager";
-
+        let isShopManager = this.get('session').get('data.currentUserRole') === 'Administrator';
+        
         return( isOwnedByUser || isShopManager );
     })
 });

@@ -2,20 +2,20 @@
 	<div id="splash-title">
 		RETINA
 	</div>
-	
+
 	<div id="splash-subtitle">
 		Renascent Tool Inventory Application
 	</div>
-	
-	
-	
+
+
+
 <form {{action 'authenticate' on='submit'}}>
-  {{input class="text-field" id='identification' placeholder='username' value=identification}}<br>
-  {{input class="text-field" id='password' placeholder='password' type='password' value=password}}<br>
+  {{input class="text-field" id='identification' placeholder='username' value=identification key-up='clearError'}}<br>
+  {{input class="text-field" id='password' placeholder='password' type='password' value=password key-up='clearError'}}<br>
   <button id="login-btn" class="go" type="submit">Login</button>
   
   {{#if errorMessage}}
-    <p>{{errorMessage}}</p>
+    <div class="login-fail">{{errorMessage}}</div>
   {{/if}}
 </form>
 </div>

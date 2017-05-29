@@ -12,14 +12,20 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 		} else {
 			_tools = Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?currentUser=' + this.get('session').get('data.currentUserID') + '&status=&userID=&type=&brand=');
 		}
-		
+
+        let _users = null;
+        if (this.get('session').get('data.currentUserRole') === 'Administrator') {
+            _users = Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users');
+        } else {
+            _users = Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users?currentUser=' + this.get('session').get('data.currentUserID'));
+        }
+
 		return Ember.RSVP.hash({
-      tools: _tools,
+            tools: _tools,
 			status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
-			selectUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
-      allUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
+			selectUsers: _users,
 			types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
-      brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
+            brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
 		});
 	}
 });

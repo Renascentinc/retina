@@ -24,6 +24,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             tools: _tools,
             status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status'),
             selectUsers: _users,
+            allUsers: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/users'),
             types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
             brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
         });

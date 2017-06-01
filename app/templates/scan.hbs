@@ -89,7 +89,7 @@
 	<div id="cart-actions">
 		<select id="user-to-transfer-to" class="dark-dropdown" onchange={{action "updateTransferTo" value="target"}}>
 			<option value="">Transfer to</option>
-			{{#each model.selectUsers.users as |user|}}
+			{{#each model.dropdown.user as |user|}}
 				<option value={{user.userid}} selected={{eq user.userid _transferTo}}>
 					{{user.username}}
 				</option>

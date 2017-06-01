@@ -132,7 +132,6 @@ a:-webkit-any-link {
 }
 
 #screen-view {
-  overflow: scroll;
   position: relative;
   height: calc(100vh - 98px);
 	width: 100vw;

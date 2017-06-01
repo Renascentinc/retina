@@ -21,7 +21,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
 
         return Ember.RSVP.hash({
-            dropdown: this.get('store').queryRecord('dropdown', {currentUser: 0, brand: true, type: true, provider: false, status: true, user: false, restricteduser: false}),
+            dropdown: this.get('store').queryRecord('dropdown', {currentUser: 0, brand: true, type: true, provider: false, status: true, user: true, restricteduser: false}),
             tools: _tools,
             selectUsers: _users
         });

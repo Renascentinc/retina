@@ -47,7 +47,7 @@ export default Ember.Controller.extend({
               _this.get('target').transitionTo('info', toolid);
 
           }).catch(function(e) {
-              console.log( e );
+              Ember.Logger.error( e );
           });
       },
 

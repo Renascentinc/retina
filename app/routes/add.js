@@ -29,18 +29,18 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
                     custombrand: {
                         required: true,
-                        maxlength: 40
+                        maxlength: 30
                     },
 
                     customprovider: {
                         required: true,
-                        maxlength: 40
+                        maxlength: 30
                     },
 
                     modelnumber: {
                         required: true,
                         minlength: 3,
-                        maxlength: 40,
+                        maxlength: 30,
                         alphanumeric: true
                     },
 
@@ -51,7 +51,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                     serialnumber: {
                         required: true,
                         minlength: 4,
-                        maxlength: 40,
+                        maxlength: 45,
                         alphanumeric: true
                     },
 
@@ -63,9 +63,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                         required: true
                     },
 
-                    price:{
+                    price: {
                         currency: ["$", false],
-                        maxlength: 40
+                        maxlength: 10
                     },
 
                     year: {

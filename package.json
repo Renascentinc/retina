@@ -41,6 +41,7 @@
     "ember-export-application-global": "^1.0.5",
     "ember-font-awesome": "3.0.4",
     "ember-load-initializers": "^0.5.1",
+    "ember-maskmoney": "0.3.5",
     "ember-pikaday": "2.2.2",
     "ember-power-select": "1.8.2",
     "ember-resolver": "^2.0.3",

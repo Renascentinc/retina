@@ -47,11 +47,11 @@
 
         <input id="custom-purchasedfrom" style="display: none;" type="text" class="text-field add" placeholder="Enter purchased from" />
 
-        {{input-money prefix='$' placeholder="Price" name="price" id="price" number=model.tool.price class="text-field add"}}
+        {{input-money prefix='$' type="tel" placeholder="Price" name="price" id="price" number=model.tool.price class="text-field add"}}
 
         {{pikaday-input maxDate=_maxdate theme="dark-theme" class="text-field add" readonly="readonly" id="purchase-date" placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 
-        {{input type="text" name="year" class="text-field add" placeholder="Year of Manufacture" value=model.tool.year}}<hr>
+        {{input type="tel" name="year" class="text-field add" placeholder="Year of Manufacture" value=model.tool.year}}<hr>
 
         <div>
             <select id="status" name="status" class="dark-dropdown add">

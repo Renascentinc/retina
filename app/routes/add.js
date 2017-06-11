@@ -5,12 +5,20 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model() {
         return Ember.RSVP.hash({
             tool: this.get('store').createRecord('tool'),
-            dropdown: this.get('store').queryRecord('dropdown', {currentUser: 0, brand: true, type: true, provider: true, status: true, user: true, restricteduser: false})
+            dropdown: this.get('store').queryRecord('dropdown', {
+                currentUser: 0,
+                brand: true,
+                type: true,
+                provider: true,
+                status: true,
+                user: true,
+                restricteduser: false
+            })
         });
     },
 
     afterModel() {
-        Ember.$(document).ready(function() {
+        Ember.$(document).ready(function () {
             let currentYear = new Date().getFullYear();
             Ember.$("#form").validate({
                 rules: {
@@ -39,7 +47,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                         alphanumeric: true
                     },
 
-                    purchasedate:{
+                    purchasedate: {
                         maxDate: true
                     },
 
@@ -58,7 +66,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                         required: true
                     },
 
-                    price:{
+                    price: {
                         currency: ["$", false],
                         maxlength: 40
                     },
@@ -90,9 +98,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                     },
 
                     modelnumber: {
-                      required: "Must Enter Model Number",
-                      minlength: "Must Enter Valid Model Number",
-                      alphanumeric: "Only numbers and letters allowed"
+                        required: "Must Enter Model Number",
+                        minlength: "Must Enter Valid Model Number",
+                        alphanumeric: "Only numbers and letters allowed"
                     },
 
                     serialnumber: {
@@ -101,7 +109,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                         alphanumeric: "Only numbers and letters allowed"
                     },
 
-                    purchasedate:{
+                    purchasedate: {
                         maxDate: "Purchase Dates Must Be In The Past"
                     },
 
@@ -124,7 +132,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                     }
                 }
             });
-          //----------End validation--------------
+            //----------End validation--------------
         });
     }
 });

@@ -12,11 +12,11 @@ export default Ember.Controller.extend({
 
     _query: Ember.computed(function () {
         return {
-                status: this.getWithDefault('_status', ''),
-                brand: this.getWithDefault('_brand', ''),
-                type: this.getWithDefault('_type', ''),
-                userID: this.getWithDefault('_userID', '')
-               };
+            status: this.getWithDefault('_status', ''),
+            brand: this.getWithDefault('_brand', ''),
+            type: this.getWithDefault('_type', ''),
+            userID: this.getWithDefault('_userID', '')
+        };
     }).volatile(),
 
     clearFilterParams() {
@@ -28,7 +28,7 @@ export default Ember.Controller.extend({
 
     actions: {
         updateSearch(target) {
-			Ember.$(".search-box").val('');
+            Ember.$(".search-box").val('');
 
             if (target.getAttribute('name') === "status") {
                 this.set('_status', target.value);
@@ -51,8 +51,8 @@ export default Ember.Controller.extend({
             this.clearFilterParams();
             var set = this.set.bind(this, 'model.tools');
 
-            if( value !== "" ) {
-                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
+            if (value !== "") {
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', {parameter: value}).then(set);
             } else {
                 Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);
             }

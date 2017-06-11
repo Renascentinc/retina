@@ -2,6 +2,7 @@
   "name": "retina-app",
   "dependencies": {
     "font-awesome": "^4.7.0",
+    "jquery-maskmoney": "https://github.com/plentz/jquery-maskmoney.git",
     "jquery-validation": "^1.16.0"
   }
 }

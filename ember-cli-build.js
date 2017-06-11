@@ -12,6 +12,7 @@ module.exports = function(defaults) {
   app.import('bower_components/font-awesome/fontawesome-webfont.ttf');
   app.import('bower_components/font-awesome/fontawesome-webfont.woff');
   app.import('bower_components/font-awesome/fontawesome-webfont.woff2');
+  app.import('bower_components/jquery-maskmoney/dist/jquery.maskMoney.min.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

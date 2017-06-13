@@ -1,7 +1,7 @@
 import DS from 'ember-data';
-import {validator, buildValidations} from 'ember-cp-validations';
+import { validator, buildValidations } from 'ember-cp-validations';
 
-const {attr} = DS;
+const { attr } = DS;
 
 const Validations = buildValidations({
     brand: {

@@ -1,4 +1,4 @@
-export default function () {
+export default function() {
 //     this.namespace = '/api';
 
     // this.urlPrefix = '';    // make this `http://localhost:8080`, for example, if your API is on a different server
@@ -21,21 +21,21 @@ export default function () {
         let params = request.requestBody;
 
         if (params.username === 'letme' && params.password === 'in') {
-            return {"access_token": "567k345jsd1o34sdklsdf34534", userid: 189823748};
+            return {'access_token': '567k345jsd1o34sdklsdf34534', userid: 189823748};
         }
     }); //end post => /token
 
     this.get('/tools/:id', (schema, request) => {
         return {
             data: {
-                type: "tool",
+                type: 'tool',
                 id: request.params.id,
                 attributes: {
                     brand: 'Bosch',
-                    ownerfirstname: "Shaboygen",
-                    ownerlastname: "Cactapuss",
-                    datelastcheckout: "Stardate 0.12.4.12",
-                    purchasedate: "Stardate 020.2.3.23",
+                    ownerfirstname: 'Shaboygen',
+                    ownerlastname: 'Cactapuss',
+                    datelastcheckout: 'Stardate 0.12.4.12',
+                    purchasedate: 'Stardate 020.2.3.23',
                     type: 'hammer drill',
                     status: 'in use'
                 }
@@ -43,7 +43,7 @@ export default function () {
         };
     }); //end get => /tools/:id
 
-    this.get('/tools', function () {
+    this.get('/tools', function() {
         return {
             data: [{
                 type: 'tool',
@@ -119,11 +119,11 @@ export default function () {
         };
     });
 
-    this.get('/status', function () {
+    this.get('/status', function() {
         return ['in-use', 'available', 'out of service'];
     });
 
-    this.get('/owners', function () {
+    this.get('/owners', function() {
         return {
             data: [{
                 type: 'owner',
@@ -154,19 +154,19 @@ export default function () {
         };
     });
 
-    this.get('/type', function () {
-        return ["hammer drill", "reciprocating saw", "impact driver"];
+    this.get('/type', function() {
+        return ['hammer drill', 'reciprocating saw', 'impact driver'];
     });
 
-    this.get('/providers', function () {
-        return ["jobsite supply", "home depot", "ace hardware", "lowes"];
+    this.get('/providers', function() {
+        return ['jobsite supply', 'home depot', 'ace hardware', 'lowes'];
     });
 
-    this.get('/brands', function () {
-        return ["milwuake", "black & decker", "dewalt", "bosch"];
+    this.get('/brands', function() {
+        return ['milwuake', 'black & decker', 'dewalt', 'bosch'];
     });
 
-    this.get('/dropdowns/:id', function () {
+    this.get('/dropdowns/:id', function() {
         return {
             data: {
                 type: 'dropdown',
@@ -178,7 +178,7 @@ export default function () {
         };
     });
 
-    this.get('/dropdowns', function () {
+    this.get('/dropdowns', function() {
         return {
             data: {
                 type: 'dropdown',

@@ -2,19 +2,19 @@ import DS from 'ember-data';
 import config from '../config/environment';
 
 export default DS.JSONAPIAdapter.extend({
-    host: config.APP.api_url,
-    namespace: config.APP.api_namespace,
+    host: config.APP.API_URL,
+    namespace: config.APP.API_NAMESPACE,
     authorizer: 'authorizer:oauth2',
 
-    ajaxOptions: function ajaxOptions() {
-        let hash = this._super.apply(this, arguments);
+    ajaxOptions() {
+        let hash = this._super(...arguments);
 
         if (hash.contentType) {
             hash.contentType = 'application/json';
         }
 
-        let beforeSend = hash.beforeSend;
-        hash.beforeSend = function (xhr) {
+        let { beforeSend } = hash;
+        hash.beforeSend = function(xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
             if (beforeSend) {
                 beforeSend(xhr);
@@ -24,7 +24,7 @@ export default DS.JSONAPIAdapter.extend({
         return hash;
     },
 
-    urlForQuery () {
-        return `${config.APP.api_url}${config.APP.api_namespace}/search`;
+    urlForQuery() {
+        return `${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`;
     }
 });

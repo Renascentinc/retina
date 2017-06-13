@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export function eq(params/*, hash*/) {
-    const [arg1, arg2] = params;
+    let [arg1, arg2] = params;
     return arg1 === arg2;
 }
 

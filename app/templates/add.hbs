@@ -13,14 +13,14 @@
         </div>
 
         <div>
-            <select id="brand" name="brand" class="dark-dropdown add" {{action 'addCustomOptions' '#brand' '#custom-brand'}} >
+            <select id="brand" name="brand" class="dark-dropdown add" {{action "addCustomOptions" "#brand" "#custom-brand"}} >
                 <option disabled selected hidden> Brand</option>
 
                 {{#each model.dropdown.brand as |brand|}}
                     <option value={{brand}}> {{brand}} </option>
                 {{/each}}
 
-                <option value='-1'>other</option>
+                <option value="-1">other</option>
             </select>
 
             <input id="custom-brand" name="custombrand" style="display: none;" type="text" class="text-field add" placeholder=" Enter brand"/>
@@ -32,21 +32,21 @@
         <hr>
 
         <div>
-            <select id="purchasedfrom" class="dark-dropdown add" {{action 'addCustomOptions' '#purchasedfrom' '#custom-purchasedfrom'}}>
+            <select id="purchasedfrom" class="dark-dropdown add" {{action "addCustomOptions" "#purchasedfrom" "#custom-purchasedfrom"}}>
                 <option selected value=""> Purchased From</option>
 
                 {{#each model.dropdown.provider as |provider|}}
                     <option value={{provider}}> {{provider}} </option>
                 {{/each}}
 
-                <option value='-1'>other</option>
+                <option value="-1">other</option>
             </select>
         </div>
 
         <input id="custom-purchasedfrom" name="customprovider" style="display: none;" type="text" class="text-field add" placeholder="Enter purchased from"/>
 
         {{input-money
-            prefix='$'
+            prefix="$"
             affixesStay=true
             type="tel"
             placeholder="Price"

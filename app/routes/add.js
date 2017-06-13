@@ -18,9 +18,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     },
 
     afterModel() {
-        Ember.$(document).ready(function () {
+        Ember.$(document).ready(function() {
             let currentYear = new Date().getFullYear();
-            Ember.$("#form").validate({
+            Ember.$('#form').validate({
                 rules: {
                     type: {
                         required: true
@@ -67,7 +67,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                     },
 
                     price: {
-                        currency: ["$", false],
+                        currency: ['$', false],
                         maxlength: 40
                     },
 
@@ -82,57 +82,56 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
                 messages: {
                     type: {
-                        required: "Must Select Type"
+                        required: 'Must Select Type'
                     },
 
                     brand: {
-                        required: "Must Select Brand"
+                        required: 'Must Select Brand'
                     },
 
                     custombrand: {
-                        required: "Must Specify Other Brand"
+                        required: 'Must Specify Other Brand'
                     },
 
                     customprovider: {
-                        required: "Must Specify Other Provider"
+                        required: 'Must Specify Other Provider'
                     },
 
                     modelnumber: {
-                        required: "Must Enter Model Number",
-                        minlength: "Must Enter Valid Model Number",
-                        alphanumeric: "Only numbers and letters allowed"
+                        required: 'Must Enter Model Number',
+                        minlength: 'Must Enter Valid Model Number',
+                        alphanumeric: 'Only numbers and letters allowed'
                     },
 
                     serialnumber: {
-                        required: "Enter Serial Number",
-                        minlength: "Enter Valid Serial Number",
-                        alphanumeric: "Only numbers and letters allowed"
+                        required: 'Enter Serial Number',
+                        minlength: 'Enter Valid Serial Number',
+                        alphanumeric: 'Only numbers and letters allowed'
                     },
 
                     purchasedate: {
-                        maxDate: "Purchase Dates Must Be In The Past"
+                        maxDate: 'Purchase Dates Must Be In The Past'
                     },
 
                     status: {
-                        required: "Must Assign Status"
+                        required: 'Must Assign Status'
                     },
 
                     assignee: {
-                        required: "Must Assign Tool"
+                        required: 'Must Assign Tool'
                     },
 
                     price: {
-                        currency: "Must Be Valid Price"
+                        currency: 'Must Be Valid Price'
                     },
 
                     year: {
-                        digits: "Must Be Valid Year",
-                        maxlength: "Must Be Valid 4 Digit Year",
-                        minlength: "Must Be Valid 4 Digit Year"
+                        digits: 'Must Be Valid Year',
+                        maxlength: 'Must Be Valid 4 Digit Year',
+                        minlength: 'Must Be Valid 4 Digit Year'
                     }
                 }
             });
-            //----------End validation--------------
         });
     }
 });

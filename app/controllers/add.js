@@ -18,8 +18,8 @@ export default Ember.Controller.extend({
             let brand = Ember.$('#brand').val();
             let type = Ember.$('#type').val();
             let purchasedfrom = Ember.$('#purchasedfrom').val();
-            let status = Ember.$("#status").val();
-            let assignee = Ember.$("#assignee").val();
+            let status = Ember.$('#status').val();
+            let assignee = Ember.$('#assignee').val();
 
             if (brand === '-1') {
                 brand = Ember.$('#custom-brand').val();
@@ -37,17 +37,17 @@ export default Ember.Controller.extend({
 
             let _this = this;
 
-            tool.save().then(function (tool) {
+            tool.save().then(function(tool) {
                 let toolid = tool.get('id');
                 _this.get('target').transitionTo('info', toolid);
 
-            }).catch(function (e) {
+            }).catch(function(e) {
                 Ember.Logger.error(e);
             });
         },
 
         addCustomOptions(dropdownid, textfieldid) {
-            Ember.$(dropdownid).change(function () {
+            Ember.$(dropdownid).change(function() {
                 if (Ember.$(this).val() === '-1') {
                     Ember.$(textfieldid).fadeIn();
 

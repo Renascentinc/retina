@@ -28,6 +28,10 @@ export default Ember.Controller.extend({
               purchasedfrom = Ember.$('#custom-purchasedfrom').val();
           }
 
+          if (tool.get('purchasedate') === null) {
+            tool.set('purchasedate', '');
+          }
+
           tool.set('brand', brand);
           tool.set('type', type);
           tool.set('purchasedfrom', purchasedfrom);

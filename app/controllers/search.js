@@ -1,47 +1,61 @@
 import Ember from 'ember';
+import config from '../config/environment';
 
 export default Ember.Controller.extend({
-    queryParams: {
-        status: "",
-        brand: "",
-        type: "",
-        userID: ""
+    _status: null,
+
+    _brand: null,
+
+    _type: null,
+
+    _userID: null,
+
+    _query: Ember.computed(function () {
+        return {
+                status: this.getWithDefault('_status', ''),
+                brand: this.getWithDefault('_brand', ''),
+                type: this.getWithDefault('_type', ''),
+                userID: this.getWithDefault('_userID', '')
+               };
+    }).volatile(),
+
+    clearFilterParams() {
+        this.set('_status', null);
+        this.set('_brand', null);
+        this.set('_type', null);
+        this.set('_userID', null);
     },
 
     actions: {
-        updateSearch( target ) {
-            Ember.$(".search-box").val('');
-            let params = this.queryParams.get('0');
+        updateSearch(target) {
+			Ember.$(".search-box").val('');
 
-            if( target.getAttribute('name') === "status" ) {
-                params.status = target.value;
+            if (target.getAttribute('name') === "status") {
+                this.set('_status', target.value);
 
-            } else if( target.getAttribute('name') === "brand" ) {
-                params.brand = target.value;
+            } else if (target.getAttribute('name') === "brand") {
+                this.set('_brand', target.value);
 
-            } else if( target.getAttribute('name') === "type" ) {
-                params.type = target.value;
+            } else if (target.getAttribute('name') === "type") {
+                this.set('_type', target.value);
 
-            } else if( target.getAttribute('name') === "owner" ) {
-                params.userID = target.value;
+            } else if (target.getAttribute('name') === "owner") {
+                this.set('_userID', parseInt(target.value));
             }
 
-            let set = this.set.bind(this, 'model.tool');
-            this.get('store').query('tool', params).then(set);
+            var set = this.set.bind(this, 'model.tools');
+            Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', this.get('_query')).then(set);
         },
 
         fuzzySearch(value) {
-          let set = this.set.bind(this, 'model.tool');
-          if( value !== "" ) {
-            this.get('store').query('tool', {parameter: value}).then(set);
+            this.clearFilterParams();
+            var set = this.set.bind(this, 'model.tools');
 
-          } else {
-            this.get('store').query('tool', {status: '', userID: '', type: '', brand: ''}).then(set);
-          }
-        },
-
-        currentUser() {
-            return this.get('session').get('data.currentUserID');
+            if( value !== "" ) {
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
+            } else {
+                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);
+            }
         }
     }
 });

@@ -3,7 +3,6 @@
 .idea/
 cordova/
 
-
 # compiled output
 /dist
 /tmp

@@ -8,12 +8,13 @@
 	</div>
 
 	<div id="tool-details">
-		Status: {{model.tool.status}} <br>
-		Tool ID: {{model.tool.id}}<br>
-		Owner: {{model.tool.username}}<br>
-        Contact: <br>
-        {{model.tool.phonenumber}} <br>
-        {{model.tool.email}}<br><br>
+		{{model.tool.status}} <br>
+		Tool ID: {{model.tool.id}}<br><br>
+
+    Owner:<br>
+    <i class="fa fa-user" aria-hidden="true"></i> {{model.tool.username}}<br>
+    <a href="tel:{{model.tool.phonenumber}}"> <i class="fa fa-phone" aria-hidden="true"></i> {{model.tool.phonenumber}}</a><br>
+    <a href="mailto:{{model.tool.email}}"><i class="fa fa-envelope" aria-hidden="true"></i> {{model.tool.email}}</a><br><br>
 		Model year: {{model.tool.year}} <br>
 		Purchase date: {{model.tool.purchasedate}}<br>
 		Serial number: {{model.tool.serialnumber}}<br>

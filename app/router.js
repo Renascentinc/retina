@@ -14,6 +14,7 @@ Router.map(function() {
   this.route('login');
   this.route('info', { path: "tool/:id" });
   this.route('loading');
+  this.mount('ember-engine-admin', {path: '/admin'});
 });
 
 export default Router;

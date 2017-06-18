@@ -1,0 +1,11 @@
+{
+  "preset": "ember-suave",
+  "validateIndentation": {
+      "value": 4,
+      "allExcept": [
+          "comments",
+          "emptyLines"
+      ]
+  },
+  "disallowDirectPropertyAccess": false
+}

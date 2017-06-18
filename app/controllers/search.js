@@ -10,13 +10,13 @@ export default Ember.Controller.extend({
 
     _userID: null,
 
-    _query: Ember.computed(function () {
+    _query: Ember.computed(function() {
         return {
-                status: this.getWithDefault('_status', ''),
-                brand: this.getWithDefault('_brand', ''),
-                type: this.getWithDefault('_type', ''),
-                userID: this.getWithDefault('_userID', '')
-               };
+            status: this.getWithDefault('_status', ''),
+            brand: this.getWithDefault('_brand', ''),
+            type: this.getWithDefault('_type', ''),
+            userID: this.getWithDefault('_userID', '')
+        };
     }).volatile(),
 
     clearFilterParams() {
@@ -28,33 +28,33 @@ export default Ember.Controller.extend({
 
     actions: {
         updateSearch(target) {
-			Ember.$(".search-box").val('');
+            Ember.$('.search-box').val('');
 
-            if (target.getAttribute('name') === "status") {
+            if (target.getAttribute('name') === 'status') {
                 this.set('_status', target.value);
 
-            } else if (target.getAttribute('name') === "brand") {
+            } else if (target.getAttribute('name') === 'brand') {
                 this.set('_brand', target.value);
 
-            } else if (target.getAttribute('name') === "type") {
+            } else if (target.getAttribute('name') === 'type') {
                 this.set('_type', target.value);
 
-            } else if (target.getAttribute('name') === "owner") {
+            } else if (target.getAttribute('name') === 'owner') {
                 this.set('_userID', parseInt(target.value));
             }
 
-            var set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', this.get('_query')).then(set);
+            let set = this.set.bind(this, 'model.tools');
+            Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
         },
 
         fuzzySearch(value) {
             this.clearFilterParams();
-            var set = this.set.bind(this, 'model.tools');
+            let set = this.set.bind(this, 'model.tools');
 
-            if( value !== "" ) {
-                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search', { parameter: value } ).then(set);
+            if (value !== '') {
+                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, { parameter: value }).then(set);
             } else {
-                Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/search?status=&userID=&type=&brand=').then(set);
+                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search?status=&userID=&type=&brand=`).then(set);
             }
         }
     }

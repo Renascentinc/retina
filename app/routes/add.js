@@ -5,14 +5,22 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model() {
         return Ember.RSVP.hash({
             tool: this.get('store').createRecord('tool'),
-            dropdown: this.get('store').queryRecord('dropdown', {currentUser: 0, brand: true, type: true, provider: true, status: true, user: true, restricteduser: false})
+            dropdown: this.get('store').queryRecord('dropdown', {
+                currentUser: 0,
+                brand: true,
+                type: true,
+                provider: true,
+                status: true,
+                user: true,
+                restricteduser: false
+            })
         });
     },
 
     afterModel() {
         Ember.$(document).ready(function() {
             let currentYear = new Date().getFullYear();
-            Ember.$("#form").validate({
+            Ember.$('#form').validate({
                 rules: {
                     type: {
                         required: true
@@ -39,7 +47,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                         alphanumeric: true
                     },
 
-                    purchasedate:{
+                    purchasedate: {
                         maxDate: true
                     },
 
@@ -58,8 +66,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                         required: true
                     },
 
-                    price:{
-                        currency: ["$", false],
+                    price: {
+                        currency: ['$', false],
                         maxlength: 40
                     },
 
@@ -74,57 +82,56 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
                 messages: {
                     type: {
-                        required: "Must Select Type"
+                        required: 'Must Select Type'
                     },
 
                     brand: {
-                        required: "Must Select Brand"
+                        required: 'Must Select Brand'
                     },
 
                     custombrand: {
-                        required: "Must Specify Other Brand"
+                        required: 'Must Specify Other Brand'
                     },
 
                     customprovider: {
-                        required: "Must Specify Other Provider"
+                        required: 'Must Specify Other Provider'
                     },
 
                     modelnumber: {
-                      required: "Must Enter Model Number",
-                      minlength: "Must Enter Valid Model Number",
-                      alphanumeric: "Only numbers and letters allowed"
+                        required: 'Must Enter Model Number',
+                        minlength: 'Must Enter Valid Model Number',
+                        alphanumeric: 'Only numbers and letters allowed'
                     },
 
                     serialnumber: {
-                        required: "Enter Serial Number",
-                        minlength: "Enter Valid Serial Number",
-                        alphanumeric: "Only numbers and letters allowed"
+                        required: 'Enter Serial Number',
+                        minlength: 'Enter Valid Serial Number',
+                        alphanumeric: 'Only numbers and letters allowed'
                     },
 
-                    purchasedate:{
-                        maxDate: "Purchase Dates Must Be In The Past"
+                    purchasedate: {
+                        maxDate: 'Purchase Dates Must Be In The Past'
                     },
 
                     status: {
-                        required: "Must Assign Status"
+                        required: 'Must Assign Status'
                     },
 
                     assignee: {
-                        required: "Must Assign Tool"
+                        required: 'Must Assign Tool'
                     },
 
                     price: {
-                        currency: "Must Be Valid Price"
+                        currency: 'Must Be Valid Price'
                     },
 
                     year: {
-                        digits: "Must Be Valid Year",
-                        maxlength: "Must Be Valid 4 Digit Year",
-                        minlength: "Must Be Valid 4 Digit Year"
+                        digits: 'Must Be Valid Year',
+                        maxlength: 'Must Be Valid 4 Digit Year',
+                        minlength: 'Must Be Valid 4 Digit Year'
                     }
                 }
             });
-          //----------End validation--------------
         });
     }
 });

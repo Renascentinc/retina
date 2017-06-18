@@ -1,5 +1,7 @@
+@import 'variables';
+
 html, .ember-application {
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     height: 100%;
     width: 100%;
     margin: 0px;
@@ -11,7 +13,7 @@ html, .ember-application {
     height: 78px;
     margin: 0px 0px;
     width: 100%;
-    background-color: #363636;
+    background-color: $renascent-dark-gray;
     box-shadow: 0px 3px 4px rgba(0, 0, 0, .49);
     z-index: 2;
     top: 0px;
@@ -26,7 +28,7 @@ header {
 }
 
 .login-fail {
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     font-weight: 300;
     font-size: 19px;
     margin-left: auto;
@@ -42,11 +44,11 @@ header {
 }
 
 nav {
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     height: 30px;
     position: relative;
     margin: 0px 0px;
-    background-color: #E30000;
+    background-color: $renascent-red;
     width: 100%;
     z-index: 1;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, .49);
@@ -61,7 +63,7 @@ nav {
     height: 100%;
     line-height: 65px;
     font-size: 30px;
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     font-weight: 300;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
@@ -70,7 +72,7 @@ nav {
 
 #title {
     color: white;
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     font-weight: 100;
     font-size: 38px;
     text-align: center;
@@ -134,17 +136,17 @@ a:-webkit-any-link {
     position: relative;
     height: calc(100vh - 98px);
     width: 100vw;
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     -webkit-overflow-scrolling: touch;
 }
 
 #login-page {
     height: 100vh;
-    background-color: #e30000;
+    background-color: $renascent-red;
 }
 
 #splash-title {
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     color: white;
     text-align: center;
     font-size: 95px;
@@ -154,7 +156,7 @@ a:-webkit-any-link {
 }
 
 #splash-subtitle {
-    font-family: "Helvetica Neue";
+    font-family: $app-font;
     color: white;
     text-align: center;
     font-size: 23px;
@@ -176,7 +178,7 @@ a:-webkit-any-link {
 
 .go {
     position: relative;
-    background-color: #e30000;
+    background-color: $renascent-red;
     border: none;
     border-radius: 6px;
     color: white;
@@ -213,7 +215,7 @@ a:-webkit-any-link {
 
 #login-btn {
     background-color: white;
-    color: #e30000;
+    color: $renascent-red;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
@@ -222,7 +224,7 @@ a:-webkit-any-link {
 .dark-dropdown {
     height: 47px;
     width: 80%;
-    background-color: #333333;
+    background-color: $renascent-dark-gray;
     -webkit-appearance: none;
     color: white;
     font-weight: 400;
@@ -244,7 +246,7 @@ a:-webkit-any-link {
 .description {
     width: 100%;
     text-align: center;
-    color: #797979;
+    color: $renascent-light-gray;
     font-size: 18px;
 }
 
@@ -263,7 +265,7 @@ a:-webkit-any-link {
     display: inline-block;
     height: 100%;
     width: 23%;
-    color: #797979;
+    color: $renascent-light-gray;
     font-size: 16px;
     font-weight: 600;
     background-color: rgba(0, 0, 0, 0);
@@ -273,7 +275,7 @@ a:-webkit-any-link {
 .specs-box {
     height: 80px;
     width: calc(100vw - 5px);
-    border-bottom: 1px solid #797979;
+    border-bottom: 1px solid $renascent-light-gray;
     padding: 0px 0px 0px 5px;
     margin: 0px;
     overflow: hidden;
@@ -284,14 +286,14 @@ a:-webkit-any-link {
     display: inline-block;
     top: 0px;
     height: 42px;
-    color: #797979;
+    color: $renascent-light-gray;
     font-weight: 600;
     overflow: visible;
     font-size: 17px;
 }
 
 .title {
-    color: #363636;
+    color: $renascent-dark-gray;
     font-size: 20px;
     height: 30px;
     overflow: hidden;
@@ -302,7 +304,7 @@ a:-webkit-any-link {
 .options {
     float: right;
     text-align: center;
-    color: #797979;
+    color: $renascent-light-gray;
     width: 40px;
     margin: 0px;
     height: 100%;
@@ -317,7 +319,7 @@ a:-webkit-any-link {
 .search-icon {
     font-size: 25px;
     line-height: 79px;
-    color: #363636;
+    color: $renascent-dark-gray;
 }
 
 .tool-specs {
@@ -328,7 +330,7 @@ a:-webkit-any-link {
 }
 
 #list-title {
-    color: #363636;
+    color: $renascent-dark-gray;
     font-size: 18px;
     font-weight: 500;
     margin: 1px 5px 0px;
@@ -337,7 +339,7 @@ a:-webkit-any-link {
 
 #list {
     margin: 5px;
-    color: #797979;
+    color: $renascent-light-gray;
     font-size: 23px;
     line-height: 24px;
     overflow: scroll;
@@ -420,7 +422,7 @@ form {
 
 .pika-single.dark-theme {
     color: #fff;
-    background-color: #333;
+    background-color: $renascent-dark-gray;
     border: 1px solid #666;
     border-bottom-color: #999;
     height: 200px;
@@ -428,7 +430,7 @@ form {
 }
 
 .dark-theme .pika-label {
-    background-color: #333;
+    background-color: $renascent-dark-gray;
 }
 
 .dark-theme .pika-prev {
@@ -445,7 +447,7 @@ form {
 
 .dark-theme .pika-button {
     color: #fff;
-    background: #222;
+    background: $renascent-dark-gray;
 }
 
 .dark-theme .pika-week {
@@ -469,7 +471,7 @@ form {
 
 .search-block {
     width: 100vw;
-    background-color: #797979;
+    background-color: $renascent-light-gray;
     height: 60px;
 }
 
@@ -494,7 +496,7 @@ form {
 }
 
 .delete-icon {
-    color: #e30000;
+    color: $renascent-red;
     font-size: 25px;
 }
 
@@ -512,14 +514,14 @@ button {
 }
 
 .error {
-    color: #e30000;
+    color: $renascent-red;
 }
 
 .back {
     font-size: 25px;
     height: auto;
     padding: 10px 5px 5px;
-    color: #e30000;
+    color: $renascent-red;
 }
 
 .loading {
@@ -542,7 +544,7 @@ button {
 }
 
 .error {
-    color: #e30000;
+    color: $renascent-red;
     display: block;
     width: 80%;
     margin-left: auto;
@@ -550,9 +552,9 @@ button {
 }
 
 #tool-details a:-webkit-any-link {
-    color: #363636;
+    color: $renascent-dark-gray;
 }
 
 #tool-details .fa {
-    color: #363636;
+    color: $renascent-dark-gray;
 }

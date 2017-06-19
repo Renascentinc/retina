@@ -25,6 +25,6 @@ export default DS.JSONAPIAdapter.extend({
     },
 
     urlForQuery() {
-        return `${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`;
+        return `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`;
     }
 });

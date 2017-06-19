@@ -68,7 +68,7 @@ export default Ember.Controller.extend({
                 let _this = this;
 
                 let options = {
-                    url: `${config.APP.API_URL}${config.APP.API_NAMESPACE}/transfer`,
+                    url: `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/transfer`,
                     data: {
                         userid: user,
                         toolids: this.toolList
@@ -86,7 +86,7 @@ export default Ember.Controller.extend({
 
                 Ember.$.ajax(options).then(function() {
                     let set = _this.set.bind(_this, 'model.tools');
-                    Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, _this.get('_query')).then(set);
+                    Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`, _this.get('_query')).then(set);
                 });
 
                 this.set('toolList', []);
@@ -110,7 +110,7 @@ export default Ember.Controller.extend({
             }
 
             let set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
+            Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
         },
 
         fuzzySearch(value) {
@@ -119,7 +119,7 @@ export default Ember.Controller.extend({
             let user = this.get('session').get('data.currentUserID');
 
             if (value !== '') {
-                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, {
+                Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`, {
                     currentUser: user,
                     parameter: value
                 }).then(set);

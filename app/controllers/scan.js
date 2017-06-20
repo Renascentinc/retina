@@ -35,25 +35,24 @@ export default Ember.Controller.extend(SearchMixin, {
             Ember.$('#user-to-transfer-to').css('border-style', 'none');
             Ember.$('#list-title').css('border-style', 'none');
 
-            if (this._transferTo === '') {
+            if (this.get('_transferTo') === '') {
                 Ember.$('#user-to-transfer-to').css('border-style', 'solid');
                 Ember.$('#user-to-transfer-to').css('border-color', '#e30000');
             }
 
-            if (this.toolList.length === 0) {
+            if (this.get('toolList').length === 0) {
                 Ember.$('#list-title').css('border-style', 'solid');
                 Ember.$('#list-title').css('border-color', '#e30000');
             }
 
-            if (Ember.$('#user-to-transfer-to').val() !== null && this.toolList.length !== 0) {
+            if (Ember.$('#user-to-transfer-to').val() !== null && this.get('toolList').length !== 0) {
                 let user = parseInt(Ember.$('#user-to-transfer-to').val());
-                let _this = this;
 
                 let options = {
                     url: `${config.APP.API_URL}${config.APP.API_NAMESPACE}/transfer`,
                     data: {
                         userid: user,
-                        toolids: this.toolList
+                        toolids: this.get('toolList')
                     },
                     type: 'PUT',
                     crossDomain: true,
@@ -66,12 +65,13 @@ export default Ember.Controller.extend(SearchMixin, {
                     }
                 };
 
+                let _this = this;
                 Ember.$.ajax(options).then(function() {
-                    let set = _this.set.bind(_this, 'model.tools');
-                    Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, _this.get('_query')).then(set);
+                    _this.send('updateSearch', _this.get('query'));
                 });
 
                 this.set('toolList', []);
+                this.set('_transferTo', '');
             }
         },
 

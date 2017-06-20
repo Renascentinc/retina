@@ -1,47 +1,13 @@
-<div class="search-bar">
-    <select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Status</option>
-        {{#each model.dropdown.status as |status|}}
-            <option value={{status}} selected={{eq status _status}}>
-                {{status}}
-            </option>
-        {{/each}}
-    </select>
-
-    <select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Type</option>
-        {{#each model.dropdown.type as |type|}}
-            <option value={{type}} selected={{eq type _type}}>
-                {{type}}
-            </option>
-        {{/each}}
-    </select>
-
-    <select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Owner</option>
-        {{#each model.selectUsers.users as |user|}}
-            <option value={{user.userid}} selected={{eq user.userid _userID}}>
-                {{user.username}}
-            </option>
-        {{/each}}
-    </select>
-
-    <select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Brand</option>
-        {{#each model.dropdown.brand as |brand|}}
-            <option value={{brand}} selected={{eq brand _brand}}>
-                {{brand}}
-            </option>
-        {{/each}}
-    </select>
-</div>
+{{#search-header model=model showSelectTools=true}}
+    {{#each model.selectUsers.users as |user|}}
+        <option value={{user.userid}} selected={{eq user.userid _userID}}>
+            {{user.username}}
+        </option>
+    {{/each}}
+{{/search-header}}
 
 
 <div id="tool-display-box">
-    <div class="search-block">
-        {{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
-    </div>
-
     {{#each model.tools.data as |tool|}}
         <div class="specs-box">
             <button class="tool-specs" {{action "addToList" tool.id}}>

@@ -4,7 +4,9 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
-    // Add options here
+      sassOptions: {
+          includePaths: ['app/components']
+      }
   });
 
   app.import('bower_components/jquery-validation/dist/jquery.validate.min.js');

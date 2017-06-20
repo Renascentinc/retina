@@ -23,7 +23,7 @@ export default Ember.Controller.extend({
             brand: this.getWithDefault('selectedBrand', ''),
             type: this.getWithDefault('selectedType', ''),
             userID: this.getWithDefault('_userID', '')
-        }
+        };
     }).volatile(),
 
     actions: {

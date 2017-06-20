@@ -21,10 +21,10 @@ export default Ember.Component.extend({
             brand: this.getWithDefault('selectedBrand', ''),
             type: this.getWithDefault('selectedType', ''),
             userID: this.getWithDefault('_userID', '')
-        }
+        };
 
         if (this.get('showSelectTools')) {
-            query.currentUser = this.get('session').get('data.currentUserID')
+            query.currentUser = this.get('session').get('data.currentUserID');
         }
 
         return query;
@@ -67,7 +67,7 @@ export default Ember.Component.extend({
                     parameter: value
                 }).then(set);
             } else {
-                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set)
+                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
             }
         }
     }

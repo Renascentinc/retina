@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import config from '../config/environment';
 
 export default Ember.Controller.extend({
     selectedStatus: '',
@@ -16,6 +15,6 @@ export default Ember.Controller.extend({
             brand: this.getWithDefault('selectedBrand', ''),
             type: this.getWithDefault('selectedType', ''),
             userID: this.getWithDefault('_userID', '')
-        }
+        };
     }).volatile()
 });

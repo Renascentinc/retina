@@ -3,7 +3,7 @@
         formName="status"
         headerName="Status"
         options=model.dropdown.status
-        onUpdate=(action "updateSearch")
+        onUpdate=(action "updateFilters")
         selectedOption=query.status
     }}
 
@@ -11,7 +11,7 @@
         formName="type"
         headerName="Type"
         options=model.dropdown.type
-        onUpdate=(action "updateSearch")
+        onUpdate=(action "updateFilters")
         selectedOption=query.type
     }}
 
@@ -20,7 +20,7 @@
         headerName="Owner"
         displayUsers=true
         options=userOptions
-        onUpdate=(action "updateSearch")
+        onUpdate=(action "updateFilters")
         selectedOption=query.userID
     }}
 
@@ -28,7 +28,7 @@
         formName="brand"
         headerName="Brand"
         options=model.dropdown.brand
-        onUpdate=(action "updateSearch")
+        onUpdate=(action "updateFilters")
         selectedOption=query.brand
     }}
 </div>

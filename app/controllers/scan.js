@@ -1,23 +1,18 @@
 import Ember from 'ember';
+import SearchMixin from '../mixins/search-driver';
 import config from '../config/environment';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(SearchMixin, {
     session: Ember.inject.service(),
 
     toolList: [],
 
     _transferTo: '',
 
-    query:  {
-        currentUser: 0,
-        status: '',
-        brand: '',
-        type: '',
-        userID: ''
-    },
-
     init() {
-        this.set('query.currentUser', this.get('session').get('data.currentUserID'));
+        let currentUserId = this.get('session').get('data.currentUserID');
+        this.set('query.currentUser', currentUserId);
+        this.set('fuzzySearch.currentUser', currentUserId);
     },
 
     actions: {

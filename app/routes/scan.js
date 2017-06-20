@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import config from '../config/environment';
+import roleUtils from '../utils/user-roles';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     session: Ember.inject.service('session'),
@@ -14,7 +15,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
 
         let _users = null;
-        if (this.get('session').get('data.currentUserRole') === 'Administrator') {
+        if (roleUtils.isAdmin(this.get('session').get('data'))) {
             _users = Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/users`);
         } else {
             _users = Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/users?currentUser=${this.get('session').get('data.currentUserID')}`);

@@ -1,0 +1,14 @@
+<select name={{formName}} class="search-parameter" onchange={{action "optionSelected" value="target"}}>
+    <option value=""> {{headerName}} </option>
+    {{#each options as |option|}}
+        {{#if displayUsers}}
+            <option value={{option.userid}} selected={{eq option.userid selectedOption}}>
+                {{option.username}}
+            </option>
+        {{else}}
+            <option value={{option}} selected={{eq option selectedOption}}>
+                {{option}}
+            </option>
+        {{/if}}
+    {{/each}}
+</select>

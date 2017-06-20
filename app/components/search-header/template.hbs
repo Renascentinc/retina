@@ -1,0 +1,50 @@
+<div class="search-bar">
+    {{search-header/filter-dropdown
+        formName="status"
+        headerName="Status"
+        options=model.dropdown.status
+        onSearchUpdate=(action "updateSearch")
+        selectedOption=selectedStatus
+    }}
+
+    {{search-header/filter-dropdown
+        formName="type"
+        headerName="Type"
+        options=model.dropdown.type
+        onSearchUpdate=(action "updateSearch")
+        selectedOption=selectedType
+    }}
+
+    {{#if showSelectTools}}
+        {{search-header/filter-dropdown
+            formName="owner"
+            headerName="Owner"
+            displayUsers=true
+            options=model.selectUsers.users
+            onSearchUpdate=(action "updateSearch")
+            selectedOption=_userID
+        }}
+    {{else}}
+        {{search-header/filter-dropdown
+            formName="owner"
+            headerName="Owner"
+            displayUsers=true
+            options=model.dropdown.user
+            onSearchUpdate=(action "updateSearch")
+            selectedOption=_userID
+        }}
+    {{/if}}
+
+    {{search-header/filter-dropdown
+        formName="brand"
+        headerName="Brand"
+        options=model.dropdown.brand
+        onSearchUpdate=(action "updateSearch")
+        selectedOption=selectedBrand
+    }}
+</div>
+
+
+<div class="search-block">
+    {{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
+</div>

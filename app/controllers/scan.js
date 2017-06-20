@@ -8,6 +8,24 @@ export default Ember.Controller.extend({
 
     _transferTo: '',
 
+    selectedStatus: '',
+
+    selectedBrand: '',
+
+    selectedType: '',
+
+    _userID: null,
+
+    _query: Ember.computed(function() {
+        return {
+            currentUser: this.get('session').get('data.currentUserID'),
+            status: this.getWithDefault('selectedStatus', ''),
+            brand: this.getWithDefault('selectedBrand', ''),
+            type: this.getWithDefault('selectedType', ''),
+            userID: this.getWithDefault('_userID', '')
+        }
+    }).volatile(),
+
     actions: {
         goToInfoPage() {
             let toolid = Ember.$('#toolid').val();

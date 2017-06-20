@@ -1,4 +1,11 @@
-{{#search-header model=model showSelectTools=false}}
+{{#search-header
+    model=model
+    showSelectTools=false
+    selectedStatus=selectedStatus
+    selectedBrand=selectedBrand
+    selectedType=selectedType
+    _userID=_userID
+}}
     {{#each model.dropdown.user as |user|}}
         <option value={{user.userid}} selected={{eq user.userid _userID}}>
             {{user.username}}

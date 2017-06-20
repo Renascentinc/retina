@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import roleUtils from '../utils/user-roles';
 
 export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
@@ -16,8 +17,8 @@ export default Ember.Controller.extend({
 
     ableToTransfer: Ember.computed('model', function() {
         let isOwnedByUser = this.get('session').get('data.currentUserID') === this.get('model.tool').get('userid');
-        let isShopManager = this.get('session').get('data.currentUserRole') === 'Administrator';
+        let isAdmin = roleUtils.isAdmin(this.get('session').get('data'))
 
-        return isOwnedByUser || isShopManager;
+        return isOwnedByUser || isAdmin;
     })
 });

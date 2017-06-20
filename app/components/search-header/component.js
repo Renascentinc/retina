@@ -8,27 +8,20 @@ export default Ember.Component.extend({
 
     showSelectTools: false,
 
-    clearFilterParams() {
-        this.set('selectedStatus', '');
-        this.set('selectedBrand', '');
-        this.set('selectedType', '');
-        this.set('_userID', null);
-    },
-
-    _query: Ember.computed(function() {
-        let query = {
-            status: this.getWithDefault('selectedStatus', ''),
-            brand: this.getWithDefault('selectedBrand', ''),
-            type: this.getWithDefault('selectedType', ''),
-            userID: this.getWithDefault('_userID', '')
-        };
-
+    userOptions: Ember.computed(function() {
         if (this.get('showSelectTools')) {
-            query.currentUser = this.get('session').get('data.currentUserID');
+            return this.get('model.selectUsers.users');
+        } else {
+            return this.get('model.dropdown.user');
         }
+    }),
 
-        return query;
-    }).volatile(),
+    clearFilterParams() {
+        this.set('query.status', '');
+        this.set('query.brand', '');
+        this.set('query.type', '');
+        this.set('query.userID', '');
+    },
 
     actions: {
         goToInfoPage() {
@@ -40,20 +33,20 @@ export default Ember.Component.extend({
             Ember.$('.search-box').val('');
 
             if (target.getAttribute('name') === 'status') {
-                this.set('selectedStatus', target.value);
+                this.set('query.status', target.value);
 
             } else if (target.getAttribute('name') === 'brand') {
-                this.set('selectedBrand', target.value);
+                this.set('query.brand', target.value);
 
             } else if (target.getAttribute('name') === 'type') {
-                this.set('selectedType', target.value);
+                this.set('query.type', target.value);
 
             } else if (target.getAttribute('name') === 'owner') {
-                this.set('_userID', parseInt(target.value));
+                this.set('query.userID', parseInt(target.value));
             }
 
             let set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
+            Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('query')).then(set);
         },
 
         fuzzySearch(value) {
@@ -67,7 +60,7 @@ export default Ember.Component.extend({
                     parameter: value
                 }).then(set);
             } else {
-                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
+                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('query')).then(set);
             }
         }
     }

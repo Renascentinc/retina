@@ -1,46 +1,35 @@
 <div class="search-bar">
-    {{search-header/filter-dropdown
+    {{select-dropdown
         formName="status"
         headerName="Status"
         options=model.dropdown.status
-        onSearchUpdate=(action "updateSearch")
-        selectedOption=selectedStatus
+        onUpdate=(action "updateSearch")
+        selectedOption=query.status
     }}
 
-    {{search-header/filter-dropdown
+    {{select-dropdown
         formName="type"
         headerName="Type"
         options=model.dropdown.type
-        onSearchUpdate=(action "updateSearch")
-        selectedOption=selectedType
+        onUpdate=(action "updateSearch")
+        selectedOption=query.type
     }}
 
-    {{#if showSelectTools}}
-        {{search-header/filter-dropdown
-            formName="owner"
-            headerName="Owner"
-            displayUsers=true
-            options=model.selectUsers.users
-            onSearchUpdate=(action "updateSearch")
-            selectedOption=_userID
-        }}
-    {{else}}
-        {{search-header/filter-dropdown
-            formName="owner"
-            headerName="Owner"
-            displayUsers=true
-            options=model.dropdown.user
-            onSearchUpdate=(action "updateSearch")
-            selectedOption=_userID
-        }}
-    {{/if}}
+    {{select-dropdown
+        formName="owner"
+        headerName="Owner"
+        displayUsers=true
+        options=userOptions
+        onUpdate=(action "updateSearch")
+        selectedOption=query.userID
+    }}
 
-    {{search-header/filter-dropdown
+    {{select-dropdown
         formName="brand"
         headerName="Brand"
         options=model.dropdown.brand
-        onSearchUpdate=(action "updateSearch")
-        selectedOption=selectedBrand
+        onUpdate=(action "updateSearch")
+        selectedOption=query.brand
     }}
 </div>
 

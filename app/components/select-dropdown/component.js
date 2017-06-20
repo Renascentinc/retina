@@ -7,7 +7,7 @@ export default Ember.Component.extend({
 
     actions: {
         optionSelected(target) {
-            this.get('onSearchUpdate')(target);
+            this.get('onUpdate')(target);
         }
     }
 });

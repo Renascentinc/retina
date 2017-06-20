@@ -8,23 +8,17 @@ export default Ember.Controller.extend({
 
     _transferTo: '',
 
-    selectedStatus: '',
+    query:  {
+        currentUser: 0,
+        status: '',
+        brand: '',
+        type: '',
+        userID: ''
+    },
 
-    selectedBrand: '',
-
-    selectedType: '',
-
-    _userID: null,
-
-    _query: Ember.computed(function() {
-        return {
-            currentUser: this.get('session').get('data.currentUserID'),
-            status: this.getWithDefault('selectedStatus', ''),
-            brand: this.getWithDefault('selectedBrand', ''),
-            type: this.getWithDefault('selectedType', ''),
-            userID: this.getWithDefault('_userID', '')
-        };
-    }).volatile(),
+    init() {
+        this.set('query.currentUser', this.get('session').get('data.currentUserID'));
+    },
 
     actions: {
         goToInfoPage() {

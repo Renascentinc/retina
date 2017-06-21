@@ -20,6 +20,16 @@ export default Ember.Component.extend({
         this.set('query.userID', '');
     },
 
+    fuzzySearch() {
+        this.clearFilterParams();
+
+        if (this.get('fuzzySearchParams.parameter') === '') {
+            this.get('updateSearch')(this.get('query'));
+        } else {
+            this.get('updateSearch')(this.get('fuzzySearchParams'));
+        }
+    },
+
     actions: {
         updateFilters(target) {
             Ember.$('.search-box').val('');
@@ -39,15 +49,9 @@ export default Ember.Component.extend({
             this.get('updateSearch')(this.get('query'));
         },
 
-        fuzzySearch(value) {
-            this.clearFilterParams();
-            this.set('fuzzySearch.parameter', value);
-
-            if (value === '') {
-                this.get('updateSearch')(this.get('query'));
-            } else {
-                this.get('updateSearch')(this.get('fuzzySearch'));
-            }
+        fuzzySearchDebounced(value) {
+            this.set('fuzzySearchParams.parameter', value);
+            Ember.run.debounce(this, this.fuzzySearch, 200);
         }
     }
 });

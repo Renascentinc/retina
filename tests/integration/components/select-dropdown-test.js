@@ -9,7 +9,7 @@ moduleForComponent('select-dropdown', 'Integration | Component | select dropdown
 test('it renders', function(assert) {
     this.render(hbs`{{select-dropdown}}`);
 
-    assert.equal(this.$('.search-filter-dropdown').length, 1);
+    assert.equal(this.$('.search-filter').length, 1);
 });
 
 test('it renders all options passed to it plus the header', function(assert) {

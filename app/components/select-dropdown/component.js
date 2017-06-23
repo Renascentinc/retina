@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-    classNames: ['search-filter-container'],
+    classNames: ['search-filter'],
 
     displayUsers: false,
 

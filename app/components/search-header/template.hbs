@@ -1,5 +1,6 @@
-<div class="search-bar">
+<div class="search-filters">
     {{select-dropdown
+        dropdownClass="search-filter-dropdown"
         formName="status"
         headerName="Status"
         options=model.dropdown.status
@@ -8,6 +9,7 @@
     }}
 
     {{select-dropdown
+        dropdownClass="search-filter-dropdown"
         formName="type"
         headerName="Type"
         options=model.dropdown.type
@@ -16,6 +18,7 @@
     }}
 
     {{select-dropdown
+        dropdownClass="search-filter-dropdown"
         formName="owner"
         headerName="Owner"
         displayUsers=true
@@ -25,6 +28,7 @@
     }}
 
     {{select-dropdown
+        dropdownClass="search-filter-dropdown"
         formName="brand"
         headerName="Brand"
         options=model.dropdown.brand
@@ -33,6 +37,6 @@
     }}
 </div>
 
-<div class="search-block">
-    {{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearchDebounced" }}
+<div class="search-bar">
+    {{input class="search-bar-input" placeholder="ToolID or Serial Number" value=fuzzySearchParams.parameter key-up="fuzzySearchDebounced"}}
 </div>

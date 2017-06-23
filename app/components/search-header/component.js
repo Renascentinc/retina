@@ -30,10 +30,12 @@ export default Ember.Component.extend({
         }
     },
 
+    willDestroy() {
+        this.set('fuzzySearchParams.parameter', '');
+    },
+
     actions: {
         updateFilters(target) {
-            Ember.$('.search-box').val('');
-
             if (target.getAttribute('name') === 'status') {
                 this.set('query.status', target.value);
 
@@ -46,6 +48,7 @@ export default Ember.Component.extend({
             } else if (target.getAttribute('name') === 'owner') {
                 this.set('query.userID', parseInt(target.value));
             }
+            this.set('fuzzySearchParams.parameter', '');
             this.get('updateSearch')(this.get('query'));
         },
 

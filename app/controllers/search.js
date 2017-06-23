@@ -11,5 +11,5 @@ export default Ember.Controller.extend(SearchMixin, {
 
     fuzzySearchParams: {
         parameter: ''
-    },
+    }
 });

@@ -29,11 +29,6 @@ export default Ember.Controller.extend(SearchMixin, {
     },
 
     actions: {
-        goToInfoPage() {
-            let toolid = Ember.$('#toolid').val();
-            this.get('target').transitionTo('info', toolid);
-        },
-
         addToList(toolid) {
             if (!this.toolList.includes(toolid)) {
                 this.get('toolList').pushObject(toolid);

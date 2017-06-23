@@ -12,7 +12,7 @@ moduleForComponent('search-header', 'Integration | Component | search header', {
 });
 
 test('it renders', function(assert) {
-    this.render(hbs`{{search-header}}`);
+    this.render(hbs`{{search-header fuzzySearchParams=_fuzzySearchParams}}`);
 
     assert.equal(this.$('.search-header').length, 1);
 });

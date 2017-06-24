@@ -9,20 +9,8 @@ export default Ember.Controller.extend(SearchMixin, {
 
     _transferTo: '',
 
-    query:  {
-        currentUser: '',
-        status: '',
-        brand: '',
-        type: '',
-        userID: ''
-    },
-
-    fuzzySearchParams: {
-        currentUser: '',
-        parameter: ''
-    },
-
     init() {
+        this._super(...arguments);
         let currentUserId = this.get('session').get('data.currentUserID');
         this.set('query.currentUser', currentUserId);
         this.set('fuzzySearchParams.currentUser', currentUserId);

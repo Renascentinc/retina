@@ -1,13 +1,13 @@
 {{search-header
-    model=model
+    dropdown=model.dropdown
     showSelectTools=true
     query=query
     fuzzySearchParams=fuzzySearchParams
-    updateSearch=(action "updateSearch")
+    updateSearch=(action updateSearch)
 }}
 
 <div id="tool-display-box">
-    {{#each model.tools.data as |tool|}}
+    {{#each tools.data as |tool|}}
         <div class="specs-box">
             <button class="tool-specs" {{action "addToList" tool.id}}>
                 <div class="title">

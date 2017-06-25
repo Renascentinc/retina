@@ -17,10 +17,10 @@ export default Ember.Mixin.create({
         });
     },
 
-    actions: {
-        updateSearch(body) {
-            let set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, body).then(set);
-        }
+    updateSearch(body) {
+        let _this = this;
+        Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, body).then((response) => {
+            _this.set('tools', response);
+        });
     }
 });

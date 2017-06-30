@@ -1,5 +1,5 @@
 {{search-header
-    dropdown=model.dropdown
+    dropdown=dropdown
     showSelectTools=false
     query=query
     fuzzySearchParams=fuzzySearchParams
@@ -7,18 +7,19 @@
 }}
 
 <div id="tool-display-box-full">
-    {{#each tools.data as |tool|}}
+    {{log tools}}
+    {{#each tools as |tool|}}
         <div class="specs-box">
             {{#link-to "info" tool.id}}
                 <div class="tool-specs">
                     <div class="title">
-                        {{tool.attributes.brand}}
-                        {{tool.attributes.type}}<br>
+                        {{tool.brand}}
+                        {{tool.type}}<br>
                     </div>
 
                     <div class="facts">
                         Tool ID: {{tool.id}} <br>
-                        <span class="fa fa-user"></span> {{tool.attributes.username}}, {{tool.attributes.status}}
+                        <span class="fa fa-user"></span> {{tool.username}}, {{tool.status}}
                     </div>
                 </div>
 

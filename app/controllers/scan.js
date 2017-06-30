@@ -1,13 +1,17 @@
 import Ember from 'ember';
 import SearchMixin from '../mixins/search-driver';
 import TransferValidationMixin from '../mixins/transfer-validation';
+import roleUtils from '../utils/user-roles';
 import config from '../config/environment';
 
 export default Ember.Controller.extend(SearchMixin, TransferValidationMixin, {
-    session: Ember.inject.service(),
     notifications: Ember.inject.service('notification-messages'),
 
     showErrorMessages: false,
+
+    showSelectTools: Ember.computed(function() {
+        return !roleUtils.isAdmin(this.get('session').get('data'));
+    }),
 
     transferInfo: {
         userid: '',
@@ -20,6 +24,8 @@ export default Ember.Controller.extend(SearchMixin, TransferValidationMixin, {
         let currentUserId = this.get('session').get('data.currentUserID');
         this.set('query.currentUser', currentUserId);
         this.set('fuzzySearchParams.currentUser', currentUserId);
+
+        // this.updateSearch(this.get('query'));
     },
 
     actions: {

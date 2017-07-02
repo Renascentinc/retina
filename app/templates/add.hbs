@@ -1,5 +1,5 @@
 <div id="form-container">
-    <form id="form" method="post" {{action "saveNewTool" tool on="submit"}}>
+    <form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>
         <div>
             <select id="type" name="type" class="dark-dropdown add">
                 <option disabled selected hidden> Type</option>
@@ -26,9 +26,9 @@
             <input id="custom-brand" name="custombrand" style="display: none;" type="text" class="text-field add" placeholder=" Enter brand"/>
         </div>
 
-        {{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" value=tool.modelnumber}}
+        {{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" value=model.tool.modelnumber}}
 
-        {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" value=tool.serialnumber}}
+        {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" value=model.tool.serialnumber}}
         <hr>
 
         <div>
@@ -52,7 +52,7 @@
             placeholder="Price"
             name="price"
             id="price"
-            number=tool.price
+            number=model.tool.price
             class="text-field add"
             allowEmpty=true
         }}
@@ -67,11 +67,11 @@
             placeholder="Purchase Date"
             format="MM/DD/YYYY"
             yearRange="1990,currentYear"
-            onSelection=(action (mut tool.purchasedate))
+            onSelection=(action (mut model.tool.purchasedate))
         }}
 
 
-        {{input type="tel" name="year" class="text-field add" placeholder="Year of Manufacture" value=tool.year}}
+        {{input type="tel" name="year" class="text-field add" placeholder="Year of Manufacture" value=model.tool.year}}
 
         <hr>
 

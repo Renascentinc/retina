@@ -1,69 +1,32 @@
-<div class="search-bar">
-    <select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Status </option>
-
-        {{#each model.dropdown.status as |status|}}
-            <option value={{status}} selected={{eq status _status}}>
-                {{status}}
-            </option>
-        {{/each}}
-    </select>
-
-    <select name="type" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Type </option>
-
-        {{#each model.dropdown.type as |type|}}
-            <option value={{type}} selected={{eq type _type}}>
-                {{type}}
-            </option>
-        {{/each}}
-    </select>
-
-    <select name="owner" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Owner </option>
-
-        {{#each model.dropdown.user as |user|}}
-            <option value={{user.userid}} selected={{eq user.userid _userID}}>
-                {{user.username}}
-            </option>
-        {{/each}}
-    </select>
-
-    <select name="brand" class="search-parameter search" id="brand" onchange={{action "updateSearch" value="target"}}>
-        <option value=""> Brand </option>
-
-        {{#each model.dropdown.brand as |brand|}}
-            <option value={{brand}} selected={{eq brand _brand}}>
-                {{brand}}
-            </option>
-        {{/each}}
-    </select>
-</div>
+{{search-header
+    model=model
+    showSelectTools=false
+    query=query
+    fuzzySearchParams=fuzzySearchParams
+    updateSearch=(action "updateSearch")
+}}
 
 <div id="tool-display-box-full">
-    <div class="search-block">
-        {{input class="search-box" placeholder="ToolID or Serial Number" key-up="fuzzySearch" }}
-    </div>
-
     {{#each model.tools.data as |tool|}}
-        <div class="specs-box"> {{#link-to "info" tool.id}}
-            <div class="tool-specs">
-                <div class="title">
-                    {{tool.attributes.brand}}
-                    {{tool.attributes.type}}<br>
+        <div class="specs-box">
+            {{#link-to "info" tool.id}}
+                <div class="tool-specs">
+                    <div class="title">
+                        {{tool.attributes.brand}}
+                        {{tool.attributes.type}}<br>
+                    </div>
+
+                    <div class="facts">
+                        Tool ID: {{tool.id}} <br>
+                        <span class="fa fa-user"></span> {{tool.attributes.username}}, {{tool.attributes.status}}
+                    </div>
                 </div>
 
-                <div class="facts">
-
-                    Tool ID: {{tool.id}} <br>
-                    <span class="fa fa-user"></span> {{tool.attributes.username}}, {{tool.attributes.status}}
+                <div class="options">
+                    <span class="fa fa-chevron-right search-icon" aria-hidden="true"></span>
+                    <br>
                 </div>
-            </div>
-
-            <div class="options">
-                <span class="fa fa-chevron-right search-icon" aria-hidden="true"></span>
-                <br>
-            </div>
-        {{/link-to}} </div>
+            {{/link-to}}
+        </div>
     {{/each}}
 </div>

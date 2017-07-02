@@ -19,7 +19,7 @@ export default Ember.Component.extend({
 
                         }).catch(function(e) {
                             reject('save failed');
-                            Ember.Logger.info(e);
+                            Ember.Logger.error(e);
                         });
 
                     } else {

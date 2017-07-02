@@ -12,9 +12,9 @@ test('it works with numbers', function(assert) {
 });
 
 test('it works with strings', function(assert) {
-    let result = eq(['test', 'test'])
+    let result = eq(['test', 'test']);
     assert.ok(result);
 
-    result = eq(['test', 'test1'])
+    result = eq(['test', 'test1']);
     assert.notOk(result);
 });

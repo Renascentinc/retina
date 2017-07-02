@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import roleUtils from '../utils/user-roles';
 
 export default Ember.Mixin.create({
     session: Ember.inject.service(),
@@ -10,11 +9,11 @@ export default Ember.Mixin.create({
     tools: Ember.computed('_tools', function() {
         if (this.get('_tools')) {
             return this.get('_tools');
-        } else {
-            return this.get('store').query('tool', this.get('query')).then((response) => {
-                this.set('_tools', response);
-            });;
         }
+
+        return this.get('store').query('tool', this.get('query')).then((response) => {
+            this.set('_tools', response);
+        });
     }),
 
     init() {

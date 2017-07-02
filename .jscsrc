@@ -7,5 +7,6 @@
           "emptyLines"
       ]
   },
-  "disallowDirectPropertyAccess": false
+  "disallowDirectPropertyAccess": false,
+  "requireDotNotation": false
 }

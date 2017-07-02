@@ -40,11 +40,11 @@ export default Ember.Controller.extend({
                 this.set('_type', target.value);
 
             } else if (target.getAttribute('name') === 'owner') {
-                this.set('_userID', parseInt(target.value));
+                this.set('_userID', (target.value !== '') ? parseInt(target.value) : target.value);
             }
 
             let set = this.set.bind(this, 'model.tools');
-            Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
+            Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`, this.get('_query')).then(set);
         },
 
         fuzzySearch(value) {
@@ -52,9 +52,9 @@ export default Ember.Controller.extend({
             let set = this.set.bind(this, 'model.tools');
 
             if (value !== '') {
-                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, { parameter: value }).then(set);
+                Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`, { parameter: value }).then(set);
             } else {
-                Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search?status=&userID=&type=&brand=`).then(set);
+                Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search?status=&userID=&type=&brand=`).then(set);
             }
         }
     }

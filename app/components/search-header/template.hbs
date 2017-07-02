@@ -22,7 +22,7 @@
         formName="owner"
         headerName="Owner"
         displayUsers=true
-        options=userOptions
+        options=(get (await dropdown) userOption)
         onUpdate=(action "updateFilters")
         selectedOption=query.userID
     }}

@@ -52,7 +52,7 @@ export default Ember.Controller.extend(SearchMixin, TransferValidationMixin, {
                     let _this = this;
 
                     let options = {
-                        url: `${config.APP.API_URL}${config.APP.API_NAMESPACE}/transfer`,
+                        url: `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/transfer`,
                         data: this.get('transferInfo'),
                         type: 'PUT',
                         crossDomain: true,
@@ -66,10 +66,10 @@ export default Ember.Controller.extend(SearchMixin, TransferValidationMixin, {
                     };
 
                     Ember.$.ajax(options).then(function() {
-                        _this.send('updateSearch', _this.get('query'));
                         _this.set('transferInfo.toolids', Ember.A());
                         _this.set('transferInfo.userid', '');
                         _this.set('showErrorMessages', false);
+                        _this.updateSearch(_this.get('query'));
                     });
 
                 } else {

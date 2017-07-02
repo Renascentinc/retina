@@ -3,7 +3,7 @@ import OAuth2PasswordGrant from 'ember-simple-auth/authenticators/oauth2-passwor
 import config from '../config/environment';
 
 export default OAuth2PasswordGrant.extend({
-    serverTokenEndpoint: `${config.APP.API_URL}${config.APP.API_NAMESPACE}/token`,
+    serverTokenEndpoint: `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/token`,
     session: Ember.inject.service('session'),
 
     makeRequest(requestUrl, body) {

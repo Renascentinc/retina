@@ -1,4 +1,4 @@
-const rolesUtils = {
+let rolesUtils = {
     isAdmin(user) {
         return user.currentUserRole === 'Administrator';
     }

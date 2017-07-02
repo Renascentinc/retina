@@ -3,7 +3,11 @@
         dropdownClass="search-filter-dropdown"
         formName="status"
         headerName="Status"
+<<<<<<< HEAD
         options=dropdown.status
+=======
+        options=model.dropdown.status
+>>>>>>> develop
         onUpdate=(action "updateFilters")
         selectedOption=query.status
     }}
@@ -12,7 +16,11 @@
         dropdownClass="search-filter-dropdown"
         formName="type"
         headerName="Type"
+<<<<<<< HEAD
         options=dropdown.type
+=======
+        options=model.dropdown.type
+>>>>>>> develop
         onUpdate=(action "updateFilters")
         selectedOption=query.type
     }}
@@ -22,7 +30,11 @@
         formName="owner"
         headerName="Owner"
         displayUsers=true
+<<<<<<< HEAD
         options=(get (await dropdown) userOption)
+=======
+        options=userOptions
+>>>>>>> develop
         onUpdate=(action "updateFilters")
         selectedOption=query.userID
     }}
@@ -31,7 +43,11 @@
         dropdownClass="search-filter-dropdown"
         formName="brand"
         headerName="Brand"
+<<<<<<< HEAD
         options=dropdown.brand
+=======
+        options=model.dropdown.brand
+>>>>>>> develop
         onUpdate=(action "updateFilters")
         selectedOption=query.brand
     }}

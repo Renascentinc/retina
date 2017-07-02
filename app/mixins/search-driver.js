@@ -1,4 +1,5 @@
 import Ember from 'ember';
+<<<<<<< HEAD
 
 export default Ember.Mixin.create({
     session: Ember.inject.service(),
@@ -16,6 +17,11 @@ export default Ember.Mixin.create({
         });
     }),
 
+=======
+import config from '../config/environment';
+
+export default Ember.Mixin.create({
+>>>>>>> develop
     init() {
         this._super(...arguments);
 
@@ -31,9 +37,17 @@ export default Ember.Mixin.create({
         });
     },
 
+<<<<<<< HEAD
     updateSearch(body) {
         this.get('store').query('tool', body).then((response) => {
             this.set('_tools', response);
         });
+=======
+    actions: {
+        updateSearch(body) {
+            let set = this.set.bind(this, 'model.tools');
+            Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`, body).then(set);
+        }
+>>>>>>> develop
     }
 });

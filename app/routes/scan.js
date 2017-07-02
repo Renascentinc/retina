@@ -15,7 +15,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
 
         let _users = null;
-        if (this.get('session').get('data.currentUserRole') === 'Administrator') {
+        if (roleUtils.isAdmin(this.get('session').get('data'))) {
             _users = Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/users`);
         } else {
             _users = Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/users?currentUser=${this.get('session').get('data.currentUserID')}`);

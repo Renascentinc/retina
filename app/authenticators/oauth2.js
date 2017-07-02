@@ -2,8 +2,10 @@ import Ember from 'ember';
 import OAuth2PasswordGrant from 'ember-simple-auth/authenticators/oauth2-password-grant';
 import config from '../config/environment';
 
+const { isEmpty } = Ember;
+
 export default OAuth2PasswordGrant.extend({
-    serverTokenEndpoint: `${config.APP.API_URL}${config.APP.API_NAMESPACE}/token`,
+    serverTokenEndpoint: `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/token`,
     session: Ember.inject.service('session'),
 
     makeRequest(requestUrl, body) {
@@ -23,5 +25,9 @@ export default OAuth2PasswordGrant.extend({
         });
 
         return $ajaxCall;
+    },
+
+    _validate(data) {
+        return !isEmpty(data['access_token']) || !isEmpty(data.ACCESS_TOKEN);
     }
 });

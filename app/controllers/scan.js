@@ -45,7 +45,7 @@ export default Ember.Controller.extend(SearchMixin, {
                 let user = parseInt(Ember.$('#user-to-transfer-to').val());
 
                 let options = {
-                    url: `${config.APP.API_URL}${config.APP.API_NAMESPACE}/transfer`,
+                    url: `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/transfer`,
                     data: {
                         userid: user,
                         toolids: this.get('toolList')

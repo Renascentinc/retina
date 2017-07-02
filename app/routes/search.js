@@ -6,9 +6,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model() {
         let _tools = null;
         if (this.controller != null) {
-            _tools = Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search`, this.controller.get('query'));
+            _tools = Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search`, this.controller.get('_query'));
         } else {
-            _tools = Ember.$.getJSON(`${config.APP.API_URL}${config.APP.API_NAMESPACE}/search?status=&userID=&type=&brand=`);
+            _tools = Ember.$.getJSON(`${config.APP.API_URL}/${config.APP.API_NAMESPACE}/search?status=&userID=&type=&brand=`);
         }
 
         return Ember.RSVP.hash({

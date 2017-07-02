@@ -1,193 +1,59 @@
 export default function() {
-//     this.namespace = '/api';
+    this.namespace = 'api';
+    this.urlPrefix = 'https://retina-api-develop.azurewebsites.net';
 
-    // this.urlPrefix = '';    // make this `http://localhost:8080`, for example, if your API is on a different server
-    // this.namespace = '';    // make this `api`, for example, if your API is namespaced
-    // this.timing = 400;      // delay for each request, automatically set to 0 during testing
+    this.post('/token', () => {
+        return { ACCESS_TOKEN: '567k345jsd1o34sdklsdf34534', userid: 1, role: 'user', data: {} };
+    });
 
-    /*
-     Shorthand cheatsheet:
+    this.post('/tools', (schema, request) => {
+        let { requestBody } = request;
+        let { attributes } = JSON.parse(requestBody).data;
+        let owner = schema.users.find(attributes.userid);
 
-     this.get('/posts');
-     this.post('/posts');
-     this.get('/posts/:id');
-     this.put('/posts/:id'); // or this.patch
-     this.del('/posts/:id');
+        attributes.username = owner.username;
+        attributes.email = owner.email;
+        attributes.phonenumber = owner.phonenumber;
 
-     http://www.ember-cli-mirage.com/docs/v0.2.x/shorthands/
-     */
+        let newTool = schema.tools.new(attributes);
+        newTool.save();
+        return newTool;
+    });
 
-    this.post('/token', (schema, request) => {
-        let params = request.requestBody;
-
-        if (params.username === 'letme' && params.password === 'in') {
-            return {'access_token': '567k345jsd1o34sdklsdf34534', userid: 189823748};
-        }
-    }); //end post => /token
+    this.put('/transfer', () => {
+        // just leaving this empty for now
+    });
 
     this.get('/tools/:id', (schema, request) => {
-        return {
-            data: {
-                type: 'tool',
-                id: request.params.id,
-                attributes: {
-                    brand: 'Bosch',
-                    ownerfirstname: 'Shaboygen',
-                    ownerlastname: 'Cactapuss',
-                    datelastcheckout: 'Stardate 0.12.4.12',
-                    purchasedate: 'Stardate 020.2.3.23',
-                    type: 'hammer drill',
-                    status: 'in use'
-                }
-            }
-        };
-    }); //end get => /tools/:id
-
-    this.get('/tools', function() {
-        return {
-            data: [{
-                type: 'tool',
-                id: '1',
-                attributes: {
-                    brand: 'Bosch',
-                    ownerfirstname: 'George',
-                    ownerlastname: 'Boole',
-                    type: 'hammer drill',
-                    status: 'in use'
-                }
-            }, {
-                type: 'tool',
-                id: '2',
-                attributes: {
-                    brand: 'DeWalt',
-                    ownerfirstname: 'Mike',
-                    ownerlastname: 'Flag',
-                    type: 'impact driver',
-                    status: 'in use'
-                }
-            }, {
-                type: 'tool',
-                id: '3',
-                attributes: {
-                    brand: 'Milwaukee',
-                    ownerfirstname: 'Charlie',
-                    ownerlastname: 'Delta',
-                    type: 'reciprocating saw',
-                    status: 'available'
-                }
-            }, {
-                type: 'tool',
-                id: '3',
-                attributes: {
-                    brand: 'Milwaukee',
-                    ownerfirstname: 'Charlie',
-                    ownerlastname: 'Delta',
-                    type: 'reciprocating saw',
-                    status: 'available'
-                }
-            }, {
-                type: 'tool',
-                id: '234',
-                attributes: {
-                    brand: 'Milwaukee',
-                    ownerfirstname: 'Charlie',
-                    ownerlastname: 'Delta',
-                    type: 'reciprocating saw',
-                    status: 'available'
-                }
-            }, {
-                type: 'tool',
-                id: '10',
-                attributes: {
-                    brand: 'Milwaukee',
-                    ownerfirstname: 'Charlie',
-                    ownerlastname: 'Delta',
-                    type: 'reciprocating saw',
-                    status: 'available'
-                }
-            }, {
-                type: 'tool',
-                id: '5',
-                attributes: {
-                    brand: 'Milwaukee',
-                    ownerfirstname: 'Charlie',
-                    ownerlastname: 'Delta',
-                    type: 'reciprocating saw',
-                    status: 'available'
-                }
-            }]
-        };
+        return schema.tools.find(request.params.id);
     });
 
-    this.get('/status', function() {
-        return ['in-use', 'available', 'out of service'];
+    this.get('/tools', (schema) => {
+        return schema.tools.all();
     });
 
-    this.get('/owners', function() {
-        return {
-            data: [{
-                type: 'owner',
-                id: '1',
-                attributes: {
-                    ownerid: '12345',
-                    firstname: 'george',
-                    lastname: 'boole'
-                }
-            }, {
-                type: 'owner',
-                id: '2',
-                attributes: {
-                    id: '43215',
-                    firstname: 'charlie',
-                    lastname: 'delta'
-                }
-            },
-                {
-                    type: 'owner',
-                    id: '3',
-                    attributes: {
-                        id: '54326',
-                        firstname: 'mike',
-                        lastname: 'flag'
-                    }
-                }]
-        };
+    this.get('/search', (schema, request) => {
+        let query = {};
+        let { queryParams } = request;
+
+        (queryParams.currentUser !== '' && queryParams.currentUser !== undefined) ? query.userid = queryParams.currentUser : '';
+        (queryParams.status !== '') ? query.status = queryParams.status : '';
+        (queryParams.userID !== '') ? query.userid = queryParams.userID : '';
+        (queryParams.type !== '') ? query.type = queryParams.type : '';
+        (queryParams.brand !== '') ? query.brand = queryParams.brand : '';
+
+        if (Object.keys(query).length !== 0) {
+            return schema.tools.where(query);
+        }
+
+        return schema.tools.all();
     });
 
-    this.get('/type', function() {
-        return ['hammer drill', 'reciprocating saw', 'impact driver'];
+    this.get('/users', (schema) => {
+        return schema.users.all();
     });
 
-    this.get('/providers', function() {
-        return ['jobsite supply', 'home depot', 'ace hardware', 'lowes'];
+    this.get('/dropdowns', (schema) => {
+        return schema.dropdowns.first();
     });
-
-    this.get('/brands', function() {
-        return ['milwuake', 'black & decker', 'dewalt', 'bosch'];
-    });
-
-    this.get('/dropdowns/:id', function() {
-        return {
-            data: {
-                type: 'dropdown',
-                id: '1',
-                attributes: {
-                    user: ['boole', 'george', 'ted', 'haha']
-                }
-            }
-        };
-    });
-
-    this.get('/dropdowns', function() {
-        return {
-            data: {
-                type: 'dropdown',
-                id: '1',
-                attributes: {
-                    user: ['boole', 'george', 'ted', 'haha']
-                }
-            }
-        };
-    }); //end get => /tools/:id
-
-}//end config
+}

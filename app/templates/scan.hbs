@@ -32,36 +32,36 @@
     {{/each}}
 </div>
 
-<div id="cart-menu">
-    <div id="cart">
-        <div id="list-title">
-            <div id="trash-icon">
-                <button class="fa fa-trash delete-icon" aria-hidden="true" {{action "deleteToolList"}}></button>
-            </div>
-            <div id="cart-title">
+<div class="cart-menu">
+    <div class="cart">
+        <div class="cart-header">
+            <button class="fa fa-trash delete-icon" aria-hidden="true" {{action "deleteToolList"}}></button>
+
+            <div class="cart-title">
                 Cart
             </div>
         </div>
 
-        <hr style="margin: 0;">
-
-        <div id="list">
-            {{#each toolList key="@index" as |tool|}}
-                {{tool}}<br>
+        <div class="cart-list" class="{{if (and showErrorMessages (not (v-get this "transferInfo.toolids.length" "isValid"))) 'validation-error'}}">
+            {{#each transferInfo.toolids as |tool|}}
+                <div class="cart-item">
+                    <button class="fa fa-times-circle delete-icon" {{action "removeFromList" tool}}></button>
+                    {{tool}}
+                </div>
             {{/each}}
         </div>
     </div>
-    <div id="cart-actions">
-        <select id="user-to-transfer-to" class="dark-dropdown" onchange={{action "updateTransferTo" value="target"}}>
+    <div class="cart-actions">
+        <select class="dark-dropdown select-transferee cart-action {{if (and showErrorMessages (not (v-get this "transferInfo.userid" "isValid"))) "validation-error"}}" onchange={{action "updateTransferTo" value="target"}}>
             <option value="">Transfer to</option>
             {{#each model.dropdown.user as |user|}}
-                <option value={{user.userid}} selected={{eq user.userid _transferTo}}>
+                <option value={{user.userid}} selected={{eq user.userid transferInfo.userid}}>
                     {{user.username}}
                 </option>
             {{/each}}
         </select>
 
-        <button {{action "transferTools"}} class="go" id="transfer-button">
+        <button {{action "transferTools"}} class="go cart-action complete-transfer">
             Transfer
         </button>
     </div>

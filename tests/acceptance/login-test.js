@@ -1,20 +1,21 @@
-import { test, skip } from 'qunit';
+import { test } from 'qunit';
 import moduleForAcceptance from 'retina-app/tests/helpers/module-for-acceptance';
+import Ember from 'ember';
 
 moduleForAcceptance('Acceptance | login');
 
-test('visiting /login', function(assert) {
-    visit('/login');
+test('The first page I am sent to is the login page', function(assert) {
+    visit('/');
 
     andThen(() => {
-        assert.equal(currentURL(), '/login');
+        assert.equal(currentURL(), '/login', 'was not taken to the login route');
     });
 });
 
-skip('try logging in', function(assert) {
+test('The default page after login is the transfer page', function(assert) {
     visit('/login');
     andThen(() => {
-        assert.equal(currentURL(), '/login');
+        assert.equal(currentURL(), '/login', 'was not taken to the login route');
 
         fillIn('#identification', 'username');
         fillIn('#password', 'password');
@@ -22,7 +23,27 @@ skip('try logging in', function(assert) {
         click('#login-btn');
 
         andThen(() => {
-            assert.equal(currentURL(), '/scan');
+            Ember.run.later(() => {
+                assert.equal(currentURL(), '/scan', 'was not taken to the transfer page');
+            }, 1000);
+        });
+    });
+});
+
+test('If the password is invalid you see the invalid password message', function(assert) {
+    visit('/login');
+    andThen(() => {
+        assert.equal(currentURL(), '/login', 'was not taken to the login route');
+
+        fillIn('#identification', 'bad');
+        fillIn('#password', 'key');
+
+        click('#login-btn');
+
+        andThen(()=> {
+            Ember.run.later(() => {
+                assert.equal(find('.login-fail').first().text().trim(), 'Invalid Username/Password');
+            }, 1000);
         });
     });
 });

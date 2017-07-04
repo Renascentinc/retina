@@ -82,19 +82,6 @@ nav {
     overflow-x: hidden;
 }
 
-#title {
-    color: white;
-    font-family: $app-font;
-    font-weight: 100;
-    font-size: 38px;
-    text-align: center;
-    width: 200px;
-    position: relative;
-    margin-top: auto;
-    margin-bottom: auto;
-
-}
-
 .active {
     background-color: rgba(255, 255, 255, 0.42);
 }
@@ -262,60 +249,10 @@ a:-webkit-any-link {
     font-size: 18px;
 }
 
-.specs-box {
-    height: 80px;
-    width: calc(100vw - 5px);
-    border-bottom: 1px solid $renascent-light-gray;
-    padding: 0px 0px 0px 5px;
-    margin: 0px;
-    overflow: hidden;
-}
-
-.facts {
-    width: 100%;
-    display: inline-block;
-    top: 0px;
-    height: 42px;
-    color: $renascent-light-gray;
-    font-weight: 600;
-    overflow: visible;
-    font-size: 17px;
-}
-
-.title {
-    color: $renascent-dark-gray;
-    font-size: 20px;
-    height: 30px;
-    overflow: hidden;
-    font-weight: 500;
-    width: 100%;
-}
-
-.options {
-    float: right;
-    text-align: center;
-    color: $renascent-light-gray;
-    width: 40px;
-    margin: 0px;
-    height: 100%;
-}
-
 #tool-display-box {
     overflow-y: scroll;
     height: calc(100% - 279px);
     border-bottom: 4px solid rgba(76, 90, 96, .49);
-}
-
-.search-icon {
-    font-size: 25px;
-    line-height: 79px;
-    color: $renascent-dark-gray;
-}
-
-.tool-specs {
-    width: calc(100% - 40px);
-    display: inline-block;
-    text-align: left;
 }
 
 #specs {

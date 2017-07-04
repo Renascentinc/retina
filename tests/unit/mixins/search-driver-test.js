@@ -1,11 +1,12 @@
 import Ember from 'ember';
 import SearchDriverMixin from 'retina-app/mixins/search-driver';
-import { module, skip } from 'qunit';
+import { module, test } from 'qunit';
 
-module('Unit | Mixin | search driver');
+module('Unit | Mixin | search driver', {
+    needs: ['service:session']
+});
 
-// Replace this with your real tests.
-skip('it works', function(assert) {
+test('it works', function(assert) {
     let SearchDriverObject = Ember.Object.extend(SearchDriverMixin);
     let subject = SearchDriverObject.create();
     assert.ok(subject);

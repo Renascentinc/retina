@@ -13,37 +13,21 @@ test('The first page I am sent to is the login page', function(assert) {
 });
 
 test('The default page after login is the transfer page', function(assert) {
-    visit('/login');
+    loginUser(assert, 'username', 'password');
+
     andThen(() => {
-        assert.equal(currentURL(), '/login', 'was not taken to the login route');
-
-        fillIn('#identification', 'username');
-        fillIn('#password', 'password');
-
-        click('#login-btn');
-
-        andThen(() => {
-            Ember.run.later(() => {
-                assert.equal(currentURL(), '/scan', 'was not taken to the transfer page');
-            }, 1000);
-        });
+        Ember.run.later(() => {
+            assert.equal(currentURL(), '/scan', 'was not taken to the transfer page');
+        }, 1000);
     });
 });
 
 test('If the password is invalid you see the invalid password message', function(assert) {
-    visit('/login');
-    andThen(() => {
-        assert.equal(currentURL(), '/login', 'was not taken to the login route');
+    loginUser(assert, 'bad', 'Password');
 
-        fillIn('#identification', 'bad');
-        fillIn('#password', 'key');
-
-        click('#login-btn');
-
-        andThen(()=> {
-            Ember.run.later(() => {
-                assert.equal(find('.login-fail').first().text().trim(), 'Invalid Username/Password');
-            }, 1000);
-        });
+    andThen(()=> {
+        Ember.run.later(() => {
+            assert.equal(find('.login-fail').first().text().trim(), 'Invalid Username/Password');
+        }, 1000);
     });
 });

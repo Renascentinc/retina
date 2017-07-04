@@ -1,5 +1,6 @@
 <div style="width:100%">
-    <button class="back" onclick=window.history.back()><span class="fa fa-chevron-left" aria-hidden="true"></span>
+    <button class="back" onclick=window.history.back()>
+        <span class="fa fa-chevron-left" aria-hidden="true"></span>
         back
     </button>
 </div>
@@ -26,9 +27,9 @@
 
     {{#if ableToTransfer }}
         <div id="status-change-box">
-            <select id="status" class="dark-dropdown ">
+            <select id="status" class="dark-dropdown">
                 <option value=""> Status </option>
-                {{#each model.dropdown.status as |status|}}
+                {{#each dropdown.status as |status|}}
                     <option value={{status}}> {{status}} </option>
                 {{/each}}
             </select>

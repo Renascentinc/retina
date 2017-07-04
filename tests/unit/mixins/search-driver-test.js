@@ -11,17 +11,3 @@ test('it works', function(assert) {
     let subject = SearchDriverObject.create();
     assert.ok(subject);
 });
-
-test('it returns the tools and dropdown if it already has it', function(assert) {
-    let SearchDriverObject = Ember.Object.extend(SearchDriverMixin, {
-        // _dropdown: { key: 'vlaue' },
-        _tools: { key: 'value' }
-    });
-    let subject = SearchDriverObject.create();
-
-    let dropdown = subject.get('dropdown');
-    assert.equal(dropdown, { key: 'value' });
-
-    let tools = subject.get('tools');
-    assert.equal(tools, { key: 'value' });
-});

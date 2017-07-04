@@ -9,6 +9,13 @@
         border-bottom: 4px solid rgba(76, 90, 96, .49);
         text-align: center;
 
+        .loading-dropdowns {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
         .search-filter {
             display: inline;
 

@@ -1,78 +1,86 @@
 import Ember from 'ember';
 import SearchMixin from '../mixins/search-driver';
+import TransferValidationMixin from '../mixins/transfer-validation';
+import roleUtils from '../utils/user-roles';
 import config from '../config/environment';
 
-export default Ember.Controller.extend(SearchMixin, {
-    session: Ember.inject.service(),
+export default Ember.Controller.extend(SearchMixin, TransferValidationMixin, {
+    notifications: Ember.inject.service('notification-messages'),
 
-    toolList: [],
+    showErrorMessages: false,
 
-    _transferTo: '',
+    showSelectTools: Ember.computed(function() {
+        return !roleUtils.isAdmin(this.get('session').get('data'));
+    }),
+
+    transferInfo: {
+        userid: '',
+        toolids: Ember.A()
+    },
 
     init() {
         this._super(...arguments);
+
         let currentUserId = this.get('session').get('data.currentUserID');
         this.set('query.currentUser', currentUserId);
         this.set('fuzzySearchParams.currentUser', currentUserId);
+
+        // this.updateSearch(this.get('query'));
     },
 
     actions: {
         addToList(toolid) {
-            if (!this.toolList.includes(toolid)) {
-                this.get('toolList').pushObject(toolid);
+            if (!this.get('transferInfo.toolids').includes(toolid)) {
+                this.get('transferInfo.toolids').pushObject(toolid);
             }
         },
 
         deleteToolList() {
-            this.set('toolList', []);
+            this.set('transferInfo.toolids', Ember.A());
+        },
+
+        removeFromList(toolToRemove) {
+            let filteredToolList = this.get('transferInfo.toolids').filter((tool) => {
+                return tool !== toolToRemove;
+            });
+            this.set('transferInfo.toolids', filteredToolList);
         },
 
         transferTools() {
-            Ember.$('#user-to-transfer-to').css('border-style', 'none');
-            Ember.$('#list-title').css('border-style', 'none');
+            this.validate().then(({ validations }) => {
+                if (validations.get('isValid')) {
+                    let _this = this;
 
-            if (this.get('_transferTo') === '') {
-                Ember.$('#user-to-transfer-to').css('border-style', 'solid');
-                Ember.$('#user-to-transfer-to').css('border-color', '#e30000');
-            }
+                    let options = {
+                        url: `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/transfer`,
+                        data: this.get('transferInfo'),
+                        type: 'PUT',
+                        crossDomain: true,
+                        success() {
+                            _this.get('notifications').success('Transaction success', { autoClear: true, clearDuration: 1000 });
+                        },
 
-            if (this.get('toolList').length === 0) {
-                Ember.$('#list-title').css('border-style', 'solid');
-                Ember.$('#list-title').css('border-color', '#e30000');
-            }
+                        error() {
+                            _this.get('notifications').error('Tranaction failed', { autoClear: true, clearDuration: 1000 });
+                        }
+                    };
 
-            if (Ember.$('#user-to-transfer-to').val() !== null && this.get('toolList').length !== 0) {
-                let user = parseInt(Ember.$('#user-to-transfer-to').val());
+                    Ember.$.ajax(options).then(function() {
+                        _this.set('transferInfo.toolids', Ember.A());
+                        _this.set('transferInfo.userid', '');
+                        _this.set('showErrorMessages', false);
+                        _this.updateSearch(_this.get('query'));
+                    });
 
-                let options = {
-                    url: `${config.APP.API_URL}/${config.APP.API_NAMESPACE}/transfer`,
-                    data: {
-                        userid: user,
-                        toolids: this.get('toolList')
-                    },
-                    type: 'PUT',
-                    crossDomain: true,
-                    success() {
-                        alert('Transaction success.');
-                    },
-
-                    error() {
-                        alert('Tranaction failed.');
-                    }
-                };
-
-                let _this = this;
-                Ember.$.ajax(options).then(function() {
-                    _this.send('updateSearch', _this.get('query'));
-                });
-
-                this.set('toolList', []);
-                this.set('_transferTo', '');
-            }
+                } else {
+                    this.set('showErrorMessages', true);
+                    this.get('notifications').error('Missing Information', { autoClear: true, clearDuration: 1000 });
+                }
+            });
         },
 
         updateTransferTo(target) {
-            this.set('_transferTo', parseInt(target.value));
+            this.set('transferInfo.userid', parseInt(target.value) || target.value);
         }
     }
 });

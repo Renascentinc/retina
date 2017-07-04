@@ -1,7 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 
-moduleFor('service:session', 'Unit | Service | session', {
-
+moduleFor('service:data-cache', 'Unit | Service | data cache', {
+    needs: ['service:session']
 });
 
 test('it exists', function(assert) {

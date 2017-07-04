@@ -5,12 +5,12 @@ export default Ember.Component.extend({
 
     showSelectTools: false,
 
-    userOptions: Ember.computed(function() {
+    userOption: Ember.computed(function() {
         if (this.get('showSelectTools')) {
-            return this.get('model.selectUsers.users');
+            return 'restricteduser';
         }
 
-        return this.get('model.dropdown.user');
+        return 'user';
     }),
 
     clearFilterParams() {

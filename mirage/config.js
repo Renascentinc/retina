@@ -2,8 +2,18 @@ export default function() {
     this.namespace = 'api';
     this.urlPrefix = 'https://retina-api-develop.azurewebsites.net';
 
-    this.post('/token', () => {
-        return { ACCESS_TOKEN: '567k345jsd1o34sdklsdf34534', userid: 1, role: 'user', data: {} };
+    this.post('/token', (schema, request) => {
+        let { requestBody } = request;
+        let sections = requestBody.split('&');
+
+        let [ , username ] = sections[1].split('=');
+        let [ , password ] = sections[2].split('=');
+
+        if (username === 'username' && password === 'password') {
+            return { ACCESS_TOKEN: '567k345jsd1o34sdklsdf34534', userid: 1, role: 'user', data: {} };
+        } else {
+            return { errors: { message: 'Invalid Username/Password' } };
+        }
     });
 
     this.post('/tools', (schema, request) => {
@@ -36,7 +46,7 @@ export default function() {
         let query = {};
         let { queryParams } = request;
 
-        (queryParams.currentUser !== '' && queryParams.currentUser !== undefined) ? query.userid = queryParams.currentUser : '';
+        (queryParams.currentUser !== '' && queryParams.currentUser) ? query.userid = queryParams.currentUser : '';
         (queryParams.status !== '') ? query.status = queryParams.status : '';
         (queryParams.userID !== '') ? query.userid = queryParams.userID : '';
         (queryParams.type !== '') ? query.type = queryParams.type : '';

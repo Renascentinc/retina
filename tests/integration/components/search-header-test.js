@@ -69,10 +69,10 @@ test('it uses the filter params on filter search', function(assert) {
 test('it clears the fuzzy search on filter search', function(assert) {
     assert.expect(1);
 
-    this.set('model', { dropdown: { status: [ 'Available' ] } });
+    this.set('dropdown', { status: [ 'Available' ], type: [ 'Drill' ], user: [ { userid: 1, username: 'bob' } ], brand: [ 'Bosch' ] });
     this.set('noop', () => { });
 
-    this.render(hbs`{{search-header model=model fuzzySearchParams=_fuzzySearchParams query=_query updateSearch=(action noop)}}`);
+    this.render(hbs`{{search-header dropdown=dropdown fuzzySearchParams=_fuzzySearchParams query=_query updateSearch=(action noop)}}`);
 
     this.$('.search-bar-input').val('test');
     this.$('.search-bar-input').trigger('keyup');
@@ -88,10 +88,10 @@ test('it clears the fuzzy search on filter search', function(assert) {
 test('it clears the filter search on fuzzy search', function(assert) {
     assert.expect(1);
 
-    this.set('model', { dropdown: { status: [ 'Available' ], type: [ 'Drill' ], user: [ { userid: 1, username: 'bob' } ], brand: [ 'Bosch' ] } });
+    this.set('dropdown', { status: [ 'Available' ], type: [ 'Drill' ], user: [ { userid: 1, username: 'bob' } ], brand: [ 'Bosch' ] });
     this.set('noop', () => { });
 
-    this.render(hbs`{{search-header model=model fuzzySearchParams=_fuzzySearchParams query=_query updateSearch=(action noop)}}`);
+    this.render(hbs`{{search-header dropdown=dropdown fuzzySearchParams=_fuzzySearchParams query=_query updateSearch=(action noop)}}`);
 
     this.$('select[name="status"]').val('Available');
     this.$('select[name="type"]').val('Drill');

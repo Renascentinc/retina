@@ -1,67 +1,71 @@
 {{search-header
-    model=model
-    showSelectTools=true
+    dropdown=dropdown
+    showSelectTools=showSelectTools
     query=query
     fuzzySearchParams=fuzzySearchParams
-    updateSearch=(action "updateSearch")
+    updateSearch=(action updateSearch)
 }}
 
 <div id="tool-display-box">
-    {{#each model.tools.data as |tool|}}
-        <div class="specs-box">
-            <button class="tool-specs" {{action "addToList" tool.id}}>
-                <div class="title">
-                    {{tool.attributes.brand}}
-                    {{tool.attributes.type}}<br>
+    {{#if (is-pending tools)}}
+        <i class="loading fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+    {{else}}
+        {{#each tools as |tool|}}
+            <div class="specs-box">
+                <button class="tool-specs" {{action "addToList" tool.id}}>
+                    <div class="title">
+                        {{tool.brand}}
+                        {{tool.type}}<br>
+                    </div>
+
+                    <div class="facts">
+
+                        Tool ID: {{tool.id}}<br>
+                        <span class="fa fa-user"></span> {{tool.username}}, {{tool.status}}
+                    </div>
+                </button>
+
+                <div class="options">
+                    {{#link-to "info" tool.id}}
+                        <span class="fa fa-info-circle search-icon" aria-hidden="true"></span>
+                    {{/link-to}}
+                    <br>
                 </div>
-
-                <div class="facts">
-
-                    Tool ID: {{tool.id}}<br>
-                    <span class="fa fa-user"></span> {{tool.attributes.username}}, {{tool.attributes.status}}
-                </div>
-            </button>
-
-            <div class="options">
-                {{#link-to "info" tool.id}}
-                    <span class="fa fa-info-circle search-icon" aria-hidden="true"></span>
-                {{/link-to}}
-                <br>
             </div>
-        </div>
-    {{/each}}
+        {{/each}}
+    {{/if}}
 </div>
 
-<div id="cart-menu">
-    <div id="cart">
-        <div id="list-title">
-            <div id="trash-icon">
-                <button class="fa fa-trash delete-icon" aria-hidden="true" {{action "deleteToolList"}}></button>
-            </div>
-            <div id="cart-title">
+<div class="cart-menu">
+    <div class="cart">
+        <div class="cart-header">
+            <button class="fa fa-trash delete-icon clear-cart" aria-hidden="true" {{action "deleteToolList"}}></button>
+
+            <div class="cart-title">
                 Cart
             </div>
         </div>
 
-        <hr style="margin: 0;">
-
-        <div id="list">
-            {{#each toolList key="@index" as |tool|}}
-                {{tool}}<br>
+        <div class="cart-list" class="{{if (and showErrorMessages (not (v-get this "transferInfo.toolids.length" "isValid"))) 'validation-error'}}">
+            {{#each transferInfo.toolids as |tool|}}
+                <div class="cart-item">
+                    <button class="fa fa-times-circle delete-icon remove-tool" {{action "removeFromList" tool}}></button>
+                    {{tool}}
+                </div>
             {{/each}}
         </div>
     </div>
-    <div id="cart-actions">
-        <select id="user-to-transfer-to" class="dark-dropdown" onchange={{action "updateTransferTo" value="target"}}>
+    <div class="cart-actions">
+        <select class="dark-dropdown select-transferee cart-action {{if (and showErrorMessages (not (v-get this "transferInfo.userid" "isValid"))) "validation-error"}}" onchange={{action "updateTransferTo" value="target"}}>
             <option value="">Transfer to</option>
-            {{#each model.dropdown.user as |user|}}
-                <option value={{user.userid}} selected={{eq user.userid _transferTo}}>
+            {{#each dropdown.user as |user|}}
+                <option value={{user.userid}} selected={{eq user.userid transferInfo.userid}}>
                     {{user.username}}
                 </option>
             {{/each}}
         </select>
 
-        <button {{action "transferTools"}} class="go" id="transfer-button">
+        <button {{action "transferTools"}} class="go cart-action complete-transfer">
             Transfer
         </button>
     </div>

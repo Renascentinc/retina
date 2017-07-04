@@ -1,11 +1,10 @@
-import { moduleFor, skip } from 'ember-qunit';
+import { moduleFor, test } from 'ember-qunit';
 
 moduleFor('route:search', 'Unit | Route | search', {
-    // Specify the other units that are required for this test.
-    // needs: ['controller:foo']
+    needs: ['service:session']
 });
 
-skip('it exists', function(assert) {
+test('it exists', function(assert) {
     let route = this.subject();
     assert.ok(route);
 });

@@ -39,7 +39,7 @@
 <div class="cart-menu">
     <div class="cart">
         <div class="cart-header">
-            <button class="fa fa-trash delete-icon" aria-hidden="true" {{action "deleteToolList"}}></button>
+            <button class="fa fa-trash delete-icon clear-cart" aria-hidden="true" {{action "deleteToolList"}}></button>
 
             <div class="cart-title">
                 Cart
@@ -49,7 +49,7 @@
         <div class="cart-list" class="{{if (and showErrorMessages (not (v-get this "transferInfo.toolids.length" "isValid"))) 'validation-error'}}">
             {{#each transferInfo.toolids as |tool|}}
                 <div class="cart-item">
-                    <button class="fa fa-times-circle delete-icon" {{action "removeFromList" tool}}></button>
+                    <button class="fa fa-times-circle delete-icon remove-tool" {{action "removeFromList" tool}}></button>
                     {{tool}}
                 </div>
             {{/each}}

@@ -25,7 +25,7 @@ module.exports = function(environment) {
         ENV.APP.API_URL = 'https://retina-api-develop.azurewebsites.net';
 
         ENV['ember-cli-mirage'] = {
-            enabled: true
+            enabled: false
         };
     }
 

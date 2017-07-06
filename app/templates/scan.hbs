@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="cart-list" class="{{if (and showErrorMessages (not (v-get this "transferInfo.toolids.length" "isValid"))) 'validation-error'}}">
+        <div class="cart-list" class="{{if (and showErrorMessages (not (v-get this "transferInfo.toolids.length" "isValid"))) 'transfer-validation-error'}}">
             {{#each transferInfo.toolids as |tool|}}
                 <div class="cart-item">
                     <button class="fa fa-times-circle delete-icon remove-tool" {{action "removeFromList" tool}}></button>
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="cart-actions">
-        <select class="dark-dropdown select-transferee cart-action {{if (and showErrorMessages (not (v-get this "transferInfo.userid" "isValid"))) "validation-error"}}" onchange={{action "updateTransferTo" value="target"}}>
+        <select class="dark-dropdown select-transferee cart-action {{if (and showErrorMessages (not (v-get this "transferInfo.userid" "isValid"))) "transfer-validation-error"}}" onchange={{action "updateTransferTo" value="target"}}>
             <option value=""> Transfer to </option>
             {{#each dropdown.user as |user|}}
                 <option value={{user.userid}} selected={{eq user.userid transferInfo.userid}}>

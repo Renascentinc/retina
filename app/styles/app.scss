@@ -6,7 +6,7 @@
     outline: none;
 }
 
-html, .ember-application, #ember-testing {
+html, .ember-application {
     font-family: $app-font;
     height: 100%;
     width: 100%;
@@ -31,12 +31,6 @@ html, .ember-application, #ember-testing {
 header {
     height: 78px;
     position: relative;
-}
-
-.validation-error {
-    outline-color: red;
-    outline-style: solid;
-    outline-width: 2px;
 }
 
 .login-fail {
@@ -247,12 +241,6 @@ a:-webkit-any-link {
     text-align: center;
     color: $renascent-light-gray;
     font-size: 18px;
-}
-
-#tool-display-box {
-    overflow-y: scroll;
-    height: calc(100% - 279px);
-    border-bottom: 4px solid rgba(76, 90, 96, .49);
 }
 
 #specs {

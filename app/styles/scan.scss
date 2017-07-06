@@ -1,5 +1,4 @@
 .cart-menu {
-    // width: 100vw;
     height: 140px;
     display: flex;
 
@@ -65,4 +64,17 @@
 .delete-icon {
     color: $renascent-red;
     font-size: 25px;
+}
+
+.transfer-validation-error {
+    outline-color: red;
+    outline-style: solid;
+    outline-width: 2px;
+}
+
+
+#tool-display-box {
+    overflow-y: scroll;
+    height: calc(100% - 279px);
+    border-bottom: 4px solid rgba(76, 90, 96, .49);
 }

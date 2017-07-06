@@ -9,5 +9,7 @@ export default Ember.Component.extend({
         }
 
         return 'fa-chevron-right';
-    })
+    }),
+
+    onResultSelected: () => {}
 });

@@ -17,13 +17,8 @@
     </div>
 </div>
 
-
 <div class="tool-action">
-    {{#if displayOptions}}
-        {{#link-to "info" tool.id}}
-            <i class="fa fa-info-circle search-icon" aria-hidden="true"></i>
-        {{/link-to}}
-    {{else}}
-        <i class="fa fa-chevron-right search-icon" aria-hidden="true"></i>
-    {{/if}}
+    {{#link-to "info" tool.id class="info-page-link"}}
+        <i class="fa {{_iconCss}} search-icon" aria-hidden="true"></i>
+    {{/link-to}}
 </div>

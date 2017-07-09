@@ -6,7 +6,7 @@ sudo: false
 
 cache:
   directories:
-    - $HOME/.npm
+    - node_modules
 
 before_install:
   - npm config set spin false
@@ -18,6 +18,8 @@ before_install:
 install:
   - npm install
   - bower install
+
+before_script: "git fetch --unshallow || true && git fetch origin '+refs/heads/*:refs/remotes/origin/*'"
 
 script:
   - npm test

@@ -29,19 +29,19 @@ deploy:
   file: "dist/"
 
 - provider: azure_web_apps
-  slot: retina-app-develop
+  slot: develop
   on: develop
   file_glob: true
   file: "dist/"
 
 - provider: azure_web_apps
-  slot: retina-app-release
+  slot: release
   on: release_2.1.1
   file_glob: true
   file: "dist/"
 
 - provider: azure_web_apps
-  slot: retina-app-testing
+  slot: testing
   on: retina-143-search-results-component
   file_glob: true
   file: "dist/"

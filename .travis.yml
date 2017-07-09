@@ -23,16 +23,25 @@ script:
   - npm test
 
 deploy:
-  file_glob: true
-  file: "dist/"
 - provider: azure_web_apps
   on: master
+  file_glob: true
+  file: "dist/"
+
 - provider: azure_web_apps
   slot: retina-app-develop
   on: develop
+  file_glob: true
+  file: "dist/"
+
 - provider: azure_web_apps
   slot: retina-app-release
   on: release_2.1.1
+  file_glob: true
+  file: "dist/"
+
 - provider: azure_web_apps
   slot: retina-app-testing
   on: retina-143-search-results-component
+  file_glob: true
+  file: "dist/"

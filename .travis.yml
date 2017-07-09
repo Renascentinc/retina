@@ -12,7 +12,6 @@ before_install:
   - npm config set spin false
   - npm install -g phantomjs-prebuilt
   - npm install -g bower
-  - npm install -g ember-cli
   - phantomjs --version
   - bower --version
 
@@ -29,21 +28,21 @@ deploy:
 - provider: azure_web_apps
   on: master
   file_glob: true
-  file: "dist/"
+  file: "dist/*"
   verbose: true
 
 - provider: azure_web_apps
   slot: retina-app-develop
   on: develop
   file_glob: true
-  file: "dist/"
+  file: "dist/*"
   verbose: true
 
 - provider: azure_web_apps
   slot: retina-app-release
   on: release_2.1.1
   file_glob: true
-  file: "dist/"
+  file: "dist/*"
   verbose: true
 
 - provider: azure_web_apps

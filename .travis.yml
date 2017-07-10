@@ -32,6 +32,7 @@ deploy:
   file_glob: true
   file: "dist/*"
   verbose: true
+  skip_cleanup: true
 
 - provider: azure_web_apps
   slot: retina-app-develop
@@ -39,6 +40,7 @@ deploy:
   file_glob: true
   file: "dist/*"
   verbose: true
+  skip_cleanup: true
 
 - provider: azure_web_apps
   slot: retina-app-release
@@ -46,6 +48,7 @@ deploy:
   file_glob: true
   file: "dist/*"
   verbose: true
+  skip_cleanup: true
 
 - provider: azure_web_apps
   slot: retina-app-testing
@@ -53,3 +56,4 @@ deploy:
   file_glob: true
   file: "dist/*"
   verbose: true
+  skip_cleanup: true

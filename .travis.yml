@@ -28,7 +28,6 @@ script:
 
 before_deploy:
   - ember build
-  - sh scripts/prep-for-deploy.sh
 
 deploy:
 - provider: azure_web_apps
@@ -49,6 +48,8 @@ deploy:
   skip_cleanup: true
 
 - provider: azure_web_apps
+  file_glob: true
+  file: "dist/*"
   verbose: true
   skip_cleanup: true
   slot: retina-app-testing

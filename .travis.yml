@@ -28,7 +28,7 @@ script:
 
 before_deploy:
   - ember build
-  - sh prep-for-deploy.sh
+  - sh scripts/prep-for-deploy.sh
 
 deploy:
 - provider: azure_web_apps

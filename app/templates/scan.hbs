@@ -11,27 +11,7 @@
         <i class="loading fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
     {{else}}
         {{#each tools as |tool|}}
-            <div class="specs-box">
-                <button class="tool-specs" {{action "addToList" tool.id}}>
-                    <div class="title">
-                        {{tool.brand}}
-                        {{tool.type}}<br>
-                    </div>
-
-                    <div class="facts">
-
-                        Tool ID: {{tool.id}}<br>
-                        <span class="fa fa-user"></span> {{tool.username}}, {{tool.status}}
-                    </div>
-                </button>
-
-                <div class="options">
-                    {{#link-to "info" tool.id}}
-                        <span class="fa fa-info-circle search-icon" aria-hidden="true"></span>
-                    {{/link-to}}
-                    <br>
-                </div>
-            </div>
+            {{tool-search-entry tool=tool onResultSelected=(action "addToList") displayOptions=true}}
         {{/each}}
     {{/if}}
 </div>
@@ -46,7 +26,7 @@
             </div>
         </div>
 
-        <div class="cart-list" class="{{if (and showErrorMessages (not (v-get this "transferInfo.toolids.length" "isValid"))) 'validation-error'}}">
+        <div class="cart-list" class="{{if (and showErrorMessages (not (v-get this "transferInfo.toolids.length" "isValid"))) 'transfer-validation-error'}}">
             {{#each transferInfo.toolids as |tool|}}
                 <div class="cart-item">
                     <button class="fa fa-times-circle delete-icon remove-tool" {{action "removeFromList" tool}}></button>
@@ -56,8 +36,8 @@
         </div>
     </div>
     <div class="cart-actions">
-        <select class="dark-dropdown select-transferee cart-action {{if (and showErrorMessages (not (v-get this "transferInfo.userid" "isValid"))) "validation-error"}}" onchange={{action "updateTransferTo" value="target"}}>
-            <option value="">Transfer to</option>
+        <select class="dark-dropdown select-transferee cart-action {{if (and showErrorMessages (not (v-get this "transferInfo.userid" "isValid"))) "transfer-validation-error"}}" onchange={{action "updateTransferTo" value="target"}}>
+            <option value=""> Transfer to </option>
             {{#each dropdown.user as |user|}}
                 <option value={{user.userid}} selected={{eq user.userid transferInfo.userid}}>
                     {{user.username}}

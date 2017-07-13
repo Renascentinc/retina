@@ -24,8 +24,6 @@ export default Ember.Controller.extend(SearchMixin, TransferValidationMixin, {
         let currentUserId = this.get('session').get('data.currentUserID');
         this.set('query.currentUser', currentUserId);
         this.set('fuzzySearchParams.currentUser', currentUserId);
-
-        // this.updateSearch(this.get('query'));
     },
 
     actions: {

@@ -5,6 +5,8 @@ export default Ember.Component.extend({
 
     showSelectTools: false,
 
+    usingFuzzySearch: false,
+
     userOption: Ember.computed(function() {
         if (this.get('showSelectTools')) {
             return 'restricteduser';
@@ -22,6 +24,7 @@ export default Ember.Component.extend({
 
     fuzzySearch() {
         this.clearFilterParams();
+        this.set('usingFuzzySearch', true);
 
         if (this.get('fuzzySearchParams.parameter') === '') {
             this.get('updateSearch')(this.get('query'));
@@ -32,10 +35,15 @@ export default Ember.Component.extend({
 
     willDestroy() {
         this.set('fuzzySearchParams.parameter', '');
+        if (this.get('usingFuzzySearch')) {
+            this.get('updateSearch')(this.get('query'));
+        }
     },
 
     actions: {
         updateFilters(target) {
+            this.set('usingFuzzySearch', false);
+
             if (target.getAttribute('name') === 'status') {
                 this.set('query.status', target.value);
 

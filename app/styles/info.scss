@@ -1,0 +1,27 @@
+.back {
+    font-size: 25px;
+    height: auto;
+    padding: 10px 5px 5px;
+    color: $renascent-red;
+}
+
+#specs {
+    padding: 10px;
+    display: inline-block;
+    width: calc(100vw - 20px)
+}
+
+#tool-title {
+    color: rgba(0, 0, 0, .87);
+    font-size: 28px;
+    width: 100%;
+}
+
+#tool-details {
+    color: rgba(0, 0, 0, .57);
+    font-size: 18px;
+}
+
+.owner-info {
+    margin-bottom: 15px;
+}

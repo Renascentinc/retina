@@ -3,8 +3,6 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model(params) {
-        return Ember.RSVP.hash({
-            tool: this.get('store').findRecord('tool', params.id)
-        });
+        return this.get('store').findRecord('tool', params.id);
     }
 });

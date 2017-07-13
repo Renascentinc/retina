@@ -19,9 +19,10 @@ export default Ember.Controller.extend({
     },
 
     ableToTransfer: Ember.computed('model', function() {
-        let isOwnedByUser = this.get('session').get('data.currentUserID') === this.get('model.tool').get('userid');
-        let isAdmin = roleUtils.isAdmin(this.get('session').get('data'));
+        let isOwnedByUser = this.get('session.data.currentUserID') === this.get('model.userid');
+        let isAdmin = roleUtils.isAdmin(this.get('session.data'));
+        let isInShop = this.get('model.username') === 'The Shop';
 
-        return isOwnedByUser || isAdmin;
+        return isOwnedByUser || isAdmin || isInShop;
     })
 });

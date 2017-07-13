@@ -60,8 +60,7 @@ export default Ember.Component.extend({
             this.get('updateSearch')(this.get('query'));
         },
 
-        fuzzySearchDebounced(value) {
-            this.set('fuzzySearchParams.parameter', value);
+        fuzzySearchDebounced() {
             Ember.run.debounce(this, this.fuzzySearch, 200);
         }
     }

@@ -31,12 +31,12 @@ test('it uses the filter params when the fuzzy search is empty string', function
 
     this.$('.search-bar-input').trigger('keyup');
 
-    return wait();
+    return wait().then(() => {
+        this.set('validate', () => { });
+    });
 });
 
 test('it uses the fuzzy params when the fuzzy search is not empty string', function(assert) {
-    assert.expect(1);
-
     this.set('validate', (data) => {
         assert.equal(data.parameter, 'test', 'parameter was not set on the query. must not be the fuzzy params');
     });
@@ -46,7 +46,9 @@ test('it uses the fuzzy params when the fuzzy search is not empty string', funct
     this.$('.search-bar-input').val('test');
     this.$('.search-bar-input').trigger('keyup');
 
-    return wait();
+    return wait().then(() => {
+        this.set('validate', () => { });
+    });
 });
 
 test('it uses the filter params on filter search', function(assert) {

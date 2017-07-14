@@ -37,7 +37,6 @@
     "ember-cli-uglify": "^1.2.0",
     "ember-cp-validations": "^3.3.2",
     "ember-data": "^2.13.0",
-    "ember-engine-admin": "https://github.com/Renascentinc/ember-engine-admin.git",
     "ember-engines": "^0.5.4",
     "ember-export-application-global": "^2.0.0",
     "ember-font-awesome": "^3.0.5",

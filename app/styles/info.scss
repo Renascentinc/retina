@@ -7,8 +7,10 @@
 
 #specs {
     padding: 10px;
+    overflow-y: scroll;
     display: inline-block;
-    width: calc(100vw - 20px)
+    width: calc(100vw - 20px);
+    height: calc(100% - 75px);
 }
 
 #tool-title {
@@ -23,5 +25,6 @@
 }
 
 .owner-info {
+    margin-top: 10px;
     margin-bottom: 15px;
 }

@@ -5,8 +5,6 @@ export default Ember.Component.extend({
 
     showSelectTools: false,
 
-    usingFuzzySearch: false,
-
     userOption: Ember.computed(function() {
         if (this.get('showSelectTools')) {
             return 'restricteduser';
@@ -20,24 +18,6 @@ export default Ember.Component.extend({
         this.set('query.brand', '');
         this.set('query.type', '');
         this.set('query.userID', '');
-    },
-
-    fuzzySearch() {
-        this.clearFilterParams();
-        this.set('usingFuzzySearch', true);
-
-        if (this.get('fuzzySearchParams.parameter') === '') {
-            this.get('updateSearch')(this.get('query'));
-        } else {
-            this.get('updateSearch')(this.get('fuzzySearchParams'));
-        }
-    },
-
-    willDestroy() {
-        this.set('fuzzySearchParams.parameter', '');
-        if (this.get('usingFuzzySearch')) {
-            this.get('updateSearch')(this.get('query'));
-        }
     },
 
     actions: {
@@ -56,12 +36,7 @@ export default Ember.Component.extend({
             } else if (target.getAttribute('name') === 'owner') {
                 this.set('query.userID', parseInt(target.value));
             }
-            this.set('fuzzySearchParams.parameter', '');
-            this.get('updateSearch')(this.get('query'));
-        },
-
-        fuzzySearchDebounced() {
-            Ember.run.debounce(this, this.fuzzySearch, 200);
+            this.get('onFilterChange')();
         }
     }
 });

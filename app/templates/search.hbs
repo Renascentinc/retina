@@ -2,11 +2,13 @@
     dropdown=dropdown
     showSelectTools=false
     query=query
-    fuzzySearchParams=fuzzySearchParams
-    updateSearch=(action updateSearch)
+    onFilterChange=(action "onFilterChange")
+    onInput=(action "onFuzzySearch")
 }}
 
 <div id="tool-display-box-full">
+    {{search-bar searchParameter=fuzzySearchParams.parameter onInput=(action "onFuzzySearch") usingFuzzySearch=usingFuzzySearch}}
+
     {{#if (is-pending tools)}}
         <i class="loading fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
     {{else}}

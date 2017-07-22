@@ -5,12 +5,12 @@ export default Ember.Component.extend({
 
     showSelectTools: false,
 
-    userOptions: Ember.computed(function() {
+    userOption: Ember.computed(function() {
         if (this.get('showSelectTools')) {
-            return this.get('model.selectUsers.users');
+            return 'restricteduser';
         }
 
-        return this.get('model.dropdown.user');
+        return 'user';
     }),
 
     clearFilterParams() {
@@ -20,22 +20,10 @@ export default Ember.Component.extend({
         this.set('query.userID', '');
     },
 
-    fuzzySearch() {
-        this.clearFilterParams();
-
-        if (this.get('fuzzySearchParams.parameter') === '') {
-            this.get('updateSearch')(this.get('query'));
-        } else {
-            this.get('updateSearch')(this.get('fuzzySearchParams'));
-        }
-    },
-
-    willDestroy() {
-        this.set('fuzzySearchParams.parameter', '');
-    },
-
     actions: {
         updateFilters(target) {
+            this.set('usingFuzzySearch', false);
+
             if (target.getAttribute('name') === 'status') {
                 this.set('query.status', target.value);
 
@@ -48,13 +36,7 @@ export default Ember.Component.extend({
             } else if (target.getAttribute('name') === 'owner') {
                 this.set('query.userID', parseInt(target.value));
             }
-            this.set('fuzzySearchParams.parameter', '');
-            this.get('updateSearch')(this.get('query'));
-        },
-
-        fuzzySearchDebounced(value) {
-            this.set('fuzzySearchParams.parameter', value);
-            Ember.run.debounce(this, this.fuzzySearch, 200);
+            this.get('onFilterChange')();
         }
     }
 });

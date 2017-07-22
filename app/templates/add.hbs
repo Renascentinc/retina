@@ -4,7 +4,7 @@
             <select id="type" name="type" class="dark-dropdown add">
                 <option disabled selected hidden> Type</option>
 
-                {{#each model.dropdown.type as |type|}}
+                {{#each dropdown.type as |type|}}
                     <option value={{type}}> {{type}} </option>
                 {{/each}}
             </select>
@@ -16,7 +16,7 @@
             <select id="brand" name="brand" class="dark-dropdown add" {{action "addCustomOptions" "#brand" "#custom-brand"}} >
                 <option disabled selected hidden> Brand</option>
 
-                {{#each model.dropdown.brand as |brand|}}
+                {{#each dropdown.brand as |brand|}}
                     <option value={{brand}}> {{brand}} </option>
                 {{/each}}
 
@@ -35,7 +35,7 @@
             <select id="purchasedfrom" class="dark-dropdown add" {{action "addCustomOptions" "#purchasedfrom" "#custom-purchasedfrom"}}>
                 <option selected value=""> Purchased From</option>
 
-                {{#each model.dropdown.provider as |provider|}}
+                {{#each dropdown.provider as |provider|}}
                     <option value={{provider}}> {{provider}} </option>
                 {{/each}}
 
@@ -79,7 +79,7 @@
             <select id="status" name="status" class="dark-dropdown add">
                 <option disabled selected hidden> Status</option>
 
-                {{#each model.dropdown.status as |status|}}
+                {{#each dropdown.status as |status|}}
                     <option value={{status}}> {{status}} </option>
                 {{/each}}
             </select>
@@ -89,7 +89,7 @@
             <select id="assignee" name="assignee" class="dark-dropdown add">
                 <option disabled selected hidden> Assign To</option>
 
-                {{#each model.dropdown.user as |user|}}
+                {{#each dropdown.user as |user|}}
                     <option value={{user.userid}}> {{user.username}} </option>
                 {{/each}}
             </select>

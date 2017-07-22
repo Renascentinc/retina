@@ -1,32 +1,19 @@
 {{search-header
-    model=model
+    dropdown=dropdown
     showSelectTools=false
     query=query
-    fuzzySearchParams=fuzzySearchParams
-    updateSearch=(action "updateSearch")
+    onFilterChange=(action "onFilterChange")
+    onInput=(action "onFuzzySearch")
 }}
 
 <div id="tool-display-box-full">
-    {{#each model.tools.data as |tool|}}
-        <div class="specs-box">
-            {{#link-to "info" tool.id}}
-                <div class="tool-specs">
-                    <div class="title">
-                        {{tool.attributes.brand}}
-                        {{tool.attributes.type}}<br>
-                    </div>
+    {{search-bar searchParameter=fuzzySearchParams.parameter onInput=(action "onFuzzySearch") usingFuzzySearch=usingFuzzySearch}}
 
-                    <div class="facts">
-                        Tool ID: {{tool.id}} <br>
-                        <span class="fa fa-user"></span> {{tool.attributes.username}}, {{tool.attributes.status}}
-                    </div>
-                </div>
-
-                <div class="options">
-                    <span class="fa fa-chevron-right search-icon" aria-hidden="true"></span>
-                    <br>
-                </div>
-            {{/link-to}}
-        </div>
-    {{/each}}
+    {{#if (is-pending tools)}}
+        <i class="loading fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+    {{else}}
+        {{#each tools as |tool|}}
+            {{tool-search-entry tool=tool onResultSelected=(action goToInfoPage)}}
+        {{/each}}
+    {{/if}}
 </div>

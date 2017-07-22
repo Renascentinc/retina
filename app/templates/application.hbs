@@ -1,8 +1,10 @@
+{{notification-container position="top"}}
+
 {{#if isLoginRoute}}
     {{outlet}}
 {{else}}
     <header>
-        <div id="titlebar" class="container-fluid">
+        <div id="titlebar">
             <div class="nav-container">
                 {{#link-to "add" class="icon-btn" id="add-icon"}}
                     <span class="fa fa-plus fa-main " aria-hidden="true"></span>

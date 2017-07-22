@@ -1,0 +1,24 @@
+<div class="tool-info" {{action onResultSelected tool.id}}>
+    <div class="tool-info-header">
+        <span class="tool-info-brand"> {{tool.brand}} </span>
+        <span class="tool-info-type"> {{tool.type}} </span>
+    </div>
+
+    <div class="tool-info-details">
+        <div>
+            <span> Tool ID: </span>
+            <span class="tool-info-id"> {{tool.id}} </span>
+        </div>
+        <div>
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span class="tool-info-username"> {{tool.username}}, </span>
+            <span class="tool-info-status"> {{tool.status}} </span>
+        </div>
+    </div>
+</div>
+
+<div class="tool-action">
+    {{#link-to "info" tool.id class="info-page-link"}}
+        <i class="fa {{_iconCss}} search-icon" aria-hidden="true"></i>
+    {{/link-to}}
+</div>

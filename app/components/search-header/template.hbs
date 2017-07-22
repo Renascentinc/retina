@@ -1,42 +1,44 @@
 <div class="search-filters">
-    {{select-dropdown
-        dropdownClass="search-filter-dropdown"
-        formName="status"
-        headerName="Status"
-        options=model.dropdown.status
-        onUpdate=(action "updateFilters")
-        selectedOption=query.status
-    }}
+    {{#if (is-pending dropdown)}}
+        <div class="loading-dropdowns">
+            <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+        </div>
+    {{else}}
+        {{select-dropdown
+            dropdownClass="search-filter-dropdown"
+            formName="status"
+            headerName="Status"
+            options=dropdown.status
+            onUpdate=(action "updateFilters")
+            selectedOption=query.status
+        }}
 
-    {{select-dropdown
-        dropdownClass="search-filter-dropdown"
-        formName="type"
-        headerName="Type"
-        options=model.dropdown.type
-        onUpdate=(action "updateFilters")
-        selectedOption=query.type
-    }}
+        {{select-dropdown
+            dropdownClass="search-filter-dropdown"
+            formName="type"
+            headerName="Type"
+            options=dropdown.type
+            onUpdate=(action "updateFilters")
+            selectedOption=query.type
+        }}
 
-    {{select-dropdown
-        dropdownClass="search-filter-dropdown"
-        formName="owner"
-        headerName="Owner"
-        displayUsers=true
-        options=userOptions
-        onUpdate=(action "updateFilters")
-        selectedOption=query.userID
-    }}
+        {{select-dropdown
+            dropdownClass="search-filter-dropdown"
+            formName="owner"
+            headerName="Owner"
+            displayUsers=true
+            options=(get (await dropdown) userOption)
+            onUpdate=(action "updateFilters")
+            selectedOption=query.userID
+        }}
 
-    {{select-dropdown
-        dropdownClass="search-filter-dropdown"
-        formName="brand"
-        headerName="Brand"
-        options=model.dropdown.brand
-        onUpdate=(action "updateFilters")
-        selectedOption=query.brand
-    }}
-</div>
-
-<div class="search-bar">
-    {{input class="search-bar-input" placeholder="ToolID or Serial Number" value=fuzzySearchParams.parameter key-up="fuzzySearchDebounced"}}
+        {{select-dropdown
+            dropdownClass="search-filter-dropdown"
+            formName="brand"
+            headerName="Brand"
+            options=dropdown.brand
+            onUpdate=(action "updateFilters")
+            selectedOption=query.brand
+        }}
+    {{/if}}
 </div>

@@ -1,43 +1,80 @@
 <div style="width:100%">
-    <button class="back" onclick=window.history.back()><span class="fa fa-chevron-left" aria-hidden="true"></span>
+    <button class="back" onclick=window.history.back()>
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
         back
     </button>
 </div>
 
 <div id="specs">
     <div id="tool-title">
-        {{model.tool.brand}} {{model.tool.type}}
+        <span class="tool-brand"> {{model.brand}} </span>
+        <span class="tool-type"> {{model.type}} </span>
     </div>
 
     <div id="tool-details">
-        {{model.tool.status}} <br>
-        Tool ID: {{model.tool.id}}<br><br>
+        <span class="tool-status"> {{model.status}} </span>
 
-        Owner:<br>
-        <i class="fa fa-user" aria-hidden="true"></i> {{model.tool.username}}<br>
-        <a href="tel:{{model.tool.phonenumber}}"> <i class="fa fa-phone"
-                                                     aria-hidden="true"></i> {{model.tool.phonenumber}}</a><br>
-        <a href="mailto:{{model.tool.email}}"><i class="fa fa-envelope" aria-hidden="true"></i> {{model.tool.email}}</a><br><br>
-        Model year: {{model.tool.year}} <br>
-        Purchase date: {{model.tool.purchasedate}}<br>
-        Serial number: {{model.tool.serialnumber}}<br>
-        Model number: {{model.tool.modelnumber}}
+        <div>
+            <span> Tool ID: </span>
+            <span class="tool-id"> {{model.id}} </span>
+        </div>
+
+        <div class="owner-info">
+            <span> Owner: </span>
+
+            <div>
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span class="tool-owner"> {{model.username}} </span>
+            </div>
+
+            <div>
+                <a href="tel:{{model.phonenumber}}">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <span class="tool-phonenumber"> {{model.phonenumber}} </span>
+                </a>
+            </div>
+
+            <div>
+                <a href="mailto:{{model.email}}">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span class="tool-owner-email"> {{model.email}} </span>
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <span> Model year: </span>
+            <span class="tool-year"> {{model.year}} </span>
+        </div>
+
+        <div>
+            <span> Purchase date: </span>
+            <span class="tool-purchase-date"> {{model.purchasedate}} </span>
+        </div>
+
+        <div>
+            <span> Serial number:</span>
+            <span class="tool-serial-number"> {{model.serialnumber}} </span>
+        </div>
+
+        <div>
+            <span> Model number: </span>
+            <span class="tool-model-number"> {{model.modelnumber}} </span>
+        </div>
     </div>
 
     {{#if ableToTransfer }}
         <div id="status-change-box">
-            <select id="status" class="dark-dropdown ">
+            <select id="status" class="dark-dropdown">
                 <option value=""> Status </option>
-                {{#each model.dropdown.status as |status|}}
+                {{#each dropdown.status as |status|}}
                     <option value={{status}}> {{status}} </option>
                 {{/each}}
             </select>
 
-            <button style="margin-top: 20px; font-size: 24px;" class="go" {{action "updateStatus" model.tool}}>
+            <button style="margin-top: 20px; font-size: 24px;" class="go" {{action "updateStatus" model}}>
                 Update Status
             </button>
         </div>
     {{/if}}
-
-
 </div>

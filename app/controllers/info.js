@@ -3,6 +3,9 @@ import roleUtils from '../utils/user-roles';
 
 export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
+    cache: Ember.inject.service('data-cache'),
+
+    dropdown: Ember.computed.alias('cache.dropdown'),
 
     actions: {
         updateStatus(tool) {
@@ -16,8 +19,8 @@ export default Ember.Controller.extend({
     },
 
     ableToTransfer: Ember.computed('model', function() {
-        let isOwnedByUser = this.get('session').get('data.currentUserID') === this.get('model.tool').get('userid');
-        let isAdmin = roleUtils.isAdmin(this.get('session').get('data'));
+        let isOwnedByUser = this.get('session.data.currentUserID') === this.get('model.userid');
+        let isAdmin = roleUtils.isAdmin(this.get('session.data'));
 
         return isOwnedByUser || isAdmin;
     })

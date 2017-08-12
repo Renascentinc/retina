@@ -29,6 +29,14 @@ module.exports = function(environment) {
         };
     }
 
+    if (environment === 'development-local-api') {
+        ENV.APP.API_URL = 'http://localhost:8080';
+
+        ENV['ember-cli-mirage'] = {
+            enabled: false
+        };
+    }
+
     if (environment === 'test') {
         ENV.APP.API_URL = 'https://retina-api-develop.azurewebsites.net';
 

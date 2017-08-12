@@ -49,7 +49,11 @@
 
         <div>
             <span> Purchase date: </span>
-            <span class="tool-purchase-date"> {{model.purchasedate}} </span>
+            <span class="tool-purchase-date">
+                {{#if model.purchasedate}}
+                    {{moment-format model.purchasedate 'MMMM DD, YYYY' 'YYYY-MM-DD'}}
+                {{/if}}
+            </span>
         </div>
 
         <div>

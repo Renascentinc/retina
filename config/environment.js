@@ -19,10 +19,10 @@ module.exports = function(environment) {
     }
   };
 
-  ENV.APP.api_namespace = 'api';    
-    
+  ENV.APP.api_namespace = 'api';
+
   if (environment === 'development') {
-      ENV.APP.api_url = 'https://retina-api-develop.azurewebsites.net/'; 
+      ENV.APP.api_url = 'https://retina-api-develop.azurewebsites.net/';
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -30,9 +30,17 @@ module.exports = function(environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
 
+  if (environment === 'development-local-api') {
+    ENV.APP.API_URL = 'http://localhost:8080';
+
+    ENV['ember-cli-mirage'] = {
+        enabled: false
+    };
+  }
+
   if (environment === 'test') {
-    ENV.APP.api_url = 'https://retina-api-develop.azurewebsites.net/'; 
-      
+    ENV.APP.api_url = 'https://retina-api-develop.azurewebsites.net/';
+
     // Testem prefers this...
     ENV.locationType = 'none';
 
@@ -44,7 +52,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-      ENV.APP.api_url = 'https://retina-api.azurewebsites.net/'; 
+      ENV.APP.api_url = 'https://retina-api.azurewebsites.net/';
   }
 
   ENV.contentSecurityPolicy = {

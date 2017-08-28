@@ -72,6 +72,9 @@ export default Ember.Controller.extend({
                     data: { userid: userid, toolids: this.toolList},
                     type: 'PUT',
                     crossDomain: true,
+                    headers: {
+                      AUTH_TOKEN: this.get('session').get('data.currentUserID')
+                    },
                     success: function() {
                         alert("Transaction success.");
                     },

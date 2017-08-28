@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
     _maxdate: new Date(),
+    isAddingTool: false,
     actions: {
 
       toggleField(hideObj, showObj) {
@@ -14,6 +15,7 @@ export default Ember.Controller.extend({
       },
 
       saveNewTool(tool) {
+          this.set('isAddingTool', true);
           let brand = Ember.$('#brand').val();
           let type = Ember.$('#type').val();
           let purchasedfrom = Ember.$('#purchasedfrom').val();
@@ -42,9 +44,11 @@ export default Ember.Controller.extend({
 
           tool.save().then(function(tool) {
               let toolid = tool.get('id');
+              _this.set('isAddingTool', false);
               _this.get('target').transitionTo('info', toolid);
 
           }).catch(function(e) {
+              _this.set('isAddingTool', false);
               console.log( e );
           });
       },

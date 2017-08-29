@@ -136,6 +136,7 @@ a:-webkit-any-link {
   height: calc(100vh - 108px);
 	width: 100vw;
   font-family: "Helvetica Neue";
+  -webkit-overflow-scrolling: touch;
   overflow-y: scroll;
 }
 

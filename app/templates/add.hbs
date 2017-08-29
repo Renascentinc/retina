@@ -47,7 +47,7 @@
 
         <input id="custom-purchasedfrom" name="customprovider" style="display: none;" type="text" class="text-field add" placeholder="Enter purchased from" />
 
-        {{input-money prefix='$' affixesStay=true type="tel" placeholder="Price" name="price" id="price" number=model.tool.price class="text-field add" allowEmpty=true}}
+        {{input-money prefix='$' affixesStay=true type="tel" placeholder="Price" name="price" id="price" number=model.tool.price class="text-field add" allowEmpty=true allowDecimal=true}}
 
         {{pikaday-input maxDate=_maxdate theme="dark-theme" class="text-field add" readonly="readonly" id="purchase-date" placeholder="Purchase Date" format="MM/DD/YYYY" yearRange="1990,currentYear" onSelection=(action (mut model.tool.purchasedate))}}
 

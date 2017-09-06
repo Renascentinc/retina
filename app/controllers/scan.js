@@ -7,19 +7,19 @@ export default Ember.Controller.extend({
     toolList: [],
 
     _transferTo: "",
-    
+
     _status: null,
-    
+
     _brand: null,
-    
+
     _type: null,
-    
+
     _userID: null,
 
     _query: Ember.computed(function () {
-        return { 
-                currentUser: this.get('session').get('data.currentUserID'), 
-                status: this.getWithDefault('_status', ''), 
+        return {
+                currentUser: this.get('session').get('data.currentUserID'),
+                status: this.getWithDefault('_status', ''),
                 brand: this.getWithDefault('_brand', ''),
                 type: this.getWithDefault('_type', ''),
                 userID: this.getWithDefault('_userID', '')
@@ -63,7 +63,7 @@ export default Ember.Controller.extend({
 				Ember.$("#list-title").css("border-color", "#e30000");
 			}
 
-			if (Ember.$("#user-to-transfer-to").val() !== null && this.toolList.length !== 0) {
+			if (Ember.$("#user-to-transfer-to").val() !== '' && this.toolList.length !== 0) {
                 var userid = parseInt(Ember.$("#user-to-transfer-to").val());
                 let _this = this;
 
@@ -72,6 +72,9 @@ export default Ember.Controller.extend({
                     data: { userid: userid, toolids: this.toolList},
                     type: 'PUT',
                     crossDomain: true,
+                    headers: {
+                      AUTH_TOKEN: this.get('session').get('data.currentUserID')
+                    },
                     success: function() {
                         alert("Transaction success.");
                     },

@@ -137,6 +137,7 @@ a:-webkit-any-link {
 	width: 100vw;
   font-family: "Helvetica Neue";
   -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
 }
 
 #login-page{

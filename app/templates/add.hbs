@@ -2,7 +2,7 @@
     <form id="form" method="post" {{action "saveNewTool" model.tool on="submit"}}>
         <div>
             <select id="type" name="type" class="dark-dropdown add">
-                <option disabled selected hidden> Type </option>
+                <option disabled selected hidden>Type *</option>
                 {{#each model.types.types as |type|}}
                 <option value={{type}}> {{type}} </option>
                 {{/each}}
@@ -15,7 +15,7 @@
 
         <div>
             <select id="brand" name = "brand" class="dark-dropdown add" {{action 'addCustomOptions' '#brand' '#custom-brand'}} >
-                <option disabled selected hidden> Brand </option>
+                <option disabled selected hidden>Brand *</option>
                 {{#each model.brands.brands as |brand|}}
                 <option value={{brand}}> {{brand}} </option>
                 {{/each}}
@@ -27,9 +27,9 @@
 
         </div>
 
-        {{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number" value=model.tool.modelnumber}}
+        {{input type="text" name="modelnumber" class="text-field add" placeholder="Model Number *" value=model.tool.modelnumber}}
 
-        {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number" value=model.tool.serialnumber}}<hr>
+        {{input type="text" name="serialnumber" class="text-field" placeholder="Serial Number *" value=model.tool.serialnumber}}<hr>
 
         <div>
 
@@ -55,7 +55,7 @@
 
         <div>
             <select id="status" name="status" class="dark-dropdown add">
-                <option disabled selected hidden> Status </option>
+                <option disabled selected hidden>Status *</option>
                 {{#each model.status.status as |status|}}
                 <option value={{status}}> {{status}} </option>
                 {{/each}}
@@ -64,7 +64,7 @@
 
         <div>
             <select id="assignee" name="assignee" class="dark-dropdown add" >
-                <option disabled selected hidden> Assign To </option>
+                <option disabled selected hidden>Assign To *</option>
                 {{#each model.users.users as |user|}}
                 <option value={{user.userid}}> {{user.username}} </option>
                 {{/each}}

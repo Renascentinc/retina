@@ -18,3 +18,14 @@ cordova/
 /libpeerconnection.log
 npm-debug.log
 testem.log
+
+corber/tmp-livereload
+corber/cordova/node_modules
+corber/cordova/package.json
+corber/cordova/package-lock.json
+corber/cordova/platforms/*
+!corber/cordova/platforms/.gitkeep
+corber/cordova/plugins/*
+!corber/cordova/plugins/.gitkeep
+corber/cordova/www/*
+!corber/cordova/www/.gitkeep

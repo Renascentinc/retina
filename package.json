@@ -2,13 +2,8 @@
   "name": "retina-app",
   "version": "2.2.0",
   "description": "Renascent inc. Tool Inventory Application",
-  "license": "",
   "author": "Renascent inc.",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
-  "repository": "",
+  "repository": "https://github.com/Renascentinc/retina-app",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
@@ -37,7 +32,6 @@
     "ember-cli-uglify": "^1.2.0",
     "ember-cp-validations": "^3.3.2",
     "ember-data": "^2.13.0",
-    "ember-engines": "^0.5.4",
     "ember-export-application-global": "^2.0.0",
     "ember-font-awesome": "^3.0.5",
     "ember-inflector": "^2.0.1",
@@ -59,7 +53,6 @@
   "engines": {
     "node": ">= 4"
   },
-  "private": true,
   "pre-push": [
     "test"
   ]

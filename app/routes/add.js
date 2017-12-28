@@ -2,6 +2,9 @@ import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+    notifications: Ember.inject.service('notification-messages'),
+    nfc: Ember.inject.service(),
+
     model() {
         return Ember.RSVP.hash({
             tool: this.get('store').createRecord('tool')
@@ -9,6 +12,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     },
 
     afterModel() {
+        this.get('notifications').info(`nfc available = ${this.get('nfc.available')}`, { autoClear: false });
+
         Ember.$(document).ready(function() {
             let currentYear = new Date().getFullYear();
             Ember.$('#form').validate({

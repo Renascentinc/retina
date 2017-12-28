@@ -38,9 +38,7 @@ export default Ember.Controller.extend(SearchMixin, TransferValidationMixin, {
         },
 
         removeFromList(toolToRemove) {
-            let filteredToolList = this.get('transferInfo.toolids').filter((tool) => {
-                return tool !== toolToRemove;
-            });
+            let filteredToolList = this.get('transferInfo.toolids').filter((tool) => tool !== toolToRemove);
             this.set('transferInfo.toolids', filteredToolList);
         },
 

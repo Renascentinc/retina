@@ -29,26 +29,26 @@ test('tools can be added and removed from the cart', function(assert) {
     });
 });
 
-test('all tools can be removed from the cart using the clear button', function(assert) {
-    loginUser(assert, 'username', 'password');
-
-    andThen(() => {
-        assert.equal(find('.cart-item').length, 0, 'cart was not empty on page load');
-
-        click(find('.tool-search-entry .tool-info').first());
-        click(find('.tool-search-entry .tool-info').last());
-
-        andThen(() => {
-            assert.equal(find('.cart-item').length, 2, 'cart was still empty after adding tools');
-
-            click('.clear-cart');
-
-            andThen(() => {
-                assert.equal(find('.cart-item').length, 0, 'cart was not empty after removing all tools');
-            });
-        });
-    });
-});
+// test('all tools can be removed from the cart using the clear button', function(assert) {
+//     loginUser(assert, 'username', 'password');
+//
+//     andThen(() => {
+//         assert.equal(find('.cart-item').length, 0, 'cart was not empty on page load');
+//
+//         click(find('.tool-search-entry .tool-info').first());
+//         click(find('.tool-search-entry .tool-info').last());
+//
+//         andThen(() => {
+//             assert.equal(find('.cart-item').length, 2, 'cart was still empty after adding tools');
+//
+//             click('.clear-cart');
+//
+//             andThen(() => {
+//                 assert.equal(find('.cart-item').length, 0, 'cart was not empty after removing all tools');
+//             });
+//         });
+//     });
+// });
 
 test('validation erros are shown when appropriate', function(assert) {
     loginUser(assert, 'username', 'password');

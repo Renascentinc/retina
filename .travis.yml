@@ -24,9 +24,6 @@ install:
 after_success:
   - sh scripts/build-app.sh
 
-before_deploy:
-  - sh scripts/prep-for-deploy.sh
-
 deploy:
 - provider: azure_web_apps
   on: master

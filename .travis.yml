@@ -10,44 +10,46 @@ cache:
     - node_modules
     - $HOME/.npm
 
-before_install:
-  - npm config set spin false
-  - npm install -g phantomjs-prebuilt
-  - npm install -g bower
-  - phantomjs --version
-  - bower --version
+# before_install:
+#   - npm config set spin false
+#   - npm install -g phantomjs-prebuilt
+#   - npm install -g bower
+#   - phantomjs --version
+#   - bower --version
 
-install:
-  - npm install
-  - bower install
+# install:
+#   - npm install
+#   - bower install
 
-after_success:
-  - sh scripts/build-app.sh
-
+# after_success:
+#   - sh scripts/build-app.sh
+script:
+  - echo dude
+  
 deploy:
-- provider: azure_web_apps
-  on: master
-  verbose: true
-  skip_cleanup: true
+  - provider: azure_web_apps
+    on: master
+    verbose: true
+    skip_cleanup: true
 
-- provider: azure_web_apps
-  slot: retina-app-develop
-  on: develop
-  verbose: true
-  skip_cleanup: true
+  - provider: azure_web_apps
+    slot: retina-app-develop
+    on: develop
+    verbose: true
+    skip_cleanup: true
 
-- provider: azure_web_apps
-  slot: retina-app-release
-  on: release_2.1.1
-  verbose: true
-  skip_cleanup: true
+  - provider: azure_web_apps
+    slot: retina-app-release
+    on: release_2.1.1
+    verbose: true
+    skip_cleanup: true
 
-- provider: s3
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key:
-    secure: $AWS_SECRET_ACCESS_KEY
-  bucket: retina-app-develop
-  local-dir: dist
-  acl: public_read
-  on: issue-176
-  skip_cleanup: true
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key:
+      secure: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-app-develop
+    local-dir: dist
+    acl: public_read
+    on: issue-176
+    skip_cleanup: true

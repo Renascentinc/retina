@@ -49,8 +49,7 @@ deploy:
 
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key:
-      secure: $AWS_SECRET_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: retina-app-develop
     local-dir: dist
     acl: public_read

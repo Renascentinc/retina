@@ -8,22 +8,27 @@ sudo: false
 cache:
   directories:
     - node_modules
+    - bower_components
     - $HOME/.npm
 
-before_install:
-  - npm config set spin false
-  - npm install -g phantomjs-prebuilt
-  - npm install -g bower
-  - phantomjs --version
-  - bower --version
+# before_install:
+#   - npm config set spin false
+#   - npm install -g phantomjs-prebuilt
+#   - npm install -g bower
+#   - phantomjs --version
+#   - bower --version
+#
+# install:
+#   - npm install
+#   - bower install
 
-install:
-  - npm install
-  - bower install
+script:
+  - mkdir dist
+  - touch dist/afile.txt
 
-after_success:
-  - sh scripts/build-app.sh
-  
+# after_success:
+#   - sh scripts/build-app.sh
+
 deploy:
   - provider: azure_web_apps
     on: master
@@ -50,4 +55,5 @@ deploy:
     local-dir: dist
     acl: public_read
     on: issue-176
+    region: us-east-2
     skip_cleanup: true

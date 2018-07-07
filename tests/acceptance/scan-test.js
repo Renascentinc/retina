@@ -4,7 +4,10 @@ import moduleForAcceptance from 'retina-app/tests/helpers/module-for-acceptance'
 moduleForAcceptance('Acceptance | scan', {
     beforeEach() {
         server.createList('users', 10);
-        server.createList('tool', 50);
+        // TODO: When the number of tools generated was 50, sometimes only 0 or 1 tools
+        //       were generated, causing the tests to fail. Adding 100 tools reduces
+        //       the probability of that happening.
+        server.createList('tool', 100);
         server.create('dropdowns');
     }
 });
@@ -29,26 +32,26 @@ test('tools can be added and removed from the cart', function(assert) {
     });
 });
 
-// test('all tools can be removed from the cart using the clear button', function(assert) {
-//     loginUser(assert, 'username', 'password');
-//
-//     andThen(() => {
-//         assert.equal(find('.cart-item').length, 0, 'cart was not empty on page load');
-//
-//         click(find('.tool-search-entry .tool-info').first());
-//         click(find('.tool-search-entry .tool-info').last());
-//
-//         andThen(() => {
-//             assert.equal(find('.cart-item').length, 2, 'cart was still empty after adding tools');
-//
-//             click('.clear-cart');
-//
-//             andThen(() => {
-//                 assert.equal(find('.cart-item').length, 0, 'cart was not empty after removing all tools');
-//             });
-//         });
-//     });
-// });
+test('all tools can be removed from the cart using the clear button', function(assert) {
+    loginUser(assert, 'username', 'password');
+
+    andThen(() => {
+        assert.equal(find('.cart-item').length, 0, 'cart was not empty on page load');
+
+        click(find('.tool-search-entry .tool-info').first());
+        click(find('.tool-search-entry .tool-info').last());
+
+        andThen(() => {
+            assert.equal(find('.cart-item').length, 2, 'cart was still empty after adding tools');
+
+            click('.clear-cart');
+
+            andThen(() => {
+                assert.equal(find('.cart-item').length, 0, 'cart was not empty after removing all tools');
+            });
+        });
+    });
+});
 
 test('validation erros are shown when appropriate', function(assert) {
     loginUser(assert, 'username', 'password');

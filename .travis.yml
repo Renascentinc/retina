@@ -43,16 +43,36 @@ deploy:
 
   - provider: azure_web_apps
     slot: retina-app-release
-    on: release_2.1.1
+    on: release_3.0.0
     verbose: true
     skip_cleanup: true
 
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: retina-app-develop
+    bucket: retina-app-release
     local-dir: dist
     acl: public_read
-    on: issue-176
+    on: release_3.0.0
+    region: us-east-2
+    skip_cleanup: true
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-app-devlop
+    local-dir: dist
+    acl: public_read
+    on: develop
+    region: us-east-2
+    skip_cleanup: true
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-app
+    local-dir: dist
+    acl: public_read
+    on: master
     region: us-east-2
     skip_cleanup: true

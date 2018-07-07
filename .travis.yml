@@ -24,7 +24,7 @@ cache:
 
 script:
   - mkdir dist
-  - touch dist/afile.txt
+  - touch dist/afile2.txt
 
 # after_success:
 #   - sh scripts/build-app.sh

@@ -10,21 +10,19 @@ cache:
     - node_modules
     - $HOME/.npm
 
-# before_install:
-#   - npm config set spin false
-#   - npm install -g phantomjs-prebuilt
-#   - npm install -g bower
-#   - phantomjs --version
-#   - bower --version
+before_install:
+  - npm config set spin false
+  - npm install -g phantomjs-prebuilt
+  - npm install -g bower
+  - phantomjs --version
+  - bower --version
 
-# install:
-#   - npm install
-#   - bower install
+install:
+  - npm install
+  - bower install
 
-# after_success:
-#   - sh scripts/build-app.sh
-script:
-  - echo dude
+after_success:
+  - sh scripts/build-app.sh
   
 deploy:
   - provider: azure_web_apps

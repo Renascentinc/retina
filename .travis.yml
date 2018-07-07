@@ -43,9 +43,9 @@ deploy:
   skip_cleanup: true
 
 - provider: s3
-  access_key_id: AKIAI4WXR4PRA6AJKFYA
+  access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key:
-    secure: E9J2bhUmmbzPkCnO3EtI229tCx86W7MASTkQmz6n/WBGSqT4Yk7jOH0KVJwiAIqnnlnrEayuWnTvFEfT3/VY+bem3HId5yjw6Pyf4BOEYiu+iTcbqycjwdVULrlmmvcG1XFqzNdGRNj4dIfCx/RIl2xFs3MpZv2Gu2gXxhLiauBAGPRt2jHNVT16C4obi/huV3CP/SjrLzXpGmdCI0Ry1TiIoIfI4bwGARIxOb+LkazMOUEllcPLg3cQNh396OvA/QH+F7RBYCifaf0kBPkHw9PlVO3fwKYw6NxFM8Jq4wDw+ApMOH4VEFcocgcBQ3rEw/nXPE3C6z6h8/Gciw8qlNI9UMLzx0VtviB4Ja/0NmWfU7mk98E4CqYwD0AEqKuY0IUxpMId1AK0OwedbABdXQbu77/xjDgnbUUvmUWnWU2CnZbXQCMUXY9OIRbwUKBaIFBCou082vvkpYZ1y0UVtq3HENfxIBRDBMPLZMthd9DFniIF4WXwVN7LnlUC7z/48pQ3VBYcW1y7crCxu0upeu6ngBaXFi8uMHBNQE/Ph4RlUzHi6+Clva3I3Hd71aJaaVKBg+qOK2Xtnrym025D35ik67QL1ThNmJ7Bx5n1t0anjOAciotYhibqM6WrGHJb/kv1Vpxtlmzl17zCjoSZOwYoaC/io9FBFDfrwpZgCSA=
+    secure: $AWS_SECRET_ACCESS_KEY
   bucket: retina-app-develop
   local-dir: dist
   acl: public_read

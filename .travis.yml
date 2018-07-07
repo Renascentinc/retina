@@ -1,4 +1,5 @@
 language: node_js
+
 node_js:
   - "6"
 
@@ -7,6 +8,8 @@ sudo: false
 cache:
   directories:
     - node_modules
+    - bower_components
+    - $HOME/.npm
 
 before_install:
   - npm config set spin false
@@ -19,30 +22,53 @@ install:
   - npm install
   - bower install
 
-before_script:
-  - git fetch --unshallow || true
-  - git fetch origin '+refs/heads/*:refs/remotes/origin/*'
-
-script:
-  - npm test
-
-before_deploy:
-  - sh scripts/prep-for-deploy.sh
+after_success:
+  - sh scripts/build-app.sh
 
 deploy:
-- provider: azure_web_apps
-  on: master
-  verbose: true
-  skip_cleanup: true
+  - provider: azure_web_apps
+    on: master
+    verbose: true
+    skip_cleanup: true
 
-- provider: azure_web_apps
-  slot: retina-app-develop
-  on: develop
-  verbose: true
-  skip_cleanup: true
+  - provider: azure_web_apps
+    slot: retina-app-develop
+    on: develop
+    verbose: true
+    skip_cleanup: true
 
-- provider: azure_web_apps
-  slot: retina-app-release
-  on: release_2.1.1
-  verbose: true
-  skip_cleanup: true
+  - provider: azure_web_apps
+    slot: retina-app-release
+    on: release_3.0.0
+    verbose: true
+    skip_cleanup: true
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-app-release
+    local-dir: dist
+    acl: public_read
+    on: release_3.0.0
+    region: us-east-2
+    skip_cleanup: true
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-app-devlop
+    local-dir: dist
+    acl: public_read
+    on: develop
+    region: us-east-2
+    skip_cleanup: true
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-app
+    local-dir: dist
+    acl: public_read
+    on: master
+    region: us-east-2
+    skip_cleanup: true

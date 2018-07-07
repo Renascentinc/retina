@@ -6,7 +6,7 @@ moduleForAcceptance('Acceptance | scan', {
         server.createList('users', 10);
         // TODO: When the number of tools generated was 50, sometimes only 0 or 1 tools
         //       were generated, causing the tests to fail. Adding 100 tools reduces
-        //       the probability of that happening.
+        //       the probability of that happening. This is a poor hack and needs to be fixed.
         server.createList('tool', 100);
         server.create('dropdowns');
     }

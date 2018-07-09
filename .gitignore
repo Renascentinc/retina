@@ -1,32 +1,27 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+#OS files
 .DS_Store
-.idea/
-.vscode/
-cordova/
 
-# compiled output
-/dist
-/tmp
+# Editor files
+/.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+**.swp
+*.sw*
 
-# dependencies
-/node_modules
-/bower_components
+# Logs
+logs
+*.log
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage/*
-/libpeerconnection.log
-npm-debug.log
-testem.log
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-corber/tmp-livereload
-corber/cordova/node_modules
-corber/cordova/package.json
-corber/cordova/package-lock.json
-corber/cordova/platforms/*
-!corber/cordova/platforms/.gitkeep
-corber/cordova/plugins/*
-!corber/cordova/plugins/.gitkeep
-corber/cordova/www/*
-!corber/cordova/www/.gitkeep
+node_modules
+/dist/
+
+# Parcel cache
+.cache

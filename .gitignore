@@ -21,7 +21,8 @@ pids
 *.pid.lock
 
 node_modules
-/dist/
+dist/
+test/unit/coverage/
 
 # Parcel cache
 .cache

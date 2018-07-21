@@ -1,22 +1,25 @@
+// https://eslint.org/docs/user-guide/configuring
+
 module.exports = {
-    globals: {
-        server: true,
-    },
-
-    root: true,
-
-    parserOptions: {
-        ecmaVersion: 2017,
-        sourceType: 'module'
-    },
-
-    extends: 'eslint:recommended',
-
-    env: {
-        browser: true
-    },
-
-    rules: {
-
-    }
-};
+  root: true,
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
+  env: {
+    browser: true,
+  },
+  extends: [
+    'plugin:vue/recommended',
+    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
+    'standard'
+  ],
+  plugins: [
+    'vue'
+  ],
+  rules: {
+    // allow async-await
+    'generator-star-spacing': 'off',
+    // allow debugger during development
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+  }
+}

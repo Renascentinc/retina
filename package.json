@@ -1,66 +1,38 @@
 {
-  "name": "retina-app",
-  "version": "2.2.0",
-  "description": "Renascent inc. Tool Inventory Application",
-  "license": "",
+  "name": "retina",
+  "version": "3.0.0",
+  "description": "The Renascent inc. Asset Tracking Application",
   "author": "Renascent inc.",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
-  "repository": "",
+  "private": true,
   "scripts": {
-    "build": "ember build",
-    "start": "ember server",
-    "test": "ember test"
+    "start": "parcel index.html --port 4200",
+    "unit": "jest --config test/unit/jest.conf.js --coverage",
+    "test": "npm run unit",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "vue": "^2.5.16",
+    "vue-hot-reload-api": "^2.3.0",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
-    "broccoli-asset-rev": "^2.4.5",
-    "ember-ajax": "^3.0.0",
-    "ember-async-button": "^1.0.2",
-    "ember-cli": "2.13.2",
-    "ember-cli-app-version": "^3.0.0",
-    "ember-cli-babel": "^6.0.0",
-    "ember-cli-cors": "0.0.2",
-    "ember-cli-dependency-checker": "^1.3.0",
-    "ember-cli-eslint": "^3.0.0",
-    "ember-cli-htmlbars": "^1.1.1",
-    "ember-cli-htmlbars-inline-precompile": "^0.4.0",
-    "ember-cli-inject-live-reload": "^1.4.1",
-    "ember-cli-mirage": "^0.3.3",
-    "ember-cli-moment-shim": "^3.4.0",
-    "ember-cli-notifications": "^4.2.0",
-    "ember-cli-qunit": "^4.0.0",
-    "ember-cli-sass": "^6.2.0",
-    "ember-cli-shims": "^1.1.0",
-    "ember-cli-sri": "^2.1.0",
-    "ember-cli-uglify": "^1.2.0",
-    "ember-cp-validations": "^3.3.2",
-    "ember-data": "^2.13.0",
-    "ember-engines": "^0.5.4",
-    "ember-export-application-global": "^2.0.0",
-    "ember-font-awesome": "^3.0.5",
-    "ember-inflector": "^2.0.1",
-    "ember-load-initializers": "^1.0.0",
-    "ember-maskmoney": "https://github.com/Jbcampbe/ember-maskmoney.git",
-    "ember-moment": "^7.4.1",
-    "ember-pikaday": "^2.2.2",
-    "ember-power-select": "^1.8.4",
-    "ember-power-select-with-create": "^0.4.3",
-    "ember-promise-helpers": "^1.0.3",
-    "ember-resolver": "^4.0.0",
-    "ember-simple-auth": "^1.3.0",
-    "ember-source": "~2.13.0",
-    "ember-suave": "^4.0.0",
-    "ember-truth-helpers": "^1.3.0",
-    "loader.js": "^4.2.3",
-    "pre-push": "^0.1.1"
-  },
-  "engines": {
-    "node": ">= 4"
-  },
-  "private": true,
-  "pre-push": [
-    "test"
-  ]
+    "@vue/component-compiler-utils": "^2.1.0",
+    "babel-eslint": "^8.2.1",
+    "babel-jest": "^21.0.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "eslint": "^4.15.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-vue": "^4.0.0",
+    "jest": "^22.0.4",
+    "jest-serializer-vue": "^0.3.0",
+    "nightwatch": "^1.0.6",
+    "parcel-bundler": "^1.7.0",
+    "vue-jest": "^2.4.1",
+    "vue-template-compiler": "^2.5.16"
+  }
 }

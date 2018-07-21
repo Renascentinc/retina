@@ -1,5 +1,5 @@
 {
-  "name": "retina-app",
+  "name": "retina",
   "version": "3.0.0",
   "description": "The Renascent inc. Asset Tracking Application",
   "author": "Renascent inc.",
@@ -30,6 +30,7 @@
     "eslint-plugin-vue": "^4.0.0",
     "jest": "^22.0.4",
     "jest-serializer-vue": "^0.3.0",
+    "nightwatch": "^0.9.21",
     "parcel-bundler": "^1.7.0",
     "vue-jest": "^2.4.1",
     "vue-template-compiler": "^2.5.16"

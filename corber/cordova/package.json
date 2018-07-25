@@ -1,0 +1,19 @@
+{
+  "name": "io.corber.retinaapp",
+  "version": "1.0.0",
+  "displayName": "retinaApp",
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "phonegap-nfc": {},
+      "cordova-plugin-whitelist": {}
+    }
+  },
+  "dependencies": {
+    "cordova-android": "~7.0.0",
+    "phonegap-nfc": "^1.0.3",
+    "cordova-plugin-whitelist": "1"
+  }
+}

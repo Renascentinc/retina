@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import attachFastClick from 'fastclick';
 
 export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
@@ -10,8 +11,10 @@ export default Ember.Controller.extend({
   },
 
   isLoginRoute: Ember.computed('currentRouteName', {
-    get() {
-        return (this.get('currentRouteName') === 'login');
-    }
+    return (this.get('currentRouteName') === 'login');
   }),
+
+  init() {
+      Ember.run.scheduleOnce('afterRender', () => attachFastClick.attach(document.body));
+  }
 });

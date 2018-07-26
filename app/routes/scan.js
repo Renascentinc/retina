@@ -28,5 +28,16 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             types: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/types'),
             brands: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/brands')
         });
+    },
+
+    setupController(controller, model) {
+      this._super(controller, model);
+      this.set('nfc.nfcCallback', Ember.run.bind(controller, controller.addToList));
+    },
+
+    resetController(controller, isExiting) {
+      if (isExiting) {
+          this.set('nfc.nfcCallback', () => {});
+      }
     }
 });

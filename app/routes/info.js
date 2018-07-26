@@ -8,5 +8,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             tool: this.get('store').findRecord('tool', params.id),
 			status: Ember.$.getJSON(config.APP.api_url + config.APP.api_namespace + '/status')
 		});
-	}
+	},
+
+  setupController(controller, model) {
+    this._super(controller, model);
+    this.set('nfc.nfcCallback', () => {});
+  }
 });

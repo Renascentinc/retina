@@ -14,6 +14,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         });
     },
 
+    setupController(controller, model) {
+      this._super(controller, model);
+      this.set('nfc.nfcCallback', () => {});
+    },
+
     afterModel() {
         Ember.$(document).ready(function() {
             let currentYear = new Date().getFullYear();

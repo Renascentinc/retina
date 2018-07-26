@@ -3,6 +3,8 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import config from '../config/environment';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+    nfc: Ember.inject.service(),
+
     model() {
         return Ember.RSVP.hash({
             tool: this.get('store').createRecord('tool'),

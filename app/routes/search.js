@@ -3,6 +3,8 @@ import config from '../config/environment';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+  nfc: Ember.inject.service(),
+
 	model() {
 		let _tools = null;
 		if (this.controller != null) {

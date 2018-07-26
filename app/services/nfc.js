@@ -1,8 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Service.extend({
-    notifications: Ember.inject.service('notification-messages'),
-
     nfcExists: false,
 
     nfcCallback() {},

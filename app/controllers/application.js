@@ -10,8 +10,8 @@ export default Ember.Controller.extend({
     }
   },
 
-  isLoginRoute: Ember.computed('currentRouteName', {
-    return (this.get('currentRouteName') === 'login');
+  isLoginRoute: Ember.computed('currentRouteName', function() {
+    return this.get('currentRouteName') === 'login';
   }),
 
   init() {

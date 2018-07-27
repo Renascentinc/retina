@@ -8,7 +8,7 @@
     "start": "parcel index.html --port 4200",
     "test": "jest --config test/unit/jest.conf.js --coverage",
     "build": "parcel build index.html",
-    "build-cordova": "node parcel-build.js && cp cordova/index.html cordova/www/",
+    "build-cordova": "node cordova-parcel-build.js && cp cordova/index.html cordova/www/",
     "android": "npm run build-cordova && cd cordova && cordova run android",
     "ios": "npm run build-cordova && cd cordova && cordova run ios"
   },

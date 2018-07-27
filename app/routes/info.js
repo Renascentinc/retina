@@ -14,6 +14,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
   setupController(controller, model) {
     this._super(controller, model);
-    this.set('nfc.nfcCallback', () => {});
+    this.set('nfc.nfcCallback', Ember.run.bind(controller, controller.goToInfoPage));
+  },
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+        this.set('nfc.nfcCallback', () => {});
+    }
   }
 });

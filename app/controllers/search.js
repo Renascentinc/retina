@@ -3,16 +3,16 @@ import config from '../config/environment';
 
 export default Ember.Controller.extend({
     _status: null,
-    
+
     _brand: null,
-    
+
     _type: null,
-    
+
     _userID: null,
 
     _query: Ember.computed(function () {
-        return { 
-                status: this.getWithDefault('_status', ''), 
+        return {
+                status: this.getWithDefault('_status', ''),
                 brand: this.getWithDefault('_brand', ''),
                 type: this.getWithDefault('_type', ''),
                 userID: this.getWithDefault('_userID', '')
@@ -24,6 +24,10 @@ export default Ember.Controller.extend({
         this.set('_brand', null);
         this.set('_type', null);
         this.set('_userID', null);
+    },
+
+    goToInfoPage(toolId) {
+        this.get('target').transitionTo('info', toolId);
     },
 
     actions: {

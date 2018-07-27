@@ -7,13 +7,11 @@
       "android"
     ],
     "plugins": {
-      "phonegap-nfc": {},
-      "cordova-plugin-whitelist": {}
+      "phonegap-nfc": {}
     }
   },
   "dependencies": {
     "cordova-android": "~7.0.0",
-    "phonegap-nfc": "^1.0.3",
-    "cordova-plugin-whitelist": "1"
+    "phonegap-nfc": "^1.0.3"
   }
 }

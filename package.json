@@ -50,8 +50,10 @@
     "ember-resolver": "^2.0.3",
     "ember-simple-auth": "1.2.0-beta.1",
     "loader.js": "^4.0.1",
-    "corber": "^1.3.0",
-    "corber-ember-livereload": "0.0.1",
     "fastclick": "^1.0.6"
+  },
+  "dependencies": {
+    "corber": "^1.3.0",
+    "corber-ember-livereload": "0.0.1"
   }
 }

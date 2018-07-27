@@ -1,4 +1,4 @@
-#Thu Jul 26 02:12:15 EDT 2018
-base.0=/Users/josiahcampbell/retina/retina-app/corber/cordova/platforms/android/app/build/intermediates/transforms/dexMerger/debug/19
+#Thu Jul 26 23:46:37 EDT 2018
+base.0=/Users/josiahcampbell/retina/retina-app/corber/cordova/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
 renamed.0=classes.dex
-file.0=/Users/josiahcampbell/retina/retina-app/corber/cordova/platforms/android/app/build/intermediates/transforms/dexMerger/debug/19/classes.dex
+file.0=/Users/josiahcampbell/retina/retina-app/corber/cordova/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0/classes.dex

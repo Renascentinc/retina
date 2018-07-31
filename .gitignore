@@ -23,9 +23,9 @@ pids
 node_modules/
 dist/
 test/unit/coverage/
-/cordova/www/**
-/cordova/platforms/**
-/cordova/plugins/**
+/www/**
+/platforms/**
+/plugins/**
 
 # Parcel cache
 .cache

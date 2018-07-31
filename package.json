@@ -1,20 +1,25 @@
 {
   "name": "retina",
+  "displayName": "RETINA",
   "version": "3.0.0",
   "description": "The Renascent inc. Asset Tracking Application",
   "author": "Renascent inc.",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "start": "parcel index.html --port 4200",
     "test": "jest --config test/unit/jest.conf.js --coverage",
     "build": "parcel build index.html --no-source-maps",
-    "build-cordova": "parcel build index.html --out-dir=cordova/www --public-url=./ --no-source-maps --no-minify",
-    "android": "npm run build-cordova && cd cordova && cordova run android",
-    "ios": "npm run build-cordova && cd cordova && cordova run ios",
-    "setup-cordova": "./cordova/setup-cordova.sh"
+    "build-cordova": "parcel build index.html --out-dir=www --public-url=./ --no-source-maps --no-minify",
+    "android": "npm run build-cordova && cordova prepare && cordova run android",
+    "ios": "npm run build-cordova && cordova prepare && cordova run ios"
   },
   "dependencies": {
+    "cordova-android": "^7.0.0",
+    "cordova-ios": "^4.5.5",
+    "cordova-plugin-whitelist": "^1.3.3",
     "fastclick": "^1.0.6",
+    "phonegap-nfc": "^1.0.3",
     "vue": "^2.5.16",
     "vue-hot-reload-api": "^2.3.0",
     "vue-router": "^3.0.1"
@@ -38,5 +43,17 @@
     "parcel-bundler": "^1.7.0",
     "vue-jest": "^2.4.1",
     "vue-template-compiler": "^2.5.16"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "phonegap-nfc": {
+        "NFC_USAGE_DESCRIPTION": "Read NFC Tags"
+      }
+    },
+    "platforms": [
+      "ios",
+      "android"
+    ]
   }
 }

@@ -20,10 +20,12 @@ pids
 *.seed
 *.pid.lock
 
-node_modules
+node_modules/
 dist/
 test/unit/coverage/
 /cordova/www/**
+/cordova/platforms/**
+/cordova/plugins/**
 
 # Parcel cache
 .cache

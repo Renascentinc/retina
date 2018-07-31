@@ -23,7 +23,7 @@ pids
 node_modules
 dist/
 test/unit/coverage/
-www/
+/cordova/www/**
 
 # Parcel cache
 .cache

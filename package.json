@@ -10,7 +10,9 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "exit 0"
+    "test": "exit 0",
+    "setup-cordova": "cd corber/cordova && cordova prepare",
+    "android": "npm run setup-cordova && corber start --platform=android"
   },
   "repository": "",
   "engines": {

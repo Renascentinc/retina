@@ -3,10 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="theme-color" content="#FFFFFF">
     <title>RETINA</title>
+    <link rel="manifest" href="./src/manifest.webmanifest">
   </head>
   <body>
     <div id="app"></div>
-    <script src="./src/main.js"></script>
+    <script type="text/javascript" src="./src/main.js"></script>
+    <script type="text/javascript">
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('service-worker.js');
+        })
+      }
+    </script>
+    <noscript>
+      <h1>Sorry You Will Need a Browser Capable of Running Javascript in Order to Use This App.</h1>
+    </noscript>
   </body>
 </html>

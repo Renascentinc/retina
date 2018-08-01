@@ -1,0 +1,21 @@
+{
+  "short_name": "Retina",
+  "name": "Retina",
+  "icons": [
+    {
+      "src": "./assets/retina_192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./assets/retina_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#FFFFFF"
+}

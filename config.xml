@@ -28,10 +28,10 @@
     </plugin>
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <platform name="android">
-        <icon density="ldpi" src="src/assets/icons/android/icon-36-ldpi.png" />
-        <icon density="mdpi" src="src/assets/icons/android/icon-48-mdpi.png" />
-        <icon density="hdpi" src="src/assets/icons/android/icon-72-hdpi.png" />
-        <icon density="xhdpi" src="src/assets/icons/android/icon-96-xhdpi.png" />
+        <icon density="ldpi" src="src/assets/icons/android/retina_36x36.png" />
+        <icon density="mdpi" src="src/assets/icons/android/retina_48x48.png" />
+        <icon density="hdpi" src="src/assets/icons/android/retina_72x72.png" />
+        <icon density="xhdpi" src="src/assets/icons/android/retina_96x96.png" />
     </platform>
     <platform name="ios">
         <icon height="180" src="src/assets/icons/ios/retina_180x180.png" width="180" />
@@ -53,10 +53,7 @@
         <splash height="2048" src="src/assets/splashscreens/ios/screen-ipad-portrait-2x.png" width="1536" />
         <splash height="768" src="src/assets/splashscreens/ios/screen-ipad-landscape.png" width="1024" />
         <splash height="1536" src="src/assets/splashscreens/ios/screen-ipad-landscape-2x.png" width="2048" />
-        <splash height="1136" src="src/assets/splashscreens/ios/screen-iphone-568h-2x.png" width="640" />
-        <splash height="1334" src="src/assets/splashscreens/ios/screen-iphone-portrait-667h.png" width="750" />
-        <splash height="2208" src="src/assets/splashscreens/ios/screen-iphone-portrait-736h.png" width="1242" />
-        <splash height="1242" src="src/assets/splashscreens/ios/screen-iphone-landscape-736h.png" width="2208" />
+        <splash height="1136" src="src/assets/splashscreens/ios/screen-iphone-portrait-568h-2x.png" width="640" />
     </platform>
     <preference name="SplashScreenDelay" value="2000" />
     <engine name="ios" spec="^4.5.5" />

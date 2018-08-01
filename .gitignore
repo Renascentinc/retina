@@ -23,6 +23,9 @@ pids
 node_modules/
 dist/
 test/unit/coverage/
+/www/**
+/platforms/**
+/plugins/**
 
 # Parcel cache
 .cache

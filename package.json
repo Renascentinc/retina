@@ -5,7 +5,7 @@
   "author": "Renascent inc.",
   "private": true,
   "scripts": {
-    "start": "parcel index.html --port 4200 --https",
+    "start": "parcel index.html --port 4200",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "npm run unit",
     "build": "parcel build index.html --no-source-maps"

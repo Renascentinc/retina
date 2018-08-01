@@ -33,13 +33,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     setupController(controller, model) {
       this._super(controller, model);
-      console.log('binding callback');
       this.set('nfc.nfcCallback', Ember.run.bind(controller, controller.actions.addToList));
     },
 
     resetController(controller, isExiting) {
       if (isExiting) {
-          console.log('removing callback');
           this.set('nfc.nfcCallback', () => {});
       }
     }

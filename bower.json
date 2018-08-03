@@ -4,7 +4,6 @@
     "ember": "~2.8.0",
     "ember-cli-shims": "0.1.1",
     "jquery-validation": "^1.16.0",
-    "jquery-maskmoney": "~3.0.2",
-    "font-awesome": "^4.7.0"
+    "jquery-maskmoney": "~3.0.2"
   }
 }

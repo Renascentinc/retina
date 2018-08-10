@@ -56,9 +56,6 @@
         <splash density="port-mdpi" src="src/assets/splashscreens/android/red_splash_480x800.png" />
         <splash density="port-xhdpi" src="src/assets/splashscreens/android/red_splash_720x1280.png" />
     </platform>
-    <platform name="ios">
-        <icon src="src/assets/splashscreens/ios/red_splash_1536x2048.png" />
-    </platform>
     <preference name="SplashScreenDelay" value="2000" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^7.0.0" />

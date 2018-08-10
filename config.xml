@@ -28,32 +28,36 @@
     </plugin>
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <platform name="android">
-        <icon density="ldpi" src="src/assets/icons/android/retina_36x36.png" />
-        <icon density="mdpi" src="src/assets/icons/android/retina_48x48.png" />
-        <icon density="hdpi" src="src/assets/icons/android/retina_72x72.png" />
-        <icon density="xhdpi" src="src/assets/icons/android/retina_96x96.png" />
+        <icon density="ldpi" src="src/assets/icons/android/white_36x36.png" />
+        <icon density="mdpi" src="src/assets/icons/android/white_48x48.png" />
+        <icon density="hdpi" src="src/assets/icons/android/white_72x72.png" />
+        <icon density="xhdpi" src="src/assets/icons/android/white_96x96.png" />
+        <icon density="xxhdpi" src="src/assets/icons/android/white_144x144.png" />
+        <icon density="xxxhdpi" src="src/assets/icons/android/white_192x192.png" />
     </platform>
     <platform name="ios">
-        <icon height="180" src="src/assets/icons/ios/retina_180x180.png" width="180" />
+        <icon height="20" src="src/assets/icons/ios/white_20x20.png" width="20" />
+        <icon height="29" src="src/assets/icons/ios/white_29x29.png" width="29" />
+        <icon height="40" src="src/assets/icons/ios/white_40x40.png" width="40" />
+        <icon height="58" src="src/assets/icons/ios/white_58x58.png" width="58" />
+        <icon height="60" src="src/assets/icons/ios/white_60x60.png" width="60" />
+        <icon height="72" src="src/assets/icons/ios/white_72x72.png" width="72" />
+        <icon height="76" src="src/assets/icons/ios/white_76x76.png" width="76" />
+        <icon height="80" src="src/assets/icons/ios/white_80x80.png" width="80" />
+        <icon height="87" src="src/assets/icons/ios/white_87x87.png" width="87" />
+        <icon height="144" src="src/assets/icons/ios/white_144x144.png" width="144" />
+        <icon height="167" src="src/assets/icons/ios/white_167x167.png" width="167" />
+        <icon height="180" src="src/assets/icons/ios/white_180x180.png" width="180" />
+        <icon src="src/assets/icons/ios/white_512x512.png" />
     </platform>
     <platform name="android">
-        <splash density="land-hdpi" src="src/assets/splashscreens/android/screen-hdpi-landscape.png" />
-        <splash density="land-ldpi" src="src/assets/splashscreens/android/screen-ldpi-landscape.png" />
-        <splash density="land-mdpi" src="src/assets/splashscreens/android/screen-mdpi-landscape.png" />
-        <splash density="land-xhdpi" src="src/assets/splashscreens/android/screen-xhdpi-landscape.png" />
-        <splash density="port-hdpi" src="src/assets/splashscreens/android/screen-hdpi-portrait.png" />
-        <splash density="port-ldpi" src="src/assets/splashscreens/android/screen-ldpi-portrait.png" />
-        <splash density="port-mdpi" src="src/assets/splashscreens/android/screen-mdpi-portrait.png" />
-        <splash density="port-xhdpi" src="src/assets/splashscreens/android/screen-xhdpi-portrait.png" />
+        <splash density="port-hdpi" src="src/assets/splashscreens/android/red_splash_200x320.png" />
+        <splash density="port-ldpi" src="src/assets/splashscreens/android/red_splash_320x480.png" />
+        <splash density="port-mdpi" src="src/assets/splashscreens/android/red_splash_480x800.png" />
+        <splash density="port-xhdpi" src="src/assets/splashscreens/android/red_splash_720x1280.png" />
     </platform>
     <platform name="ios">
-        <splash height="480" src="src/assets/splashscreens/ios/screen-iphone-portrait.png" width="320" />
-        <splash height="960" src="src/assets/splashscreens/ios/screen-iphone-portrait-2x.png" width="640" />
-        <splash height="1024" src="src/assets/splashscreens/ios/screen-ipad-portrait.png" width="768" />
-        <splash height="2048" src="src/assets/splashscreens/ios/screen-ipad-portrait-2x.png" width="1536" />
-        <splash height="768" src="src/assets/splashscreens/ios/screen-ipad-landscape.png" width="1024" />
-        <splash height="1536" src="src/assets/splashscreens/ios/screen-ipad-landscape-2x.png" width="2048" />
-        <splash height="1136" src="src/assets/splashscreens/ios/screen-iphone-portrait-568h-2x.png" width="640" />
+        <icon src="src/assets/splashscreens/ios/red_splash_1536x2048.png" />
     </platform>
     <preference name="SplashScreenDelay" value="2000" />
     <engine name="ios" spec="^4.5.5" />

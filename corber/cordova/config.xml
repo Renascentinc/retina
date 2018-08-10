@@ -1,11 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.corber.retinaApp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>retinaApp</name>
+    <name>RETINA</name>
     <description>
     </description>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="phonegap-nfc" spec="^1.0.3" />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -20,26 +22,26 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
-    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
-    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
     <platform name="android">
-        <icon density="ldpi" src="icons/android/retina_36x36.png" />
-        <icon density="mdpi" src="icons/android/retina_48x48.png" />
-        <icon density="hdpi" src="icons/android/retina_72x72.png" />
-        <icon density="xhdpi" src="icons/android/retina_96x96.png" />
+        <icon density="ldpi" src="icons/android/white_36x36.png" />
+        <icon density="mdpi" src="icons/android/white_48x48.png" />
+        <icon density="hdpi" src="icons/android/white_72x72.png" />
+        <icon density="xhdpi" src="icons/android/white_96x96.png" />
+        <icon density="xxhdpi" src="icons/android/white_144x144.png" />
+        <icon density="xxxhdpi" src="icons/android/white_192x192.png" />
     </platform>
     <platform name="android">
-        <splash density="land-hdpi" src="icons/splashscreens/android/screen-hdpi-landscape.png" />
-        <splash density="land-ldpi" src="icons/splashscreens/android/screen-ldpi-landscape.png" />
-        <splash density="land-mdpi" src="icons/splashscreens/android/screen-mdpi-landscape.png" />
-        <splash density="land-xhdpi" src="icons/splashscreens/android/screen-xhdpi-landscape.png" />
-        <splash density="port-hdpi" src="icons/splashscreens/android/screen-hdpi-portrait.png" />
-        <splash density="port-ldpi" src="icons/splashscreens/android/screen-ldpi-portrait.png" />
-        <splash density="port-mdpi" src="icons/splashscreens/android/screen-mdpi-portrait.png" />
-        <splash density="port-xhdpi" src="icons/splashscreens/android/screen-xhdpi-portrait.png" />
+        <splash density="port-hdpi" src="splashscreens/android/red_splash_200x320.png" />
+        <splash density="port-ldpi" src="splashscreens/android/red_splash_320x480.png" />
+        <splash density="port-mdpi" src="splashscreens/android/red_splash_480x800.png" />
+        <splash density="port-xhdpi" src="splashscreens/android/red_splash_720x1280.png" />
     </platform>
+    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
+    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
+    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
+    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
+    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
+    <allow-navigation href="http://192.168.0.17:4200" name="ec-nav" />
     <preference name="SplashScreenDelay" value="2000" />
     <engine name="android" spec="~7.0.0" />
-    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
 </widget>

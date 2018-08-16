@@ -16,6 +16,7 @@
     "cordova-browser": "npm run build cordova && cordova serve 4200"
   },
   "dependencies": {
+    "@johmun/vue-tags-input": "^1.5.5",
     "cordova-android": "^7.0.0",
     "cordova-ios": "^4.5.5",
     "cordova-plugin-splashscreen": "^5.0.2",

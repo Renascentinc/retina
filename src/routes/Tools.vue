@@ -5,8 +5,13 @@
 </template>
 
 <script>
+import ToolSearchInput from '../components/tool-search-input.vue';
+
 export default {
-  name: 'Tools'
+  name: 'Tools',
+  components: {
+    ToolSearchInput
+  }
 }
 </script>
 

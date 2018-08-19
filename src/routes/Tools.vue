@@ -1,6 +1,7 @@
 <template>
 <div class="tools-page">
   <h1>Tools</h1>
+  <tool-search-input/>
 </div>
 </template>
 

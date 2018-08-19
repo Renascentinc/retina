@@ -43,7 +43,11 @@ export default {
 </script>
 
 <style lang="scss">
-.tool-search-input {
+@import '../styles/variables';
 
+.tool-search-input {
+  .tag {
+    background-color: $renascent-red !important;
+  }
 }
 </style>

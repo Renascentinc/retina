@@ -9,7 +9,7 @@
   "scripts": {
     "start": "changeFile=false parcel index.html --port 4200 --no-cache",
     "test": "jest --config test/unit/jest.conf.js --coverage",
-    "build": "changeFile=false parcel build index.html --no-source-maps",
+    "build": "changeFile=false parcel build index.html --no-source-maps --experimental-scope-hoisting",
     "build-cordova": "changeFile=true parcel build index.html --out-dir=www --public-url=./ --no-source-maps --no-minify",
     "android": "npm run build-cordova && cordova prepare && cordova run android",
     "ios": "npm run build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios",
@@ -24,7 +24,9 @@
     "fastclick": "^1.0.6",
     "phonegap-nfc": "^1.0.3",
     "vue": "^2.5.16",
+    "vue-drawer-layout": "^0.3.2",
     "vue-hot-reload-api": "^2.3.0",
+    "vue-lazyload": "^1.2.6",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

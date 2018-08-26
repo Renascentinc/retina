@@ -1,17 +1,17 @@
 <template>
-<div class="page add-tool-page">
-  <h1>Add</h1>
+<div class="page users-page">
+  <h1>Users</h1>
 </div>
 </template>
 
 <script>
 export default {
-  name: 'Add'
+  name: 'Users'
 }
 </script>
 
 <style lang="scss">
-.add-tool-page {
+.users-page {
 
 }
 </style>

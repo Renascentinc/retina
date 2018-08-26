@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './routes/Login'
-import Tools from './routes/Tools'
-import Add from './routes/Add'
-import Info from './routes/Info'
+import Login from './routes/login'
+import Tools from './routes/tools'
+import ToolDetail from './routes/tool-detail'
+import Add from './routes/add'
+import Users from './routes/users'
+import UserDetail from './routes/user-detail'
+import Reports from './routes/reports'
+import Configuration from './routes/configuration'
 
 Vue.use(Router)
 
@@ -25,11 +29,27 @@ export default new Router({
     },
     {
       path: '/tool/:toolId',
-      component: Info
+      component: ToolDetail
+    },
+    {
+      path: '/users',
+      component: Users
+    },
+    {
+      path: '/user/:userId',
+      component: UserDetail
     },
     {
       path: '/add',
       component: Add
+    },
+    {
+      path: '/reports',
+      component: Reports
+    },
+    {
+      path: '/configuration',
+      component: Configuration
     }
   ]
 })

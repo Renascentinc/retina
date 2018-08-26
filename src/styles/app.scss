@@ -1,6 +1,13 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
 @import 'variables';
+@import 'fonts';
 
-body {
+body, #app {
   font-family: $font-family;
+  height: 100vh;
+  margin: 0;
+}
+
+.page {
+  height: 100%;
+  overflow: hidden;
 }

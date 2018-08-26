@@ -1,10 +1,13 @@
 <template>
 <div class="tool-search-input">
+  <div class="search-icon-container">
+    <i class="material-icons">search</i>
+  </div>
   <vue-tags-input
     v-model="tag"
     :tags="tags"
     :autocomplete-items="filteredItems"
-    @tags-changed="newTags => tags = newTags">
+    @tags-changed="update">
   </vue-tags-input>
 </div>
 </template>
@@ -38,6 +41,13 @@ export default {
     filteredItems() {
       return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text));
     },
+  },
+  methods: {
+    update(newTags) {
+      console.log(newTags);
+      this.autocompleteItems = [];
+      this.tags = newTags;
+    }
   }
 }
 </script>
@@ -46,8 +56,38 @@ export default {
 @import '../styles/variables';
 
 .tool-search-input {
-  .tag {
-    background-color: $renascent-red !important;
+  display: flex;
+  align-items: center;
+  border: solid 1px;
+  border-radius: 5px;
+  padding-left: 5px;
+
+  .search-icon-container {
+    display: flex;
+    flex: 0 0 20px;
+  }
+
+  .vue-tags-input {
+    font-weight: bold;
+    width: 100%;
+    border-radius: 5px;
+
+    .input {
+      border: none;
+    }
+
+    .tag {
+      background-color: $renascent-red !important;
+      padding-right: 2px;
+    }
+
+    .icon-close {
+      padding-top: 1px;
+    }
+
+    .new-tag-input {
+      font-weight: bold;
+    }
   }
 }
 </style>

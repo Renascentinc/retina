@@ -1,2 +1,11 @@
-$font-family: 'Roboto', sans-serif;
+$font-family: 'Lato', sans-serif;
 $renascent-red: #eb212e;
+$renascent-dark-gray: #404040;
+$background-light-gray: #F1F1F1;
+$background-dark-gray: #8C8C8C;
+
+$status-red: #CE352F;
+$status-available: #3BCE2F;
+$status-in-use: $status-red;
+$status-maintenance: $status-red;
+$status-out-of-service: gray;

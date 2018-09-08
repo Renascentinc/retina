@@ -10,7 +10,6 @@ module.exports = {
   },
   extends: [
     'plugin:vue/recommended',
-    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     'standard'
   ],
   plugins: [

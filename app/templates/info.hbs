@@ -9,7 +9,12 @@
 
 	<div id="tool-details">
 		{{model.tool.status}} <br>
-		Tool ID: {{model.tool.id}}<br><br>
+		Tool ID: {{model.tool.id}}
+    <br>
+    {{#if nfc.nfcExists}}
+      <button class="dark-button" {{action encodeNFCTag}}>Encode New NFC Tag</button>
+    {{/if}}
+    <br><br>
 
     Owner:<br>
     <i class="fa fa-user" aria-hidden="true"></i> {{model.tool.username}}<br>

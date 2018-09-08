@@ -4,8 +4,8 @@ export default Ember.Controller.extend({
     session: Ember.inject.service('session'),
     _maxdate: new Date(),
     isAddingTool: false,
-    actions: {
 
+    actions: {
       toggleField(hideObj, showObj) {
           hideObj.disabled = true;
           hideObj.style.display = 'none';
@@ -22,11 +22,11 @@ export default Ember.Controller.extend({
           let status = Ember.$("#status").val();
           let assignee = Ember.$("#assignee").val();
 
-          if(brand === '-1') {
+          if (brand === '-1') {
               brand = Ember.$('#custom-brand').val();
           }
 
-          if(purchasedfrom === '-1') {
+          if (purchasedfrom === '-1') {
               purchasedfrom = Ember.$('#custom-purchasedfrom').val();
           }
 
@@ -40,28 +40,26 @@ export default Ember.Controller.extend({
           tool.set('status', status);
           tool.set('userid', assignee);
 
-          let _this = this;
-
-          tool.save().then(function(tool) {
+          tool.save().then(tool => {
               let toolid = tool.get('id');
-              _this.set('isAddingTool', false);
-              _this.get('target').transitionTo('info', toolid);
+              this.set('isAddingTool', false);
+              this.get('target').transitionTo('info', toolid);
 
-          }).catch(function(e) {
-              _this.set('isAddingTool', false);
-              console.log( e );
+          }).catch(e => {
+              this.set('isAddingTool', false);
+              window.console.error(e);
           });
       },
 
-      addCustomOptions(dropdownid, textfieldid){
-        Ember.$(dropdownid).change(function(){
-          if(Ember.$(this).val() === '-1'){
+      addCustomOptions(dropdownid, textfieldid) {
+        Ember.$(dropdownid).change(() => {
+          if (Ember.$(this).val() === '-1') {
             Ember.$(textfieldid).fadeIn();
 
           } else {
             Ember.$(textfieldid).fadeOut();
-            }
-        });
           }
+        });
       }
+    }
 });

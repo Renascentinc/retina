@@ -5,8 +5,8 @@ import config from '../config/environment';
 export default OAuth2PasswordGrant.extend({
   serverTokenEndpoint: config.APP.api_url + config.APP.api_namespace + '/token',
   session: Ember.inject.service('session'),
-    
-  makeRequest(url, data) { 
+
+  makeRequest(url, data) {
     const options = {
         url: url,
         data: data,
@@ -16,13 +16,13 @@ export default OAuth2PasswordGrant.extend({
 
     var $ajaxCall = Ember.$.ajax(options);
     var _this = this;
-      
+
     $ajaxCall.then(function(response) {
         _this.get('session').set('data.currentUserID', parseInt(response.userid));
         _this.get('session').set('data.currentUserRole', response.role);
-        console.log(response.role);
+        window.console.log(response.role);
     });
-      
+
     return $ajaxCall;
   }
 });

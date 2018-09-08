@@ -561,3 +561,10 @@ button{
 #tool-details .fa {
   color: #363636;
 }
+
+.dark-button {
+  background-color: #333333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}

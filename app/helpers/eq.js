@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export function eq(params/*, hash*/) {
+export function eq(params) {
   const [arg1, arg2] = params;
   return arg1 === arg2;
 }

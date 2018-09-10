@@ -568,3 +568,29 @@ button{
   padding: 5px 10px;
   border-radius: 5px;
 }
+
+.translucent-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(250, 250, 250, .5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  margin-bottom: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  width: 80%;
+  height: 150px;
+  border-radius: 10px;
+  background-color: #333333;
+  z-index: 1000;
+}

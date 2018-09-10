@@ -12,7 +12,7 @@ Router.map(function() {
   this.route('add');
   this.route('scan');
   this.route('login');
-  this.route('info', { path: "tool/:id" });
+  this.route('info', { path: 'tool/:id' });
   this.route('loading');
 });
 

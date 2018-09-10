@@ -1,6 +1,6 @@
 <div class="search-bar">
 
-	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>      
+	<select name="status" class="search-parameter search" onchange={{action "updateSearch" value="target"}}>
 		<option value=""> Status </option>
 
 		{{#each model.status.status as |status|}}
@@ -65,4 +65,3 @@
 	{{/link-to}} </div>
 {{/each}}
 </div>
-

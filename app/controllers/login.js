@@ -5,7 +5,7 @@ export default Ember.Controller.extend({
 
   actions: {
     authenticate() {
-      this.set('errorMessage', "authenticating...");
+      this.set('errorMessage', 'authenticating...');
 
       let { identification, password } = this.getProperties('identification', 'password');
 
@@ -14,8 +14,8 @@ export default Ember.Controller.extend({
       });
     },
 
-    clearError(){
-      this.set('errorMessage', "");
+    clearError() {
+      this.set('errorMessage', '');
     }
   }
 });

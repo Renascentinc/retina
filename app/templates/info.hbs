@@ -1,5 +1,13 @@
+{{#if showModal}}
+  <div class="translucent-overlay">
+    <div class="modal">
+      <span>Ready to encode tag.</span>
+    </div>
+  </div>
+{{/if}}
+
 <div style="width:100%">
-<button class="back" onclick=window.history.back()><span class="fa fa-chevron-left" aria-hidden="true"></span> back</button>
+  <button class="back" onclick=window.history.back()><span class="fa fa-chevron-left" aria-hidden="true"></span> back</button>
 </div>
 
 <div id="specs">
@@ -11,8 +19,8 @@
 		{{model.tool.status}} <br>
 		Tool ID: {{model.tool.id}}
     <br>
-    {{#if nfc.nfcExists}}
-      <button class="dark-button" {{action encodeNFCTag}}>Encode New NFC Tag</button>
+    {{#if canEncodeTag}}
+      <button class="dark-button" {{action prepareForEncodeNFCTag}}>Encode New NFC Tag</button>
     {{/if}}
     <br><br>
 

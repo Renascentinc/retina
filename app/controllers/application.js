@@ -15,6 +15,6 @@ export default Ember.Controller.extend({
   }),
 
   init() {
-      Ember.run.scheduleOnce('afterRender', () => attachFastClick.attach(document.body));
+    Ember.run.scheduleOnce('afterRender', () => attachFastClick.attach(document.body));
   }
 });

@@ -5,11 +5,14 @@ module.exports = {
     sourceType: 'module'
   },
   extends: [
-    'eslint:recommended'
+    'eslint:recommended',
+    'plugin:ember-suave/recommended'
   ],
   env: {
     browser: true
   },
   rules: {
+    'ember-suave/no-const-outside-module-scope': 'off',
+    'ember-suave/no-direct-property-access': 'off'
   }
 };

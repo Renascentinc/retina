@@ -11,3 +11,26 @@ body, #app {
   height: 100%;
   overflow: hidden;
 }
+
+.tool-status {
+  &.available {
+    color: black;
+    font-weight: bold;
+  }
+
+  &.in-use {
+    color: $renascent-red;
+  }
+
+  &.maintenance {
+    color: #fff;
+    background-color: #000;
+    border-radius: 3px;
+    padding: 0 3px 1px 3px;
+    line-height: 16px;
+  }
+
+  &.out-of-service {
+    color: #828282;
+  }
+}

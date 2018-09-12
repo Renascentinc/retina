@@ -7,7 +7,7 @@
     v-model="tag"
     :tags="tags"
     :autocomplete-items="filteredItems"
-    @tags-changed="update">
+    @tags-changed="newTags => this.tags = newTags">
   </vue-tags-input>
 </div>
 </template>
@@ -25,15 +25,15 @@ export default {
       tag: '',
       tags: [],
       autocompleteItems: [{
-        text: 'Spain',
+        text: 'Brand: Bosch',
       }, {
-        text: 'France',
+        text: 'Brand: DeWalt',
       }, {
-        text: 'USA',
+        text: 'Type: Drill Driver',
       }, {
-        text: 'Germany',
+        text: 'Type: Hammer Drill',
       }, {
-        text: 'China',
+        text: 'Status: Available',
       }],
     };
   },
@@ -41,13 +41,6 @@ export default {
     filteredItems() {
       return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text));
     },
-  },
-  methods: {
-    update(newTags) {
-      console.log(newTags);
-      this.autocompleteItems = [];
-      this.tags = newTags;
-    }
   }
 }
 </script>

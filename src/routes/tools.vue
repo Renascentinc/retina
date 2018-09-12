@@ -47,6 +47,69 @@ export default {
           status: 'in use',
           assignee: 'colin powell',
           type: 'hammer drill'
+        },
+        {
+          id: '31343',
+          brand: 'bosch',
+          status: 'maintenance',
+          assignee: 'colin powell',
+          type: 'jigsaw'
+        },
+        {
+          id: '93713',
+          brand: 'bosch',
+          status: 'out of service',
+          assignee: 'colin powell',
+          type: 'hammer drill'
+        },
+        {
+          id: '94702',
+          brand: 'dewalt',
+          status: 'available',
+          assignee: 'james alstrong',
+          type: 'driver'
+        },
+        {
+          id: '31348',
+          brand: 'dewalt',
+          status: 'in use',
+          assignee: 'colin powell',
+          type: 'hammer drill'
+        },
+        {
+          id: '31343',
+          brand: 'bosch',
+          status: 'maintenance',
+          assignee: 'colin powell',
+          type: 'jigsaw'
+        },
+        {
+          id: '93713',
+          brand: 'bosch',
+          status: 'out of service',
+          assignee: 'colin powell',
+          type: 'hammer drill'
+        },
+        {
+          id: '94702',
+          brand: 'dewalt',
+          status: 'available',
+          assignee: 'james alstrong',
+          type: 'driver'
+        },
+        {
+          id: '31348',
+          brand: 'dewalt',
+          status: 'in use',
+          assignee: 'colin powell',
+          type: 'hammer drill'
+        },
+        {
+          id: '31343',
+          brand: 'bosch',
+          status: 'maintenance',
+          assignee: 'colin powell',
+          type: 'jigsaw'
         }
       ]
     }
@@ -69,8 +132,9 @@ export default {
     flex-direction: column;
     height: 100%;
     background-color: $background-light-gray;
-    overflow-y: scroll;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    padding-top: 5px;
   }
 
   .nav-bar {

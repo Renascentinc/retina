@@ -1,45 +1,55 @@
 <template>
-<div class="tool-search-result">
-  <div class="main-container">
-    <div class="row">
-      <span class="tool-name">{{toolName}}</span>
+  <div class="tool-search-result">
+    <div
+      :click="onClick"
+      class="main-container">
+      <div class="row">
+        <span class="tool-name">{{ toolName }}</span>
+      </div>
+      <div class="row">
+        <span class="tool-id">{{ toolId }}</span>
+        <span
+          :class="[toolStatusClass]"
+          class="tool-status">{{ tool.status }}</span>
+      </div>
+      <div class="row">
+        <i class="user-icon material-icons">person</i>
+        <span class="tool-assignee">{{ tool.assignee }}</span>
+      </div>
     </div>
-    <div class="row">
-      <span class="tool-id">{{toolId}}</span>
-      <span class="tool-status" :class="[toolStatusClass]">{{tool.status}}</span>
-    </div>
-    <div class="row">
-      <i class="user-icon material-icons">person</i>
-      <span class="tool-assignee">{{tool.assignee}}</span>
-    </div>
-  </div>
   <!-- <div class="image-container">
     <img class="tool-image" v-lazy="imageSrc">
   </div> -->
-</div>
+  </div>
 </div>
 </template>
 
 <script>
 export default {
-  name: 'tool-search-result',
+  name: 'ToolSearchResult',
 
   props: [
     'tool'
   ],
 
   computed: {
-    imageSrc() {
+    imageSrc () {
       return this.tool.imgSrc || 'https://vuejs.org/images/logo.png'
     },
-    toolId() {
+    toolId () {
       return `#${this.tool.id}`
     },
-    toolName() {
+    toolName () {
       return `${this.tool.brand} ${this.tool.type}`
     },
-    toolStatusClass() {
-      return this.tool.status.split(' ').join('-');
+    toolStatusClass () {
+      return this.tool.status.split(' ').join('-')
+    }
+  },
+
+  methods: {
+    onClick () {
+      this.$router.push({ name: 'toolDetail', params: { toolId: this.tool.id }})
     }
   }
 }

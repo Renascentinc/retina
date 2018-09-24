@@ -1,0 +1,11 @@
+@import 'variables';
+
+.drawer-wrap {
+  background-color: $renascent-dark-gray;
+
+  .drawer-content {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+  }
+}

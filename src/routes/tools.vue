@@ -1,19 +1,25 @@
 <template>
-  <div class="page tools-page">
-    <div class="search-bar">
-      <tool-search-input/>
-    </div>
-    <div class="tool-scroll-container">
-      <div v-if="!tools.length" class="no-tools-container">
-        <span class="no-tools-text">No Tools Added Yet</span>
+  <transition name="fade">
+    <div class="page tools-page">
+      <div class="search-bar">
+        <tool-search-input/>
       </div>
-      <tool-search-result v-for="tool in tools" :tool="tool" @onSelect="transitionToToolInfo"/>
+      <div class="tool-scroll-container">
+        <transition name="fade">
+          <div v-if="!tools.length" class="no-tools-container">
+            <span class="no-tools-text">No Tools Added Yet</span>
+          </div>
+        </transition>
+        <transition-group name="list" tag="div">
+          <tool-search-result v-for="tool in tools" :tool="tool" :key="tool.id" @onSelect="transitionToToolInfo"/>
+        </transition-group>
+      </div>
+      <div class="extended-fab transfer">
+        <i class="fas fa-check"></i>
+        SELECT
+      </div>
     </div>
-    <div class="extended-fab transfer">
-      <i class="fas fa-check"></i>
-      SELECT
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -63,56 +69,56 @@ export default {
           type: 'jigsaw'
         },
         {
-          id: '93713',
+          id: '93712',
           brand: 'bosch',
           status: 'out of service',
           assignee: 'colin powell',
           type: 'hammer drill'
         },
         {
-          id: '94702',
+          id: '94402',
           brand: 'dewalt',
           status: 'available',
           assignee: 'james alstrong',
           type: 'driver'
         },
         {
-          id: '31348',
+          id: '31378',
           brand: 'dewalt',
           status: 'in use',
           assignee: 'colin powell',
           type: 'hammer drill'
         },
         {
-          id: '31343',
+          id: '33343',
           brand: 'bosch',
           status: 'maintenance',
           assignee: 'colin powell',
           type: 'jigsaw'
         },
         {
-          id: '93713',
+          id: '93513',
           brand: 'bosch',
           status: 'out of service',
           assignee: 'colin powell',
           type: 'hammer drill'
         },
         {
-          id: '94702',
+          id: '94782',
           brand: 'dewalt',
           status: 'available',
           assignee: 'james alstrong',
           type: 'driver'
         },
         {
-          id: '31348',
+          id: '32348',
           brand: 'dewalt',
           status: 'in use',
           assignee: 'colin powell',
           type: 'hammer drill'
         },
         {
-          id: '31343',
+          id: '31349',
           brand: 'bosch',
           status: 'maintenance',
           assignee: 'colin powell',

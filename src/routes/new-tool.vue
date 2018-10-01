@@ -1,8 +1,10 @@
 <template>
-<div class="page new-tool-page">
-  <h1>Add</h1>
-  <button @click="goBack">Back</button>
-</div>
+  <transition name="fade">
+    <div class="page new-tool-page">
+      <h1>Add</h1>
+      <button @click="goBack">Back</button>
+    </div>
+  </transition>
 </template>
 
 <script>

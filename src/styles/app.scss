@@ -9,7 +9,31 @@ html, body, #app {
   overflow: hidden;
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  transition: opacity 0s;
+}
+
+.list-item {
+  transition: all 1s;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.list-enter, .list-leave-to {
+  opacity: 0;
+}
+
+.list-complete-leave-active {
+  position: absolute;
+}
+
 a {
+  color: white;
   text-decoration: none;
 }
 

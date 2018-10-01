@@ -14,9 +14,7 @@
         <avatar username="Josiah Campbell"/>
       </div>
 
-      <div
-        slot="content"
-        class="main-content">
+      <div slot="content" class="main-content">
         <router-view />
 
         <div class="nav-bar">

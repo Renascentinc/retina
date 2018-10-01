@@ -12,35 +12,32 @@
           </div>
       </div>
       <div class="bottom-panel">
-        <div class="login-input email-container">
-          <div class="icon-container">
-            <i class="material-icons">person</i>
-          </div>
+        <input-with-icon class="email-container" icon-class="fa-user">
           <input
-            :value="username"
+            v-model="username"
             class="username-input"
             placeholder="username">
           <input
-            :value="domain"
+            v-model="domain"
             class="domain-input"
             placeholder="@domain.com">
-        </div>
+        </input-with-icon>
 
-        <div class="login-input password-container">
-          <div class="icon-container">
-            <i class="fas fa-key"></i>
-          </div>
-          <input
-            :value="password"
-            class="password-input"
-            placeholder="password"
-            type="password">
-        </div>
+        <input-with-icon class="password-container" icon-class="fa-key">
+        <input
+          v-model="password"
+          class="password-input"
+          placeholder="password"
+          type="password">
+        </input-with-icon>
 
-        <!-- <input
-          :value="organizationName"
-          class="login-input"
-          placeholder="organization name"> -->
+        <input-with-icon class="organization-container" icon-class="fa-building">
+        <input
+          v-model="organizationName"
+          class="org-name-input"
+          placeholder="organization name">
+        </input-with-icon>
+
         <button
           class="login-btn"
           @click="attemptUserLogin">
@@ -53,36 +50,6 @@
               <span> {{currentState.text}} </span>
             </div>
           </transition>
-
-        <!-- <transition name="fade">
-          <div v-if="currentState === loginStates.INCORRECT_CREDENTIALS">
-            Invalid Credentials
-          </div>
-        </transition>
-
-        <transition name="fade">
-          <div v-if="currentState === loginStates.NEED_ORG_NAME">
-            Please Also Provide The Name of Your Organization
-          </div>
-        </transition>
-
-        <transition name="fade">
-          <div v-if="currentState === loginStates.AUTHENTICATING">
-            Authorizing...
-          </div>
-        </transition>
-
-        <transition name="fade">
-          <div v-if="currentState === loginStates.NETWORK_ERROR">
-            Sorry There Was An Issue With The Network
-          </div>
-        </transition>
-
-        <transition name="fade">
-          <div v-if="currentState === loginStates.GENERIC_ERROR">
-            Sorry. Something Went Wrong
-          </div>
-        </transition> -->
       </div>
     </div>
   </transition>
@@ -91,9 +58,20 @@
 <script>
 import gql from 'graphql-tag'
 import ApiStatusCodes from '../utils/api-status-codes'
+import InputWithIcon from '../components/input-with-icon'
 
 export default {
   name: 'Login',
+
+  components: {
+    InputWithIcon
+  },
+
+  computed: {
+    email() {
+      return `${this.username}${this.domain}`
+    }
+  },
 
   data () {
     const loginStates = {
@@ -124,10 +102,10 @@ export default {
     }
 
     return {
-      organizationName: 'DeWalt',
-      username: 'bob.thompson',
+      organizationName: '',
+      username: '',
       domain: '@renascentinc.com',
-      password: 'Test1234!',
+      password: '',
       currentState: loginStates.READY,
       loginStates
     }
@@ -190,7 +168,6 @@ export default {
 
 <style lang="scss">
 @import '../styles/variables';
-
 $login-input-border-radius: 5px;
 
 .login-page {
@@ -238,67 +215,14 @@ $login-input-border-radius: 5px;
     overflow: hidden;
     padding-top: 40px;
 
-    .icon-container {
-      width: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: $renascent-dark-gray;
-      border-top-left-radius: $login-input-border-radius;
-      border-bottom-left-radius: $login-input-border-radius;
-      color: white;
+    .username-input {
+      width: 40%;
     }
 
-    .login-input {
-      width: 80%;
-      border-radius: $login-input-border-radius;
-      border: solid 1px black;
-      outline: none;
-      display: flex;
-      height: 40px;
-      margin-bottom: 10px;
-      max-width: 500px;
-    }
-
-    .email-container {
-      .username-input {
-        border: none;
-        outline: none;
-        font-size: 15px;
-        border-radius: $login-input-border-radius;
-        font-family: $font-family;
-        margin: 1px 0;
-
-        width: 36%;
-        padding-left: 10px;
-        text-align: right;
-      }
-
-      .domain-input {
-        border: none;
-        outline: none;
-        font-size: 15px;
-        border-radius: $login-input-border-radius;
-        font-family: $font-family;
-        margin: 1px 0;
-
-        width: 45%;
-        opacity: .5;
-      }
-    }
-
-    .password-container {
-      margin-bottom: 70px;
-
-      .password-input {
-        border: none;
-        outline: none;
-        font-size: 15px;
-        border-radius: $login-input-border-radius;
-        font-family: $font-family;
-
-        padding-left: 10px;
-      }
+    .domain-input {
+      width: 140px;
+      opacity: .5;
+      padding: 0;
     }
   }
 

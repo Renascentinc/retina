@@ -1,7 +1,9 @@
 <template>
-<div class="page users-page">
-  <h1>Users</h1>
-</div>
+  <transition name="fade">
+    <div class="page users-page">
+      <h1>Users</h1>
+    </div>
+  </transition>
 </template>
 
 <script>

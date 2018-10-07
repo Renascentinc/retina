@@ -1,54 +1,80 @@
 <template>
-<div class="page tools-page">
-  <div class="search-bar">
-    <tool-search-input/>
-  </div>
-  <div class="tool-scroll-container">
-    <tool-search-result v-for="tool in tools" :tool="tool"/>
-  </div>
-  <div class="nav-bar">
-    <i class="material-icons">menu</i>
-    <i class="material-icons">add</i>
-  </div>
-</div>
+  <transition name="fade">
+    <div class="page tools-page">
+      <div class="search-bar">
+        <tool-search-input/>
+      </div>
+      <div class="tool-scroll-container">
+        <transition name="fade">
+          <div
+            v-if="!getAllTool.length"
+            class="no-tools-container">
+            <span class="no-tools-text">No Tools Added Yet</span>
+          </div>
+        </transition>
+        <transition-group
+          name="list"
+          tag="div">
+          <tool-search-result
+            v-for="tool in getAllTool"
+            :tool="tool"
+            :key="tool.id"
+            :on-select="transitionToToolInfo"/>
+        </transition-group>
+      </div>
+
+      <extended-fab
+        :on-click="() => 0"
+        class="transfer-btn"
+        icon-class="fa-exchange-alt"
+        button-text="TRANSFER"/>
+    </div>
+  </transition>
 </template>
 
 <script>
-import ToolSearchInput from '../components/tool-search-input.vue';
-import ToolSearchResult from '../components/tool-search-result.vue';
+import ToolSearchInput from '../components/tool-search-input.vue'
+import ToolSearchResult from '../components/tool-search-result.vue'
+import ExtendedFab from '../components/extended-fab.vue'
+import gql from 'graphql-tag'
 
 export default {
   name: 'Tools',
   components: {
     ToolSearchInput,
-    ToolSearchResult
+    ToolSearchResult,
+    ExtendedFab
+  },
+  apollo: {
+    getAllTool: gql`query tools {
+      getAllTool {
+        id
+        type {
+          name
+        }
+        brand {
+          name
+        }
+        status
+        user {
+          first_name
+          last_name
+        }
+        location {
+          name
+        }
+      }
+    }`
   },
 
-  data() {
+  data () {
     return {
-      tools: [
-        {
-          id: '93713',
-          brand: 'bosch',
-          status: 'out of service',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        },
-        {
-          id: '94702',
-          brand: 'dewalt',
-          status: 'available',
-          assignee: 'james alstrong',
-          type: 'driver'
-        },
-        {
-          id: '31348',
-          brand: 'dewalt',
-          status: 'in use',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        }
-      ]
+      getAllTool: []
+    }
+  },
+  methods: {
+    transitionToToolInfo (toolId) {
+      this.$router.push({ name: 'toolDetail', params: { toolId } })
     }
   }
 }
@@ -56,6 +82,7 @@ export default {
 
 <style lang="scss">
 @import '../styles/variables';
+
 .tools-page {
   display: flex;
   flex-direction: column;
@@ -69,19 +96,22 @@ export default {
     flex-direction: column;
     height: 100%;
     background-color: $background-light-gray;
-    overflow-y: scroll;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    padding-top: 5px;
   }
 
-  .nav-bar {
+  .no-tools-container {
     display: flex;
-    flex: 0 0 40px;
-    background-color: $renascent-dark-gray;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-    padding: 0 30px;
-    font-size: 30px;
+    justify-content: center;
+    padding-top: 50px;
+  }
+
+  .transfer-btn {
+    position: absolute;
+    bottom: 60px;
+    left: calc(50% - 68px);
+    width: 142px;
   }
 }
 </style>

@@ -73,7 +73,7 @@ export default {
           }
         }
       }`,
-      variables() {
+      variables () {
         let options = {}
 
         // if (this.searchString) {

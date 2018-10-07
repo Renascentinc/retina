@@ -6,18 +6,16 @@
       </div>
       <div class="tool-scroll-container">
         <transition name="fade">
-          <div v-if="!tools.length" class="no-tools-container">
+          <div v-if="!getAllTool.length" class="no-tools-container">
             <span class="no-tools-text">No Tools Added Yet</span>
           </div>
         </transition>
         <transition-group name="list" tag="div">
-          <tool-search-result v-for="tool in tools" :tool="tool" :key="tool.id" @onSelect="transitionToToolInfo"/>
+          <tool-search-result v-for="tool in getAllTool" :tool="tool" :key="tool.id" :onSelect="transitionToToolInfo"/>
         </transition-group>
       </div>
-      <div class="extended-fab transfer">
-        <i class="fas fa-check"></i>
-        SELECT
-      </div>
+
+      <extended-fab class="transfer-btn" iconClass="fa-exchange-alt" buttonText="TRANSFER" :onClick="() => 0"></extended-fab>
     </div>
   </transition>
 </template>
@@ -25,106 +23,46 @@
 <script>
 import ToolSearchInput from '../components/tool-search-input.vue';
 import ToolSearchResult from '../components/tool-search-result.vue';
+import ExtendedFab from '../components/extended-fab.vue';
+import gql from 'graphql-tag'
 
 export default {
   name: 'tools',
   components: {
     ToolSearchInput,
-    ToolSearchResult
+    ToolSearchResult,
+    ExtendedFab
+  },
+  apollo: {
+    getAllTool: gql`query tools {
+      getAllTool {
+        id
+        type {
+          name
+        }
+        brand {
+          name
+        }
+        status
+        user {
+          first_name
+          last_name
+        }
+        location {
+          name
+        }
+      }
+    }`
   },
   methods: {
     transitionToToolInfo(toolId) {
-      this.$router.push({ path: `/tool/${toolId}` })
+      this.$router.push({ name: 'toolDetail', params: { toolId }})
     }
   },
+
   data() {
     return {
-      tools: [
-        {
-          id: '93713',
-          brand: 'bosch',
-          status: 'out of service',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        },
-        {
-          id: '94702',
-          brand: 'dewalt',
-          status: 'available',
-          assignee: 'james alstrong',
-          type: 'driver'
-        },
-        {
-          id: '31348',
-          brand: 'dewalt',
-          status: 'in use',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        },
-        {
-          id: '31343',
-          brand: 'bosch',
-          status: 'maintenance',
-          assignee: 'colin powell',
-          type: 'jigsaw'
-        },
-        {
-          id: '93712',
-          brand: 'bosch',
-          status: 'out of service',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        },
-        {
-          id: '94402',
-          brand: 'dewalt',
-          status: 'available',
-          assignee: 'james alstrong',
-          type: 'driver'
-        },
-        {
-          id: '31378',
-          brand: 'dewalt',
-          status: 'in use',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        },
-        {
-          id: '33343',
-          brand: 'bosch',
-          status: 'maintenance',
-          assignee: 'colin powell',
-          type: 'jigsaw'
-        },
-        {
-          id: '93513',
-          brand: 'bosch',
-          status: 'out of service',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        },
-        {
-          id: '94782',
-          brand: 'dewalt',
-          status: 'available',
-          assignee: 'james alstrong',
-          type: 'driver'
-        },
-        {
-          id: '32348',
-          brand: 'dewalt',
-          status: 'in use',
-          assignee: 'colin powell',
-          type: 'hammer drill'
-        },
-        {
-          id: '31349',
-          brand: 'bosch',
-          status: 'maintenance',
-          assignee: 'colin powell',
-          type: 'jigsaw'
-        }
-      ]
+      getAllTool: []
     }
   }
 }
@@ -155,6 +93,13 @@ export default {
     display: flex;
     justify-content: center;
     padding-top: 50px;
+  }
+
+  .transfer-btn {
+    position: absolute;
+    bottom: 60px;
+    left: calc(50% - 68px);
+    width: 142px;
   }
 }
 </style>

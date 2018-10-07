@@ -8,10 +8,16 @@
 
           <div class="name-container">
             <span class="retina-name"> RETINA </span>
-            <span class="renascent-name"> By Renascent, Inc. </span>
+            <span class="renascent-name"> Renascent, Inc. </span>
           </div>
       </div>
       <div class="bottom-panel">
+        <div class="status-message">
+          <transition name="fade">
+              <span v-if="currentState.show" :class="currentState.class"> {{currentState.text}} </span>
+          </transition>
+        </div>
+
         <input-with-icon class="email-container" icon-class="fa-user">
           <input
             v-model="username"
@@ -31,7 +37,7 @@
           type="password">
         </input-with-icon>
 
-        <input-with-icon class="organization-container" icon-class="fa-building">
+        <input-with-icon :class="{ show: currentState === loginStates.NEED_ORG_NAME }" class="organization-container" icon-class="fa-building">
         <input
           v-model="organizationName"
           class="org-name-input"
@@ -39,17 +45,12 @@
         </input-with-icon>
 
         <button
+          focused=true
           class="login-btn"
           @click="attemptUserLogin">
           <i class="fas fa-arrow-right"></i>
           <span> SIGN IN </span>
         </button>
-
-          <transition name="fade">
-            <div :class="currentState.class">
-              <span> {{currentState.text}} </span>
-            </div>
-          </transition>
       </div>
     </div>
   </transition>
@@ -76,27 +77,29 @@ export default {
   data () {
     const loginStates = {
       READY: {
-        text: '',
-        class: 'ready'
+        show: false
       },
       AUTHENTICATING: {
-        text: 'Authenticating...',
-        class: 'authenticating'
+        show: false
       },
       INCORRECT_CREDENTIALS: {
-        text: 'Invalid Credentials',
+        show: true,
+        text: 'Invalid Username/Password',
         class: 'incorrect-credentials'
       },
       NEED_ORG_NAME: {
-        text: 'Please Also Provide The Name of Your Organization',
+        show: true,
+        text: 'Organization Name Required',
         class: 'need-org-name'
       },
       GENERIC_ERROR: {
-        text: 'Sorry. Something Went Wrong',
+        show: true,
+        text: 'An Unknown Error Ocurred',
         class: 'generic-error'
       },
       NETWORK_ERROR: {
-        text: 'Sorry There Was An Issue With The Network',
+        show: true,
+        text: 'Network Error: Please Check Connection',
         class: 'network-error'
       }
     }
@@ -139,7 +142,7 @@ export default {
         let { data: { login: { token, user } } } = result
 
         window.localStorage.setItem('token', token)
-        window.localStorage.setItem('currentUser', user)
+        window.localStorage.setItem('currentUser', JSON.stringify(user))
         this.$router.push({ path: '/' })
       }).catch(error => {
         if (error.graphQLErrors && error.graphQLErrors.length) {
@@ -176,7 +179,7 @@ $login-input-border-radius: 5px;
 
   .top-panel {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: flex-end;
     flex: 0 0 60%;
 
@@ -191,7 +194,7 @@ $login-input-border-radius: 5px;
     .name-container {
       display: flex;
       flex-direction: column;
-      flex: 0 0 55%;
+      padding-left: 100px;
 
       .retina-name {
         color: $renascent-dark-gray;
@@ -213,16 +216,34 @@ $login-input-border-radius: 5px;
     align-items: center;
     flex-direction: column;
     overflow: hidden;
-    padding-top: 40px;
+
+    .status-message {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      color: #CE352F;
+    }
+
+    .organization-container {
+      visibility: hidden;
+
+      &.show {
+        visibility: visible;
+      }
+    }
 
     .username-input {
-      width: 40%;
+      width: calc(100% - 140px);
     }
 
     .domain-input {
       width: 140px;
       opacity: .5;
       padding: 0;
+    }
+
+    .password-input {
+      width: calc(100% - 70px);
     }
   }
 

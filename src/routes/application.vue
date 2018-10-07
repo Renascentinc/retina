@@ -2,7 +2,7 @@
   <div class="main-application">
     <vue-drawer-layout
       ref="drawer"
-      :drawer-width="200"
+      :drawer-width="250"
       :enable="false"
       :animatable="true"
       :backdrop="true"
@@ -11,7 +11,10 @@
       <div
         slot="drawer"
         class="drawer-content">
-        <avatar username="Josiah Campbell"/>
+        <avatar :username="name"/>
+        <span>{{name}}</span>
+        <span>{{email}}</span>
+        <span>{{role}}</span>
       </div>
 
       <div slot="content" class="main-content">
@@ -52,6 +55,20 @@ export default {
   name: 'Application',
   components: {
     Avatar
+  },
+  computed: {
+    currentUser() {
+      return JSON.parse(window.localStorage.getItem('currentUser')) || {}
+    },
+    name() {
+      return this.currentUser.first_name ? `${this.currentUser.first_name} ${this.currentUser.last_name}` : ''
+    },
+    email() {
+      return this.currentUser.email
+    },
+    role() {
+      return this.currentUser.role
+    }
   },
   mixins: [authenticatedRouteMixin],
   methods: {

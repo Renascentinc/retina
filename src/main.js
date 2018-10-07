@@ -9,14 +9,26 @@ import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
+import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-const link = new HttpLink({
-  uri: 'http://retina-api-release.us-east-2.elasticbeanstalk.com/graphql'
+const httpLink = new HttpLink({
+  uri: 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+})
+
+const authLink = setContext((_, { headers = {} }) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    headers.authorization = `Bearer ${token}`
+  }
+
+  return {
+    headers
+  }
 })
 
 const defaultClient = new ApolloClient({
-  link,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
   connectToDevTools: true
 })

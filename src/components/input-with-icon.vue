@@ -25,7 +25,7 @@ export default {
   .input-with-icon {
     width: 80%;
     border-radius: $login-input-border-radius;
-    border: solid 1px black;
+    border: solid 1px $renascent-dark-gray;
     outline: none;
     display: flex;
     height: 40px;
@@ -44,12 +44,13 @@ export default {
 
     .icon-container {
       width: 40px;
+      min-width: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
       background-color: $renascent-dark-gray;
-      border-top-left-radius: $login-input-border-radius;
-      border-bottom-left-radius: $login-input-border-radius;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
       color: white;
     }
   }

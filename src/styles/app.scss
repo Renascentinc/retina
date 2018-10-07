@@ -45,20 +45,6 @@ button {
   outline: none;
 }
 
-.extended-fab {
-    position: absolute;
-    bottom: 60px;
-    background-color: #CE352F;
-    padding: 5px 10px;
-    border-radius: 50px;
-    color: white;
-    left: calc(50% - 45px);
-    width: 85px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
 .page {
   height: 100%;
   overflow: hidden;

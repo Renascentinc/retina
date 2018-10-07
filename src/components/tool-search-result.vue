@@ -1,25 +1,22 @@
 <template>
   <div class="tool-search-result">
     <div
-      :click="onClick"
+      @click="onClick"
       class="main-container">
       <div class="row">
-        <span class="tool-name">{{ toolName }}</span>
+        <span class="tool-name">{{ name }}</span>
       </div>
       <div class="row">
-        <span class="tool-id">{{ toolId }}</span>
+        <span class="tool-id">{{ id }}</span>
         <span
-          :class="[toolStatusClass]"
-          class="tool-status">{{ tool.status }}</span>
+          :class="[statusClass]"
+          class="tool-status">{{ status }}</span>
       </div>
       <div class="row">
         <i class="user-icon material-icons">person</i>
-        <span class="tool-assignee">{{ tool.assignee }}</span>
+        <span class="tool-assignee">{{ assignee }}</span>
       </div>
     </div>
-  <!-- <div class="image-container">
-    <img class="tool-image" v-lazy="imageSrc">
-  </div> -->
   </div>
 </div>
 </template>
@@ -29,27 +26,34 @@ export default {
   name: 'ToolSearchResult',
 
   props: [
-    'tool'
+    'tool',
+    'onSelect'
   ],
 
   computed: {
-    imageSrc () {
-      return this.tool.imgSrc || 'https://vuejs.org/images/logo.png'
-    },
-    toolId () {
+    id () {
       return `#${this.tool.id}`
     },
-    toolName () {
-      return `${this.tool.brand} ${this.tool.type}`
+    name () {
+      return `${this.tool.brand.name} ${this.tool.type.name}`
     },
-    toolStatusClass () {
-      return this.tool.status.split(' ').join('-')
+    statusClass () {
+      return this.tool.status.split('_').join('-').toLowerCase()
+    },
+    status () {
+      return this.tool.status.split('_').join(' ').toLowerCase()
+    },
+    assignee () {
+      if (this.tool.location.name) {
+        return this.tool.location.name
+      }
+      return `${this.tool.user.first_name} ${this.tool.user.last_name}`
     }
   },
 
   methods: {
     onClick () {
-      this.$router.push({ name: 'toolDetail', params: { toolId: this.tool.id }})
+      this.onSelect(this.tool.id);
     }
   }
 }
@@ -99,18 +103,5 @@ export default {
         }
       }
     }
-
-    // .image-container {
-    //   flex: 0 0 75px;
-    //   height: 100%;
-    //   background-color: $background-dark-gray;
-    //   border-top-right-radius: $tool-search-result-border-radius;
-    //   border-bottom-right-radius: $tool-search-result-border-radius;
-    //
-    //   .tool-image {
-    //     height: 100%;
-    //     width: 100%;
-    //   }
-    // }
   }
 </style>

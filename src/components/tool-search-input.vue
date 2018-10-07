@@ -1,46 +1,46 @@
 <template>
-<div class="tool-search-input">
-  <div class="search-icon-container">
-    <i class="material-icons">search</i>
+  <div class="tool-search-input">
+    <div class="search-icon-container">
+      <i class="material-icons">search</i>
+    </div>
+    <vue-tags-input
+      v-model="tag"
+      :tags="tags"
+      :autocomplete-items="filteredItems"
+      @tags-changed="tagsChanged"/>
   </div>
-  <vue-tags-input
-    v-model="tag"
-    :tags="tags"
-    :autocomplete-items="filteredItems"
-    @tags-changed="newTags => this.tags = newTags">
-  </vue-tags-input>
-</div>
 </template>
 
 <script>
-import VueTagsInput from '@johmun/vue-tags-input';
+import VueTagsInput from '@johmun/vue-tags-input'
 
 export default {
-  name: 'tool-search-input',
+  name: 'ToolSearchInput',
   components: {
-    VueTagsInput,
+    VueTagsInput
   },
-  data() {
+  data () {
     return {
       tag: '',
       tags: [],
-      autocompleteItems: [{
-        text: 'Brand: Bosch',
-      }, {
-        text: 'Brand: DeWalt',
-      }, {
-        text: 'Type: Drill Driver',
-      }, {
-        text: 'Type: Hammer Drill',
-      }, {
-        text: 'Status: Available',
-      }],
-    };
+      autocompleteItems: [
+        { text: 'Brand: Bosch' },
+        { text: 'Brand: DeWalt' },
+        { text: 'Type: Drill Driver' },
+        { text: 'Type: Hammer Drill' },
+        { text: 'Status: Available' }
+      ]
+    }
   },
   computed: {
-    filteredItems() {
-      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text));
-    },
+    filteredItems (test) {
+      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
+    }
+  },
+  methods: {
+    tagsChanged (newTags) {
+      this.tags = newTags
+    }
   }
 }
 </script>

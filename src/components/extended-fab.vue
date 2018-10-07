@@ -1,21 +1,34 @@
 <template>
-  <button class="extended-fab" @click="onClick">
+  <button
+    class="extended-fab"
+    @click="onClick">
     <div class="fab-icon-container">
-      <i class="fas" :class="iconClass"></i>
+      <i
+        :class="iconClass"
+        class="fas"/>
     </div>
-    <span class="efab-text">{{buttonText}}</span>
+    <span class="efab-text">{{ buttonText }}</span>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'input-with-icon',
+  name: 'InputWithIcon',
 
-  props: [
-    'iconClass',
-    'buttonText',
-    'onClick'
-  ]
+  props: {
+    iconClass: {
+      type: String,
+      required: true
+    },
+    buttonText: {
+      type: String,
+      required: true
+    },
+    onClick: {
+      type: Function,
+      required: true
+    }
+  }
 }
 </script>
 

@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'toolDetail'
+  name: 'ToolDetail'
 }
 </script>
 

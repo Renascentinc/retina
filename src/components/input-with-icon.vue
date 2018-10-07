@@ -1,19 +1,24 @@
 <template>
   <div class="input-with-icon">
     <div class="icon-container">
-      <i class="fas" :class="iconClass"></i>
+      <i
+        :class="iconClass"
+        class="fas"/>
     </div>
-    <slot></slot>
+    <slot/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'input-with-icon',
+  name: 'InputWithIcon',
 
-  props: [
-    'iconClass'
-  ]
+  props: {
+    iconClass: {
+      type: String,
+      required: true
+    }
+  }
 }
 </script>
 

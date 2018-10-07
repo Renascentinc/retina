@@ -4,21 +4,30 @@
       <div class="top-panel">
         <img
           class="logo"
-          src="../assets/icons/web/red_transparent_512x512.png"></img>
+          src="../assets/icons/web/red_transparent_512x512.png">
 
-          <div class="name-container">
-            <span class="retina-name"> RETINA </span>
-            <span class="renascent-name"> Renascent, Inc. </span>
-          </div>
+        <div class="name-container">
+          <span
+            class="retina-name"
+            value="RETINA"/>
+          <span
+            class="renascent-name"
+            value="Renascent, Inc."/>
+        </div>
       </div>
       <div class="bottom-panel">
         <div class="status-message">
           <transition name="fade">
-              <span v-if="currentState.show" :class="currentState.class"> {{currentState.text}} </span>
+            <span
+              v-if="currentState.show"
+              :class="currentState.class"
+              :value="currentState.text"/>
           </transition>
         </div>
 
-        <input-with-icon class="email-container" icon-class="fa-user">
+        <input-with-icon
+          class="email-container"
+          icon-class="fa-user">
           <input
             v-model="username"
             class="username-input"
@@ -29,27 +38,32 @@
             placeholder="@domain.com">
         </input-with-icon>
 
-        <input-with-icon class="password-container" icon-class="fa-key">
-        <input
-          v-model="password"
-          class="password-input"
-          placeholder="password"
-          type="password">
+        <input-with-icon
+          class="password-container"
+          icon-class="fa-key">
+          <input
+            v-model="password"
+            class="password-input"
+            placeholder="password"
+            type="password">
         </input-with-icon>
 
-        <input-with-icon :class="{ show: currentState === loginStates.NEED_ORG_NAME }" class="organization-container" icon-class="fa-building">
-        <input
-          v-model="organizationName"
-          class="org-name-input"
-          placeholder="organization name">
+        <input-with-icon
+          :class="{ show: currentState === loginStates.NEED_ORG_NAME }"
+          class="organization-container"
+          icon-class="fa-building">
+          <input
+            v-model="organizationName"
+            class="org-name-input"
+            placeholder="organization name">
         </input-with-icon>
 
         <button
-          focused=true
+          focused="true"
           class="login-btn"
           @click="attemptUserLogin">
-          <i class="fas fa-arrow-right"></i>
-          <span> SIGN IN </span>
+          <i class="fas fa-arrow-right"/>
+          <span value="SIGN IN"/>
         </button>
       </div>
     </div>
@@ -66,12 +80,6 @@ export default {
 
   components: {
     InputWithIcon
-  },
-
-  computed: {
-    email() {
-      return `${this.username}${this.domain}`
-    }
   },
 
   data () {
@@ -114,6 +122,12 @@ export default {
     }
   },
 
+  computed: {
+    email () {
+      return `${this.username}${this.domain}`
+    }
+  },
+
   methods: {
     attemptUserLogin () {
       this.currentState = this.loginStates.AUTHENTICATING
@@ -123,7 +137,7 @@ export default {
            login(organization_name: $organization_name, email: $email, password: $password) {
             token,
             user {
-        	    id,
+              id,
               first_name,
               last_name,
               email,

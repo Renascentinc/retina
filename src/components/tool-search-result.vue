@@ -1,8 +1,8 @@
 <template>
   <div class="tool-search-result">
     <div
-      @click="onClick"
-      class="main-container">
+      class="main-container"
+      @click="onClick">
       <div class="row">
         <span class="tool-name">{{ name }}</span>
       </div>
@@ -18,17 +18,22 @@
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 export default {
   name: 'ToolSearchResult',
 
-  props: [
-    'tool',
-    'onSelect'
-  ],
+  props: {
+    tool: {
+      type: Object,
+      required: true
+    },
+    onSelect: {
+      type: Function,
+      required: true
+    }
+  },
 
   computed: {
     id () {
@@ -53,7 +58,7 @@ export default {
 
   methods: {
     onClick () {
-      this.onSelect(this.tool.id);
+      this.onSelect(this.tool.id)
     }
   }
 }

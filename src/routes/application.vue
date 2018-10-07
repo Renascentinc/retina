@@ -12,12 +12,14 @@
         slot="drawer"
         class="drawer-content">
         <avatar :username="name"/>
-        <span>{{name}}</span>
-        <span>{{email}}</span>
-        <span>{{role}}</span>
+        <span>{{ name }}</span>
+        <span>{{ email }}</span>
+        <span>{{ role }}</span>
       </div>
 
-      <div slot="content" class="main-content">
+      <div
+        slot="content"
+        class="main-content">
         <router-view />
 
         <div class="nav-bar">
@@ -56,21 +58,21 @@ export default {
   components: {
     Avatar
   },
+  mixins: [authenticatedRouteMixin],
   computed: {
-    currentUser() {
+    currentUser () {
       return JSON.parse(window.localStorage.getItem('currentUser')) || {}
     },
-    name() {
+    name () {
       return this.currentUser.first_name ? `${this.currentUser.first_name} ${this.currentUser.last_name}` : ''
     },
-    email() {
+    email () {
       return this.currentUser.email
     },
-    role() {
+    role () {
       return this.currentUser.role
     }
   },
-  mixins: [authenticatedRouteMixin],
   methods: {
     closeDrawer () {
       this.$refs.drawer.toggle(false)

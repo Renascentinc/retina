@@ -9,10 +9,10 @@
 
 <script>
 export default {
-  name: 'newTool',
+  name: 'NewTool',
   methods: {
-    goBack() {
-      this.$router.go(-1);
+    goBack () {
+      this.$router.go(-1)
     }
   }
 }

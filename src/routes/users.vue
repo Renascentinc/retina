@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'users'
+  name: 'Users'
 }
 </script>
 

@@ -6,28 +6,40 @@
       </div>
       <div class="tool-scroll-container">
         <transition name="fade">
-          <div v-if="!getAllTool.length" class="no-tools-container">
+          <div
+            v-if="!getAllTool.length"
+            class="no-tools-container">
             <span class="no-tools-text">No Tools Added Yet</span>
           </div>
         </transition>
-        <transition-group name="list" tag="div">
-          <tool-search-result v-for="tool in getAllTool" :tool="tool" :key="tool.id" :onSelect="transitionToToolInfo"/>
+        <transition-group
+          name="list"
+          tag="div">
+          <tool-search-result
+            v-for="tool in getAllTool"
+            :tool="tool"
+            :key="tool.id"
+            :on-select="transitionToToolInfo"/>
         </transition-group>
       </div>
 
-      <extended-fab class="transfer-btn" iconClass="fa-exchange-alt" buttonText="TRANSFER" :onClick="() => 0"></extended-fab>
+      <extended-fab
+        :on-click="() => 0"
+        class="transfer-btn"
+        icon-class="fa-exchange-alt"
+        button-text="TRANSFER"/>
     </div>
   </transition>
 </template>
 
 <script>
-import ToolSearchInput from '../components/tool-search-input.vue';
-import ToolSearchResult from '../components/tool-search-result.vue';
-import ExtendedFab from '../components/extended-fab.vue';
+import ToolSearchInput from '../components/tool-search-input.vue'
+import ToolSearchResult from '../components/tool-search-result.vue'
+import ExtendedFab from '../components/extended-fab.vue'
 import gql from 'graphql-tag'
 
 export default {
-  name: 'tools',
+  name: 'Tools',
   components: {
     ToolSearchInput,
     ToolSearchResult,
@@ -54,15 +66,15 @@ export default {
       }
     }`
   },
-  methods: {
-    transitionToToolInfo(toolId) {
-      this.$router.push({ name: 'toolDetail', params: { toolId }})
-    }
-  },
 
-  data() {
+  data () {
     return {
       getAllTool: []
+    }
+  },
+  methods: {
+    transitionToToolInfo (toolId) {
+      this.$router.push({ name: 'toolDetail', params: { toolId } })
     }
   }
 }

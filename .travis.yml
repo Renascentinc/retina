@@ -8,13 +8,30 @@ sudo: false
 cache:
   directories:
     - node_modules
-    - $HOME/.npm
-
-before_install:
-  - npm config set spin false
 
 install:
-  - npm install
+  - npm i
 
-script:
-  - npm test
+after_success:
+  - npm run build
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-develop-us-east-2
+    local-dir: dist
+    acl: public_read
+    on: develop
+    region: us-east-2
+    skip_cleanup: true
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: retina-us-east-1
+    local-dir: dist
+    acl: public_read
+    on: master
+    region: us-east-2
+    skip_cleanup: true

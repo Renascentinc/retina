@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    filteredItems (test) {
+    filteredItems() {
       return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
     }
   },

@@ -13,7 +13,8 @@ module.exports = {
     'standard'
   ],
   plugins: [
-    'vue'
+    'vue',
+    'html'
   ],
   rules: {
     // allow async-await

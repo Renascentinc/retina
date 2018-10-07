@@ -1,35 +1,40 @@
 <template>
-  <transition name="fade">
-    <div class="page tools-page">
-      <div class="search-bar">
-        <tool-search-input/>
-      </div>
-      <div class="tool-scroll-container">
-        <transition name="fade">
-          <div
-            v-if="!getAllTool.length"
-            class="no-tools-container">
-            <span class="no-tools-text">No Tools Added Yet</span>
-          </div>
-        </transition>
-        <transition-group
-          name="list"
-          tag="div">
-          <tool-search-result
-            v-for="tool in getAllTool"
-            :tool="tool"
-            :key="tool.id"
-            :on-select="transitionToToolInfo"/>
-        </transition-group>
-      </div>
-
-      <extended-fab
-        :on-click="() => 0"
-        class="transfer-btn"
-        icon-class="fa-exchange-alt"
-        button-text="TRANSFER"/>
+  <div class="page tools-page">
+    <div class="search-bar">
+      <tool-search-input/>
     </div>
-  </transition>
+    <div class="tool-scroll-container">
+      <transition name="fade">
+        <div
+          v-if="$apollo.queries.searchTool.loading"
+          class="loading-container">
+          <span class="no-tools-text">Loading...</span>
+        </div>
+      </transition>
+      <transition name="fade">
+        <div
+          v-if="!$apollo.queries.searchTool.loading && !searchTool.length"
+          class="no-tools-container">
+          <span class="no-tools-text">No Tools Added Yet</span>
+        </div>
+      </transition>
+      <transition-group
+        name="list"
+        tag="div">
+        <tool-search-result
+          v-for="tool in searchTool"
+          :tool="tool"
+          :key="tool.id"
+          :on-select="transitionToToolInfo"/>
+      </transition-group>
+    </div>
+
+    <extended-fab
+      :on-click="() => 0"
+      class="transfer-btn"
+      icon-class="fa-exchange-alt"
+      button-text="TRANSFER"/>
+  </div>
 </template>
 
 <script>
@@ -40,38 +45,52 @@ import gql from 'graphql-tag'
 
 export default {
   name: 'Tools',
+
   components: {
     ToolSearchInput,
     ToolSearchResult,
     ExtendedFab
   },
+
   apollo: {
-    getAllTool: gql`query tools {
-      getAllTool {
-        id
-        type {
-          name
+    searchTool: {
+      query: gql`query tools($query: String, $toolFilter: ToolFilter, $pagingParameters: PagingParameters) {
+        searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
+          id
+          type {
+            name
+          }
+          brand {
+            name
+          }
+          status
+          user {
+            first_name
+            last_name
+          }
+          location {
+            name
+          }
         }
-        brand {
-          name
-        }
-        status
-        user {
-          first_name
-          last_name
-        }
-        location {
-          name
-        }
+      }`,
+      variables() {
+        let options = {}
+
+        // if (this.searchString) {
+        //   options.query = this.searchString
+        // }
+
+        return options
       }
-    }`
+    }
   },
 
   data () {
     return {
-      getAllTool: []
+      searchTool: []
     }
   },
+
   methods: {
     transitionToToolInfo (toolId) {
       this.$router.push({ name: 'toolDetail', params: { toolId } })

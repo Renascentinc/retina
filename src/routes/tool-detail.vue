@@ -1,9 +1,7 @@
 <template>
-  <transition name="fade">
-    <div class="page tool-detail-page">
-      <h1>Tool Detail</h1>
-    </div>
-  </transition>
+  <div class="page tool-detail-page">
+    <h1>Tool Detail</h1>
+  </div>
 </template>
 
 <script>

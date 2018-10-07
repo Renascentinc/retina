@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "changeFile=false parcel index.html --port 4200 --no-cache",
-    "test": "eslint --ext .js,.vue src --fix",
+    "test": "eslint --ext .js,.vue src",
     "build": "changeFile=false parcel build index.html --no-source-maps",
     "build-cordova": "changeFile=true parcel build index.html --out-dir=www --public-url=./ --no-source-maps --no-minify",
     "android": "npm run build-cordova && cordova prepare && cordova run android",
@@ -44,7 +44,6 @@
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
-    "eslint-plugin-html": "^4.0.6",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.4.0",

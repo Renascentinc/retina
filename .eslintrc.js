@@ -12,10 +12,6 @@ module.exports = {
     'plugin:vue/recommended',
     'standard'
   ],
-  plugins: [
-    'vue',
-    'html'
-  ],
   rules: {
     // allow async-await
     'generator-star-spacing': 'off',

@@ -37,12 +37,12 @@
             <span class="icon-subtext">TOOLS</span>
           </div>
 
-          <div class="icon-text-container">
+          <!-- <div class="icon-text-container">
             <router-link
               :to="{ name: 'newTool' }"
               class="material-icons add-icon">add</router-link>
             <span class="icon-subtext">ADD</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </vue-drawer-layout>

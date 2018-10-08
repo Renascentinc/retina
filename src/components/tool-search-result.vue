@@ -13,7 +13,7 @@
           class="tool-status">{{ status }}</span>
       </div>
       <div class="row">
-        <i class="user-icon material-icons">person</i>
+        <i class="fas fa-user user-icon"/>
         <span class="tool-assignee">{{ assignee }}</span>
       </div>
     </div>
@@ -104,7 +104,8 @@ export default {
         }
 
         .user-icon {
-          font-size: 20px;
+          font-size: 15px;
+          margin-right: 5px;
         }
       }
     }

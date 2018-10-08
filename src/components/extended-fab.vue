@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'InputWithIcon',
+  name: 'ExtendedFab',
 
   props: {
     iconClass: {
@@ -36,7 +36,7 @@ export default {
   @import '../styles/variables';
 
   .extended-fab {
-      background-color: #CE352F;
+      background-color: $renascent-red;
       padding: 5px 15px;
       border-radius: 50px;
       color: white;
@@ -46,6 +46,7 @@ export default {
       display: flex;
       justify-content: space-around;
       align-items: center;
+      border: none;
 
       .fab-icon-container {
         margin-right: 5px;

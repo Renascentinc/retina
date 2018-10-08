@@ -16,14 +16,14 @@
   },
   "dependencies": {
     "@johmun/vue-tags-input": "^1.5.5",
-    "apollo-cache-inmemory": "^1.2.10",
+    "apollo-cache-inmemory": "^1.3.5",
     "apollo-client": "^2.4.2",
     "apollo-link": "^1.2.3",
     "apollo-link-context": "^1.0.9",
     "apollo-link-http": "^1.5.5",
     "fastclick": "^1.0.6",
     "graphql": "^14.0.2",
-    "graphql-tag": "^2.9.2",
+    "graphql-tag": "^2.10.0",
     "gsap": "^2.0.1",
     "vue-apollo": "^3.0.0-beta.25",
     "vue-avatar": "^2.1.6",
@@ -53,7 +53,6 @@
     "jest-serializer-vue": "^0.3.0",
     "node-sass": "^4.9.3",
     "parcel-bundler": "^1.7.0",
-    "parcel-plugin-compress": "^1.0.6",
     "parcel-plugin-sw-precache": "^0.5.2",
     "phonegap-nfc": "^1.0.3",
     "vue": "^2.5.16",
@@ -74,5 +73,6 @@
       "ios",
       "android"
     ]
-  }
+  },
+  "parcel-plugin-change-file": {}
 }

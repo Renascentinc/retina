@@ -28,6 +28,11 @@
         class="transfer-btn"
         icon-class="fa-exchange-alt"
         button-text="TRANSFER"/>
+
+      <fab
+        :on-click="() => 0"
+        class="add-btn"
+        icon-class="fa-plus"/>
     </div>
   </transition>
 </template>
@@ -36,6 +41,7 @@
 import ToolSearchInput from '../components/tool-search-input.vue'
 import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
+import Fab from '../components/fab.vue'
 import gql from 'graphql-tag'
 
 export default {
@@ -43,7 +49,8 @@ export default {
   components: {
     ToolSearchInput,
     ToolSearchResult,
-    ExtendedFab
+    ExtendedFab,
+    Fab
   },
   apollo: {
     getAllTool: gql`query tools {
@@ -112,6 +119,12 @@ export default {
     bottom: 60px;
     left: calc(50% - 68px);
     width: 142px;
+  }
+
+  .add-btn {
+    position: absolute;
+    bottom: 60px;
+    right: 7%;
   }
 }
 </style>

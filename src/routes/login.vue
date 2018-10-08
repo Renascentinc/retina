@@ -25,46 +25,48 @@
           </transition>
         </div>
 
-        <input-with-icon
-          class="email-container"
-          icon-class="fa-user">
-          <input
-            v-model="username"
-            class="username-input"
-            placeholder="username">
-          <input
-            v-model="domain"
-            class="domain-input"
-            placeholder="@domain.com">
-        </input-with-icon>
+        <div class="login-inputs-container">
+          <input-with-icon
+            class="email-container"
+            icon-class="fa-user">
+            <input
+              v-model="username"
+              class="username-input"
+              placeholder="username@renascentinc.com">
+          </input-with-icon>
 
-        <input-with-icon
-          class="password-container"
-          icon-class="fa-key">
-          <input
-            v-model="password"
-            class="password-input"
-            placeholder="password"
-            type="password">
-        </input-with-icon>
+          <input-with-icon
+            class="password-container"
+            icon-class="fa-key">
+            <input
+              v-model="password"
+              class="password-input"
+              placeholder="password"
+              type="password">
+          </input-with-icon>
 
-        <input-with-icon
-          :class="{ show: currentState === loginStates.NEED_ORG_NAME }"
-          class="organization-container"
-          icon-class="fa-building">
-          <input
-            v-model="organizationName"
-            class="org-name-input"
-            placeholder="organization name">
-        </input-with-icon>
+          <input-with-icon
+            :class="{ show: currentState === loginStates.NEED_ORG_NAME }"
+            class="organization-container"
+            icon-class="fa-building">
+            <input
+              v-model="organizationName"
+              class="org-name-input"
+              placeholder="organization name">
+          </input-with-icon>
+        </div>
 
-        <button
-          focused="true"
-          class="login-btn"
-          @click="attemptUserLogin">
-          <i class="fas fa-arrow-right"/>
-          <span value="SIGN IN"/>
-        </button>
+        <div class="login-action-row">
+          <button class="reset-password">
+            RESET PASSWORD
+          </button>
+
+          <extended-fab
+            :on-click="attemptUserLogin"
+            class="login-btn"
+            icon-class="fa-arrow-right"
+            button-text="SIGN IN"/>
+        </div>
       </div>
     </div>
   </transition>
@@ -74,12 +76,14 @@
 import gql from 'graphql-tag'
 import ApiStatusCodes from '../utils/api-status-codes'
 import InputWithIcon from '../components/input-with-icon'
+import ExtendedFab from '../components/extended-fab.vue'
 
 export default {
   name: 'Login',
 
   components: {
-    InputWithIcon
+    InputWithIcon,
+    ExtendedFab
   },
 
   data () {
@@ -168,14 +172,11 @@ export default {
             this.currentState = this.loginStates.NEED_ORG_NAME
           } else {
             this.currentState = this.loginStates.GENERIC_ERROR
-            window.console.error('Login Attempt Failed With Error Code', code)
           }
         } else if (error.networkError) {
           this.currentState = this.loginStates.NETWORK_ERROR
-          window.console.error(error.toString())
         } else {
           this.currentState = this.loginStates.GENERIC_ERROR
-          window.console.error(error.toString())
         }
       })
     }
@@ -230,6 +231,7 @@ $login-input-border-radius: 5px;
     align-items: center;
     flex-direction: column;
     overflow: hidden;
+    flex: 0 0 40%;
 
     .status-message {
       height: 40px;
@@ -247,13 +249,7 @@ $login-input-border-radius: 5px;
     }
 
     .username-input {
-      width: calc(100% - 140px);
-    }
-
-    .domain-input {
-      width: 140px;
-      opacity: .5;
-      padding: 0;
+      width: calc(100% - 70px);
     }
 
     .password-input {
@@ -261,23 +257,23 @@ $login-input-border-radius: 5px;
     }
   }
 
-  .login-btn {
-    width: 130px;
-    background-color: $renascent-red;
-    height: 40px;
-    border-radius: 50px;
-    color: white;
-    padding: 0;
-    font-size: 20px;
+  .login-inputs-container {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
-    padding: 0 10px;
-    font-family: $font-family;
+    justify-content: space-around;
+    flex: 1 1 auto;
+    width: 100%;
+  }
 
-    span {
-      font-weight: 700;
-      font-size: 15px;
+  .login-action-row {
+    display: flex;
+    height: 70px;
+    align-items: center;
+    justify-content: space-around;
+
+    .login-btn {
+      width: 130px;
     }
   }
 }

@@ -11,10 +11,11 @@
       <div
         slot="drawer"
         class="drawer-content">
-        <avatar :username="name"/>
-        <span>{{ name }}</span>
-        <span>{{ email }}</span>
-        <span>{{ role }}</span>
+        <avatar :username="firstname+' '+lastname"/>
+        <span class="username">{{ firstname }} <br> {{ lastname }}</span>
+        <span class="role">{{ role }}</span>
+        <span class="email">{{ email }}</span>
+        <hr class="line">
       </div>
 
       <div
@@ -65,8 +66,11 @@ export default {
     currentUser () {
       return JSON.parse(window.localStorage.getItem('currentUser')) || {}
     },
-    name () {
-      return this.currentUser.first_name ? `${this.currentUser.first_name} ${this.currentUser.last_name}` : ''
+    firstname () {
+      return this.currentUser.first_name ? `${this.currentUser.first_name}` : ''
+    },
+    lastname () {
+      return this.currentUser.last_name ? `${this.currentUser.last_name}` : ''
     },
     email () {
       return this.currentUser.email

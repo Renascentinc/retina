@@ -11,11 +11,18 @@
       <div
         slot="drawer"
         class="drawer-content">
-        <avatar :username="firstname+' '+lastname"/>
-        <span class="username">{{ firstname }} <br> {{ lastname }}</span>
-        <span class="role">{{ role }}</span>
-        <span class="email">{{ email }}</span>
-        <hr class="line">
+        <div class="account-info">
+          <avatar :username="firstname+' '+lastname"/>
+          <span class="username">{{ firstname }} <br> {{ lastname }}</span>
+          <span class="role">{{ role }}</span>
+          <span class="email">{{ email }}</span>
+          <hr class="line">
+        </div>
+
+        <div class="menu-buttons">
+          <button class="change-password menu-btn"> <span class="fas menu-btn-icon fa-key"></span> CHANGE PASSWORD </button>
+          <button class="sign-out menu-btn"> <span class="fas menu-btn-icon fa-sign-out-alt"></span> SIGN OUT </button>
+        </div>
       </div>
 
       <div

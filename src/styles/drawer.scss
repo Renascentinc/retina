@@ -6,11 +6,18 @@
 
   .drawer-content {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: column;
     align-items: center;
-    padding-top: 43px;
     text-align: center;
+    height: 100%;
+
+    .account-info {
+      display: flex;
+      margin-top: 43px;
+      justify-content: center;
+      flex-direction: column;
+    }
 
     .vue-avatar--wrapper {
       height: 89px !important;
@@ -18,6 +25,8 @@
       font-size: 41px !important;
       background-color: white !important;
       color: $background-dark-gray !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
     }
 
     .username {
@@ -42,6 +51,33 @@
       width: 140px;
       color: white;
       margin-top: 20px;
+    }
+
+    .menu-buttons {
+      margin-bottom: 55px;
+      margin-top: auto;
+    }
+
+    .menu-btn {
+      border: none;
+      height: 43px;
+      width: 221px;
+      border-radius: 5px;
+      background-color: $background-light-gray;
+      margin: 13px;
+      padding: 0px;
+      font-size: 16px;
+      font-weight: 700;
+      color: $dark-text;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+
+      .menu-btn-icon {
+        height: 18px;
+        width: 18px;
+        font-size: 20px;
+        float: left;
+        margin-left: 18px;
+      }
     }
   }
 }

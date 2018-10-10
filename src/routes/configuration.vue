@@ -1,9 +1,7 @@
 <template>
-  <transition name="fade">
-    <div class="page configuration-page">
-      <h1>Configuration</h1>
-    </div>
-  </transition>
+  <div class="page configuration-page">
+    <h1>Configuration</h1>
+  </div>
 </template>
 
 <script>

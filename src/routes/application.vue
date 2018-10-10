@@ -20,7 +20,9 @@
       <div
         slot="content"
         class="main-content">
-        <router-view />
+        <transition>
+          <router-view />
+        </transition>
 
         <div class="nav-bar">
           <div class="icon-text-container">

@@ -1,29 +1,31 @@
 <template>
-  <transition name="fade">
-    <div class="page login-page">
-      <div class="top-panel">
-        <img
-          class="logo"
-          src="../assets/icons/web/red_transparent_512x512.png">
+  <div class="page login-page">
+    <div class="top-panel">
+      <img
+        class="logo"
+        src="../assets/icons/web/red_transparent_512x512.png">
 
-        <div class="name-container">
-          <span
-            class="retina-name"
-            value="RETINA"/>
-          <span
-            class="renascent-name"
-            value="Renascent, Inc."/>
-        </div>
+      <div class="name-container">
+        <span
+          class="retina-name">
+          RETINA
+        </span>
+        <span
+          class="renascent-name">
+          Renascent, Inc.
+        </span>
       </div>
-      <div class="bottom-panel">
-        <div class="status-message">
-          <transition name="fade">
-            <span
-              v-if="currentState.show"
-              :class="currentState.class"
-              :value="currentState.text"/>
-          </transition>
-        </div>
+    </div>
+    <div class="bottom-panel">
+      <div class="status-message">
+        <transition name="fade">
+          <span
+            v-if="currentState.show"
+            :class="currentState.class">
+            {{ currentState.text }}
+          </span>
+        </transition>
+      </div>
 
         <div class="login-inputs-container">
           <input-with-icon
@@ -69,7 +71,7 @@
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>

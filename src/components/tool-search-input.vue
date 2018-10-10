@@ -13,26 +13,45 @@
 
 <script>
 import VueTagsInput from '@johmun/vue-tags-input'
+import gql from 'graphql-tag'
 
 export default {
   name: 'ToolSearchInput',
   components: {
     VueTagsInput
   },
+  apollo: {
+    getAllConfigurableItem: {
+      query: gql`query getAllConfigurableItem($pagingParameters: PagingParameters) {
+        getAllConfigurableItem(pagingParameters: $pagingParameters) {
+          id,
+          type,
+          name
+        }
+      }`,
+      variables: { },
+      error (error) {
+        console.log('configurable item query error')
+      }
+    }
+  },
   data () {
     return {
       tag: '',
-      tags: [],
-      autocompleteItems: [
-        { text: 'Brand: Bosch' },
-        { text: 'Brand: DeWalt' },
-        { text: 'Type: Drill Driver' },
-        { text: 'Type: Hammer Drill' },
-        { text: 'Status: Available' }
-      ]
+      tags: []
     }
   },
   computed: {
+    autocompleteItems () {
+      if (this.getAllConfigurableItem) {
+        return this.getAllConfigurableItem.map(item => {
+          item.text = `${item.type.split('_').join(' ').toLowerCase()}: ${item.name}`
+          return item
+        })
+      }
+
+      return []
+    },
     filteredItems () {
       return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
     }

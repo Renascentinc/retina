@@ -27,48 +27,47 @@
         </transition>
       </div>
 
-        <div class="login-inputs-container">
-          <input-with-icon
-            class="email-container"
-            icon-class="fa-user">
-            <input
-              v-model="username"
-              class="username-input"
-              placeholder="username@renascentinc.com">
-          </input-with-icon>
+      <div class="login-inputs-container">
+        <input-with-icon
+          class="email-container"
+          icon-class="fa-user">
+          <input
+            v-model="username"
+            class="username-input"
+            placeholder="username@renascentinc.com">
+        </input-with-icon>
 
-          <input-with-icon
-            class="password-container"
-            icon-class="fa-key">
-            <input
-              v-model="password"
-              class="password-input"
-              placeholder="password"
-              type="password">
-          </input-with-icon>
+        <input-with-icon
+          class="password-container"
+          icon-class="fa-key">
+          <input
+            v-model="password"
+            class="password-input"
+            placeholder="password"
+            type="password">
+        </input-with-icon>
 
-          <input-with-icon
-            :class="{ show: currentState === loginStates.NEED_ORG_NAME }"
-            class="organization-container"
-            icon-class="fa-building">
-            <input
-              v-model="organizationName"
-              class="org-name-input"
-              placeholder="organization name">
-          </input-with-icon>
-        </div>
+        <input-with-icon
+          :class="{ show: currentState === loginStates.NEED_ORG_NAME }"
+          class="organization-container"
+          icon-class="fa-building">
+          <input
+            v-model="organizationName"
+            class="org-name-input"
+            placeholder="organization name">
+        </input-with-icon>
+      </div>
 
-        <div class="login-action-row">
-          <button class="reset-password">
-            RESET PASSWORD
-          </button>
+      <div class="login-action-row">
+        <button class="reset-password">
+          RESET PASSWORD
+        </button>
 
-          <extended-fab
-            :on-click="attemptUserLogin"
-            class="login-btn"
-            icon-class="fa-arrow-right"
-            button-text="SIGN IN"/>
-        </div>
+        <extended-fab
+          :on-click="attemptUserLogin"
+          class="login-btn"
+          icon-class="fa-arrow-right"
+          button-text="SIGN IN"/>
       </div>
     </div>
   </div>
@@ -108,12 +107,12 @@ export default {
       },
       GENERIC_ERROR: {
         show: true,
-        text: 'An Unknown Error Ocurred',
+        text: 'An Unknown Error Ocurred. Please Try Again or Contact Support',
         class: 'generic-error'
       },
       NETWORK_ERROR: {
         show: true,
-        text: 'Network Error: Please Check Connection',
+        text: 'Network Error. Please Try Again',
         class: 'network-error'
       }
     }
@@ -176,6 +175,10 @@ export default {
             this.currentState = this.loginStates.GENERIC_ERROR
           }
         } else if (error.networkError) {
+          // remove token just in case a stale one happens to be sitting around.
+          // theoretically should never happen but if it ever did the user would
+          // be unable to login without clearing their localStorage
+          window.localStorage.removeItem('token')
           this.currentState = this.loginStates.NETWORK_ERROR
         } else {
           this.currentState = this.loginStates.GENERIC_ERROR

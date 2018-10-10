@@ -4,6 +4,12 @@
       <tool-search-input/>
     </div>
     <div class="tool-scroll-container">
+      <div class="add-btn-container">
+        <fab
+          :on-click="transitionToAdd"
+          class="add-btn"
+          icon-class="fa-plus"/>
+      </div>
       <transition name="fade">
         <div
           v-if="$apollo.queries.searchTool.loading"
@@ -83,6 +89,9 @@ export default {
         // }
 
         return options
+      },
+      error (error) {
+        window.console.log('search error...')
       }
     }
   },
@@ -96,6 +105,9 @@ export default {
   methods: {
     transitionToToolInfo (toolId) {
       this.$router.push({ name: 'toolDetail', params: { toolId } })
+    },
+    transitionToAdd () {
+      this.$router.push({ name: 'newTool' })
     }
   }
 }
@@ -135,10 +147,11 @@ export default {
     width: 142px;
   }
 
-  .add-btn {
-    position: absolute;
-    bottom: 60px;
-    right: 7%;
+  .add-btn-container {
+    flex: 0 0 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

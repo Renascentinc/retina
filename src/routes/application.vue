@@ -20,8 +20,14 @@
         </div>
 
         <div class="menu-buttons">
-          <button class="change-password menu-btn"> <span class="fas menu-btn-icon fa-key"></span> CHANGE PASSWORD </button>
-          <button class="sign-out menu-btn"> <span class="fas menu-btn-icon fa-sign-out-alt"></span> SIGN OUT </button>
+          <button class="change-password menu-btn">
+            <span class="fas menu-btn-icon fa-key"></span>
+            CHANGE PASSWORD
+          </button>
+          <button v-on:click="signout()" class="sign-out menu-btn">
+            <span class="fas menu-btn-icon fa-sign-out-alt"></span>
+            SIGN OUT
+          </button>
         </div>
       </div>
 
@@ -61,6 +67,7 @@
 
 <script>
 import Avatar from 'vue-avatar'
+import gql from 'graphql-tag'
 import authenticatedRouteMixin from '../mixins/authenticatedRoute'
 
 export default {
@@ -93,6 +100,17 @@ export default {
 
     openDrawer () {
       this.$refs.drawer.toggle(true)
+    },
+
+    signout () {
+      this.$apollo.mutate({
+        mutation: gql`mutation dotheloggingout {
+           logout
+        }`
+      }).then(() => {
+        window.localStorage.setItem('token', '');
+        this.$router.push({path: '/login'});
+      });
     }
   }
 }

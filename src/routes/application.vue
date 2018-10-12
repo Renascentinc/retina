@@ -21,11 +21,13 @@
 
         <div class="menu-buttons">
           <button class="change-password menu-btn">
-            <span class="fas menu-btn-icon fa-key"></span>
+            <span class="fas menu-btn-icon fa-key"/>
             CHANGE PASSWORD
           </button>
-          <button v-on:click="signout()" class="sign-out menu-btn">
-            <span class="fas menu-btn-icon fa-sign-out-alt"></span>
+          <button
+            class="sign-out menu-btn"
+            @click="signout()">
+            <span class="fas menu-btn-icon fa-sign-out-alt"/>
             SIGN OUT
           </button>
         </div>
@@ -108,9 +110,9 @@ export default {
            logout
         }`
       }).then(() => {
-        window.localStorage.setItem('token', '');
-        this.$router.push({path: '/login'});
-      });
+        window.localStorage.setItem('token', '')
+        this.$router.push({path: '/login'})
+      })
     }
   }
 }

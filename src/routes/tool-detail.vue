@@ -14,13 +14,19 @@
       <div id="actions">
         <button class="action-btn">
           <i class="fas fa-pen action-icon"/>
-          {{ formattedStatus(getTool.status) }}
+          <span class="action-title">{{ formattedStatus(getTool.status) }}</span>
         </button>
         <button class="action-btn">
           <i class="fas fa-check action-icon"/>
-          select
+          <span class="action-title">select</span>
         </button>
       </div>
+    </div>
+
+    <div
+    id="owner-card"
+    class="card">
+      Owner
     </div>
   </div>
 </template>
@@ -33,7 +39,7 @@ export default {
 
   apollo: {
     getTool: {
-      query: gql`query namedthing($tool_id: ID!) {
+      query: gql`query tool($tool_id: ID!) {
 	                getTool(tool_id: $tool_id)
                   {
                     id
@@ -58,7 +64,7 @@ export default {
                 }`,
       variables () {
         let options = {}
-        options.tool_id = 11
+        options.tool_id = this.$router.currentRoute.params.toolId;
         return options
       }
     }
@@ -91,6 +97,8 @@ export default {
     border-radius: 0px 0px 7px 7px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
     color: $dark-text;
+    position: relative;
+    z-index: 1;
 
     #backarrow {
       position: absolute;
@@ -131,13 +139,38 @@ export default {
         color: white;
         font-size: 18px;
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-        display: flex;
 
         .action-icon {
-          align-self: flex-start;
+          font-size: 18px;
+          padding-left: 5px;
+          float: left;
+        }
+
+        .action-title {
+          font-size: 18px;
         }
       }
     }
+  }
+
+  .card {
+    position: relative;
+    width: calc(100vw - 15px);
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    z-index: 0;
+    margin-top: 6px;
+    margin-bottom: 4px;
+    border-radius: 3px;
+  }
+
+  #owner-card {
+    height: 122px;
+    font-size: 25px;
+    font-weight: 900;
+    color: $dark-text;
   }
 }
 </style>

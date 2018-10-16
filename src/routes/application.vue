@@ -109,7 +109,7 @@ export default {
 
     signout () {
       this.$apollo.mutate({
-        mutation: gql`mutation dotheloggingout {
+        mutation: gql`mutation logout {
            logout
         }`
       }).then(() => {

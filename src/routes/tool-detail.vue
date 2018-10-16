@@ -17,25 +17,104 @@
           <span class="action-title">{{ formattedStatus(getTool.status) }}</span>
         </button>
         <button class="action-btn">
-          <i class="fas fa-check action-icon"/>
-          <span class="action-title">select</span>
+          <i class="fas fa-exchange-alt action-icon"/>
+          <span class="action-title">transfer</span>
         </button>
       </div>
     </div>
+    <div id="cards">
+      <div
+      id="owner-card"
+      class="card">
+        <div class="card-title">
+          Owner
+        </div>
+        <div class="card-details owner-details">
+          <div class="user-symbol">
+            <i
+              v-if="getTool.user"
+              class="fas fa-user"/>
+            <i
+              v-if="getTool.location"
+              class="fas fa-map-marker-alt"/>
+          </div>
+          <div id="owner-name">
+            <div v-if="getTool.location"> {{getTool.location.name }} </div>
+            <div v-if="getTool.user"> {{ getTool.user.first_name }} {{ getTool.user.last_name  }} </div>
+          </div>
+          <div class="contact-buttons">
+            <fab
+              :on-click="phoneCall"
+              class="call-btn"
+              icon-class="fa-phone"/>
 
-    <div
-    id="owner-card"
-    class="card">
-      Owner
+            <div class="spacer"/>
+
+            <fab
+              :on-click="sendEmail"
+              class="call-btn"
+              icon-class="fa-envelope"/>
+          </div>
+        </div>
+      </div>
+      <div
+      id="general-card"
+      class="card">
+        <div class="card-title">
+          General
+        </div>
+        <div class="card-details general-details">
+          <span class="general-label">RetinaID</span>
+          <span class="general-data"> {{ getTool.id || '-'}} </span>
+
+          <span class="general-label">serial number</span>
+          <span class="general-data"> {{ getTool.serial_number || '-'}} </span>
+
+          <span class="general-label">model number</span>
+          <span class="general-data"> {{ getTool.model_number || '-'}} </span>
+
+          <span class="general-label">model year</span>
+          <span class="general-data"> {{ getTool.year || '-'}} </span>
+
+          <span class="general-label">purchased from</span>
+          <span class="general-data"> {{ getTool.purchased_from.name || '-'}} </span>
+
+          <span class="general-label">purchase date</span>
+          <span class="general-data"> {{ getTool.date_purchased || '-'}} </span>
+
+          <span class="general-label">purchase price</span>
+          <span class="general-data"> ${{ getTool.price || '123.99'}} </span>
+        </div>
+
+      </div>
+
+      <div
+        id="photo-card"
+        class="card">
+        <div class="card-title">
+          Photo
+        </div>
+        <div class="photo-box">
+          <!-- <img class="image" src="https://s3.us-east-2.amazonaws.com/retina-images/spitfire.jpg"> -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import gql from 'graphql-tag';
+import Avatar from 'vue-avatar';
+import Fab from '../components/fab.vue';
+
 export default {
 
   name: 'ToolDetail',
+
+  components: {
+    Avatar,
+    Fab
+  },
 
   apollo: {
     getTool: {
@@ -53,6 +132,10 @@ export default {
                     date_purchased
                     price
                     photo
+
+                    location {
+                      name
+                    }
 
                     user {
                       first_name
@@ -72,13 +155,22 @@ export default {
 
   data () {
     return {
-      getTool: {}
+      getTool: {},
+      window: window
     }
   },
 
   methods: {
     formattedStatus (status) {
       return status.replace(/\_/g, ' ').toLowerCase()
+    },
+
+    phoneCall () {
+      window.location.href = `tel:${ this.getTool.user.phone_number }`
+    },
+
+    sendEmail () {
+      window.location = `mailto:${ this.getTool.user.email }`
     }
   }
 }
@@ -89,6 +181,8 @@ export default {
 
 .tool-detail-page {
   background-color: $background-light-gray;
+  display: flex;
+  flex-direction: column;
 
   #header {
     width: 100%;
@@ -99,6 +193,7 @@ export default {
     color: $dark-text;
     position: relative;
     z-index: 1;
+    flex-shrink: 0;
 
     #backarrow {
       position: absolute;
@@ -153,24 +248,116 @@ export default {
     }
   }
 
-  .card {
-    position: relative;
-    width: calc(100vw - 15px);
-    margin-left: auto;
-    margin-right: auto;
-    background-color: white;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-    z-index: 0;
-    margin-top: 6px;
-    margin-bottom: 4px;
-    border-radius: 3px;
-  }
+  #cards {
+    overflow-y: auto;
 
-  #owner-card {
-    height: 122px;
-    font-size: 25px;
-    font-weight: 900;
-    color: $dark-text;
+    .card {
+      position: relative;
+      width: calc(100vw - 15px);
+      margin-left: auto;
+      margin-right: auto;
+      background-color: white;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+      z-index: 0;
+      margin-top: 6px;
+      margin-bottom: 10px;
+      border-radius: 3px;
+
+      .card-title {
+        font-size: 25px;
+        font-weight: 900;
+        color: $dark-text;
+        padding-left: 14px;
+        padding-top: 6px;
+      }
+
+      .card-details {
+        padding-left: 14px;
+        padding-right: 14px;
+        padding-top: 10px;
+      }
+    }
+
+    #general-card {
+      padding-bottom: 10px;
+
+      .general-details {
+        display: flex;
+        flex-direction: column;
+        font-size: 16px;
+
+        .general-label {
+          padding-top: 10px;
+          color: $dark-avatar;
+          font-weight: 400;
+        }
+
+        .general-data {
+          color: $dark-text;
+          font-weight: 600;
+        }
+      }
+    }
+
+    #photo-card {
+      .photo-box {
+        width: calc(100% - 23px);
+        height: 150px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        border-radius: 2px;
+        background-color: $renascent-dark-gray;
+        overflow: hidden;
+
+        .image {
+          width: 100%;
+        }
+      }
+    }
+
+    #owner-card {
+      height: 122px;
+
+      .owner-details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        #owner-name {
+          display: flex;
+          flex-direction: column;
+          font-size: 23px;
+          font-weight: 800;
+          color: $renascent-dark-gray;
+          margin-left: 11px;
+        }
+
+        .user-symbol {
+          height: 44px;
+          width: 44px;
+          border-radius: 50%;
+          background-color: $dark-avatar;
+          color: white;
+          margin: 0px;
+          font-size: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-shrink: 0;
+        }
+      }
+
+      .contact-buttons {
+        margin-left: auto;
+        display: flex;
+        flex-direction: row;
+
+        .spacer {
+          width: 22px;
+        }
+      }
+    }
   }
 }
 </style>

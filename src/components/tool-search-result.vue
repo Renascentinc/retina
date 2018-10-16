@@ -49,7 +49,7 @@ export default {
       return this.tool.status.split('_').join(' ').toLowerCase()
     },
     assignee () {
-      if (this.tool.location.name) {
+      if (this.tool.location) {
         return this.tool.location.name
       }
       return `${this.tool.user.first_name} ${this.tool.user.last_name}`

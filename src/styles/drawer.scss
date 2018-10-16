@@ -2,7 +2,6 @@
 
 .drawer-wrap {
   background-color: $renascent-dark-gray;
-  width: 270px !important;
 
   .drawer-content {
     display: flex;
@@ -33,6 +32,8 @@
       margin-top: 18px;
       color: white;
       font-size: 33px;
+      display: flex;
+      flex-direction: column;
     }
 
     .role {

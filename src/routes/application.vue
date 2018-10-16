@@ -2,7 +2,7 @@
   <div class="main-application">
     <vue-drawer-layout
       ref="drawer"
-      :drawer-width="250"
+      :drawer-width="270"
       :enable="false"
       :animatable="true"
       :backdrop="true"
@@ -12,8 +12,11 @@
         slot="drawer"
         class="drawer-content">
         <div class="account-info">
-          <avatar :username="firstname+' '+lastname"/>
-          <span class="username">{{ firstname }} <br> {{ lastname }}</span>
+          <avatar :username="`${ firstname } ${ lastname }`"/>
+          <span class="username">
+            <span> {{ firstname }} </span>
+            <span> {{ lastname }} </span>
+          </span>
           <span class="role">{{ role }}</span>
           <span class="email">{{ email }}</span>
           <hr class="line">
@@ -21,13 +24,13 @@
 
         <div class="menu-buttons">
           <button class="change-password menu-btn">
-            <span class="fas menu-btn-icon fa-key"/>
+            <i class="fas menu-btn-icon fa-key"/>
             CHANGE PASSWORD
           </button>
           <button
             class="sign-out menu-btn"
             @click="signout()">
-            <span class="fas menu-btn-icon fa-sign-out-alt"/>
+            <i class="fas menu-btn-icon fa-sign-out-alt"/>
             SIGN OUT
           </button>
         </div>
@@ -83,10 +86,10 @@ export default {
       return JSON.parse(window.localStorage.getItem('currentUser')) || {}
     },
     firstname () {
-      return this.currentUser.first_name ? `${this.currentUser.first_name}` : ''
+      return this.currentUser.first_name
     },
     lastname () {
-      return this.currentUser.last_name ? `${this.currentUser.last_name}` : ''
+      return this.currentUser.last_name
     },
     email () {
       return this.currentUser.email
@@ -110,8 +113,8 @@ export default {
            logout
         }`
       }).then(() => {
-        window.localStorage.setItem('token', '')
-        this.$router.push({path: '/login'})
+        window.localStorage.removeItem('token')
+        this.$router.push({ path: '/login' })
       })
     }
   }

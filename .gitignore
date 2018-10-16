@@ -29,3 +29,5 @@ test/unit/coverage/
 
 # Parcel cache
 .cache
+
+.vscode/

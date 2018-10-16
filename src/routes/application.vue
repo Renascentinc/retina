@@ -2,7 +2,7 @@
   <div class="main-application">
     <vue-drawer-layout
       ref="drawer"
-      :drawer-width="250"
+      :drawer-width="270"
       :enable="false"
       :animatable="true"
       :backdrop="true"
@@ -11,10 +11,29 @@
       <div
         slot="drawer"
         class="drawer-content">
-        <avatar :username="name"/>
-        <span>{{ name }}</span>
-        <span>{{ email }}</span>
-        <span>{{ role }}</span>
+        <div class="account-info">
+          <avatar :username="`${ firstname } ${ lastname }`"/>
+          <span class="username">
+            <span> {{ firstname }} </span>
+            <span> {{ lastname }} </span>
+          </span>
+          <span class="role">{{ role }}</span>
+          <span class="email">{{ email }}</span>
+          <hr class="line">
+        </div>
+
+        <div class="menu-buttons">
+          <button class="change-password menu-btn">
+            <i class="fas menu-btn-icon fa-key"/>
+            CHANGE PASSWORD
+          </button>
+          <button
+            class="sign-out menu-btn"
+            @click="signout()">
+            <i class="fas menu-btn-icon fa-sign-out-alt"/>
+            SIGN OUT
+          </button>
+        </div>
       </div>
 
       <div
@@ -53,6 +72,7 @@
 
 <script>
 import Avatar from 'vue-avatar'
+import gql from 'graphql-tag'
 import authenticatedRouteMixin from '../mixins/authenticatedRoute'
 
 export default {
@@ -65,8 +85,11 @@ export default {
     currentUser () {
       return JSON.parse(window.localStorage.getItem('currentUser')) || {}
     },
-    name () {
-      return this.currentUser.first_name ? `${this.currentUser.first_name} ${this.currentUser.last_name}` : ''
+    firstname () {
+      return this.currentUser.first_name
+    },
+    lastname () {
+      return this.currentUser.last_name
     },
     email () {
       return this.currentUser.email
@@ -82,6 +105,17 @@ export default {
 
     openDrawer () {
       this.$refs.drawer.toggle(true)
+    },
+
+    signout () {
+      this.$apollo.mutate({
+        mutation: gql`mutation logout {
+           logout
+        }`
+      }).then(() => {
+        window.localStorage.removeItem('token')
+        this.$router.push({ path: '/login' })
+      })
     }
   }
 }

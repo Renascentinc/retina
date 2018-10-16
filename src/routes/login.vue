@@ -72,6 +72,7 @@
 </template>
 
 <script>
+
 import gql from 'graphql-tag'
 import ApiStatusCodes from '../utils/api-status-codes'
 import InputWithIcon from '../components/input-with-icon'

@@ -39,20 +39,31 @@
               class="fas fa-map-marker-alt"/>
           </div>
           <div id="owner-name">
-            <div v-if="getTool.location"> {{getTool.location.name }} </div>
-            <div v-if="getTool.user"> {{ getTool.user.first_name }} {{ getTool.user.last_name  }} </div>
+            <div
+              v-if="getTool.location"
+              id="owner-location">
+              {{ getTool.location.name }}
+            </div>
+            <div
+              v-if="getTool.user"
+              id="owner-user">
+              <span> {{ getTool.user.first_name }} </span>
+              <span> {{ getTool.user.last_name }} </span>
+            </div>
           </div>
           <div class="contact-buttons">
             <fab
               :on-click="phoneCall"
-              class="call-btn"
+              class="contact-btn"
+              id="call-btn"
               icon-class="fa-phone"/>
 
             <div class="spacer"/>
 
             <fab
               :on-click="sendEmail"
-              class="call-btn"
+              class="contact-btn"
+              id="email-btn"
               icon-class="fa-envelope"/>
           </div>
         </div>
@@ -186,7 +197,9 @@ export default {
 
   #header {
     width: 100%;
-    height: 148px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 12px;
     background-color: white;
     border-radius: 0px 0px 7px 7px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
@@ -317,7 +330,7 @@ export default {
     }
 
     #owner-card {
-      height: 122px;
+      padding-bottom: 17px;
 
       .owner-details {
         display: flex;
@@ -331,6 +344,11 @@ export default {
           font-weight: 800;
           color: $renascent-dark-gray;
           margin-left: 11px;
+
+          #owner-user {
+            display: flex;
+            flex-direction: column;
+          }
         }
 
         .user-symbol {
@@ -351,10 +369,24 @@ export default {
       .contact-buttons {
         margin-left: auto;
         display: flex;
+        justify-content: flex-end;
         flex-direction: row;
+        flex-wrap: wrap;
 
-        .spacer {
-          width: 22px;
+        .fab {
+          margin: 11px;
+        }
+
+        #email-btn {
+          margin-left: 11px;
+          margin-top: 5px;
+          margin-bottom: 5px;
+        }
+
+        #call-btn {
+          margin-right: 11px;
+          margin-bottom: 5px;
+          margin-top: 5px;
         }
       }
     }

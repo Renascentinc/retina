@@ -75,25 +75,25 @@
           General
         </div>
         <div class="card-details general-details">
-          <span class="general-label">retinaID</span>
+          <span class="general-label">RetinaID</span>
           <span class="general-data"> {{ getTool.id || '-'}} </span>
 
-          <span class="general-label">serial number</span>
+          <span class="general-label">Serial number</span>
           <span class="general-data"> {{ getTool.serial_number || '-'}} </span>
 
-          <span class="general-label">model number</span>
+          <span class="general-label">Model number</span>
           <span class="general-data"> {{ getTool.model_number || '-'}} </span>
 
-          <span class="general-label">model year</span>
+          <span class="general-label">Model year</span>
           <span class="general-data"> {{ getTool.year || '-'}} </span>
 
-          <span class="general-label">purchased from</span>
+          <span class="general-label">Purchased from</span>
           <span class="general-data"> {{ getTool.purchased_from.name || '-'}} </span>
 
-          <span class="general-label">purchase date</span>
+          <span class="general-label">Purchase date</span>
           <span class="general-data"> {{ formattedDate(getTool.date_purchased) || '-'}} </span>
 
-          <span class="general-label">purchase price</span>
+          <span class="general-label">Purchase price</span>
           <span class="general-data"> ${{ formattedPrice(getTool.price) || ' -'}} </span>
         </div>
 

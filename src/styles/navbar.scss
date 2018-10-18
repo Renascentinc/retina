@@ -1,0 +1,39 @@
+.icon-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.icon-subtext {
+    font-size: 10px;
+    line-height: .8;
+}
+
+.nav-bar {
+  display: flex;
+  flex: 0 0 50px;
+  background-color: $renascent-dark-gray;
+  align-items: center;
+  justify-content: space-between;
+  color: $disabled-gray;
+  padding: 0 30px;
+  font-size: 30px;
+  box-shadow: 0 0 10px #777;
+  z-index: 1;
+
+  .menu-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $disabled-gray;
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+
+    .icon-subtext {
+      margin-top: 5px;
+    }
+  }
+}

@@ -43,28 +43,27 @@
           <router-view />
         </transition>
 
-        <div class="nav-bar">
-          <div class="icon-text-container">
-            <button
-              class="material-icons menu-icon"
-              @click="openDrawer">menu</button>
-            <span class="icon-subtext">MENU</span>
-          </div>
+        <transition>
+          <div
+            class="nav-bar">
+            <div class="icon-text-container">
+              <button
+                class="fas fa-bars menu-icon"
+                @click="openDrawer">
+                <span class="icon-subtext">MENU</span>
+              </button>
+            </div>
 
-          <div class="icon-text-container">
-            <router-link
-              class="fas fa-toolbox"
-              to="/tools"/>
-            <span class="icon-subtext">TOOLS</span>
+            <div class="icon-text-container">
+              <router-link
+                class="fas fa-toolbox menu-icon"
+                to="/tools">
+                <span class="icon-subtext">TOOLS</span>
+              </router-link>
+            </div>
           </div>
+        </transition>
 
-          <div class="icon-text-container">
-            <router-link
-              :to="{ name: 'newTool' }"
-              class="material-icons add-icon">add</router-link>
-            <span class="icon-subtext">ADD</span>
-          </div>
-        </div>
       </div>
     </vue-drawer-layout>
   </div>
@@ -77,27 +76,35 @@ import authenticatedRouteMixin from '../mixins/authenticatedRoute'
 
 export default {
   name: 'Application',
+
   components: {
     Avatar
   },
-  mixins: [authenticatedRouteMixin],
+
+  mixins: [ authenticatedRouteMixin ],
+
   computed: {
     currentUser () {
       return JSON.parse(window.localStorage.getItem('currentUser')) || {}
     },
+
     firstname () {
       return this.currentUser.first_name
     },
+
     lastname () {
       return this.currentUser.last_name
     },
+
     email () {
       return this.currentUser.email
     },
+
     role () {
       return this.currentUser.role
     }
   },
+
   methods: {
     closeDrawer () {
       this.$refs.drawer.toggle(false)

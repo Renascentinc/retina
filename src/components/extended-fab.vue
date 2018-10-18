@@ -1,5 +1,6 @@
 <template>
   <button
+    :class="{ outlined: outlineDisplay }"
     class="extended-fab"
     @click="onClick">
     <div class="fab-icon-container">
@@ -27,6 +28,11 @@ export default {
     onClick: {
       type: Function,
       required: true
+    },
+    outlineDisplay: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   }
 }
@@ -40,17 +46,25 @@ export default {
       padding: 5px 15px;
       border-radius: 50px;
       color: white;
-      font-weight: 500;
-      height: 40px;
+      font-weight: 700;
+      height: 50px;
       font-size: 17px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       border: none;
+      box-shadow: 0 0 10px #777;
+      font-size: 18px;
+
+      &.outlined {
+        color: $renascent-red;
+        border: solid 2px $renascent-red;
+        background: transparent;
+      }
 
       .fab-icon-container {
         margin-right: 5px;
-        font-size: 20px;
+        font-size: 25px;
       }
   }
 </style>

@@ -5,12 +5,15 @@ import VueApollo from 'vue-apollo'
 import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
+import store from './store'
 import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+
+const cache = new InMemoryCache()
 
 const httpLink = new HttpLink({
   uri: 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
@@ -29,7 +32,7 @@ const authLink = setContext((_, { headers = {} }) => {
 
 const defaultClient = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache,
   connectToDevTools: true
 })
 
@@ -47,6 +50,7 @@ attachFastClick(document.body)
 
 new Vue({
   router,
+  store,
   el: '#app',
   apolloProvider,
   render: h => h(App)

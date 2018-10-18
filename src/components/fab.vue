@@ -33,12 +33,13 @@ export default {
     padding: 0;
     border-radius: 50%;
     color: white;
-    height: 40px;
-    width: 40px;
+    height: 50px;
+    width: 50px;
     font-size: 19px;
     display: flex;
     justify-content: center;
     align-items: center;
     border: none;
+    box-shadow: 0 0 10px #777;
   }
 </style>

@@ -24,28 +24,28 @@
           <router-view />
         </transition>
 
-        <div class="nav-bar">
-          <div class="icon-text-container">
-            <button
-              class="material-icons menu-icon"
-              @click="openDrawer">menu</button>
-            <span class="icon-subtext">MENU</span>
-          </div>
+        <transition>
+          <div
+            v-if="navbarStatus.isShown"
+            class="nav-bar">
+            <div class="icon-text-container">
+              <button
+                class="fas fa-bars menu-icon"
+                @click="openDrawer">
+                <span class="icon-subtext">MENU</span>
+              </button>
+            </div>
 
-          <div class="icon-text-container">
-            <router-link
-              class="fas fa-toolbox"
-              to="/tools"/>
-            <span class="icon-subtext">TOOLS</span>
+            <div class="icon-text-container">
+              <router-link
+                class="fas fa-toolbox menu-icon"
+                to="/tools">
+                <span class="icon-subtext">TOOLS</span>
+              </router-link>
+            </div>
           </div>
+        </transition>
 
-          <!-- <div class="icon-text-container">
-            <router-link
-              :to="{ name: 'newTool' }"
-              class="material-icons add-icon">add</router-link>
-            <span class="icon-subtext">ADD</span>
-          </div> -->
-        </div>
       </div>
     </vue-drawer-layout>
   </div>
@@ -54,13 +54,28 @@
 <script>
 import Avatar from 'vue-avatar'
 import authenticatedRouteMixin from '../mixins/authenticatedRoute'
+import gql from 'graphql-tag'
 
 export default {
   name: 'Application',
   components: {
     Avatar
   },
-  mixins: [authenticatedRouteMixin],
+  mixins: [ authenticatedRouteMixin ],
+  // apollo: {
+  //   navbarStatus: gql`query {
+  //     navbarStatus @client {
+  //       isShown
+  //     }
+  //   }`
+  // },
+  data () {
+    return {
+      navbarStatus: {
+        isShown: true
+      }
+    }
+  },
   computed: {
     currentUser () {
       return JSON.parse(window.localStorage.getItem('currentUser')) || {}

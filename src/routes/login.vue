@@ -48,7 +48,7 @@
         </input-with-icon>
 
         <input-with-icon
-          :class="{ show: currentState === loginStates.NEED_ORG_NAME }"
+          :class="{ show: currentState === states.NEED_ORG_NAME }"
           class="organization-container"
           icon-class="fa-building">
           <input
@@ -88,8 +88,8 @@ export default {
   },
 
   data () {
-    const loginStates = {
-      READY: {
+    const states = {
+      INITIAL: {
         show: false
       },
       AUTHENTICATING: {
@@ -122,8 +122,8 @@ export default {
       username: '',
       domain: '@renascentinc.com',
       password: '',
-      currentState: loginStates.READY,
-      loginStates
+      currentState: states.INITIAL,
+      states
     }
   },
 
@@ -135,7 +135,7 @@ export default {
 
   methods: {
     attemptUserLogin () {
-      this.currentState = this.loginStates.AUTHENTICATING
+      this.currentState = this.states.AUTHENTICATING
 
       this.$apollo.mutate({
         mutation: gql`mutation attemptUserLogin($organization_name: String!, $email: String!, $password: String!) {
@@ -168,20 +168,20 @@ export default {
           let { graphQLErrors: [{ extensions: { code } }] } = error
 
           if (code === ApiStatusCodes.UNAUTHENTICATED) {
-            this.currentState = this.loginStates.INCORRECT_CREDENTIALS
+            this.currentState = this.states.INCORRECT_CREDENTIALS
           } else if (code === ApiStatusCodes.INSUFFICIENT_INFORMATION) {
-            this.currentState = this.loginStates.NEED_ORG_NAME
+            this.currentState = this.states.NEED_ORG_NAME
           } else {
-            this.currentState = this.loginStates.GENERIC_ERROR
+            this.currentState = this.states.GENERIC_ERROR
           }
         } else if (error.networkError) {
           // remove token just in case a stale one happens to be sitting around.
           // theoretically should never happen but if it ever did the user would
           // be unable to login without clearing their localStorage
           window.localStorage.removeItem('token')
-          this.currentState = this.loginStates.NETWORK_ERROR
+          this.currentState = this.states.NETWORK_ERROR
         } else {
-          this.currentState = this.loginStates.GENERIC_ERROR
+          this.currentState = this.states.GENERIC_ERROR
         }
       })
     }

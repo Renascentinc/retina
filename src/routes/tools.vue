@@ -138,6 +138,7 @@ export default {
         role
       }
     }`,
+
     searchTool: {
       query: gql`query tools($query: String, $toolFilter: ToolFilter, $pagingParameters: PagingParameters) {
         searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
@@ -158,6 +159,7 @@ export default {
           }
         }
       }`,
+
       variables () {
         let options = {
           pagingParameters: {
@@ -208,10 +210,11 @@ export default {
 
   computed: {
     tools () {
+      let tools = this.searchTool || []
       if (this.showOnlySelectedTools) {
-        return (this.searchTool || []).filter(tool => this.$store.state.selectedToolsMap[tool.id])
+        return tools.filter(tool => this.$store.state.selectedToolsMap[tool.id])
       }
-      return this.searchTool || []
+      return tools
     },
 
     users () {
@@ -266,7 +269,8 @@ export default {
     },
 
     finalizeTransfer () {
-      // TODO deselect all selected tools
+      // TODO make api call to transfer tools
+      this.$store.commit('resetSelectedTools')
       this.currentState = this.states.INITIAL
     },
 
@@ -279,7 +283,6 @@ export default {
 
 <style lang="scss">
 @import '../styles/variables';
-@import '../styles/loading-spinner';
 
 .tools-page {
   display: flex;

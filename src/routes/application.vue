@@ -45,7 +45,6 @@
 
         <transition>
           <div
-            v-if="navbarStatus.isShown"
             class="nav-bar">
             <div class="icon-text-container">
               <button
@@ -74,45 +73,38 @@
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
 import authenticatedRouteMixin from '../mixins/authenticatedRoute'
-import gql from 'graphql-tag'
 
 export default {
   name: 'Application',
+
   components: {
     Avatar
   },
+
   mixins: [ authenticatedRouteMixin ],
-  // apollo: {
-  //   navbarStatus: gql`query {
-  //     navbarStatus @client {
-  //       isShown
-  //     }
-  //   }`
-  // },
-  data () {
-    return {
-      navbarStatus: {
-        isShown: true
-      }
-    }
-  },
+
   computed: {
     currentUser () {
       return JSON.parse(window.localStorage.getItem('currentUser')) || {}
     },
+
     firstname () {
       return this.currentUser.first_name
     },
+
     lastname () {
       return this.currentUser.last_name
     },
+
     email () {
       return this.currentUser.email
     },
+
     role () {
       return this.currentUser.role
     }
   },
+
   methods: {
     closeDrawer () {
       this.$refs.drawer.toggle(false)

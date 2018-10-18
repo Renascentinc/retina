@@ -29,17 +29,16 @@ export default {
   @import '../styles/variables';
 
   .fab {
-    background-color: $renascent-red;
-    padding: 0;
-    border-radius: 50%;
-    color: white;
-    height: 50px;
-    width: 50px;
-    font-size: 19px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    box-shadow: 0 0 10px #777;
+      border: none;
+      background-color: #CE352F;
+      border-radius: 50%;
+      color: white;
+      height: 57px;
+      width: 57px;
+      font-size: 24px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
   }
 </style>

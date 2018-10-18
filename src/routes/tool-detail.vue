@@ -18,7 +18,7 @@
         </button>
         <button class="action-btn">
           <i class="fas fa-exchange-alt action-icon"/>
-          <span class="action-title">transfer</span>
+          <span class="action-title">TRANSFER</span>
         </button>
       </div>
     </div>
@@ -75,7 +75,7 @@
           General
         </div>
         <div class="card-details general-details">
-          <span class="general-label">RetinaID</span>
+          <span class="general-label">retinaID</span>
           <span class="general-data"> {{ getTool.id || '-'}} </span>
 
           <span class="general-label">serial number</span>
@@ -91,10 +91,10 @@
           <span class="general-data"> {{ getTool.purchased_from.name || '-'}} </span>
 
           <span class="general-label">purchase date</span>
-          <span class="general-data"> {{ getTool.date_purchased || '-'}} </span>
+          <span class="general-data"> {{ formattedDate(getTool.date_purchased) || '-'}} </span>
 
           <span class="general-label">purchase price</span>
-          <span class="general-data"> ${{ getTool.price || '123.99'}} </span>
+          <span class="general-data"> ${{ formattedPrice(getTool.price) || ' -'}} </span>
         </div>
 
       </div>
@@ -106,7 +106,7 @@
           Photo
         </div>
         <div class="photo-box">
-          <!-- <img class="image" src="https://s3.us-east-2.amazonaws.com/retina-images/spitfire.jpg"> -->
+          <img class="image" v-lazy="`https://s3.us-east-2.amazonaws.com/retina-images/spitfire.jpg`">
         </div>
       </div>
     </div>
@@ -117,6 +117,7 @@
 import gql from 'graphql-tag';
 import Avatar from 'vue-avatar';
 import Fab from '../components/fab.vue';
+import VueLazyload from 'vue-lazyload';
 
 export default {
 
@@ -173,7 +174,7 @@ export default {
 
   methods: {
     formattedStatus (status) {
-      return status.replace(/\_/g, ' ').toLowerCase()
+      return status.replace(/\_/g, ' ').toUpperCase()
     },
 
     phoneCall () {
@@ -182,6 +183,22 @@ export default {
 
     sendEmail () {
       window.location = `mailto:${ this.getTool.user.email }`
+    },
+
+    formattedDate (dateString) {
+      if (dateString) {
+        return new Date(dateString).toLocaleDateString("en-US")
+      }
+
+      return null
+    },
+
+    formattedPrice (priceString) {
+      if (priceString) {
+        return `${(priceString / 100)}`
+      }
+
+      return null
     }
   }
 }
@@ -245,17 +262,24 @@ export default {
         border: none !important;
         border-radius: 5px;
         color: white;
-        font-size: 18px;
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+        padding: 0px;
+        display: flex;
+        align-content: center;
 
         .action-icon {
           font-size: 18px;
-          padding-left: 5px;
+          padding-left: 12px;
           float: left;
+          margin-top: auto;
+          margin-bottom: auto;
         }
 
         .action-title {
-          font-size: 18px;
+          font-size: 13px;
+          flex: 1 0 auto;
+          margin-top: auto;
+          margin-bottom: auto;
         }
       }
     }
@@ -313,18 +337,19 @@ export default {
     }
 
     #photo-card {
+      padding-bottom: 11px;
+
       .photo-box {
         width: calc(100% - 23px);
-        height: 150px;
         margin-left: auto;
         margin-right: auto;
         margin-top: 10px;
-        border-radius: 2px;
-        background-color: $renascent-dark-gray;
         overflow: hidden;
 
         .image {
+          height: 100%;
           width: 100%;
+          border-radius: 2px;
         }
       }
     }

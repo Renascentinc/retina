@@ -2,9 +2,9 @@
   <div class="page tool-detail-page">
     <div id="header">
       <router-link
-      class="fas fa-arrow-left"
-      id="backarrow"
-      to="/tools"/>
+        id="backarrow"
+        class="fas fa-arrow-left"
+        to="/tools"/>
 
       <span id="toolid">#{{ getTool.id }} </span>
       <div id="name">
@@ -12,10 +12,9 @@
       </div>
 
       <div id="actions">
-        <button class="action-btn">
-          <i class="fas fa-pen action-icon"/>
-          <span class="action-title">{{ formattedStatus(getTool.status) }}</span>
-        </button>
+        <button-dropdown
+          :button-text="`${ formattedStatus(getTool.status) }`"/>
+
         <button class="action-btn">
           <i class="fas fa-exchange-alt action-icon"/>
           <span class="action-title">TRANSFER</span>
@@ -24,8 +23,8 @@
     </div>
     <div id="cards">
       <div
-      id="owner-card"
-      class="card">
+        id="owner-card"
+        class="card">
         <div class="card-title">
           Owner
         </div>
@@ -53,48 +52,48 @@
           </div>
           <div class="contact-buttons">
             <fab
+              id="call-btn"
               :on-click="phoneCall"
               class="contact-btn"
-              id="call-btn"
               icon-class="fa-phone"/>
 
             <div class="spacer"/>
 
             <fab
+              id="email-btn"
               :on-click="sendEmail"
               class="contact-btn"
-              id="email-btn"
               icon-class="fa-envelope"/>
           </div>
         </div>
       </div>
       <div
-      id="general-card"
-      class="card">
+        id="general-card"
+        class="card">
         <div class="card-title">
           General
         </div>
         <div class="card-details general-details">
           <span class="general-label">RetinaID</span>
-          <span class="general-data"> {{ getTool.id || '-'}} </span>
+          <span class="general-data"> {{ getTool.id || '-' }} </span>
 
           <span class="general-label">Serial number</span>
-          <span class="general-data"> {{ getTool.serial_number || '-'}} </span>
+          <span class="general-data"> {{ getTool.serial_number || '-' }} </span>
 
           <span class="general-label">Model number</span>
-          <span class="general-data"> {{ getTool.model_number || '-'}} </span>
+          <span class="general-data"> {{ getTool.model_number || '-' }} </span>
 
           <span class="general-label">Model year</span>
-          <span class="general-data"> {{ getTool.year || '-'}} </span>
+          <span class="general-data"> {{ getTool.year || '-' }} </span>
 
           <span class="general-label">Purchased from</span>
-          <span class="general-data"> {{ getTool.purchased_from.name || '-'}} </span>
+          <span class="general-data"> {{ getTool.purchased_from.name || '-' }} </span>
 
           <span class="general-label">Purchase date</span>
-          <span class="general-data"> {{ formattedDate(getTool.date_purchased) || '-'}} </span>
+          <span class="general-data"> {{ formattedDate(getTool.date_purchased) || '-' }} </span>
 
           <span class="general-label">Purchase price</span>
-          <span class="general-data"> ${{ formattedPrice(getTool.price) || ' -'}} </span>
+          <span class="general-data"> ${{ formattedPrice(getTool.price) || ' -' }} </span>
         </div>
 
       </div>
@@ -107,9 +106,9 @@
         </div>
         <div class="photo-box">
           <img
+            v-lazy="`${getTool.photo}`"
             v-if="getTool.photo"
-            class="image"
-            v-lazy="`${getTool.photo}`"/>
+            class="image">
           <i
             v-if="!getTool.photo"
             id="no-image"
@@ -121,10 +120,11 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
-import Avatar from 'vue-avatar';
-import Fab from '../components/fab.vue';
-import VueLazyload from 'vue-lazyload';
+import gql from 'graphql-tag'
+import Avatar from 'vue-avatar'
+import Fab from '../components/fab.vue'
+import VueLazyload from 'vue-lazyload'
+import ButtonDropdown from '../components/button-dropdown.vue'
 
 export default {
 
@@ -132,7 +132,8 @@ export default {
 
   components: {
     Avatar,
-    Fab
+    Fab,
+    ButtonDropdown
   },
 
   apollo: {
@@ -166,7 +167,7 @@ export default {
                 }`,
       variables () {
         let options = {}
-        options.tool_id = this.$router.currentRoute.params.toolId;
+        options.tool_id = this.$router.currentRoute.params.toolId
         return options
       }
     }
@@ -185,16 +186,16 @@ export default {
     },
 
     phoneCall () {
-      window.location.href = `tel:${ this.getTool.user.phone_number }`
+      window.location.href = `tel:${this.getTool.user.phone_number}`
     },
 
     sendEmail () {
-      window.location = `mailto:${ this.getTool.user.email }`
+      window.location = `mailto:${this.getTool.user.email}`
     },
 
     formattedDate (dateString) {
       if (dateString) {
-        return new Date(dateString).toLocaleDateString("en-US")
+        return new Date(dateString).toLocaleDateString('en-US')
       }
 
       return null
@@ -238,6 +239,7 @@ export default {
       left: 23px;
       color: $renascent-red;
       font-size: 30px;
+      z-index: -10
     }
 
     #toolid {
@@ -273,6 +275,7 @@ export default {
         padding: 0px;
         display: flex;
         align-content: center;
+        z-index: -10;
 
         .action-icon {
           font-size: 18px;

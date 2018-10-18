@@ -106,7 +106,14 @@
           Photo
         </div>
         <div class="photo-box">
-          <img class="image" v-lazy="`https://s3.us-east-2.amazonaws.com/retina-images/spitfire.jpg`">
+          <img
+            v-if="getTool.photo"
+            class="image"
+            v-lazy="`${getTool.photo}`"/>
+          <i
+            v-if="!getTool.photo"
+            id="no-image"
+            class="fas fa-image"/>
         </div>
       </div>
     </div>
@@ -350,6 +357,15 @@ export default {
           height: 100%;
           width: 100%;
           border-radius: 2px;
+        }
+
+        #no-image {
+          color: $background-dark-gray;
+          font-size: 60px;
+          width: 100%;
+          text-align: center;
+          margin-top: 20px;
+          margin-bottom: 20px;
         }
       }
     }

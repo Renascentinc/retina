@@ -33,12 +33,13 @@ export default {
       background-color: #CE352F;
       border-radius: 50%;
       color: white;
-      height: 57px;
-      width: 57px;
+      height: 55px;
+      width: 55px;
       font-size: 24px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+      padding: 0;
   }
 </style>

@@ -12,6 +12,8 @@ import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import { onError } from 'apollo-link-error'
+import ApiStatusCodes from './utils/api-status-codes'
 
 const cache = new InMemoryCache()
 
@@ -19,9 +21,9 @@ const httpLink = new HttpLink({
   uri: 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })
 
-const authLink = setContext((_, { headers = {} }) => {
+const authLink = setContext(({ operationName }, { headers = {} }) => {
   const token = localStorage.getItem('token')
-  if (token) {
+  if (token && operationName !== 'attemptUserLogin') {
     headers.authorization = `Bearer ${token}`
   }
 
@@ -30,8 +32,18 @@ const authLink = setContext((_, { headers = {} }) => {
   }
 })
 
+const errorLink = onError(({ graphQLErrors = [] }) => {
+  graphQLErrors.map(({ extensions: { code } }) => {
+    if (code === ApiStatusCodes.UNAUTHENTICATED) {
+      window.localStorage.removeItem('token')
+      window.confirm('Your Session Has Expired. Click Ok To Return To Log In')
+      router.push({ path: '/login' })
+    }
+  })
+})
+
 const defaultClient = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: authLink.concat(errorLink).concat(httpLink),
   cache,
   connectToDevTools: true
 })

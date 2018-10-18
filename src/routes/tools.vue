@@ -230,6 +230,12 @@ export default {
     }
   },
 
+  created () {
+    if (this.numSelectedTools.length) {
+      this.currentState = this.states.SELECTING
+    }
+  },
+
   methods: {
     transitionToToolInfo (toolId) {
       this.$router.push({ name: 'toolDetail', params: { toolId } })
@@ -311,19 +317,20 @@ export default {
   .floating-action-bar {
     display: inline-block;
     position: absolute;
-    bottom: 60px;
+    bottom: 65px;
     width: 100vw;
-    height: 50px;
+    height: 55px;
 
     .transfer-btn {
       position: absolute;
-      left: calc(50% - 68px);
-      width: 142px;
+      left: calc(50% - 79px);
+      width: 158px;
+      height: 55px;
     }
 
     .add-btn {
       position: absolute;
-      right: 40px;
+      right: 20px;
     }
   }
 

@@ -179,7 +179,6 @@ export default {
           // remove token just in case a stale one happens to be sitting around.
           // theoretically should never happen but if it ever did the user would
           // be unable to login without clearing their localStorage
-          window.localStorage.removeItem('token')
           this.currentState = this.states.NETWORK_ERROR
         } else {
           this.currentState = this.states.GENERIC_ERROR

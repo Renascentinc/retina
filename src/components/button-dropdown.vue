@@ -8,11 +8,23 @@
       @click="showOptions">
       <div class="fab-icon-container">
         <i
+          v-if="!activated"
           :class="iconClass || 'fa-pen'"
           class="fas"/>
       </div>
       <span class="text">{{ buttonText }}</span>
     </button>
+    <div class="options"
+      v-if="activated">
+
+      <button
+        class="option button"
+        v-for="status in filteredOptions()"
+        :key="status">
+        {{ status }}
+      </button>
+
+    </div>
   </div>
 </template>
 
@@ -22,13 +34,24 @@ export default {
 
   data () {
     return {
-      activated: false
+      activated: false,
+      statuses: this.$props.options
     }
   },
 
   methods: {
     showOptions () {
       this.activated = !this.activated;
+    },
+
+    filteredOptions () {
+      var array = this.$props.options;
+      var index = array.indexOf(this.$props.buttonText);
+      if (index !== -1) {
+        array.splice(index, 1);
+      }
+
+      return array
     }
   },
 
@@ -41,12 +64,26 @@ export default {
       type: String,
       required: true
     },
+    options: {
+      type: Array,
+      required: true
+    }
   }
 }
 </script>
 
 <style lang="scss">
 @import '../styles/variables';
+.options {
+  position: absolute;
+
+  .button {
+    margin-top: 11px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
 .scrim {
   background-color: rgba(255, 255, 255, 0.70);
   width: 100vw;

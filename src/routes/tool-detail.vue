@@ -13,6 +13,7 @@
 
       <div id="actions">
         <button-dropdown
+          :options="['AVAILABLE', 'IN USE', 'MAINTENENCE', 'OUT OF SERVICE']"
           :button-text="`${ formattedStatus(getTool.status) }`"/>
 
         <button class="action-btn">

@@ -19,9 +19,10 @@
 
       <button
         class="option button"
-        v-for="status in filteredOptions()"
-        :key="status">
-        {{ status }}
+        v-for="option in filteredOptions()"
+        @click="clickOption(option)"
+        :key="option">
+        {{ option }}
       </button>
 
     </div>
@@ -35,11 +36,15 @@ export default {
   data () {
     return {
       activated: false,
-      statuses: this.$props.options
     }
   },
 
   methods: {
+    clickOption (selectedOption) {
+      this.$props.onClick(selectedOption)
+      this.activated = false;
+    },
+
     showOptions () {
       this.activated = !this.activated;
     },
@@ -66,6 +71,10 @@ export default {
     },
     options: {
       type: Array,
+      required: true
+    },
+    onClick: {
+      type: Function,
       required: true
     }
   }

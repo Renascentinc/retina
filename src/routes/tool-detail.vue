@@ -13,6 +13,7 @@
 
       <div id="actions">
         <button-dropdown
+          :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENENCE', 'OUT OF SERVICE']"
           :button-text="`${ formattedStatus(getTool.status) }`"/>
 
@@ -192,6 +193,23 @@ export default {
 
     sendEmail () {
       window.location = `mailto:${this.getTool.user.email}`
+    },
+
+    updateStatus (status) {
+      var tool = this.getTool
+      this.getTool.status = status
+      console.log(this.getTool)
+
+      this.$apollo.mutate({
+        mutation: gql`mutation update($tool: UpdatedTool!) {
+                      updateTool(updatedTool: $tool) {
+                        status
+                      }
+                    }`,
+        variables: {
+          tool: this.getTool
+        }
+      })
     },
 
     formattedDate (dateString) {

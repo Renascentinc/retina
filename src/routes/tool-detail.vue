@@ -55,16 +55,16 @@
           <div class="contact-buttons">
             <fab
               id="call-btn"
-              :on-click="phoneCall"
-              v-bind:class="[this.phoneNumber() ? 'contact-btn-active' : 'contact-btn-inactive']"
+              :on-click="phoneNumber() ? phoneCall : () => 0"
+              :class="[phoneNumber() ? 'contact-btn-active' : 'contact-btn-inactive']"
               icon-class="fa-phone"/>
 
             <div class="spacer"/>
 
             <fab
               id="email-btn"
-              :on-click="sendEmail"
-              v-bind:class="[this.email() ? 'contact-btn-active' : 'contact-btn-inactive']"
+              :on-click="email() ? sendEmail : () => 0"
+              :class="[email() ? 'contact-btn-active' : 'contact-btn-inactive']"
               icon-class="fa-envelope"/>
           </div>
         </div>
@@ -129,55 +129,56 @@ import VueLazyload from 'vue-lazyload'
 import ButtonDropdown from '../components/button-dropdown.vue'
 
 export default {
-
   name: 'ToolDetail',
 
   components: {
     Avatar,
     Fab,
-    ButtonDropdown
+    ButtonDropdown,
+    VueLazyload
   },
 
   apollo: {
     getTool: {
-      query: gql`query tool($tool_id: ID!) {
-	                getTool(tool_id: $tool_id)
-                  {
-                    id
-                    brand {
-                      id
-                      name
-                    }
-                    type {
-                      id
-                      name
-                    }
-                    year
-                    status
-                    model_number
-                    serial_number
-                    purchased_from {
-                      id
-                      name
-                    }
-                    date_purchased
-                    price
-                    photo
+      query: gql`
+        query tool($tool_id: ID!) {
+          getTool(tool_id: $tool_id) {
+            id
+            brand {
+              id
+              name
+            }
+            type {
+              id
+              name
+            }
+            year
+            status
+            model_number
+            serial_number
+            purchased_from {
+              id
+              name
+            }
+            date_purchased
+            price
+            photo
 
-                    location {
-                      id
-                      name
-                    }
+            location {
+              id
+              name
+            }
 
-                    user {
-                      id
-                      first_name
-                      last_name
-                      email
-                      phone_number
-                    }
-                  }
-                }`,
+            user {
+              id
+              first_name
+              last_name
+              email
+              phone_number
+            }
+          }
+        }
+      `,
       variables () {
         let options = {}
         options.tool_id = this.$router.currentRoute.params.toolId
@@ -211,7 +212,7 @@ export default {
     },
 
     formattedStatus (status) {
-      return status.replace(/\_/g, ' ').toUpperCase()
+      return status.replace(/_/g, ' ').toUpperCase()
     },
 
     phoneCall () {
@@ -226,32 +227,39 @@ export default {
       newStatus = newStatus.replace(/ /g, '_').toUpperCase()
       var datePurchased = this.getTool.date_purchased.replace(/\(.*\)/g, '')
 
-      this.$apollo.mutate({
-        mutation: gql`mutation update($tool: UpdatedTool!) {
-                      updateTool(updatedTool: $tool) {
-                        status
-                      }
-                    }`,
-        variables: {
-          tool: {
-            id: this.getTool.id,
-            type_id: this.getTool.type.id,
-            brand_id: this.getTool.brand.id,
-            model_number: this.getTool.model_number,
-            serial_number: this.getTool.serial_number,
-            status: newStatus,
-            purchased_from_id: this.getTool.purchased_from.id,
-            date_purchased: datePurchased,
-            user_id: this.getTool.user !== null ? this.getTool.user.id : null,
-            location_id: this.getTool.location !== null ? this.getTool.location.id : null,
-            photo: this.getTool.photo,
-            price: this.getTool.price,
-            year: this.getTool.year
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation update($tool: UpdatedTool!) {
+              updateTool(updatedTool: $tool) {
+                status
+              }
+            }
+          `,
+          variables: {
+            tool: {
+              id: this.getTool.id,
+              type_id: this.getTool.type.id,
+              brand_id: this.getTool.brand.id,
+              model_number: this.getTool.model_number,
+              serial_number: this.getTool.serial_number,
+              status: newStatus,
+              purchased_from_id: this.getTool.purchased_from.id,
+              date_purchased: datePurchased,
+              user_id: this.getTool.user !== null ? this.getTool.user.id : null,
+              location_id:
+                this.getTool.location !== null
+                  ? this.getTool.location.id
+                  : null,
+              photo: this.getTool.photo,
+              price: this.getTool.price,
+              year: this.getTool.year
+            }
           }
-        }
-      }).then( (status) => {
-        this.getTool.status = status.data.updateTool.status
-      })
+        })
+        .then(status => {
+          this.getTool.status = status.data.updateTool.status
+        })
     },
 
     formattedDate (dateString) {
@@ -264,7 +272,7 @@ export default {
 
     formattedPrice (priceString) {
       if (priceString) {
-        return `${(priceString / 100)}`
+        return `${priceString / 100}`
       }
 
       return null
@@ -274,7 +282,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+@import "../styles/variables";
 
 .tool-detail-page {
   background-color: $background-light-gray;
@@ -300,7 +308,7 @@ export default {
       left: 23px;
       color: $renascent-red;
       font-size: 30px;
-      z-index: -10
+      z-index: -10;
     }
 
     #toolid {
@@ -480,6 +488,7 @@ export default {
 
         .contact-btn-inactive {
           background-color: $disabled-gray;
+          box-shadow: none;
         }
 
         .fab {

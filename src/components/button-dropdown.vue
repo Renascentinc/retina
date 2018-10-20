@@ -2,10 +2,10 @@
   <div class="container">
 
     <transition name="fade">
-    <div
-      class="scrim"
-      v-if="activated"
-      @click="toggle"/>
+      <div
+        v-if="activated"
+        class="scrim"
+        @click="toggle"/>
     </transition>
 
     <button
@@ -14,25 +14,26 @@
       <div class="fab-icon-container">
         <i
           v-if="!activated"
-          :class="iconClass || 'fa-pen'"
+          :class="iconClass"
           class="fas"/>
       </div>
       <span class="text">{{ buttonText }}</span>
     </button>
 
     <transition name="fade">
-    <div class="options"
-      v-if="activated">
+      <div
+        v-if="activated"
+        class="options">
 
-      <button
-        class="option button slide-item"
-        v-for="option in filteredOptions()"
-        @click="clickOption(option)"
-        :key="option">
-        {{ option }}
-      </button>
+        <button
+          v-for="option in filteredOptions()"
+          :key="option"
+          class="option button slide-item"
+          @click="clickOption(option)">
+          {{ option }}
+        </button>
 
-    </div>
+      </div>
     </transition>
 
   </div>
@@ -42,37 +43,11 @@
 export default {
   name: 'ButtonDropdown',
 
-  data () {
-    return {
-      activated: false,
-    }
-  },
-
-  methods: {
-    clickOption (selectedOption) {
-      this.$props.onClick(selectedOption)
-      this.activated = false;
-    },
-
-    toggle () {
-      this.activated = !this.activated;
-    },
-
-    filteredOptions () {
-      var array = this.$props.options;
-      var index = array.indexOf(this.$props.buttonText);
-      if (index !== -1) {
-        array.splice(index, 1);
-      }
-
-      return array
-    }
-  },
-
   props: {
     iconClass: {
       type: String,
-      required: false
+      required: false,
+      default: 'fa-pen'
     },
     buttonText: {
       type: String,
@@ -85,6 +60,33 @@ export default {
     onClick: {
       type: Function,
       required: true
+    }
+  },
+
+  data () {
+    return {
+      activated: false
+    }
+  },
+
+  methods: {
+    clickOption (selectedOption) {
+      this.$props.onClick(selectedOption)
+      this.activated = false
+    },
+
+    toggle () {
+      this.activated = !this.activated
+    },
+
+    filteredOptions () {
+      var array = this.$props.options
+      var index = array.indexOf(this.$props.buttonText)
+      if (index !== -1) {
+        array.splice(index, 1)
+      }
+
+      return array
     }
   }
 }

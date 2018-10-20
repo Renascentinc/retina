@@ -14,7 +14,7 @@
       <div id="actions">
         <button-dropdown
           :on-click="updateStatus"
-          :options="['AVAILABLE', 'IN USE', 'MAINTENENCE', 'OUT OF SERVICE']"
+          :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
           :button-text="`${ formattedStatus(getTool.status) }`"/>
 
         <button class="action-btn">
@@ -56,7 +56,7 @@
             <fab
               id="call-btn"
               :on-click="phoneCall"
-              class="contact-btn"
+              v-bind:class="[this.phoneNumber() ? 'contact-btn-active' : 'contact-btn-inactive']"
               icon-class="fa-phone"/>
 
             <div class="spacer"/>
@@ -64,7 +64,7 @@
             <fab
               id="email-btn"
               :on-click="sendEmail"
-              class="contact-btn"
+              v-bind:class="[this.email() ? 'contact-btn-active' : 'contact-btn-inactive']"
               icon-class="fa-envelope"/>
           </div>
         </div>
@@ -144,22 +144,33 @@ export default {
 	                getTool(tool_id: $tool_id)
                   {
                     id
-                    brand { name }
-                    type { name }
+                    brand {
+                      id
+                      name
+                    }
+                    type {
+                      id
+                      name
+                    }
                     year
                     status
                     model_number
                     serial_number
-                    purchased_from { name }
+                    purchased_from {
+                      id
+                      name
+                    }
                     date_purchased
                     price
                     photo
 
                     location {
+                      id
                       name
                     }
 
                     user {
+                      id
                       first_name
                       last_name
                       email
@@ -183,6 +194,22 @@ export default {
   },
 
   methods: {
+    phoneNumber () {
+      if (this.getTool.user) {
+        return this.getTool.user.phone_number
+      } else if (this.getTool.location) {
+        return this.getTool.location.phone_number
+      }
+    },
+
+    email () {
+      if (this.getTool.user) {
+        return this.getTool.user.email
+      } else if (this.getTool.location) {
+        return this.getTool.location.email
+      }
+    },
+
     formattedStatus (status) {
       return status.replace(/\_/g, ' ').toUpperCase()
     },
@@ -195,10 +222,9 @@ export default {
       window.location = `mailto:${this.getTool.user.email}`
     },
 
-    updateStatus (status) {
-      var tool = this.getTool
-      this.getTool.status = status
-      console.log(this.getTool)
+    updateStatus (newStatus) {
+      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
+      var datePurchased = this.getTool.date_purchased.replace(/\(.*\)/g, '')
 
       this.$apollo.mutate({
         mutation: gql`mutation update($tool: UpdatedTool!) {
@@ -207,8 +233,24 @@ export default {
                       }
                     }`,
         variables: {
-          tool: this.getTool
+          tool: {
+            id: this.getTool.id,
+            type_id: this.getTool.type.id,
+            brand_id: this.getTool.brand.id,
+            model_number: this.getTool.model_number,
+            serial_number: this.getTool.serial_number,
+            status: newStatus,
+            purchased_from_id: this.getTool.purchased_from.id,
+            date_purchased: datePurchased,
+            user_id: this.getTool.user !== null ? this.getTool.user.id : null,
+            location_id: this.getTool.location !== null ? this.getTool.location.id : null,
+            photo: this.getTool.photo,
+            price: this.getTool.price,
+            year: this.getTool.year
+          }
         }
+      }).then( (status) => {
+        this.getTool.status = status.data.updateTool.status
       })
     },
 
@@ -435,6 +477,10 @@ export default {
         justify-content: flex-end;
         flex-direction: row;
         flex-wrap: wrap;
+
+        .contact-btn-inactive {
+          background-color: $disabled-gray;
+        }
 
         .fab {
           margin: 11px;

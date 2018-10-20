@@ -1,11 +1,16 @@
 <template>
   <div class="container">
+
+    <transition name="fade">
     <div
       class="scrim"
-      v-if="activated"/>
+      v-if="activated"
+      @click="toggle"/>
+    </transition>
+
     <button
       class="button"
-      @click="showOptions">
+      @click="toggle">
       <div class="fab-icon-container">
         <i
           v-if="!activated"
@@ -14,11 +19,13 @@
       </div>
       <span class="text">{{ buttonText }}</span>
     </button>
+
+    <transition name="fade">
     <div class="options"
       v-if="activated">
 
       <button
-        class="option button"
+        class="option button slide-item"
         v-for="option in filteredOptions()"
         @click="clickOption(option)"
         :key="option">
@@ -26,6 +33,8 @@
       </button>
 
     </div>
+    </transition>
+
   </div>
 </template>
 
@@ -45,7 +54,7 @@ export default {
       this.activated = false;
     },
 
-    showOptions () {
+    toggle () {
       this.activated = !this.activated;
     },
 
@@ -83,6 +92,15 @@ export default {
 
 <style lang="scss">
 @import '../styles/variables';
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 .options {
   position: absolute;
 
@@ -94,7 +112,7 @@ export default {
 }
 
 .scrim {
-  background-color: rgba(255, 255, 255, 0.70);
+  background-color: rgba(255, 255, 255, 0.75);
   width: 100vw;
   height: 100vh;
   position: absolute;

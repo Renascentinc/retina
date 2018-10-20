@@ -81,7 +81,7 @@
 
         <div class="finalize-row finalize-middle">
           <span class="finalize-to-text"> To </span>
-          <select
+          <!-- <select
             class="dark-dropdown"
             placeholder="select user">
             <option> select user </option>
@@ -90,7 +90,13 @@
               :key="user.id">
               {{ `${user.first_name} ${user.last_name}` }}
             </option>
-          </select>
+          </select> -->
+
+          <v-select
+            :options="users"
+            label="full_name"
+            class="dark-input"
+            placeholder="select user"/>
         </div>
 
         <div class="finalize-row finalize-footer">
@@ -117,6 +123,7 @@ import ToolSearchInput from '../components/tool-search-input.vue'
 import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab.vue'
+import vSelect from 'vue-select'
 import gql from 'graphql-tag'
 
 export default {
@@ -126,7 +133,8 @@ export default {
     ToolSearchInput,
     ToolSearchResult,
     ExtendedFab,
-    Fab
+    Fab,
+    vSelect
   },
 
   apollo: {
@@ -218,6 +226,11 @@ export default {
     },
 
     users () {
+      if (this.getAllUser) {
+        this.getAllUser.forEach(user => {
+          user.full_name = `${user.first_name} ${user.last_name}`
+        })
+      }
       return this.getAllUser || []
     },
 
@@ -390,6 +403,18 @@ export default {
         font-size: 39px;
         margin-right: 13px;
       }
+
+      .dropdown {
+        width: 246px;
+
+        .selected-tag {
+          font-size: 20px;
+        }
+
+        .dropdown-menu {
+          top: -260px !important;
+        }
+      }
     }
 
     .finalize-header {
@@ -405,19 +430,5 @@ export default {
       width: 146px;
     }
   }
-}
-
-.dark-dropdown {
-  width: 243px;
-  height: 45px;
-  background-color: $renascent-dark-gray;
-  border-radius: 3px;
-  color: white;
-  // font-size: 31px;
-  font-family: Lato;
-  font-weight: 700;
-  padding-left: 7px;
-  padding-bottom: 5px;
-  font-size: 28px;
 }
 </style>

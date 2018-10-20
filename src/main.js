@@ -53,7 +53,6 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.config.productionTip = false
-
 Vue.use(VueLazyload)
 Vue.use(DrawerLayout)
 Vue.use(VueApollo)

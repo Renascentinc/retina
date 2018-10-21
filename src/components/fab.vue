@@ -1,7 +1,7 @@
 <template>
   <button
+    :class="[this.$props.active() ? 'active' : 'inactive']"
     class="fab"
-    v-bind:class="[this.$props.active() ? 'active' : 'inactive']"
     @click="onClick">
     <div class="fab-icon-container">
       <i
@@ -27,7 +27,7 @@ export default {
     active: {
       type: Function,
       required: false,
-      default: true
+      default: () => { return true }
     }
   }
 }

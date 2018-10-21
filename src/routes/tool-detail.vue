@@ -18,8 +18,8 @@
           :button-text="`${ formattedStatus(getTool.status) }`"/>
 
         <button
-        class="action-btn"
-        v-if="isTransferable()">
+          v-if="isTransferable()"
+          class="action-btn">
           <i class="fas fa-exchange-alt action-icon"/>
           <span class="action-title">TRANSFER</span>
         </button>
@@ -197,10 +197,10 @@ export default {
   },
 
   methods: {
-    isTransferable() {
+    isTransferable () {
       if (this.getTool.location) {
         return true
-      } else if (JSON.parse(window.localStorage.getItem('currentUser')).id ==  this.getTool.user.id) {
+      } else if (JSON.parse(window.localStorage.getItem('currentUser')).id === this.getTool.user.id) {
         return true
       }
       return false

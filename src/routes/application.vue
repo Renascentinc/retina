@@ -56,9 +56,9 @@
 
             <div class="icon-text-container">
               <router-link
-                class="fas fa-user menu-icon"
-                to="/users">
-                <span class="icon-subtext">USERS</span>
+                class="fas fa-cog menu-icon"
+                to="/configuration">
+                <span class="icon-subtext">CONFIGURE</span>
               </router-link>
             </div>
 
@@ -72,7 +72,7 @@
 
             <div class="icon-text-container">
               <router-link
-                class="fas fa-file menu-icon"
+                class="fas fa-file-alt menu-icon"
                 to="/reports">
                 <span class="icon-subtext">REPORTS</span>
               </router-link>
@@ -80,9 +80,9 @@
 
             <div class="icon-text-container">
               <router-link
-                class="fas fa-cog menu-icon"
-                to="/configuration">
-                <span class="icon-subtext">CONFIGURE</span>
+                class="fas fa-users menu-icon"
+                to="/users">
+                <span class="icon-subtext">USERS</span>
               </router-link>
             </div>
           </div>

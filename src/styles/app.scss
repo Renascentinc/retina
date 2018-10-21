@@ -4,6 +4,10 @@
 @import 'drawer';
 @import 'navbar';
 
+* {
+  font-family: $font-family;
+}
+
 html, body, #app {
   font-family: $font-family;
   height: 100%;

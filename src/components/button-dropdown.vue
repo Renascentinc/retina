@@ -71,6 +71,7 @@ export default {
 
   methods: {
     clickOption (selectedOption) {
+      this.buttonText = selectedOption
       this.$props.onClick(selectedOption)
       this.activated = false
     },

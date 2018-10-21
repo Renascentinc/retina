@@ -1,7 +1,9 @@
 <template>
   <div class="page new-tool-page">
     <div class="header">
-      <i class="fas fa-times exit-new-tool"/>
+      <router-link
+        class="fas fa-times exit-new-tool"
+        to="/tools"/>
 
       <span class="new-tool-text"> New Tool </span>
 
@@ -109,18 +111,15 @@
         icon-class="fa-arrow-left"/>
 
       <div class="pager">
-        <button
+        <div
           :class="{ selected: currentState === 1 }"
-          class="pager-page"
-          @click="() => currentState = 1"/>
-        <button
+          class="pager-page"/>
+        <div
           :class="{ selected: currentState === 2 }"
-          class="pager-page"
-          @click="() => currentState = 2"/>
-        <button
+          class="pager-page"/>
+        <div
           :class="{ selected: currentState === 3 }"
-          class="pager-page"
-          @click="() => currentState = 3"/>
+          class="pager-page"/>
       </div>
 
       <fab
@@ -248,7 +247,7 @@ export default {
 
   .add-another-efab {
     border-color: transparent;
-    box-shadow: 0;
+    box-shadow: none;
   }
 
   .tool-search-result {

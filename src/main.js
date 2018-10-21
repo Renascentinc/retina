@@ -16,6 +16,7 @@ import { onError } from 'apollo-link-error'
 import ApiStatusCodes from './utils/api-status-codes'
 import VCalendar from 'v-calendar'
 import '../node_modules/v-calendar/lib/v-calendar.min.css'
+import VeeValidate from 'vee-validate'
 
 const cache = new InMemoryCache()
 
@@ -36,7 +37,7 @@ const authLink = setContext(({ operationName }, { headers = {} }) => {
 
 const errorLink = onError(({ graphQLErrors = [] }) => {
   graphQLErrors.map(({ extensions: { code } }) => {
-    if (code === ApiStatusCodes.UNAUTHENTICATED) {
+    if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login') {
       window.localStorage.removeItem('token')
       window.confirm('Your Session Has Expired. Click Ok To Return To Log In')
       router.push({ path: '/login' })
@@ -59,6 +60,7 @@ Vue.use(VueLazyload)
 Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
+Vue.use(VeeValidate)
 
 // attachFastClick(document.body)
 

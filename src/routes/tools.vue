@@ -21,7 +21,7 @@
 
       <transition-group
         name="list"
-        tag="div">
+        tag="span">
         <tool-search-result
           v-for="tool in tools"
           :tool="tool"
@@ -94,9 +94,10 @@
 
           <v-select
             :options="users"
+            :filterable="false"
+            value="select user"
             label="full_name"
-            class="dark-input"
-            placeholder="select user"/>
+            class="dark-input"/>
         </div>
 
         <div class="finalize-row finalize-footer">
@@ -280,6 +281,7 @@ export default {
 
     cancelTransfer () {
       this.$store.commit('resetSelectedTools')
+      this.showOnlySelectedTools = false
       this.currentState = this.states.INITIAL
     },
 
@@ -290,10 +292,12 @@ export default {
     finalizeTransfer () {
       // TODO make api call to transfer tools
       this.$store.commit('resetSelectedTools')
+      this.showOnlySelectedTools = false
       this.currentState = this.states.INITIAL
     },
 
     proceedToFinalize () {
+      this.showOnlySelectedTools = true
       this.currentState = this.states.FINALIZING
     }
   }
@@ -429,6 +433,10 @@ export default {
     .extended-fab {
       width: 146px;
     }
+  }
+
+  .form-control {
+    display: none !important;
   }
 }
 </style>

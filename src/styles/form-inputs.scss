@@ -39,7 +39,12 @@
   font-size: 31px;
 
   .selected-tag {
+    height: 100%;
     color: white !important;
+  }
+
+  .dropdown-toggle {
+    height: 100%;
   }
 
   input.form-control {

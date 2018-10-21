@@ -5,6 +5,12 @@
 @import 'navbar';
 @import 'form-inputs';
 
+* {
+  font-family: $font-family;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
 html, body, #app {
   font-family: $font-family;
   height: 100%;

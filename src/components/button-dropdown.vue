@@ -5,7 +5,8 @@
       <div
         v-if="activated"
         class="scrim"
-        @click="toggle"/>
+        @click="toggle">
+      </div>
     </transition>
 
     <button
@@ -15,7 +16,8 @@
         <i
           v-if="!activated"
           :class="iconClass"
-          class="fas"/>
+          class="fas">
+        </i>
       </div>
       <span class="text">{{ buttonText }}</span>
     </button>

@@ -6,7 +6,8 @@
     <div class="fab-icon-container">
       <i
         :class="iconClass"
-        class="fas"/>
+        class="fas">
+      </i>
     </div>
     <span class="efab-text">{{ buttonText }}</span>
   </button>

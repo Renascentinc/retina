@@ -24,13 +24,13 @@
 
         <div class="menu-buttons">
           <button class="change-password menu-btn">
-            <i class="fas menu-btn-icon fa-key"/>
+            <i class="fas menu-btn-icon fa-key"></i>
             CHANGE PASSWORD
           </button>
           <button
             class="sign-out menu-btn"
             @click="signout()">
-            <i class="fas menu-btn-icon fa-sign-out-alt"/>
+            <i class="fas menu-btn-icon fa-sign-out-alt"></i>
             SIGN OUT
           </button>
         </div>

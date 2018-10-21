@@ -1,7 +1,7 @@
 <template>
   <div class="tool-search-input">
     <div class="search-icon-container">
-      <i class="fas fa-search"/>
+      <i class="fas fa-search"></i>
     </div>
     <vue-tags-input
       v-model="tag"
@@ -29,6 +29,7 @@
         <i
           :class="props.tag.iconClass"
           class="fas tag-icon"/>
+        </i>
         {{ props.tag.name }}
       </div>
     </vue-tags-input>

@@ -19,7 +19,8 @@
       <div class="row">
         <i
           :class="assigneeIcon"
-          class="fas user-icon"/>
+          class="fas user-icon">
+        </i>
 
         <span class="tool-assignee">{{ assignee }}</span>
       </div>

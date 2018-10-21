@@ -23,7 +23,7 @@
         <button
           v-if="isTransferable"
           class="action-btn">
-          <i class="fas fa-exchange-alt action-icon"/>
+          <i class="fas fa-exchange-alt action-icon"></i>
           <span class="action-title">TRANSFER</span>
         </button>
       </div>
@@ -37,10 +37,12 @@
           <div class="user-symbol">
             <i
               v-if="getTool.user"
-              class="fas fa-user"/>
+              class="fas fa-user">
+            </i>
             <i
               v-if="getTool.location"
-              class="fas fa-map-marker-alt"/>
+              class="fas fa-map-marker-alt">
+            </i>
           </div>
           <div class="owner-name">
             <div
@@ -114,7 +116,8 @@
             class="image">
           <i
             v-if="!getTool.photo"
-            class="fas fa-image no-image"/>
+            class="fas fa-image no-image">
+          </i>
         </div>
       </div>
     </div>

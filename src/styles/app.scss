@@ -36,6 +36,18 @@ a {
   flex: 1 1 auto;
 }
 
+.page-change-enter-active {
+  transition: opacity .25s;
+}
+
+.page-change-enter {
+  opacity: 0;
+}
+
+.page-change-leave-to {
+  display: none;
+}
+
 .main-application {
   display: flex;
   height: 100%;

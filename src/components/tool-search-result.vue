@@ -7,15 +7,20 @@
         <span class="tool-name">{{ name }}</span>
       </div>
       <div class="row">
-        <span class="tool-id">{{ id }}</span>
+        <span class="tool-id">
+          {{ id }}
+        </span>
         <span
           :class="statusClass"
-          class="tool-status">{{ status }}</span>
+          class="tool-status">
+          {{ status }}
+        </span>
       </div>
       <div class="row">
         <i
           :class="assigneeIcon"
           class="fas user-icon"/>
+
         <span class="tool-assignee">{{ assignee }}</span>
       </div>
     </div>

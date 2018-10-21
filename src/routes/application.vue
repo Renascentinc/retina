@@ -39,7 +39,7 @@
       <div
         slot="content"
         class="main-content">
-        <transition>
+        <transition name="page-change">
           <router-view />
         </transition>
 

@@ -25,6 +25,7 @@
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "gsap": "^2.0.1",
+    "html2pdf.js": "^0.9.0",
     "v-calendar": "^0.9.7",
     "vue-apollo": "^3.0.0-beta.25",
     "vue-avatar": "^2.1.6",
@@ -55,8 +56,10 @@
     "jest": "^22.0.4",
     "jest-serializer-vue": "^0.3.0",
     "node-sass": "^4.9.3",
-    "parcel-bundler": "^1.7.0",
-    "parcel-plugin-sw-precache": "^0.5.2",
+    "parcel-bundler": "~1.9.7",
+    "parcel-plugin-change-file": "^1.3.0",
+    "parcel-plugin-compress": "^1.0.6",
+    "parcel-plugin-sw-precache": "^1.0.1",
     "phonegap-nfc": "^1.0.3",
     "vue": "^2.5.16",
     "vue-hot-reload-api": "^2.3.0",
@@ -77,5 +80,6 @@
       "android"
     ]
   },
-  "parcel-plugin-change-file": {}
+  "parcel-plugin-change-file": {},
+  "sw-precache": {}
 }

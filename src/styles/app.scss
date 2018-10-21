@@ -1,6 +1,8 @@
 @import 'variables';
 @import 'fonts';
+@import 'loading-spinner';
 @import 'drawer';
+@import 'navbar';
 
 html, body, #app {
   font-family: $font-family;
@@ -9,40 +11,19 @@ html, body, #app {
   overflow: hidden;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .25s;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-  transition: opacity 0s;
-}
-
-.list-item {
-  transition: all 1s;
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.list-enter, .list-leave-to {
-  opacity: 0;
-}
-
-.list-complete-leave-active {
-  position: absolute;
+button {
+  outline: none;
+  border: none;
+  background: transparent;
 }
 
 a {
-  color: white;
+  color: #C4C4C4;
   text-decoration: none;
-}
 
-.router-link-active {
-  color: white;
-}
-
-button {
-  outline: none;
+  &.router-link-active {
+    color: white !important;
+  }
 }
 
 .page {
@@ -64,44 +45,6 @@ button {
       flex: 1 1 auto;
       flex-direction: column;
     }
-  }
-}
-
-.icon-text-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-}
-
-.icon-subtext {
-    font-size: 10px;
-    line-height: .8;
-}
-
-.nav-bar {
-  display: flex;
-  flex: 0 0 50px;
-  background-color: $renascent-dark-gray;
-  align-items: center;
-  justify-content: space-between;
-  color: white;
-  padding: 0 30px;
-  font-size: 30px;
-
-  .add-icon {
-    text-decoration: none;
-    color: white;
-    font-size: 32px;
-    cursor: pointer;
-  }
-
-  .menu-icon {
-    color: white;
-    background-color: transparent;
-    border: none;
-    font-size: 32px;
-    cursor: pointer;
   }
 }
 

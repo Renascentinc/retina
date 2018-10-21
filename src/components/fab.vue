@@ -35,7 +35,6 @@ export default {
 
 <style lang="scss">
   @import '../styles/variables';
-
   .inactive {
     background-color: $disabled-gray;
     box-shadow: none;

@@ -116,7 +116,7 @@ export default {
   align-items: center;
   border: solid 1px #727272;
   border-radius: 7px;
-  padding-left: 5px;
+  padding-left: 8px;
   min-height: 45px;
   width: 100%;
 
@@ -127,8 +127,7 @@ export default {
     height: 20px;
     justify-content: center;
     align-items: flex-end;
-    font-size: 15px;
-    padding-bottom: 4px;
+    font-size: 20px;
     color: $renascent-dark-gray;
   }
 

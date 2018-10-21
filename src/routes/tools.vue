@@ -352,10 +352,15 @@ export default {
   .selection-action-bar {
     position: absolute;
     bottom: 0;
-    width: calc(100vw - 60px);
-    height: 50px;
+    width: calc(100vw - 40px);
+    height: 60px;
     background-color: white;
     z-index: 100;
+    box-shadow: none;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
 
     .menu-icon {
       color: $renascent-red;

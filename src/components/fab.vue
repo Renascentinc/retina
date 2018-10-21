@@ -1,6 +1,7 @@
 <template>
   <button
     class="fab"
+    v-bind:class="[this.$props.active() ? 'active' : 'inactive']"
     @click="onClick">
     <div class="fab-icon-container">
       <i
@@ -12,7 +13,7 @@
 
 <script>
 export default {
-  name: 'InputWithIcon',
+  name: 'Fab',
 
   props: {
     iconClass: {
@@ -22,6 +23,11 @@ export default {
     onClick: {
       type: Function,
       required: true
+    },
+    active: {
+      type: Function,
+      required: false,
+      default: true
     }
   }
 }
@@ -30,9 +36,18 @@ export default {
 <style lang="scss">
   @import '../styles/variables';
 
+  .inactive {
+    background-color: $disabled-gray;
+    box-shadow: none;
+  }
+
+  .active {
+    background-color: $renascent-red;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16)
+  }
+
   .fab {
       border: none;
-      background-color: #CE352F;
       border-radius: 50%;
       color: white;
       font-weight: 500;
@@ -42,6 +57,5 @@ export default {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16)
   }
 </style>

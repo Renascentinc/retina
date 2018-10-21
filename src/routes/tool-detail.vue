@@ -58,7 +58,7 @@
             <fab
               id="call-btn"
               :on-click="phoneNumber() ? phoneCall : () => 0"
-              :class="[phoneNumber() ? 'contact-btn-active' : 'contact-btn-inactive']"
+              :active="phoneNumber"
               icon-class="fa-phone"/>
 
             <div class="spacer"/>
@@ -66,7 +66,7 @@
             <fab
               id="email-btn"
               :on-click="email() ? sendEmail : () => 0"
-              :class="[email() ? 'contact-btn-active' : 'contact-btn-inactive']"
+              :active="email"
               icon-class="fa-envelope"/>
           </div>
         </div>
@@ -496,11 +496,6 @@ export default {
         justify-content: flex-end;
         flex-direction: row;
         flex-wrap: wrap;
-
-        .contact-btn-inactive {
-          background-color: $disabled-gray;
-          box-shadow: none;
-        }
 
         .fab {
           margin: 11px;

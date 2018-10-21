@@ -227,7 +227,7 @@ export default {
 
     isTransferable () {
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return this.getTool.location && this.getTool.user && currentUser.id === this.getTool.user.id
+      return this.getTool.location || (this.getTool.user && currentUser.id === this.getTool.user.id)
     },
 
     phoneNumber () {

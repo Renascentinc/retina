@@ -46,14 +46,14 @@ export default {
       padding: 5px 15px;
       border-radius: 50px;
       color: white;
-      font-weight: 700;
+      font-weight: 500;
       height: 50px;
       font-size: 17px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       border: none;
-      box-shadow: 0 0 10px #777;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
       font-size: 18px;
 
       &.outlined {

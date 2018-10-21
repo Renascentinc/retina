@@ -6,13 +6,13 @@
   height: 30px;
   border-radius: 50%;
   background: $renascent-dark-gray;
-  background: linear-gradient(to right, $renascent-dark-gray 10%, rgba(64,64,64, 0) 42%);
+  background: linear-gradient(to right, $renascent-dark-gray 10%, rgba(64, 64, 64, 0) 42%);
   position: relative;
   animation: load3 1.4s infinite linear;
   transform: translateZ(0);
 }
 
-.loading:before {
+.loading::before {
   width: 50%;
   height: 50%;
   background: $renascent-dark-gray;
@@ -23,7 +23,7 @@
   content: '';
 }
 
-.loading:after {
+.loading::after {
   background: $background-light-gray;
   width: 75%;
   height: 75%;
@@ -42,6 +42,7 @@
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);

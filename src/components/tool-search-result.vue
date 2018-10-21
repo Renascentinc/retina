@@ -42,11 +42,13 @@ export default {
     },
     onSelect: {
       type: Function,
-      required: true
+      required: false,
+      default: () => {}
     },
     showSelect: {
       type: Boolean,
-      required: true
+      required: false,
+      default: false
     }
   },
 

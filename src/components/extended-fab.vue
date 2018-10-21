@@ -53,7 +53,7 @@ export default {
       justify-content: space-around;
       align-items: center;
       border: none;
-      box-shadow: 0 0 10px #777;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.16);
       font-size: 18px;
 
       &.outlined {

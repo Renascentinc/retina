@@ -17,7 +17,9 @@
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
           :button-text="`${ formattedStatus(getTool.status) }`"/>
 
-        <button class="action-btn">
+        <button
+        class="action-btn"
+        v-if="isTransferable()">
           <i class="fas fa-exchange-alt action-icon"/>
           <span class="action-title">TRANSFER</span>
         </button>
@@ -195,6 +197,15 @@ export default {
   },
 
   methods: {
+    isTransferable() {
+      if (this.getTool.location) {
+        return true
+      } else if (JSON.parse(window.localStorage.getItem('currentUser')).id ==  this.getTool.user.id) {
+        return true
+      }
+      return false
+    },
+
     phoneNumber () {
       if (this.getTool.user) {
         return this.getTool.user.phone_number

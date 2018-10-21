@@ -120,7 +120,6 @@ export default {
   min-height: 45px;
   width: 100%;
 
-
   .search-icon-container {
     display: flex;
     flex: 0 0 20px;

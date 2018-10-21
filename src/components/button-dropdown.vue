@@ -71,8 +71,7 @@ export default {
 
   methods: {
     clickOption (selectedOption) {
-      this.buttonText = selectedOption
-      this.$props.onClick(selectedOption)
+      this.onClick(selectedOption)
       this.activated = false
     },
 
@@ -81,8 +80,8 @@ export default {
     },
 
     filteredOptions () {
-      var array = this.$props.options
-      var index = array.indexOf(this.$props.buttonText)
+      var array = this.options
+      var index = array.indexOf(this.buttonText)
       if (index !== -1) {
         array.splice(index, 1)
       }
@@ -125,7 +124,7 @@ export default {
   z-index: -5;
 }
 
-.button{
+.button {
   background-color: $renascent-red;
   height: 43px;
   width: 154px;

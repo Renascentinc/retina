@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="[this.$props.active() ? 'active' : 'inactive']"
+    :class="{ inactive: disabled }"
     class="fab"
     @click="onClick">
     <div class="fab-icon-container">
@@ -24,10 +24,11 @@ export default {
       type: Function,
       required: true
     },
-    active: {
-      type: Function,
+
+    disabled: {
+      type: Boolean,
       required: false,
-      default: () => { return true }
+      default: false
     }
   }
 }
@@ -35,17 +36,10 @@ export default {
 
 <style lang="scss">
   @import '../styles/variables';
-  .inactive {
-    background-color: $disabled-gray;
-    box-shadow: none;
-  }
-
-  .active {
-    background-color: $renascent-red;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16)
-  }
 
   .fab {
+      background-color: $renascent-red;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
       border: none;
       border-radius: 50%;
       color: white;
@@ -56,5 +50,10 @@ export default {
       display: flex;
       justify-content: space-around;
       align-items: center;
+
+      &.inactive {
+        background-color: $disabled-gray;
+        box-shadow: none;
+      }
   }
 </style>

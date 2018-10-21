@@ -296,6 +296,10 @@ export default {
 
   .search-bar {
     padding: 10px;
+    min-height: 45px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+    display: flex;
   }
 
   .tool-scroll-container {
@@ -317,15 +321,16 @@ export default {
   .floating-action-bar {
     display: inline-block;
     position: absolute;
-    bottom: 65px;
+    bottom: 75px;
     width: 100vw;
-    height: 55px;
+    height: 57px;
+    vertical-align: bottom;
 
     .transfer-btn {
       position: absolute;
       left: calc(50% - 79px);
       width: 158px;
-      height: 55px;
+      bottom: 3.5px;
     }
 
     .add-btn {

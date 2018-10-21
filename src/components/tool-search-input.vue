@@ -114,9 +114,12 @@ export default {
 .tool-search-input {
   display: flex;
   align-items: center;
-  border: solid 1px;
-  border-radius: 5px;
+  border: solid 1px #727272;
+  border-radius: 7px;
   padding-left: 5px;
+  min-height: 45px;
+  width: 100%;
+
 
   .search-icon-container {
     display: flex;
@@ -154,7 +157,7 @@ export default {
 
     .new-tag-input {
       font-weight: bold;
-      font-size: 15px;
+      font-size: 20px;
     }
 
     .autocomplete-item {

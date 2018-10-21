@@ -52,22 +52,28 @@
       <div
         v-if="currentState === states.SELECTING"
         class="nav-bar selection-action-bar">
-        <button
-          class="fas fa-times menu-icon"
-          @click="cancelTransfer">
-          <span class="icon-subtext">CANCEL</span>
-        </button>
-        <button
-          :class="{ 'fa-check-square': !showOnlySelectedTools, 'fa-square': showOnlySelectedTools }"
-          class="fas menu-icon"
-          @click="toggleViewSelected">
-          <span class="icon-subtext">{{ showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED' }}</span>
-        </button>
-        <button
-          class="fas fa-arrow-right menu-icon"
-          @click="proceedToFinalize">
-          <span class="icon-subtext">NEXT</span>
-        </button>
+        <div class="icon-text-container">
+          <button
+            class="fas fa-times menu-icon"
+            @click="cancelTransfer">
+            <span class="icon-subtext">CANCEL</span>
+          </button>
+        </div>
+        <div class="icon-text-container">
+          <button
+            :class="{ 'fa-check-square': !showOnlySelectedTools, 'fa-square': showOnlySelectedTools }"
+            class="fas menu-icon"
+            @click="toggleViewSelected">
+            <span class="icon-subtext">{{ showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED' }}</span>
+          </button>
+        </div>
+        <div class="icon-text-container">
+          <button
+            class="fas fa-arrow-right menu-icon"
+            @click="proceedToFinalize">
+            <span class="icon-subtext">NEXT</span>
+          </button>
+        </div>
       </div>
     </transition>
 
@@ -362,11 +368,16 @@ export default {
     padding-left: 20px;
     padding-right: 20px;
 
-    .menu-icon {
-      color: $renascent-red;
+    .icon-text-container {
+      width: 95px;
+      flex: 0 0 95px;
 
-      .icon-subtext {
-        color: $renascent-dark-gray;
+      .menu-icon {
+        color: $renascent-red;
+
+        .icon-subtext {
+          color: $renascent-dark-gray;
+        }
       }
     }
   }

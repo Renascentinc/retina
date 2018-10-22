@@ -1,6 +1,7 @@
 <template>
   <div class="page new-tool-page">
-    <div class="header">
+    <header-card title="New Tool"/>
+    <!-- <div class="header">
       <router-link
         class="fas fa-times exit-new-tool"
         to="/tools"/>
@@ -8,7 +9,7 @@
       <span class="new-tool-text"> New Tool </span>
 
       <div class="spacer"/>
-    </div>
+    </div> -->
 
     <transition>
       <div
@@ -131,6 +132,7 @@
 </template>
 
 <script>
+import HeaderCard from '../components/header-card'
 import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab'
@@ -139,6 +141,7 @@ import vSelect from 'vue-select'
 export default {
   name: 'NewTool',
   components: {
+    HeaderCard,
     ToolSearchResult,
     ExtendedFab,
     Fab,
@@ -175,33 +178,6 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: $background-light-gray;
-
-  .header {
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex: 0 0 73px;
-    border-bottom-right-radius: 7px;
-    border-bottom-left-radius: 7px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
-    padding: 0 20px;
-
-    .exit-new-tool {
-      font-size: 30px;
-      color: $renascent-red;
-      width: 21px;
-    }
-
-    .new-tool-text {
-      font-size: 33px;
-      font-weight: 900;
-    }
-
-    .spacer {
-      width: 21px;
-    }
-  }
 
   .new-tool-input-card {
     display: flex;

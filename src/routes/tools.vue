@@ -1,14 +1,14 @@
 <template>
   <div class="page tools-page">
     <div class="search-bar">
-      <tool-search-input :update-tags="updateFilters"/>
+      <tool-search-input :update-tags="updateFilters"></tool-search-input>
     </div>
     <div class="tool-scroll-container">
       <transition>
         <div
           v-if="$apollo.queries.searchTool.loading"
           class="loading-container">
-          <div class="loading"/>
+          <div class="loading"></div>
         </div>
       </transition>
       <transition>
@@ -27,7 +27,8 @@
           :tool="tool"
           :key="tool.id"
           :on-select="transitionToToolInfo"
-          :show-select="currentState !== states.INITIAL"/>
+          :show-select="currentState !== states.INITIAL">
+        </tool-search-result>
       </transition-group>
     </div>
 
@@ -39,12 +40,14 @@
           :on-click="onTransferClick"
           class="transfer-btn"
           icon-class="fa-exchange-alt"
-          button-text="TRANSFER"/>
+          button-text="TRANSFER">
+        </extended-fab>
 
         <fab
           :on-click="transitionToAdd"
           class="add-btn"
-          icon-class="fa-plus"/>
+          icon-class="fa-plus">
+        </fab>
       </div>
     </transition>
 
@@ -103,7 +106,8 @@
             :filterable="false"
             value="select user"
             label="full_name"
-            class="dark-input"/>
+            class="dark-input">
+          </v-select>
         </div>
 
         <div class="finalize-row finalize-footer">
@@ -112,13 +116,15 @@
             :outline-display="true"
             class="cancel-efab"
             icon-class="fa-times"
-            button-text="CANCEL"/>
+            button-text="CANCEL">
+          </extended-fab>
 
           <extended-fab
             :on-click="finalizeTransfer"
             class="finish-transfer"
             icon-class="fa-arrow-right"
-            button-text="FINISH"/>
+            button-text="FINISH">
+          </extended-fab>
         </div>
       </div>
     </transition>

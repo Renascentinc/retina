@@ -2,11 +2,12 @@
   <div class="header-card">
     <router-link
       class="fas fa-times exit"
-      to="/tools"/>
+      to="/tools">
+    </router-link>
 
     <span class="main-text"> {{ title }} </span>
 
-    <div class="spacer"/>
+    <div class="spacer"></div>
   </div>
 </template>
 

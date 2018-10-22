@@ -12,7 +12,7 @@
         slot="drawer"
         class="drawer-content">
         <div class="account-info">
-          <avatar :username="`${ firstname } ${ lastname }`"/>
+          <avatar :username="`${ firstname } ${ lastname }`"></avatar>
           <span class="username">
             <span> {{ firstname }} </span>
             <span> {{ lastname }} </span>
@@ -40,7 +40,7 @@
         slot="content"
         class="main-content">
         <transition name="page-change">
-          <router-view />
+          <router-view></router-view>
         </transition>
 
         <transition>

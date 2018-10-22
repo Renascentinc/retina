@@ -67,7 +67,8 @@
           :on-click="attemptUserLogin"
           class="login-btn"
           icon-class="fa-arrow-right"
-          button-text="SIGN IN"/>
+          button-text="SIGN IN">
+        </extended-fab>
       </div>
     </div>
   </div>

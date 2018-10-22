@@ -4,11 +4,12 @@
       <div class="header-top">
         <router-link
           class="fas fa-arrow-left backarrow"
-          to="/tools"/>
+          to="/tools">
+        </router-link>
 
         <span class="toolid">#{{ getTool.id }} </span>
 
-        <span class="header-spacer"/>
+        <span class="header-spacer"></span>
       </div>
       <div class="name">
         {{ brand }} {{ type }}
@@ -18,7 +19,8 @@
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          :button-text="`${ formattedStatus }`"/>
+          :button-text="`${ formattedStatus }`">
+        </button-dropdown>
 
         <button
           v-if="isTransferable"
@@ -62,15 +64,17 @@
               :on-click="phoneNumber ? phoneCall : () => 0"
               :disabled="!phoneNumber"
               class="call-btn"
-              icon-class="fa-phone"/>
+              icon-class="fa-phone">
+            </fab>
 
-            <div class="spacer"/>
+            <div class="spacer"></div>
 
             <fab
               :on-click="email ? sendEmail : () => 0"
               :disabled="!email"
               class="email-btn"
-              icon-class="fa-envelope"/>
+              icon-class="fa-envelope">
+            </fab>
           </div>
         </div>
       </div>

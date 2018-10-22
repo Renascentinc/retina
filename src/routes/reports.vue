@@ -1,6 +1,6 @@
 <template>
   <div class="page reports-page">
-    <header-card title="Reports"/>
+    <header-card title="Reports"> </header-card>
 
     <div class="reports">
       <div class="report-card">

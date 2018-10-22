@@ -28,7 +28,7 @@
         slot-scope="props">
         <i
           :class="props.tag.iconClass"
-          class="fas tag-icon"/>
+          class="fas tag-icon">
         </i>
         {{ props.tag.name }}
       </div>

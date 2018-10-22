@@ -31,7 +31,8 @@
           v-if="showSelect"
           :class="{ 'fa-check': selected }"
           class="fas checkbox"
-          @click="toggleSelect"/>
+          @click="toggleSelect">
+        </button>
       </transition>
     </div>
   </div>

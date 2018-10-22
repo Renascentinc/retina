@@ -1,15 +1,6 @@
 <template>
   <div class="page new-tool-page">
-    <header-card title="New Tool"/>
-    <!-- <div class="header">
-      <router-link
-        class="fas fa-times exit-new-tool"
-        to="/tools"/>
-
-      <span class="new-tool-text"> New Tool </span>
-
-      <div class="spacer"/>
-    </div> -->
+    <header-card title="New Tool"></header-card>
 
     <transition>
       <div
@@ -18,12 +9,14 @@
         <v-select
           :options="['1', '2', '3']"
           class="dark-input"
-          placeholder="Brand"/>
+          placeholder="Brand">
+        </v-select>
 
         <v-select
           :options="['1', '2', '3']"
           class="dark-input"
-          placeholder="Type"/>
+          placeholder="Type">
+        </v-select>
 
         <input
           class="light-input"
@@ -46,21 +39,20 @@
         <v-select
           :options="['1', '2', '3']"
           class="dark-input"
-          placeholder="Owner"/>
+          placeholder="Owner">
+        </v-selecT>
 
         <v-select
           :options="['1', '2', '3']"
           class="dark-input"
-          placeholder="Purchased from"/>
-
-        <!-- <button class="dark-input">
-          <span> Purchase Date </span>
-        </button> -->
+          placeholder="Purchased from">
+        </v-select>
 
         <v-date-picker
           v-model="selectedDate"
           mode="single"
-          show-caps/>
+          show-caps>
+        </v-date-picker>
 
         <button class="dark-input">
           <span> Photo </span>
@@ -82,11 +74,13 @@
           :outline-display="true"
           class="encode-efab"
           icon-class="fa-times"
-          button-text="ENOCDE TAG"/>
+          button-text="ENOCDE TAG">
+        </extended-fab>
 
         <tool-search-result
           :tool="tool"
-          :show-select="false"/>
+          :show-select="false">
+        </tool-search-result>
 
         <div class="done-action-container">
           <extended-fab
@@ -94,13 +88,15 @@
             :outline-display="true"
             class="add-another-efab"
             icon-class="fa-undo"
-            button-text="ADD ANOTHER"/>
+            button-text="ADD ANOTHER">
+          </extended-fab>
 
           <extended-fab
             :on-click="() => 0"
             class="done-efab"
             icon-class="fa-arrow-right"
-            button-text="DONE"/>
+            button-text="DONE">
+          </extended-fab>
         </div>
       </div>
     </transition>
@@ -109,24 +105,29 @@
       <fab
         :on-click="() => currentState = --currentState"
         class="page-back"
-        icon-class="fa-arrow-left"/>
+        icon-class="fa-arrow-left">
+      </fab>
 
       <div class="pager">
         <div
           :class="{ selected: currentState === 1 }"
-          class="pager-page"/>
+          class="pager-page">
+        </div>
         <div
           :class="{ selected: currentState === 2 }"
-          class="pager-page"/>
+          class="pager-page">
+        </div>
         <div
           :class="{ selected: currentState === 3 }"
-          class="pager-page"/>
+          class="pager-page">
+        </div>
       </div>
 
       <fab
         :on-click="() => currentState = ++currentState"
         class="page-forward"
-        icon-class="fa-arrow-right"/>
+        icon-class="fa-arrow-right">
+      </fab>
     </div>
   </div>
 </template>

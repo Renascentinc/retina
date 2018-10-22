@@ -1,34 +1,35 @@
 <template>
   <div class="page tool-detail-page">
-    <div id="header">
-      <router-link
-        id="backarrow"
-        class="fas fa-arrow-left"
-        to="/tools"/>
+    <div class="header">
+      <div class="header-top">
+        <router-link
+          class="fas fa-arrow-left backarrow"
+          to="/tools"/>
 
-      <span id="toolid">#{{ getTool.id }} </span>
-      <div id="name">
-        {{ getTool.brand.name }} {{ getTool.type.name }}
+        <span class="toolid">#{{ getTool.id }} </span>
+
+        <span class="header-spacer"/>
+      </div>
+      <div class="name">
+        {{ brand }} {{ type }}
       </div>
 
-      <div id="actions">
+      <div class="actions">
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          :button-text="`${ formattedStatus(getTool.status) }`"/>
+          :button-text="`${ formattedStatus }`"/>
 
         <button
-          v-if="isTransferable()"
+          v-if="isTransferable"
           class="action-btn">
-          <i class="fas fa-exchange-alt action-icon"/>
+          <i class="fas fa-exchange-alt action-icon"></i>
           <span class="action-title">TRANSFER</span>
         </button>
       </div>
     </div>
-    <div id="cards">
-      <div
-        id="owner-card"
-        class="card">
+    <div class="cards">
+      <div class="card owner-card">
         <div class="card-title">
           Owner
         </div>
@@ -36,44 +37,45 @@
           <div class="user-symbol">
             <i
               v-if="getTool.user"
-              class="fas fa-user"/>
+              class="fas fa-user">
+            </i>
             <i
               v-if="getTool.location"
-              class="fas fa-map-marker-alt"/>
+              class="fas fa-map-marker-alt">
+            </i>
           </div>
-          <div id="owner-name">
+          <div class="owner-name">
             <div
               v-if="getTool.location"
-              id="owner-location">
+              class="owner-location">
               {{ getTool.location.name }}
             </div>
             <div
               v-if="getTool.user"
-              id="owner-user">
+              class="owner-user">
               <span> {{ getTool.user.first_name }} </span>
               <span> {{ getTool.user.last_name }} </span>
             </div>
           </div>
           <div class="contact-buttons">
             <fab
-              id="call-btn"
-              :on-click="phoneNumber() ? phoneCall : () => 0"
-              :active="phoneNumber"
+              :on-click="phoneNumber ? phoneCall : () => 0"
+              :disabled="!phoneNumber"
+              class="call-btn"
               icon-class="fa-phone"/>
 
             <div class="spacer"/>
 
             <fab
-              id="email-btn"
-              :on-click="email() ? sendEmail : () => 0"
-              :active="email"
+              :on-click="email ? sendEmail : () => 0"
+              :disabled="!email"
+              class="email-btn"
               icon-class="fa-envelope"/>
           </div>
         </div>
       </div>
       <div
-        id="general-card"
-        class="card">
+        class="card general-card">
         <div class="card-title">
           General
         </div>
@@ -91,20 +93,19 @@
           <span class="general-data"> {{ getTool.year || '-' }} </span>
 
           <span class="general-label">Purchased From</span>
-          <span class="general-data"> {{ getTool.purchased_from.name || '-' }} </span>
+          <span class="general-data"> {{ purchasedFrom }} </span>
 
           <span class="general-label">Purchase Date</span>
-          <span class="general-data"> {{ formattedDate(getTool.date_purchased) || '-' }} </span>
+          <span class="general-data"> {{ formattedDate }} </span>
 
           <span class="general-label">Purchase Price</span>
-          <span class="general-data"> ${{ formattedPrice(getTool.price) || ' -' }} </span>
+          <span class="general-data"> ${{ formattedPrice }} </span>
         </div>
 
       </div>
 
       <div
-        id="photo-card"
-        class="card">
+        class="card photo-card">
         <div class="card-title">
           Photo
         </div>
@@ -115,8 +116,8 @@
             class="image">
           <i
             v-if="!getTool.photo"
-            id="no-image"
-            class="fas fa-image"/>
+            class="fas fa-image no-image">
+          </i>
         </div>
       </div>
     </div>
@@ -196,14 +197,40 @@ export default {
     }
   },
 
-  methods: {
+  computed: {
+    brand () {
+      let brand = this.getTool.brand
+      return brand && brand.name
+    },
+
+    type () {
+      let type = this.getTool.type
+      return type && type.name
+    },
+
+    purchasedFrom () {
+      let purchasedFrom = this.getTool.purchased_from
+      return purchasedFrom ? purchasedFrom.name : '-'
+    },
+
+    formattedStatus () {
+      let status = this.getTool.status
+      return status && status.replace(/_/g, ' ').toUpperCase()
+    },
+
+    formattedDate () {
+      let datePurchased = this.getTool.date_purchased
+      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
+    },
+
+    formattedPrice () {
+      let priceString = this.getTool.price
+      return priceString ? `${priceString / 100}` : ' -'
+    },
+
     isTransferable () {
-      if (this.getTool.location) {
-        return true
-      } else if (JSON.parse(window.localStorage.getItem('currentUser')).id === this.getTool.user.id) {
-        return true
-      }
-      return false
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
+      return this.getTool.location || (this.getTool.user && currentUser.id === this.getTool.user.id)
     },
 
     phoneNumber () {
@@ -220,12 +247,10 @@ export default {
       } else if (this.getTool.location) {
         return this.getTool.location.email
       }
-    },
+    }
+  },
 
-    formattedStatus (status) {
-      return status.replace(/_/g, ' ').toUpperCase()
-    },
-
+  methods: {
     phoneCall () {
       window.location.href = `tel:${this.getTool.user.phone_number}`
     },
@@ -236,7 +261,13 @@ export default {
 
     updateStatus (newStatus) {
       newStatus = newStatus.replace(/ /g, '_').toUpperCase()
-      var datePurchased = this.getTool.date_purchased.replace(/\(.*\)/g, '')
+
+      // save current status in case request fails but set the tool status assuming it will succeed
+      let currentStatus = this.getTool.status
+      this.getTool.status = newStatus
+
+      // TODO: figure out why api chokes on its own dates
+      let datePurchased = this.getTool.date_purchased.replace(/\(.*\)/g, '')
 
       this.$apollo
         .mutate({
@@ -257,11 +288,8 @@ export default {
               status: newStatus,
               purchased_from_id: this.getTool.purchased_from.id,
               date_purchased: datePurchased,
-              user_id: this.getTool.user !== null ? this.getTool.user.id : null,
-              location_id:
-                this.getTool.location !== null
-                  ? this.getTool.location.id
-                  : null,
+              user_id: this.getTool.user && this.getTool.user.id,
+              location_id: this.getTool.location && this.getTool.location.id,
               photo: this.getTool.photo,
               price: this.getTool.price,
               year: this.getTool.year
@@ -270,23 +298,10 @@ export default {
         })
         .then(status => {
           this.getTool.status = status.data.updateTool.status
+        }).catch(() => {
+          this.getTool.status = currentStatus
+          // TODO: pop toast notifying user that request failed.
         })
-    },
-
-    formattedDate (dateString) {
-      if (dateString) {
-        return new Date(dateString).toLocaleDateString('en-US')
-      }
-
-      return null
-    },
-
-    formattedPrice (priceString) {
-      if (priceString) {
-        return `${priceString / 100}`
-      }
-
-      return null
     }
   }
 }
@@ -300,7 +315,7 @@ export default {
   display: flex;
   flex-direction: column;
 
-  #header {
+  .header {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -313,32 +328,39 @@ export default {
     z-index: 1;
     flex-shrink: 0;
 
-    #backarrow {
-      position: absolute;
-      top: 9px;
-      left: 23px;
-      color: $renascent-red;
-      font-size: 30px;
-      z-index: -10;
-    }
-
-    #toolid {
+    .header-top {
       display: flex;
-      flex: 1 0 auto;
-      font-size: 25px;
-      font-weight: 600;
-      justify-content: center;
+      justify-content: space-between;
+      padding: 0 23px;
+      align-items: center;
       padding-top: 9px;
+
+      .backarrow {
+        color: $renascent-red;
+        font-size: 30px;
+        // z-index: -10;
+        flex: 0 0 40px;
+      }
+
+      .toolid {
+        font-size: 25px;
+        font-weight: 600;
+        justify-content: center;
+      }
+
+      .header-spacer {
+        flex: 0 0 40px;
+      }
     }
 
-    #name {
+    .name {
       font-size: 33px;
       font-weight: 900;
       text-align: center;
       margin-top: 4px;
     }
 
-    #actions {
+    .actions {
       display: flex;
       flex: 0 1 auto;
       justify-content: space-around;
@@ -375,7 +397,7 @@ export default {
     }
   }
 
-  #cards {
+  .cards {
     overflow-y: auto;
 
     .card {
@@ -405,7 +427,7 @@ export default {
       }
     }
 
-    #general-card {
+    .general-card {
       padding-bottom: 10px;
 
       .general-details {
@@ -426,7 +448,7 @@ export default {
       }
     }
 
-    #photo-card {
+    .photo-card {
       padding-bottom: 11px;
 
       .photo-box {
@@ -442,7 +464,7 @@ export default {
           border-radius: 2px;
         }
 
-        #no-image {
+        .no-image {
           color: $background-dark-gray;
           font-size: 60px;
           width: 100%;
@@ -453,7 +475,7 @@ export default {
       }
     }
 
-    #owner-card {
+    .owner-card {
       padding-bottom: 17px;
 
       .owner-details {
@@ -461,7 +483,7 @@ export default {
         flex-direction: row;
         align-items: center;
 
-        #owner-name {
+        .owner-name {
           display: flex;
           flex-direction: column;
           font-size: 23px;
@@ -469,7 +491,7 @@ export default {
           color: $renascent-dark-gray;
           margin-left: 11px;
 
-          #owner-user {
+          .owner-user {
             display: flex;
             flex-direction: column;
           }
@@ -501,13 +523,13 @@ export default {
           margin: 11px;
         }
 
-        #email-btn {
+        .email-btn {
           margin-left: 11px;
           margin-top: 5px;
           margin-bottom: 5px;
         }
 
-        #call-btn {
+        .call-btn {
           margin-right: 11px;
           margin-bottom: 5px;
           margin-top: 5px;

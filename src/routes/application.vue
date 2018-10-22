@@ -24,13 +24,13 @@
 
         <div class="menu-buttons">
           <button class="change-password menu-btn">
-            <i class="fas menu-btn-icon fa-key"/>
+            <i class="fas menu-btn-icon fa-key"></i>
             CHANGE PASSWORD
           </button>
           <button
             class="sign-out menu-btn"
             @click="signout()">
-            <i class="fas menu-btn-icon fa-sign-out-alt"/>
+            <i class="fas menu-btn-icon fa-sign-out-alt"></i>
             SIGN OUT
           </button>
         </div>
@@ -39,7 +39,7 @@
       <div
         slot="content"
         class="main-content">
-        <transition>
+        <transition name="page-change">
           <router-view />
         </transition>
 
@@ -56,9 +56,33 @@
 
             <div class="icon-text-container">
               <router-link
+                class="fas fa-cog menu-icon"
+                to="/configuration">
+                <span class="icon-subtext">CONFIGURE</span>
+              </router-link>
+            </div>
+
+            <div class="icon-text-container">
+              <router-link
                 class="fas fa-toolbox menu-icon"
                 to="/tools">
                 <span class="icon-subtext">TOOLS</span>
+              </router-link>
+            </div>
+
+            <div class="icon-text-container">
+              <router-link
+                class="fas fa-file-alt menu-icon"
+                to="/reports">
+                <span class="icon-subtext">REPORTS</span>
+              </router-link>
+            </div>
+
+            <div class="icon-text-container">
+              <router-link
+                class="fas fa-users menu-icon"
+                to="/users">
+                <span class="icon-subtext">USERS</span>
               </router-link>
             </div>
           </div>

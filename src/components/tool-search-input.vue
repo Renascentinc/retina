@@ -1,7 +1,7 @@
 <template>
   <div class="tool-search-input">
     <div class="search-icon-container">
-      <i class="fas fa-search"/>
+      <i class="fas fa-search"></i>
     </div>
     <vue-tags-input
       v-model="tag"
@@ -29,6 +29,7 @@
         <i
           :class="props.tag.iconClass"
           class="fas tag-icon"/>
+        </i>
         {{ props.tag.name }}
       </div>
     </vue-tags-input>
@@ -114,9 +115,11 @@ export default {
 .tool-search-input {
   display: flex;
   align-items: center;
-  border: solid 1px;
-  border-radius: 5px;
-  padding-left: 5px;
+  border: solid 1px #727272;
+  border-radius: 7px;
+  padding-left: 8px;
+  min-height: 45px;
+  width: 100%;
 
   .search-icon-container {
     display: flex;
@@ -124,8 +127,7 @@ export default {
     height: 20px;
     justify-content: center;
     align-items: flex-end;
-    font-size: 15px;
-    padding-bottom: 4px;
+    font-size: 20px;
     color: $renascent-dark-gray;
   }
 
@@ -154,7 +156,7 @@ export default {
 
     .new-tag-input {
       font-weight: bold;
-      font-size: 15px;
+      font-size: 20px;
     }
 
     .autocomplete-item {

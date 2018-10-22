@@ -6,7 +6,8 @@
     <div class="fab-icon-container">
       <i
         :class="iconClass"
-        class="fas"/>
+        class="fas">
+      </i>
     </div>
     <span class="efab-text">{{ buttonText }}</span>
   </button>
@@ -46,14 +47,14 @@ export default {
       padding: 5px 15px;
       border-radius: 50px;
       color: white;
-      font-weight: 700;
+      font-weight: 500;
       height: 50px;
       font-size: 17px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       border: none;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
       font-size: 18px;
 
       &.outlined {

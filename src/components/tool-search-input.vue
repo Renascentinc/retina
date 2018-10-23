@@ -53,15 +53,13 @@ export default {
     }
   },
   apollo: {
-    getAllConfigurableItem: {
-      query: gql`query {
-        getAllConfigurableItem {
-          id,
-          type,
-          name
-        }
-      }`
-    }
+    getAllConfigurableItem: gql`query {
+      getAllConfigurableItem {
+        id,
+        type,
+        name
+      }
+    }`
   },
   data () {
     return {

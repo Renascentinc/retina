@@ -47,8 +47,9 @@ const errorLink = onError(({ graphQLErrors = [] }) => {
 
 const defaultClient = new ApolloClient({
   link: authLink.concat(errorLink).concat(httpLink),
-  cache,
-  connectToDevTools: true
+  connectToDevTools: false,
+  shouldBatch: true,
+  cache
 })
 
 const apolloProvider = new VueApollo({

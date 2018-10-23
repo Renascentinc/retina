@@ -15,8 +15,8 @@
     "test": "eslint --ext .js,.vue src",
     "build": "changeFile=false parcel build index.html --no-source-maps",
     "build-cordova": "changeFile=true parcel build index.html --out-dir=www --public-url=./ --no-source-maps --no-minify",
-    "android": "npm run build-cordova && cordova prepare && cordova run android",
-    "ios": "npm run build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios"
+    "android": "yarn build-cordova && cordova prepare && cordova run android",
+    "ios": "yarn build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios --buildFlag='-UseModernBuildSystem=0'"
   },
   "dependencies": {
     "@johmun/vue-tags-input": "^1.5.5",

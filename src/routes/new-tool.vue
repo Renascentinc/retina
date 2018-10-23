@@ -7,28 +7,71 @@
         v-if="currentState === 1"
         class="new-tool-input-card">
         <v-select
-          :options="['1', '2', '3']"
+          v-validate:brand="'required'"
+          :options="brandOptions"
+          v-model="brand"
+          name="brand"
+          label="name"
           class="dark-input"
           placeholder="Brand">
         </v-select>
+        <span
+          v-show="errors.has('brand')"
+          class="danger">
+          {{ errors.first('brand') }}
+        </span>
 
         <v-select
-          :options="['1', '2', '3']"
+          v-validate:type="'required'"
+          v-model="type"
+          :options="typeOptions"
+          name="type"
+          label="name"
           class="dark-input"
           placeholder="Type">
         </v-select>
+        <span
+          v-show="errors.has('type')"
+          class="danger">
+          {{ errors.first('type') }}
+        </span>
 
         <input
+          v-validate="'required|alpha_num'"
+          v-model="modelNumber"
+          name="modelNumber"
           class="light-input"
           placeholder="Model no.">
+        <span
+          v-show="errors.has('modelNumber')"
+          class="danger">
+          {{ errors.first('modelNumber') }}
+        </span>
 
         <input
+          v-validate="'required|alpha_num'"
+          v-model="serialNumber"
+          name="serialNumber"
           class="light-input"
           placeholder="Serial no.">
+        <span
+          v-show="errors.has('serialNumber')"
+          class="danger">
+          {{ errors.first('serialNumber') }}
+        </span>
 
         <input
+          v-validate="'date_format:YYYY|date_between:1950,2030'"
+          v-model="modelYear"
+          name="modelYear"
           class="light-input"
-          placeholder="Model Year">
+          placeholder="Model Year"
+          type="number">
+        <span
+          v-show="errors.has('modelYear')"
+          class="danger">
+          {{ errors.first('modelYear') }}
+        </span>
       </div>
     </transition>
 
@@ -37,13 +80,17 @@
         v-if="currentState === 2"
         class="new-tool-input-card">
         <v-select
-          :options="['1', '2', '3']"
+          v-model="owner"
+          :options="userOptions"
+          label="full_name"
           class="dark-input"
           placeholder="Owner">
-        </v-selecT>
+        </v-select>
 
         <v-select
-          :options="['1', '2', '3']"
+          v-model="purchasedFrom"
+          :options="purchasedFromOptions"
+          label="name"
           class="dark-input"
           placeholder="Purchased from">
         </v-select>
@@ -59,8 +106,17 @@
         </button>
 
         <input
+          v-validate="'decimal:2'"
+          v-model="price"
+          name="price"
           class="light-input"
-          placeholder="Price">
+          placeholder="Price"
+          type="number">
+        <span
+          v-show="errors.has('price')"
+          class="danger">
+          {{ errors.first('price') }}
+        </span>
       </div>
     </transition>
 
@@ -103,7 +159,8 @@
 
     <div class="pager-container">
       <fab
-        :on-click="() => currentState = --currentState"
+        :disabled="currentState === 1"
+        :on-click="() => --currentState"
         class="page-back"
         icon-class="fa-arrow-left">
       </fab>
@@ -124,7 +181,8 @@
       </div>
 
       <fab
-        :on-click="() => currentState = ++currentState"
+        :disabled="currentState === 3 || !!errors.items.length"
+        :on-click="advanceStep"
         class="page-forward"
         icon-class="fa-arrow-right">
       </fab>
@@ -138,9 +196,12 @@ import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab'
 import vSelect from 'vue-select'
+import gql from 'graphql-tag'
+import ConfigurableItems from '../utils/configurable-items'
 
 export default {
   name: 'NewTool',
+
   components: {
     HeaderCard,
     ToolSearchResult,
@@ -148,11 +209,42 @@ export default {
     Fab,
     vSelect
   },
+
+  apollo: {
+    getAllUser: gql`query {
+      getAllUser {
+        id
+        first_name
+        last_name
+        role
+      }
+    }`,
+
+    getAllConfigurableItem: gql`query {
+      getAllConfigurableItem {
+        id,
+        type,
+        name
+      }
+    }`
+  },
+
   data () {
     return {
-      selectedBrand: null,
+      brand: null,
+      type: null,
+      owner: null,
+      modelNumber: null,
+      serialNumber: null,
+      modelYear: null,
+      purchasedFrom: null,
+      price: null,
       currentState: 1,
       selectedDate: new Date(),
+      getAllConfigurableItem: [],
+      getAllUser: [],
+
+      // tmp
       tool: {
         id: '93713',
         type: {
@@ -167,6 +259,41 @@ export default {
           last_name: 'Pullen'
         }
       }
+    }
+  },
+
+  computed: {
+    userOptions () {
+      return this.getAllUser.map(user => {
+        user.full_name = `${user.first_name} ${user.last_name}`
+        return user
+      })
+    },
+
+    brandOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.BRAND)
+    },
+
+    typeOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.TYPE)
+    },
+
+    purchasedFromOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
+    }
+  },
+
+  methods: {
+    getConfigurableItemsForType (type) {
+      return this.getAllConfigurableItem.filter(item => item.type === type)
+    },
+
+    advanceStep () {
+      this.$validator.validate().then(result => {
+        if (result) {
+          ++this.currentState
+        }
+      })
     }
   }
 }

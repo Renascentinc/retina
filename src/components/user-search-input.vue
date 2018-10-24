@@ -76,5 +76,4 @@ export default {
 <style lang="scss">
 @import '../styles/variables';
 @import '../styles/search-input';
-
 </style>

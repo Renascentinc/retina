@@ -24,7 +24,6 @@
         tag="div">
         <user-search-result
           v-for="user in users"
-          :v-if="user.status === 'ACTIVE'"
           :user="user"
           :key="user.id"
           :on-select="transitionToUserInfo"/>
@@ -93,7 +92,8 @@ export default {
 
   data () {
     return {
-      searchTool: [],
+      searchUser: [],
+      getAllUser: [],
       searchString: null
     }
   },
@@ -114,7 +114,7 @@ export default {
     },
 
     transitionToAddUser () {
-      // transfer to add users
+      // transfer to 'add user'
     },
 
     transitionToUserInfo (userId) {
@@ -122,7 +122,6 @@ export default {
     },
 
     updateFilters (fuzzySearch) {
-      console.log(fuzzySearch)
       this.searchString = fuzzySearch
     }
   }

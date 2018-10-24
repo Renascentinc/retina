@@ -257,7 +257,10 @@ export default {
               status: newStatus,
               purchased_from_id: this.getTool.purchased_from.id,
               date_purchased: datePurchased,
-              user_id: this.getTool.user !== null ? this.getTool.user.id : null,
+              user_id:
+                this.getTool.user !== null
+                  ? this.getTool.user.id
+                  : null,
               location_id:
                 this.getTool.location !== null
                   ? this.getTool.location.id

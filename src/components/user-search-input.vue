@@ -7,36 +7,12 @@
       v-model="tag"
       :tags="tags"
       placeholder="Search"
-      @tags-changed="tagsChanged">
-
-      <button
-        slot="autocompleteItem"
-        slot-scope="props"
-        class="autocomplete-item"
-        @click="props.performAdd(props.item)">
-        <div class="item-name">
-          {{ props.item.name }}
-        </div>
-        <div class="item-category">
-          {{ props.item.formattedType }}
-        </div>
-      </button>
-
-      <div
-        slot="tagCenter"
-        slot-scope="props">
-        <i
-          :class="props.tag.iconClass"
-          class="fas tag-icon"/>
-        {{ props.tag.name }}
-      </div>
-    </vue-tags-input>
+      @tags-changed="tagsChanged"/>
   </div>
 </template>
 
 <script>
 import VueTagsInput from '@johmun/vue-tags-input'
-import ConfigurableItems from '../utils/configurable-items'
 import gql from 'graphql-tag'
 
 export default {
@@ -92,16 +68,6 @@ export default {
       }
       this.tags = newTags
       this.updateTags(fuzzySearch)
-    },
-
-    getTagIconClass (type) {
-      if (type === ConfigurableItems.BRAND) {
-        return 'fa-tag'
-      } else if (type === ConfigurableItems.PURCHASED_FROM) {
-        return 'fa-building'
-      } else if (type === ConfigurableItems.TYPE) {
-        return 'fa-wrench'
-      }
     }
   }
 }

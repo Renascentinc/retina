@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: "ToolSearchResult",
+  name: 'ToolSearchResult',
 
   props: {
     tool: {
@@ -51,58 +51,58 @@ export default {
   },
 
   computed: {
-    id() {
-      return `#${this.tool.id}`;
+    id () {
+      return `#${this.tool.id}`
     },
 
-    name() {
-      return `${this.tool.brand.name} ${this.tool.type.name}`;
+    name () {
+      return `${this.tool.brand.name} ${this.tool.type.name}`
     },
 
-    statusClass() {
+    statusClass () {
       return this.tool.status
-        .split("_")
-        .join("-")
-        .toLowerCase();
+        .split('_')
+        .join('-')
+        .toLowerCase()
     },
 
-    status() {
+    status () {
       return this.tool.status
-        .split("_")
-        .join(" ")
-        .toLowerCase();
+        .split('_')
+        .join(' ')
+        .toLowerCase()
     },
 
-    assignee() {
+    assignee () {
       if (this.tool.location) {
-        return this.tool.location.name;
+        return this.tool.location.name
       }
-      return `${this.tool.user.first_name} ${this.tool.user.last_name}`;
+      return `${this.tool.user.first_name} ${this.tool.user.last_name}`
     },
 
-    assigneeIcon() {
+    assigneeIcon () {
       if (this.tool.location) {
-        return "fa-map-marker-alt";
+        return 'fa-map-marker-alt'
       }
 
-      return "fa-user";
+      return 'fa-user'
     },
 
-    selected() {
-      return this.$store.state.selectedToolsMap[this.tool.id];
+    selected () {
+      return this.$store.state.selectedToolsMap[this.tool.id]
     }
   },
 
   methods: {
-    onClick() {
-      this.onSelect(this.tool.id);
+    onClick () {
+      this.onSelect(this.tool.id)
     },
 
-    toggleSelect() {
-      this.$store.commit("toggleToolSelection", this.tool.id);
+    toggleSelect () {
+      this.$store.commit('toggleToolSelection', this.tool.id)
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

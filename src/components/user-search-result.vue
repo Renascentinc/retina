@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import Avatar from "vue-avatar";
+import Avatar from 'vue-avatar'
 
 export default {
-  name: "UserSearchResult",
+  name: 'UserSearchResult',
 
   components: {
     Avatar
@@ -38,11 +38,11 @@ export default {
   },
 
   methods: {
-    onClick() {
-      this.onSelect(this.user.id);
+    onClick () {
+      this.onSelect(this.user.id)
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

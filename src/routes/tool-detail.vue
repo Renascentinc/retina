@@ -258,7 +258,7 @@ export default {
               purchased_from_id: this.getTool.purchased_from.id,
               date_purchased: datePurchased,
               user_id: this.getTool.user && this.getTool.user.id,
-              location_id: this.getTool.location && this.getTool.location.id
+              location_id: this.getTool.location && this.getTool.location.id,
               photo: this.getTool.photo,
               price: this.getTool.price,
               year: this.getTool.year

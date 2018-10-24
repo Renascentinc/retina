@@ -1,5 +1,5 @@
 <template>
-  <div class="tool-search-input">
+  <div class="search-input">
     <div class="search-icon-container">
       <i class="fas fa-search"/>
     </div>
@@ -75,73 +75,6 @@ export default {
 
 <style lang="scss">
 @import '../styles/variables';
+@import '../styles/search-input';
 
-.tool-search-input {
-  display: flex;
-  align-items: center;
-  border: solid 1px #727272;
-  border-radius: 7px;
-  padding-left: 8px;
-  min-height: 45px;
-  width: 100%;
-
-  .search-icon-container {
-    display: flex;
-    flex: 0 0 20px;
-    height: 20px;
-    justify-content: center;
-    align-items: flex-end;
-    font-size: 20px;
-    color: $renascent-dark-gray;
-  }
-
-  .vue-tags-input {
-    font-weight: bold;
-    width: 100%;
-    border-radius: 5px;
-
-    .input {
-      border: none;
-    }
-
-    .tag {
-      background-color: $renascent-red !important;
-      border-radius: 4px;
-      padding-right: 2px;
-
-      .tag-icon {
-        font-size: 12px;
-      }
-    }
-
-    .icon-close {
-      padding-top: 1px;
-    }
-
-    .new-tag-input {
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .autocomplete-item {
-      display: flex;
-      font-size: 20px;
-      width: 100%;
-      height: 35px;
-
-      .item-name {
-        flex: 1 1 auto;
-        text-align: left;
-      }
-
-      .item-category {
-        color: gray;
-        text-transform: capitalize;
-        flex: 0 0 95px;
-        text-align: right;
-        padding-right: 5px;
-      }
-    }
-  }
-}
 </style>

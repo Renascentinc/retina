@@ -1,7 +1,7 @@
 <template>
   <div class="page users-page">
     <div class="search-bar">
-      <user-search-input :update-tags="updateFilters"/>
+      <user-search-input :update-tags="updateFilters"></user-search-input>
     </div>
     <div class="user-scroll-container">
       <transition>

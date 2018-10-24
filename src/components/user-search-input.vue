@@ -7,7 +7,7 @@
       v-model="tag"
       :tags="tags"
       placeholder="Search"
-      @tags-changed="tagsChanged"/>
+      @tags-changed="tagsChanged"></vue-tags-input>
   </div>
 </template>
 

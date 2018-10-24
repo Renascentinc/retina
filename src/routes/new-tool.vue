@@ -2,80 +2,84 @@
   <div class="page new-tool-page">
     <header-card title="New Tool"></header-card>
 
-    <transition>
+    <transition name="card-change">
       <div
         v-if="currentState === 1"
         class="new-tool-input-card">
-        <v-select
-          v-validate:brand="'required'"
-          :options="brandOptions"
-          v-model="brand"
-          name="brand"
-          label="name"
-          class="dark-input"
-          placeholder="Brand">
-        </v-select>
-        <span
-          v-show="errors.has('brand')"
-          class="danger">
-          {{ errors.first('brand') }}
-        </span>
 
-        <v-select
-          v-validate:type="'required'"
-          v-model="type"
-          :options="typeOptions"
-          name="type"
-          label="name"
-          class="dark-input"
-          placeholder="Type">
-        </v-select>
-        <span
-          v-show="errors.has('type')"
-          class="danger">
-          {{ errors.first('type') }}
-        </span>
+        <div class="input-group-container">
+          <v-select
+            v-validate:brand="'required'"
+            :options="brandOptions"
+            v-model="brand"
+            name="brand"
+            label="name"
+            class="dark-input"
+            placeholder="Brand">
+          </v-select>
+          <div class="error-container">
+            <span
+              v-show="errors.has('brand')"
+              class="error">
+              {{ errors.first('brand') }}
+            </span>
+          </div>
+        </div>
 
-        <input
-          v-validate="'required|alpha_num'"
-          v-model="modelNumber"
-          name="modelNumber"
-          class="light-input"
-          placeholder="Model no.">
-        <span
-          v-show="errors.has('modelNumber')"
-          class="danger">
-          {{ errors.first('modelNumber') }}
-        </span>
+        <div class="input-group-container">
+          <v-select
+            v-validate:type="'required'"
+            v-model="type"
+            :options="typeOptions"
+            name="type"
+            label="name"
+            class="dark-input"
+            placeholder="Type">
+          </v-select>
+          <div class="error-container">
+            <span
+              v-show="errors.has('type')"
+              class="error">
+              {{ errors.first('type') }}
+            </span>
+          </div>
+        </div>
 
-        <input
-          v-validate="'required|alpha_num'"
-          v-model="serialNumber"
-          name="serialNumber"
-          class="light-input"
-          placeholder="Serial no.">
-        <span
-          v-show="errors.has('serialNumber')"
-          class="danger">
-          {{ errors.first('serialNumber') }}
-        </span>
+        <div class="input-group-container">
+          <input
+            v-validate="'required|alpha_num'"
+            v-model="modelNumber"
+            name="modelNumber"
+            class="light-input"
+            placeholder="Model no.">
+          <div class="error-container">
+            <span
+              v-show="errors.has('modelNumber')"
+              class="error">
+              {{ errors.first('modelNumber') }}
+            </span>
+          </div>
+        </div>
 
-        <input
-          v-validate="'date_format:YYYY|date_between:1950,2030'"
-          v-model="modelYear"
-          name="modelYear"
-          class="light-input"
-          placeholder="Model Year"
-          type="number">
-        <span
-          v-show="errors.has('modelYear')"
-          class="danger">
-          {{ errors.first('modelYear') }}
-        </span>
+        <div class="input-group-container">
+          <input
+            v-validate="'required|alpha_num'"
+            v-model="serialNumber"
+            name="serialNumber"
+            class="light-input"
+            placeholder="Serial no.">
+          <div class="error-container">
+            <span
+              v-show="errors.has('serialNumber')"
+              class="error">
+              {{ errors.first('serialNumber') }}
+            </span>
+          </div>
+        </div>
       </div>
     </transition>
 
-    <transition>
+    <transition name="card-change">
       <div
         v-if="currentState === 2"
         class="new-tool-input-card">
@@ -96,37 +100,61 @@
         </v-select>
 
         <v-date-picker
-          v-model="selectedDate"
+          v-model="purchaseDate"
           mode="single"
           show-caps>
         </v-date-picker>
 
-        <button class="dark-input">
-          <span> Photo </span>
-        </button>
+        <div class="input-group-container">
+          <input
+            v-validate="'date_format:YYYY|date_between:1950,2030'"
+            v-model="modelYear"
+            name="modelYear"
+            class="light-input"
+            placeholder="Model Year"
+            type="number">
+          <div class="error-container">
+            <span
+              v-show="errors.has('modelYear')"
+              class="error">
+              {{ errors.first('modelYear') }}
+            </span>
+          </div>
+        </div>
 
-        <input
-          v-validate="'decimal:2'"
-          v-model="price"
-          name="price"
-          class="light-input"
-          placeholder="Price"
-          type="number">
-        <span
-          v-show="errors.has('price')"
-          class="danger">
-          {{ errors.first('price') }}
-        </span>
+        <div class="input-group-container">
+          <input
+            v-model="price"
+            name="price"
+            class="light-input"
+            placeholder="Price"
+            type="number">
+        </div>
       </div>
     </transition>
 
-    <transition>
+    <transition name="card-change">
       <div
         v-if="currentState === 3"
         class="new-tool-input-card">
 
+        <button
+          class="dark-input add-photo"
+          @click="startTakingPhoto">
+          <i class="fas fa-camera"></i>
+          <span> Add Photo </span>
+        </button>
+      </div>
+    </transition>
+
+    <transition name="card-change">
+      <div
+        v-if="currentState === 4"
+        class="new-tool-input-card step-4">
+
         <extended-fab
-          :on-click="() => 0"
+          :disabled="nfcDisabled"
+          :on-click="prepareToEncodeTag"
           :outline-display="true"
           class="encode-efab"
           icon-class="fa-times"
@@ -135,12 +163,12 @@
 
         <tool-search-result
           :tool="tool"
-          :show-select="false">
+          :on-select="transitionToToolInfo">
         </tool-search-result>
 
         <div class="done-action-container">
           <extended-fab
-            :on-click="() => 0"
+            :on-click="addAnother"
             :outline-display="true"
             class="add-another-efab"
             icon-class="fa-undo"
@@ -148,7 +176,7 @@
           </extended-fab>
 
           <extended-fab
-            :on-click="() => 0"
+            :on-click="transitionToTools"
             class="done-efab"
             icon-class="fa-arrow-right"
             button-text="DONE">
@@ -157,40 +185,49 @@
       </div>
     </transition>
 
-    <div class="pager-container">
-      <fab
-        :disabled="currentState === 1"
-        :on-click="() => --currentState"
-        class="page-back"
-        icon-class="fa-arrow-left">
-      </fab>
+    <transition name="card-change">
+      <div
+        v-if="currentState !== 4"
+        class="pager-container">
+        <fab
+          :disabled="currentState === 1"
+          :on-click="() => --currentState"
+          class="page-back"
+          icon-class="fa-arrow-left">
+        </fab>
 
-      <div class="pager">
-        <div
-          :class="{ selected: currentState === 1 }"
-          class="pager-page">
+        <div class="pager">
+          <div
+            :class="{ selected: currentState === 1 }"
+            class="pager-page">
+          </div>
+          <div
+            :class="{ selected: currentState === 2 }"
+            class="pager-page">
+          </div>
+          <div
+            :class="{ selected: currentState === 3 }"
+            class="pager-page">
+          </div>
+          <div
+            :class="{ selected: currentState === 4 }"
+            class="pager-page">
+          </div>
         </div>
-        <div
-          :class="{ selected: currentState === 2 }"
-          class="pager-page">
-        </div>
-        <div
-          :class="{ selected: currentState === 3 }"
-          class="pager-page">
-        </div>
+
+        <fab
+          :disabled="!!errors.items.length"
+          :on-click="advanceStep"
+          class="page-forward"
+          icon-class="fa-arrow-right">
+        </fab>
       </div>
-
-      <fab
-        :disabled="currentState === 3 || !!errors.items.length"
-        :on-click="advanceStep"
-        class="page-forward"
-        icon-class="fa-arrow-right">
-      </fab>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import PhotoCapture from '../components/photo-capture'
 import HeaderCard from '../components/header-card'
 import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
@@ -203,6 +240,7 @@ export default {
   name: 'NewTool',
 
   components: {
+    PhotoCapture,
     HeaderCard,
     ToolSearchResult,
     ExtendedFab,
@@ -239,14 +277,15 @@ export default {
       modelYear: null,
       purchasedFrom: null,
       price: null,
-      currentState: 1,
-      selectedDate: new Date(),
+      photo: null,
+      currentState: 3,
+      purchaseDate: new Date(),
       getAllConfigurableItem: [],
       getAllUser: [],
 
       // tmp
       tool: {
-        id: '93713',
+        id: '2',
         type: {
           name: 'Hammer Drill'
         },
@@ -280,6 +319,10 @@ export default {
 
     purchasedFromOptions () {
       return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
+    },
+
+    nfcDisabled () {
+      return !window.nfc
     }
   },
 
@@ -292,8 +335,46 @@ export default {
       this.$validator.validate().then(result => {
         if (result) {
           ++this.currentState
+
+          if (this.currentState === 3) {
+            this.saveTool()
+          }
         }
       })
+    },
+
+    addAnother () {
+      this.resetData()
+      this.currentState = 1
+    },
+
+    resetData () {
+      this.brand = null
+      this.type = null
+      this.owner = null
+      this.modelNumber = null
+      this.serialNumber = null
+      this.modelYear = null
+      this.purchasedFrom = null
+      this.price = null
+      this.photo = null
+      this.purchaseDate = new Date()
+    },
+
+    transitionToToolInfo (toolId) {
+      this.$router.push({ name: 'toolDetail', params: { toolId } })
+    },
+
+    transitionToTools () {
+      this.$router.push({ path: '/tools' })
+    },
+
+    saveTool () {
+
+    },
+
+    prepareToEncodeTag () {
+
     }
   }
 }
@@ -301,6 +382,20 @@ export default {
 
 <style lang="scss">
 @import '../styles/variables';
+
+.card-change-enter-active {
+  transition: opacity .25s;
+}
+
+.card-change-leave-active,
+.card-change-leave-to {
+  display: none;
+  visibility: hidden;
+}
+
+.card-change-enter {
+  opacity: 0;
+}
 
 .new-tool-page {
   display: flex;
@@ -363,6 +458,59 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .step-4 {
+    background: transparent;
+    padding: 0 10px;
+  }
+
+  .done-efab {
+    width: 126px;
+  }
+
+  .tool-search-result {
+    height: 130px;
+
+    .tool-selection-container {
+      display: none;
+    }
+
+    .tool-name {
+      font-size: 30px;
+    }
+
+    .row .tool-id {
+      font-size: 23px;
+    }
+
+    .tool-status {
+      font-size: 22px;
+    }
+
+    .row .user-icon {
+      font-size: 18px;
+    }
+
+    .tool-assignee {
+      font-size: 24px;
+    }
+  }
+
+  .input-group-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .error-container {
+      height: 19px;
+      padding-left: 10px;
+      color: $renascent-red;
+    }
+  }
+
+  .add-photo {
+    height: 250px;
   }
 }
 </style>

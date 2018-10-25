@@ -11,14 +11,15 @@
         {{ getTool.brand.name }} {{ getTool.type.name }}
       </div>
 
-      <div id="actions">
+      <div
+        id="actions"
+        v-if="isTransferable()">
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
           :button-text="`${ formattedStatus(getTool.status) }`"/>
 
         <button
-          v-if="isTransferable()"
           class="action-btn">
           <i class="fas fa-exchange-alt action-icon"/>
           <span class="action-title">TRANSFER</span>

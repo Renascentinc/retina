@@ -327,6 +327,8 @@ export default {
       font-weight: 600;
       justify-content: center;
       padding-top: 9px;
+      margin-right: auto;
+      margin-left: auto;
     }
 
     #name {

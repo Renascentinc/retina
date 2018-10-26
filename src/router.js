@@ -15,8 +15,7 @@ const ToolDetail = () => import('./routes/tool-detail')
 Vue.use(Router)
 
 export default new Router({
-  // TODO: would like to re-enable this but causing issues with the deploy on S3
-  // mode: 'history',
+  mode: 'history',
   routes: [
     {
       path: '/login',

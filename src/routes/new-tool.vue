@@ -456,12 +456,16 @@ export default {
                 name
               }
               status
-              user {
-                first_name
-                last_name
-              }
-              location {
-                name
+              owner {
+                ... on Location {
+                   name
+                   type
+                }
+                ... on User {
+                   first_name
+                   last_name
+                   type
+                }
               }
             }
           }`,

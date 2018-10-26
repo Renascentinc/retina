@@ -81,18 +81,11 @@ export default {
     },
 
     assignee () {
-      if (this.tool.location) {
-        return this.tool.location.name
-      }
-      return `${this.tool.user.first_name} ${this.tool.user.last_name}`
+      return this.tool.owner.type === 'USER' ? `${this.tool.owner.first_name} ${this.tool.owner.last_name}` : this.tool.owner.name
     },
 
     assigneeIcon () {
-      if (this.tool.location) {
-        return 'fa-map-marker-alt'
-      }
-
-      return 'fa-user'
+      return this.tool.owner.type === 'USER' ? 'fa-user' : 'fa-map-marker-alt'
     },
 
     selected () {

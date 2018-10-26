@@ -35,11 +35,14 @@
                 id="call-btn"
                 :on-click="phoneNumber() ? phoneCall : () => 0"
                 :active="phoneNumber"
-                icon-class="fa-phone"/>
+                icon-class="fa-phone">
+              </fab>
 
               <button
                 class="contact-text"
-                @click="phoneNumber() ? phoneCall() : () => 0"> {{ getUser.phone_number }} </button>
+                @click="phoneNumber() ? phoneCall() : () => 0">
+                {{ getUser.phone_number }}
+              </button>
             </div>
 
             <div class="contact-item">
@@ -47,11 +50,14 @@
                 id="email-btn"
                 :on-click="email() ? sendEmail : () => 0"
                 :active="email"
-                icon-class="fa-envelope"/>
+                icon-class="fa-envelope">
+              </fab>
 
               <button
                 class="contact-text"
-                @click="email() ? sendEmail() : () => 0"> {{ getUser.email }} </button>
+                @click="email() ? sendEmail() : () => 0">
+                {{ getUser.email }}
+              </button>
             </div>
           </div>
         </div>

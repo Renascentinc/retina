@@ -17,7 +17,7 @@
 
       <div
         v-if="isTransferable"
-        id="actions">
+        class="actions">
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
@@ -39,30 +39,26 @@
         <div class="card-details owner-details">
           <div class="user-symbol">
             <i
-              v-if="getTool.user"
+              :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
               class="fas fa-user">
-            </i>
-            <i
-              v-if="getTool.location"
-              class="fas fa-map-marker-alt">
             </i>
           </div>
           <div class="owner-name">
             <div
-              v-if="getTool.location"
+              v-if="owner.type === 'LOCATION'"
               class="owner-location">
-              {{ getTool.location.name }}
+              {{ owner.name }}
             </div>
             <div
-              v-if="getTool.user"
+              v-if="owner.type === 'USER'"
               class="owner-user">
-              <span> {{ getTool.user.first_name }} </span>
-              <span> {{ getTool.user.last_name }} </span>
+              <span> {{ owner.first_name }} </span>
+              <span> {{ owner.last_name }} </span>
             </div>
           </div>
           <div class="contact-buttons">
             <fab
-              :on-click="phoneNumber ? phoneCall : () => 0"
+              :on-click="phoneCall"
               :disabled="!phoneNumber"
               class="call-btn"
               icon-class="fa-phone">
@@ -71,7 +67,7 @@
             <div class="spacer"></div>
 
             <fab
-              :on-click="email ? sendEmail : () => 0"
+              :on-click="sendEmail"
               :disabled="!email"
               class="email-btn"
               icon-class="fa-envelope">
@@ -172,17 +168,20 @@ export default {
             price
             photo
 
-            location {
-              id
-              name
-            }
-
-            user {
-              id
-              first_name
-              last_name
-              email
-              phone_number
+            owner {
+              ... on Location {
+                id
+                name
+                type
+              }
+              ... on User {
+                id
+                first_name
+                last_name
+                email
+                phone_number
+                type
+              }
             }
           }
         }
@@ -203,6 +202,10 @@ export default {
   },
 
   computed: {
+    owner () {
+      return this.getTool.owner || {}
+    },
+
     brand () {
       let brand = this.getTool.brand
       return brand && brand.name
@@ -235,33 +238,33 @@ export default {
 
     isTransferable () {
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return this.getTool.location || (this.getTool.user && currentUser.id === this.getTool.user.id)
+      return (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
     },
 
     phoneNumber () {
-      if (this.getTool.user) {
-        return this.getTool.user.phone_number
-      } else if (this.getTool.location) {
-        return this.getTool.location.phone_number
+      if (this.owner.type === 'USER') {
+        return this.owner.phone_number
+      } else if (this.owner.type === 'LOCATION') {
+        return this.owner.phone_number
       }
     },
 
     email () {
-      if (this.getTool.user) {
-        return this.getTool.user.email
-      } else if (this.getTool.location) {
-        return this.getTool.location.email
+      if (this.owner.type === 'USER') {
+        return this.owner.email
+      } else if (this.owner.type === 'LOCATION') {
+        return this.owner.email
       }
     }
   },
 
   methods: {
     phoneCall () {
-      window.location.href = `tel:${this.getTool.user.phone_number}`
+      window.location.href = `tel:${this.owner.phone_number}`
     },
 
     sendEmail () {
-      window.location = `mailto:${this.getTool.user.email}`
+      window.location = `mailto:${this.owner.email}`
     },
 
     updateStatus (newStatus) {
@@ -293,8 +296,7 @@ export default {
               status: newStatus,
               purchased_from_id: this.getTool.purchased_from.id,
               date_purchased: datePurchased,
-              user_id: this.getTool.user && this.getTool.user.id,
-              location_id: this.getTool.location && this.getTool.location.id,
+              owner_id: this.owner.id,
               photo: this.getTool.photo,
               price: this.getTool.price,
               year: this.getTool.year
@@ -333,14 +335,27 @@ export default {
     z-index: 1;
     flex-shrink: 0;
 
+    .backarrow {
+      color: $renascent-red;
+      font-size: 30px;
+      width: 27px;
+      z-index: -10;
+    }
+
+    .toolid {
+      font-size: 25px;
+      font-weight: 600;
+    }
+
     .header-top {
       display: flex;
       justify-content: space-between;
-      padding: 0 23px;
+      padding: 9px 23px;
       align-items: center;
-      padding-top: 9px;
-      margin-right: auto;
-      margin-left: auto;
+    }
+
+    .header-spacer {
+      width: 27px;
     }
 
     .name {

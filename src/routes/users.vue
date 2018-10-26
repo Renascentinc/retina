@@ -63,7 +63,8 @@ export default {
           last_name
           role
         }
-      }`
+      }`,
+      fetchPolicy: 'cache-and-network'
     },
 
     searchUser: {

@@ -13,8 +13,8 @@
       </div>
 
       <div
-        id="actions"
-        v-if="isAdmin()">
+        v-if="isAdmin()"
+        id="actions">
         <button-dropdown
           :on-click="updateRole"
           :options="['ADMINISTRATOR', 'USER']"
@@ -37,9 +37,9 @@
                 :active="phoneNumber"
                 icon-class="fa-phone"/>
 
-                <button
-                  class="contact-text"
-                  @click="phoneNumber() ? phoneCall() : () => 0"> {{ getUser.phone_number }} </button>
+              <button
+                class="contact-text"
+                @click="phoneNumber() ? phoneCall() : () => 0"> {{ getUser.phone_number }} </button>
             </div>
 
             <div class="contact-item">
@@ -61,16 +61,16 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import Fab from "../components/fab.vue";
-import ButtonDropdown from "../components/button-dropdown.vue";
+import gql from 'graphql-tag'
+import Fab from '../components/fab.vue'
+import ButtonDropdown from '../components/button-dropdown.vue'
 
 export default {
-  name: "ToolDetail",
+  name: 'ToolDetail',
 
   components: {
     Fab,
-    ButtonDropdown,
+    ButtonDropdown
   },
 
   apollo: {
@@ -88,23 +88,25 @@ export default {
           }
         }
       `,
-      variables() {
-        let options = {};
-        options.user_id = this.$router.currentRoute.params.userId;
-        return options;
-      }
+      variables () {
+        let options = {}
+        options.user_id = this.$router.currentRoute.params.userId
+        return options
+      },
+
+      fetchPolicy: 'cache-and-network'
     }
   },
 
-  data() {
+  data () {
     return {
       getUser: {},
       window: window
-    };
+    }
   },
 
   methods: {
-    updateRole(newRole) {
+    updateRole (newRole) {
       this.$apollo.mutate({
         mutation: gql`
           mutation updateStatus($user: UpdatedUser!) {
@@ -113,41 +115,41 @@ export default {
             }
           }`,
 
-          variables: {
-            user: {
-              id: this.getUser.id,
-              first_name: this.getUser.first_name,
-              last_name: this.getUser.last_name,
-              email: this.getUser.email,
-              phone_number: this.getUser.phone_number,
-              role: newRole,
-              status: this.getUser.status
-            }
+        variables: {
+          user: {
+            id: this.getUser.id,
+            first_name: this.getUser.first_name,
+            last_name: this.getUser.last_name,
+            email: this.getUser.email,
+            phone_number: this.getUser.phone_number,
+            role: newRole,
+            status: this.getUser.status
           }
+        }
       })
     },
 
-    isAdmin() {
-      return JSON.parse(window.localStorage.getItem("currentUser")).role === "ADMINISTRATOR"
+    isAdmin () {
+      return JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR'
     },
 
-    phoneNumber() {
+    phoneNumber () {
       return this.getUser.phone_number || null
     },
 
-    email() {
+    email () {
       return this.getUser.email || null
     },
 
-    phoneCall() {
-      window.location.href = `tel:${this.getUser.phone_number}`;
+    phoneCall () {
+      window.location.href = `tel:${this.getUser.phone_number}`
     },
 
-    sendEmail() {
-      window.location = `mailto:${this.getUser.email}`;
+    sendEmail () {
+      window.location = `mailto:${this.getUser.email}`
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -15,7 +15,9 @@
         {{ brand }} {{ type }}
       </div>
 
-      <div class="actions">
+      <div
+        v-if="isTransferable"
+        id="actions">
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
@@ -23,7 +25,6 @@
         </button-dropdown>
 
         <button
-          v-if="isTransferable"
           class="action-btn">
           <i class="fas fa-exchange-alt action-icon"></i>
           <span class="action-title">TRANSFER</span>
@@ -338,23 +339,8 @@ export default {
       padding: 0 23px;
       align-items: center;
       padding-top: 9px;
-
-      .backarrow {
-        color: $renascent-red;
-        font-size: 30px;
-        // z-index: -10;
-        flex: 0 0 40px;
-      }
-
-      .toolid {
-        font-size: 25px;
-        font-weight: 600;
-        justify-content: center;
-      }
-
-      .header-spacer {
-        flex: 0 0 40px;
-      }
+      margin-right: auto;
+      margin-left: auto;
     }
 
     .name {

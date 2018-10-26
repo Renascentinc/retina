@@ -30,7 +30,7 @@
       </transition-group>
 
       <fab
-        v-if="isAdmin()"
+        v-if="isAdmin"
         :on-click="transitionToAddUser"
         class="add-user-btn"
         icon-class="fa-plus"/>
@@ -63,7 +63,8 @@ export default {
           last_name
           role
         }
-      }`
+      }`,
+      fetchPolicy: 'cache-and-network'
     },
 
     searchUser: {
@@ -99,6 +100,10 @@ export default {
   },
 
   computed: {
+    isAdmin () {
+      return JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR'
+    },
+
     users () {
       if (this.searchUser.length > 0) {
         return this.searchUser
@@ -109,10 +114,6 @@ export default {
   },
 
   methods: {
-    isAdmin () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR'
-    },
-
     transitionToAddUser () {
       // transfer to 'add user'
     },

@@ -13,7 +13,7 @@
       </div>
 
       <div
-        v-if="isAdmin()"
+        v-if="isAdmin"
         id="actions">
         <button-dropdown
           :on-click="updateRole"
@@ -105,6 +105,12 @@ export default {
     }
   },
 
+  computed: {
+    isAdmin () {
+      return JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR'
+    }
+  },
+
   methods: {
     updateRole (newRole) {
       this.$apollo.mutate({
@@ -127,10 +133,6 @@ export default {
           }
         }
       })
-    },
-
-    isAdmin () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR'
     },
 
     phoneNumber () {

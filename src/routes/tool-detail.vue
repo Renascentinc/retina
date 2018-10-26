@@ -203,6 +203,8 @@ export default {
         return true
       } else if (JSON.parse(window.localStorage.getItem('currentUser')).id === this.getTool.user.id) {
         return true
+      } else if (JSON.parse(window.localStorage.getItem('currentUser')).role === "ADMINISTRATOR") {
+        return true
       }
       return false
     },

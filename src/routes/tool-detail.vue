@@ -11,14 +11,15 @@
         {{ getTool.brand.name }} {{ getTool.type.name }}
       </div>
 
-      <div id="actions">
+      <div
+        v-if="isTransferable()"
+        id="actions">
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
           :button-text="`${ formattedStatus(getTool.status) }`"/>
 
         <button
-          v-if="isTransferable()"
           class="action-btn">
           <i class="fas fa-exchange-alt action-icon"/>
           <span class="action-title">TRANSFER</span>
@@ -202,6 +203,8 @@ export default {
         return true
       } else if (JSON.parse(window.localStorage.getItem('currentUser')).id === this.getTool.user.id) {
         return true
+      } else if (JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR') {
+        return true
       }
       return false
     },
@@ -326,6 +329,8 @@ export default {
       font-weight: 600;
       justify-content: center;
       padding-top: 9px;
+      margin-right: auto;
+      margin-left: auto;
     }
 
     #name {

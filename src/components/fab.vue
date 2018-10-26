@@ -46,6 +46,7 @@ export default {
   }
 
   .fab {
+      cursor: pointer;
       border: none;
       border-radius: 50%;
       color: white;

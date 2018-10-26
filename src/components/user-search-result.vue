@@ -1,7 +1,7 @@
 <template>
   <div class="search-result">
     <div class="element-container">
-      <avatar :username="`${ user.first_name } ${ user.last_name }`"/>
+      <avatar :username="`${ user.first_name } ${ user.last_name }`"></avatar>
       <div
         class="main-container"
         @click="onClick">

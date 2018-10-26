@@ -16,6 +16,15 @@
             label="name"
             class="dark-input"
             placeholder="Brand">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => brand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                Set Brand To "{{ props.value }}"
+              </button>
+            </template>
           </v-select>
           <div class="error-container">
             <span
@@ -35,6 +44,15 @@
             label="name"
             class="dark-input"
             placeholder="Type">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => type = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                Set Type To "{{ props.value }}"
+              </button>
+            </template>
           </v-select>
           <div class="error-container">
             <span
@@ -76,6 +94,23 @@
             </span>
           </div>
         </div>
+
+        <div class="input-group-container">
+          <input
+            v-validate="'date_format:YYYY|date_between:1950,2030'"
+            v-model="modelYear"
+            name="modelYear"
+            class="light-input"
+            placeholder="Model Year"
+            type="number">
+          <div class="error-container">
+            <span
+              v-show="errors.has('modelYear')"
+              class="error">
+              {{ errors.first('modelYear') }}
+            </span>
+          </div>
+        </div>
       </div>
     </transition>
 
@@ -97,6 +132,23 @@
           label="name"
           class="dark-input"
           placeholder="Purchased from">
+          <template
+            slot="no-options"
+            slot-scope="props">
+            <button
+              class="no-options-btn"
+              @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+              Set Type To "{{ props.value }}"
+            </button>
+          </template>
+        </v-select>
+
+        <v-select
+          v-model="status"
+          :options="statuses"
+          label="name"
+          class="dark-input"
+          placeholder="Tool Status">
         </v-select>
 
         <v-date-picker
@@ -104,23 +156,6 @@
           mode="single"
           show-caps>
         </v-date-picker>
-
-        <div class="input-group-container">
-          <input
-            v-validate="'date_format:YYYY|date_between:1950,2030'"
-            v-model="modelYear"
-            name="modelYear"
-            class="light-input"
-            placeholder="Model Year"
-            type="number">
-          <div class="error-container">
-            <span
-              v-show="errors.has('modelYear')"
-              class="error">
-              {{ errors.first('modelYear') }}
-            </span>
-          </div>
-        </div>
 
         <div class="input-group-container">
           <input
@@ -139,8 +174,7 @@
         class="new-tool-input-card">
 
         <button
-          class="dark-input add-photo"
-          @click="startTakingPhoto">
+          class="dark-input add-photo">
           <i class="fas fa-camera"></i>
           <span> Add Photo </span>
         </button>
@@ -227,20 +261,19 @@
 </template>
 
 <script>
-import PhotoCapture from '../components/photo-capture'
 import HeaderCard from '../components/header-card'
 import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab'
-import vSelect from 'vue-select'
+import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
+import Statuses from '../utils/statuses'
 
 export default {
   name: 'NewTool',
 
   components: {
-    PhotoCapture,
     HeaderCard,
     ToolSearchResult,
     ExtendedFab,
@@ -278,26 +311,30 @@ export default {
       purchasedFrom: null,
       price: null,
       photo: null,
-      currentState: 3,
+      status: null,
+      currentState: 1,
       purchaseDate: new Date(),
       getAllConfigurableItem: [],
       getAllUser: [],
-
-      // tmp
-      tool: {
-        id: '2',
-        type: {
-          name: 'Hammer Drill'
+      tool: null,
+      statuses: [
+        {
+          name: 'Available',
+          id: Statuses.AVAILABLE
         },
-        brand: {
-          name: 'Bosch'
+        {
+          name: 'In Use',
+          id: Statuses.IN_USE
         },
-        status: 'IN_USE',
-        user: {
-          first_name: 'Colin',
-          last_name: 'Pullen'
+        {
+          name: 'Maintenance',
+          id: Statuses.MAINTENANCE
+        },
+        {
+          name: 'Out of Service',
+          id: Statuses.OUT_OF_SERVICE
         }
-      }
+      ]
     }
   },
 
@@ -334,10 +371,10 @@ export default {
     advanceStep () {
       this.$validator.validate().then(result => {
         if (result) {
-          ++this.currentState
-
           if (this.currentState === 3) {
             this.saveTool()
+          } else {
+            ++this.currentState
           }
         }
       })
@@ -358,6 +395,8 @@ export default {
       this.purchasedFrom = null
       this.price = null
       this.photo = null
+      this.tool = null
+      this.status = null
       this.purchaseDate = new Date()
     },
 
@@ -369,8 +408,81 @@ export default {
       this.$router.push({ path: '/tools' })
     },
 
-    saveTool () {
+    createNewConfigurableItem (configurableItem) {
+      return this.$apollo.mutate({
+        mutation: gql`mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
+          createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
+            id
+          }
+        }`,
+        variables: {
+          newConfigurableItem: {
+            type: configurableItem.type,
+            name: configurableItem.name,
+            sanctioned: false
+          }
+        }
+      })
+    },
 
+    saveTool () {
+      let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
+      let typeRequest = this.type && this.type.isNewConfigurableItem ? this.createNewConfigurableItem(this.type) : null
+      let purchaseRequest = this.purchasedFrom && this.purchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.purchasedFrom) : null
+
+      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
+        let [brandResponse, typeResponse, purchaseResponse] = responses
+
+        if (brandResponse) {
+          this.brand.id = brandResponse.data.createConfigurableItem.id
+        }
+
+        if (typeResponse) {
+          this.type.id = typeResponse.data.createConfigurableItem.id
+        }
+
+        if (purchaseResponse) {
+          this.purchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
+        }
+
+        this.$apollo.mutate({
+          mutation: gql`mutation newTool($newTool: NewTool!) {
+            createTool(newTool: $newTool) {
+              id
+              type {
+                name
+              }
+              brand {
+                name
+              }
+              status
+              user {
+                first_name
+                last_name
+              }
+              location {
+                name
+              }
+            }
+          }`,
+          variables: {
+            newTool: {
+              type_id: this.type.id,
+              brand_id: this.brand.id,
+              model_number: this.modelNumber,
+              serial_number: this.serialNumber,
+              purchased_from_id: this.purchasedFrom && this.purchasedFrom.id,
+              status: this.status ? this.status.id : Statuses.AVAILABLE,
+              owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
+              price: parseInt((this.price || 0) * 100),
+              year: this.modelYear
+            }
+          }
+        }).then(response => {
+          this.tool = response.data.createTool
+          ++this.currentState
+        })
+      })
     },
 
     prepareToEncodeTag () {
@@ -469,8 +581,10 @@ export default {
     width: 126px;
   }
 
-  .tool-search-result {
+  .search-result {
     height: 130px;
+    width: 100%;
+    max-width: 400px;
 
     .tool-selection-container {
       display: none;
@@ -480,7 +594,7 @@ export default {
       font-size: 30px;
     }
 
-    .row .tool-id {
+    .row .id {
       font-size: 23px;
     }
 
@@ -512,5 +626,19 @@ export default {
   .add-photo {
     height: 250px;
   }
+}
+
+.black {
+  color: black;
+}
+
+.no-options-btn {
+  // width: 100%;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  color: black;
+  font-size: 23px;
+  font-weight: 700;
 }
 </style>

@@ -90,17 +90,6 @@
 
         <div class="finalize-row finalize-middle">
           <span class="finalize-to-text"> To </span>
-          <!-- <select
-            class="dark-dropdown"
-            placeholder="select user">
-            <option> select user </option>
-            <option
-              v-for="user in users"
-              :key="user.id">
-              {{ `${user.first_name} ${user.last_name}` }}
-            </option>
-          </select> -->
-
           <v-select
             :options="users"
             :filterable="false"
@@ -136,7 +125,7 @@ import ToolSearchInput from '../components/tool-search-input.vue'
 import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab.vue'
-import vSelect from 'vue-select'
+import vSelect from '../components/select'
 import gql from 'graphql-tag'
 
 export default {
@@ -339,6 +328,7 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 5px;
+    padding-bottom: 70px;
   }
 
   .no-tools-container {

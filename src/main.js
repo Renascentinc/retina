@@ -16,7 +16,7 @@ import { onError } from 'apollo-link-error'
 import ApiStatusCodes from './utils/api-status-codes'
 import VCalendar from 'v-calendar'
 import '../node_modules/v-calendar/lib/v-calendar.min.css'
-import VeeValidate from 'vee-validate'
+import VeeValidate, { Validator } from 'vee-validate'
 
 const cache = new InMemoryCache()
 
@@ -72,3 +72,20 @@ new Vue({
   apolloProvider,
   render: h => h(App)
 })
+
+const dictionary = {
+  en: {
+    attributes: {
+      brand: 'brand',
+      type: 'type',
+      owner: 'owner',
+      modelNumber: 'model number',
+      serialNumber: 'serial number',
+      modelYear: 'model year',
+      purchasedFrom: 'purchased from',
+      price: 'price'
+    }
+  }
+}
+
+Validator.localize(dictionary)

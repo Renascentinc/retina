@@ -13,7 +13,6 @@
 
 <script>
 import VueTagsInput from '@johmun/vue-tags-input'
-import gql from 'graphql-tag'
 
 export default {
   name: 'UserSearchInput',
@@ -26,37 +25,10 @@ export default {
       required: true
     }
   },
-  apollo: {
-    getAllConfigurableItem: {
-      query: gql`query {
-        getAllConfigurableItem {
-          id,
-          type,
-          name
-        }
-      }`
-    }
-  },
   data () {
     return {
       tag: '',
       tags: []
-    }
-  },
-  computed: {
-    autocompleteItems () {
-      return this.searchableItems.map(item => {
-        item.formattedType = item.type.split('_')[0].toLowerCase()
-        item.text = `${item.formattedType} ${item.name}`
-        item.iconClass = this.getTagIconClass(item.type)
-        return item
-      })
-    },
-    filteredItems () {
-      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
-    },
-    searchableItems () {
-      return this.getAllConfigurableItem || []
     }
   },
   methods: {

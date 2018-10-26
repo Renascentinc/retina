@@ -34,7 +34,7 @@
               <fab
                 id="call-btn"
                 :on-click="phoneNumber() ? phoneCall : () => 0"
-                :active="phoneNumber"
+                :active="!phoneNumber()"
                 icon-class="fa-phone">
               </fab>
 
@@ -49,7 +49,7 @@
               <fab
                 id="email-btn"
                 :on-click="email() ? sendEmail : () => 0"
-                :active="email"
+                :active="!email()"
                 icon-class="fa-envelope">
               </fab>
 

@@ -11,7 +11,7 @@ const UserDetail = () => import('./routes/user-detail')
 const Users = () => import('./routes/users')
 const NewTool = () => import('./routes/new-tool')
 const ToolDetail = () => import('./routes/tool-detail')
-const NewUser = () => import('./routes/new-user');
+const NewUser = () => import('./routes/new-user')
 
 Vue.use(Router)
 

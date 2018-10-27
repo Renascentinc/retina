@@ -1,8 +1,8 @@
 <template>
   <div class="header-card">
     <router-link
-      class="fas fa-times exit"
-      :to= exitLink>
+      :to= "exitLink"
+      class="fas fa-times exit">
     </router-link>
 
     <span class="main-text"> {{ title }} </span>

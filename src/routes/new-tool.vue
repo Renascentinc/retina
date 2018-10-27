@@ -340,7 +340,7 @@ export default {
         }
       ],
       validations: {
-        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear()+1}`
+        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
     }
   },

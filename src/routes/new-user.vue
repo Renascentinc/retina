@@ -6,84 +6,84 @@
 
     <transition name="card-change">
       <div
-        class="new-user-input-card"
-        v-if="currentState === 1">
+        v-if="currentState === 1"
+        class="new-user-input-card">
         <div class="input-group-container">
           <input
-              v-validate="'required'"
-              v-model="firstName"
-              name="first name"
-              class="light-input"
-              placeholder="First Name"
-              type="string">
+            v-validate="'required'"
+            v-model="firstName"
+            name="first name"
+            class="light-input"
+            placeholder="First Name"
+            type="string">
 
-              <div class="error-container">
-                <span
-                  v-show="errors.has('first name')"
-                  class="error">
-                  {{ errors.first('first name') }}
-                </span>
-              </div>
+          <div class="error-container">
+            <span
+              v-show="errors.has('first name')"
+              class="error">
+              {{ errors.first('first name') }}
+            </span>
+          </div>
         </div>
         <div class="input-group-container">
-            <input
-              v-validate="'required'"
-              v-model="lastName"
-              name="last name"
-              class="light-input"
-              placeholder="Last Name"
-              type="string">
+          <input
+            v-validate="'required'"
+            v-model="lastName"
+            name="last name"
+            class="light-input"
+            placeholder="Last Name"
+            type="string">
 
-              <div class="error-container">
-                <span
-                  v-show="errors.has('last name')"
-                  class="error">
-                  {{ errors.first('last name') }}
-                </span>
-              </div>
+          <div class="error-container">
+            <span
+              v-show="errors.has('last name')"
+              class="error">
+              {{ errors.first('last name') }}
+            </span>
+          </div>
         </div>
         <div class="input-group-container">
-            <input
-              v-validate="'email|required'"
-              data-vv-as="email"
-              v-model="email"
-              name="email"
-              class="light-input"
-              placeholder="Email"
-              type="string">
+          <input
+            v-validate="'email|required'"
+            v-model="email"
+            data-vv-as="email"
+            name="email"
+            class="light-input"
+            placeholder="Email"
+            type="string">
 
-              <div class="error-container">
-                <span
-                  v-show="errors.has('email')"
-                  class="error">
-                  {{ errors.first('email') }}
-                </span>
-              </div>
+          <div class="error-container">
+            <span
+              v-show="errors.has('email')"
+              class="error">
+              {{ errors.first('email') }}
+            </span>
+          </div>
         </div>
         <div class="input-group-container">
-            <input
-              v-validate="{ required: true, numeric: true, min: 7 }"
-              v-model="phoneNumber"
-              name="phone number"
-              class="light-input"
-              placeholder="Phone #"
-              type="number">
+          <input
+            v-validate="{ required: true, numeric: true, min: 7 }"
+            v-model="phoneNumber"
+            name="phone number"
+            class="light-input"
+            placeholder="Phone #"
+            type="number">
 
-              <div class="error-container">
-                <span
-                  v-show="errors.has('phone number')"
-                  class="error">
-                  {{ errors.first('phone number') }}
-                </span>
-              </div>
+          <div class="error-container">
+            <span
+              v-show="errors.has('phone number')"
+              class="error">
+              {{ errors.first('phone number') }}
+            </span>
+          </div>
         </div>
       </div>
     </transition>
 
     <transition name="card-change">
       <div
-        class="new-user-input-card"
-        v-if="currentState === 2">
+        v-if="currentState === 2"
+        class="new-user-input-card">
         <div class="input-group-container">
           <v-select
             v-validate:role="'required'"
@@ -113,16 +113,16 @@
             placeholder="Password"
             type="password">
 
-            <div class="error-container">
-              <span
-                v-show="errors.has('first password')"
-                class="error">
-                {{ errors.first('first password') }}
-              </span>
-            </div>
+          <div class="error-container">
+            <span
+              v-show="errors.has('first password')"
+              class="error">
+              {{ errors.first('first password') }}
+            </span>
           </div>
+        </div>
 
-          <div class="input-group-container">
+        <div class="input-group-container">
           <input
             v-validate="{ required: true, is: firstPassword }"
             v-model="secondPassword"
@@ -131,20 +131,20 @@
             placeholder="Re-Enter Password"
             type="password">
 
-            <div class="error-container">
-              <span
-                v-show="errors.has('second password')"
-                class="error">
-                {{ errors.first('second password') }}
-              </span>
-            </div>
+          <div class="error-container">
+            <span
+              v-show="errors.has('second password')"
+              class="error">
+              {{ errors.first('second password') }}
+            </span>
           </div>
+        </div>
       </div>
       <user-search-result
         v-if="currentState === 3"
-        class="user-preview"
         :user="getUser"
-        :on-select="transitionToUserInfo"> </user-search-result>
+        :on-select="transitionToUserInfo"
+        class="user-preview"> </user-search-result>
     </transition>
 
     <transition name="card-change">
@@ -181,14 +181,13 @@
         </fab>
       </div>
 
-
       <div
-        class="actions"
-        v-if="currentState === 3">
+        v-if="currentState === 3"
+        class="actions">
         <extended-fab
+          :on-click="transitionToUsers"
           icon-class="fa-arrow-right"
-          button-text="DONE"
-          :on-click="transitionToUsers"></extended-fab>
+          button-text="DONE"></extended-fab>
       </div>
     </transition>
   </div>
@@ -233,11 +232,11 @@ export default {
     roles () {
       return [
         {
-          name: "User",
+          name: 'User',
           id: Roles.USER
         },
         {
-          name: "Administrator",
+          name: 'Administrator',
           id: Roles.ADMIN
         }
       ]
@@ -246,7 +245,7 @@ export default {
 
   methods: {
     advanceStep () {
-      console.log("ROLE: " + this.role)
+      console.log('ROLE: ' + this.role)
       this.$validator.validate().then(result => {
         if (result) {
           if (this.currentState === 2) {
@@ -279,17 +278,17 @@ export default {
             }
           }`,
 
-          variables: {
-              newUser: {
-                first_name: this.firstName,
-                last_name: this.lastName,
-                email: this.email,
-                phone_number: this.phoneNumber,
-                password: this.secondPassword,
-                role: this.role.id,
-                status: "ACTIVE"
-              }
+        variables: {
+          newUser: {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            email: this.email,
+            phone_number: this.phoneNumber,
+            password: this.secondPassword,
+            role: this.role.id,
+            status: 'ACTIVE'
           }
+        }
       }).then(result => {
         this.getUser = result.data.createUser
       })

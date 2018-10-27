@@ -50,7 +50,7 @@ export default new Router({
           name: 'userDetail'
         },
         {
-          path: 'tool/new',
+          path: 'new-tool',
           component: NewTool,
           name: 'newTool'
         },

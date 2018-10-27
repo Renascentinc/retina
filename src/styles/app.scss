@@ -3,6 +3,17 @@
 @import 'loading-spinner';
 @import 'drawer';
 @import 'navbar';
+@import 'form-inputs';
+
+* {
+  font-family: $font-family;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+* {
+  font-family: $font-family;
+}
 
 html, body, #app {
   font-family: $font-family;
@@ -30,6 +41,18 @@ a {
   height: 100%;
   overflow: hidden;
   flex: 1 1 auto;
+}
+
+.page-change-enter-active {
+  transition: opacity .25s;
+}
+
+.page-change-enter {
+  opacity: 0;
+}
+
+.page-change-leave-to {
+  display: none;
 }
 
 .main-application {
@@ -63,7 +86,6 @@ a {
     background-color: #000;
     border-radius: 3px;
     padding: 0 3px 1px 3px;
-    line-height: 16px;
   }
 
   &.out-of-service {

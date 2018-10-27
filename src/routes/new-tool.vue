@@ -1,23 +1,654 @@
 <template>
   <div class="page new-tool-page">
-    <h1>Add</h1>
-    <button @click="goBack">Back</button>
+    <header-card title="New Tool"></header-card>
+
+    <transition name="card-change">
+      <div
+        v-if="currentState === 1"
+        class="new-tool-input-card">
+
+        <div class="input-group-container">
+          <v-select
+            v-validate:brand="'required'"
+            :options="brandOptions"
+            v-model="brand"
+            name="brand"
+            label="name"
+            class="dark-input"
+            placeholder="Brand">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => brand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                Set Brand To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
+          <div class="error-container">
+            <span
+              v-show="errors.has('brand')"
+              class="error">
+              {{ errors.first('brand') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="input-group-container">
+          <v-select
+            v-validate:type="'required'"
+            v-model="type"
+            :options="typeOptions"
+            name="type"
+            label="name"
+            class="dark-input"
+            placeholder="Type">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => type = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                Set Type To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
+          <div class="error-container">
+            <span
+              v-show="errors.has('type')"
+              class="error">
+              {{ errors.first('type') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="input-group-container">
+          <input
+            v-validate="'required'"
+            v-model="modelNumber"
+            name="modelNumber"
+            class="light-input"
+            placeholder="Model no.">
+          <div class="error-container">
+            <span
+              v-show="errors.has('modelNumber')"
+              class="error">
+              {{ errors.first('modelNumber') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="input-group-container">
+          <input
+            v-validate="'required'"
+            v-model="serialNumber"
+            name="serialNumber"
+            class="light-input"
+            placeholder="Serial no.">
+          <div class="error-container">
+            <span
+              v-show="errors.has('serialNumber')"
+              class="error">
+              {{ errors.first('serialNumber') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="input-group-container">
+          <input
+            v-validate="validations.purchaseDate"
+            v-model="modelYear"
+            name="modelYear"
+            class="light-input"
+            placeholder="Model Year"
+            type="number">
+          <div class="error-container">
+            <span
+              v-show="errors.has('modelYear')"
+              class="error">
+              {{ errors.first('modelYear') }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <transition name="card-change">
+      <div
+        v-if="currentState === 2"
+        class="new-tool-input-card">
+        <v-select
+          v-model="owner"
+          :options="userOptions"
+          label="full_name"
+          class="dark-input"
+          placeholder="Owner">
+        </v-select>
+
+        <v-select
+          v-model="purchasedFrom"
+          :options="purchasedFromOptions"
+          label="name"
+          class="dark-input"
+          placeholder="Purchased from">
+          <template
+            slot="no-options"
+            slot-scope="props">
+            <button
+              class="no-options-btn"
+              @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+              Set Type To "{{ props.value }}"
+            </button>
+          </template>
+        </v-select>
+
+        <v-select
+          v-model="status"
+          :options="statuses"
+          label="name"
+          class="dark-input"
+          placeholder="Tool Status">
+        </v-select>
+
+        <v-date-picker
+          v-model="purchaseDate"
+          :input-props="{ readonly: true }"
+          popover-direction="top"
+          mode="single">
+        </v-date-picker>
+
+        <div class="input-group-container">
+          <input
+            v-model="price"
+            name="price"
+            class="light-input"
+            placeholder="Price"
+            type="number">
+        </div>
+      </div>
+    </transition>
+
+    <transition name="card-change">
+      <div
+        v-if="currentState === 3"
+        class="new-tool-input-card">
+
+        <button
+          class="dark-input add-photo">
+          <i class="fas fa-camera"></i>
+          <span> Add Photo </span>
+        </button>
+      </div>
+    </transition>
+
+    <transition name="card-change">
+      <div
+        v-if="currentState === 4"
+        class="new-tool-input-card step-4">
+
+        <extended-fab
+          :disabled="nfcDisabled"
+          :on-click="prepareToEncodeTag"
+          :outline-display="true"
+          class="encode-efab"
+          icon-class="fa-times"
+          button-text="ENOCDE TAG">
+        </extended-fab>
+
+        <tool-search-result
+          :tool="tool"
+          :on-select="transitionToToolInfo">
+        </tool-search-result>
+
+        <div class="done-action-container">
+          <extended-fab
+            :on-click="addAnother"
+            :outline-display="true"
+            class="add-another-efab"
+            icon-class="fa-undo"
+            button-text="ADD ANOTHER">
+          </extended-fab>
+
+          <extended-fab
+            :on-click="transitionToTools"
+            class="done-efab"
+            icon-class="fa-arrow-right"
+            button-text="DONE">
+          </extended-fab>
+        </div>
+      </div>
+    </transition>
+
+    <transition name="card-change">
+      <div
+        v-if="currentState !== 4"
+        class="pager-container">
+        <fab
+          :disabled="currentState === 1"
+          :on-click="() => --currentState"
+          class="page-back"
+          icon-class="fa-arrow-left">
+        </fab>
+
+        <div class="pager">
+          <div
+            :class="{ selected: currentState === 1 }"
+            class="pager-page">
+          </div>
+          <div
+            :class="{ selected: currentState === 2 }"
+            class="pager-page">
+          </div>
+          <div
+            :class="{ selected: currentState === 3 }"
+            class="pager-page">
+          </div>
+          <div
+            :class="{ selected: currentState === 4 }"
+            class="pager-page">
+          </div>
+        </div>
+
+        <fab
+          :disabled="!!errors.items.length"
+          :on-click="advanceStep"
+          class="page-forward"
+          icon-class="fa-arrow-right">
+        </fab>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import HeaderCard from '../components/header-card'
+import ToolSearchResult from '../components/tool-search-result.vue'
+import ExtendedFab from '../components/extended-fab.vue'
+import Fab from '../components/fab'
+import vSelect from '../components/select'
+import gql from 'graphql-tag'
+import ConfigurableItems from '../utils/configurable-items'
+import Statuses from '../utils/statuses'
+
 export default {
   name: 'NewTool',
+
+  components: {
+    HeaderCard,
+    ToolSearchResult,
+    ExtendedFab,
+    Fab,
+    vSelect
+  },
+
+  apollo: {
+    getAllUser: gql`query {
+      getAllUser {
+        id
+        first_name
+        last_name
+        role
+      }
+    }`,
+
+    getAllConfigurableItem: gql`query {
+      getAllConfigurableItem {
+        id
+        type
+        name
+        sanctioned
+      }
+    }`
+  },
+
+  data () {
+    return {
+      brand: null,
+      type: null,
+      owner: null,
+      modelNumber: null,
+      serialNumber: null,
+      modelYear: null,
+      purchasedFrom: null,
+      price: null,
+      photo: null,
+      status: null,
+      currentState: 1,
+      purchaseDate: new Date(),
+      getAllConfigurableItem: [],
+      getAllUser: [],
+      tool: null,
+      statuses: [
+        {
+          name: 'Available',
+          id: Statuses.AVAILABLE
+        },
+        {
+          name: 'In Use',
+          id: Statuses.IN_USE
+        },
+        {
+          name: 'Maintenance',
+          id: Statuses.MAINTENANCE
+        },
+        {
+          name: 'Out of Service',
+          id: Statuses.OUT_OF_SERVICE
+        }
+      ],
+      validations: {
+        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear()}`
+      }
+    }
+  },
+
+  computed: {
+    userOptions () {
+      return this.getAllUser.map(user => {
+        user.full_name = `${user.first_name} ${user.last_name}`
+        return user
+      })
+    },
+
+    brandOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.BRAND)
+    },
+
+    typeOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.TYPE)
+    },
+
+    purchasedFromOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
+    },
+
+    nfcDisabled () {
+      return !window.nfc
+    }
+  },
+
   methods: {
-    goBack () {
-      this.$router.go(-1)
+    getConfigurableItemsForType (type) {
+      return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
+    },
+
+    advanceStep () {
+      this.$validator.validate().then(result => {
+        if (result) {
+          if (this.currentState === 3) {
+            this.saveTool()
+          } else {
+            ++this.currentState
+          }
+        }
+      })
+    },
+
+    addAnother () {
+      this.resetData()
+      this.currentState = 1
+    },
+
+    resetData () {
+      this.brand = null
+      this.type = null
+      this.owner = null
+      this.modelNumber = null
+      this.serialNumber = null
+      this.modelYear = null
+      this.purchasedFrom = null
+      this.price = null
+      this.photo = null
+      this.tool = null
+      this.status = null
+      this.purchaseDate = new Date()
+    },
+
+    transitionToToolInfo (toolId) {
+      this.$router.push({ name: 'toolDetail', params: { toolId } })
+    },
+
+    transitionToTools () {
+      this.$router.push({ path: '/tools' })
+    },
+
+    createNewConfigurableItem (configurableItem) {
+      return this.$apollo.mutate({
+        mutation: gql`mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
+          createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
+            id
+          }
+        }`,
+        variables: {
+          newConfigurableItem: {
+            type: configurableItem.type,
+            name: configurableItem.name,
+            sanctioned: true
+          }
+        }
+      })
+    },
+
+    saveTool () {
+      let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
+      let typeRequest = this.type && this.type.isNewConfigurableItem ? this.createNewConfigurableItem(this.type) : null
+      let purchaseRequest = this.purchasedFrom && this.purchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.purchasedFrom) : null
+
+      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
+        let [brandResponse, typeResponse, purchaseResponse] = responses
+
+        if (brandResponse) {
+          this.brand.id = brandResponse.data.createConfigurableItem.id
+        }
+
+        if (typeResponse) {
+          this.type.id = typeResponse.data.createConfigurableItem.id
+        }
+
+        if (purchaseResponse) {
+          this.purchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
+        }
+
+        this.$apollo.mutate({
+          mutation: gql`mutation newTool($newTool: NewTool!) {
+            createTool(newTool: $newTool) {
+              id
+              type {
+                name
+              }
+              brand {
+                name
+              }
+              status
+              owner {
+                ... on Location {
+                   name
+                   type
+                }
+                ... on User {
+                   first_name
+                   last_name
+                   type
+                }
+              }
+            }
+          }`,
+          variables: {
+            newTool: {
+              type_id: this.type.id,
+              brand_id: this.brand.id,
+              model_number: this.modelNumber,
+              serial_number: this.serialNumber,
+              purchased_from_id: this.purchasedFrom && this.purchasedFrom.id,
+              status: this.status ? this.status.id : Statuses.AVAILABLE,
+              owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
+              price: parseInt((this.price || 0) * 100),
+              year: this.modelYear
+            }
+          }
+        }).then(response => {
+          this.tool = response.data.createTool
+          ++this.currentState
+        })
+      })
+    },
+
+    prepareToEncodeTag () {
+
     }
   }
 }
 </script>
 
 <style lang="scss">
-.new-tool-page {
+@import '../styles/variables';
 
+.card-change-enter-active {
+  transition: opacity .25s;
+}
+
+.card-change-leave-active,
+.card-change-leave-to {
+  display: none;
+  visibility: hidden;
+}
+
+.card-change-enter {
+  opacity: 0;
+}
+
+.new-tool-page {
+  display: flex;
+  flex-direction: column;
+  background-color: $background-light-gray;
+
+  .new-tool-input-card {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    margin: 10px 10px 0 10px;
+    background-color: white;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 20px;
+
+    .dropdown {
+      width: 100%;
+    }
+  }
+
+  .pager-container {
+    display: flex;
+    flex: 0 0 90px;
+    justify-content: space-around;
+    align-items: center;
+
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      flex: 0 0 70px;
+
+      .pager-page {
+        padding: 0;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+        background-color: white;
+
+        &.selected {
+          background-color: $renascent-dark-gray;
+        }
+      }
+    }
+  }
+
+  .add-another-efab {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .tool-search-result {
+    width: 100%;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  }
+
+  .done-action-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .step-4 {
+    background: transparent;
+    padding: 0 10px;
+  }
+
+  .done-efab {
+    width: 126px;
+  }
+
+  .search-result {
+    height: 130px;
+    width: 100%;
+    max-width: 400px;
+
+    .tool-selection-container {
+      display: none;
+    }
+
+    .tool-name {
+      font-size: 30px;
+    }
+
+    .row .id {
+      font-size: 23px;
+    }
+
+    .tool-status {
+      font-size: 22px;
+    }
+
+    .row .user-icon {
+      font-size: 18px;
+    }
+
+    .tool-assignee {
+      font-size: 24px;
+    }
+  }
+
+  .input-group-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .error-container {
+      height: 19px;
+      padding-left: 10px;
+      color: $renascent-red;
+      font-size: 14px;
+    }
+  }
+
+  .add-photo {
+    height: 250px;
+  }
+}
+
+.black {
+  color: black;
+}
+
+.no-options-btn {
+  // width: 100%;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  color: black;
+  font-size: 23px;
+  font-weight: 700;
 }
 </style>

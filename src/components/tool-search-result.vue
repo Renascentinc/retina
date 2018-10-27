@@ -10,12 +10,16 @@
         <span class="subtitle">{{ id }}</span>
         <span
           :class="statusClass"
-          class="tool-status">{{ status }}</span>
+          class="tool-status">
+          {{ status }}
+        </span>
       </div>
       <div class="row">
         <i
           :class="assigneeIcon"
-          class="fas user-icon"/>
+          class="fas user-icon">
+        </i>
+
         <span class="tool-assignee">{{ assignee }}</span>
       </div>
     </div>
@@ -25,7 +29,8 @@
           v-if="showSelect"
           :class="{ 'fa-check': selected }"
           class="fas checkbox"
-          @click="toggleSelect"/>
+          @click="toggleSelect">
+        </button>
       </transition>
     </div>
   </div>
@@ -42,11 +47,13 @@ export default {
     },
     onSelect: {
       type: Function,
-      required: true
+      required: false,
+      default: () => {}
     },
     showSelect: {
       type: Boolean,
-      required: true
+      required: false,
+      default: false
     }
   },
 
@@ -74,18 +81,11 @@ export default {
     },
 
     assignee () {
-      if (this.tool.location) {
-        return this.tool.location.name
-      }
-      return `${this.tool.user.first_name} ${this.tool.user.last_name}`
+      return this.tool.owner.type === 'USER' ? `${this.tool.owner.first_name} ${this.tool.owner.last_name}` : this.tool.owner.name
     },
 
     assigneeIcon () {
-      if (this.tool.location) {
-        return 'fa-map-marker-alt'
-      }
-
-      return 'fa-user'
+      return this.tool.owner.type === 'USER' ? 'fa-user' : 'fa-map-marker-alt'
     },
 
     selected () {

@@ -66,11 +66,11 @@
       border-radius: 5px;
       background-color: $background-light-gray;
       margin: 13px;
-      padding: 0px;
+      padding: 0;
       font-size: 16px;
       font-weight: 700;
       color: $dark-text;
-      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
 
       .menu-btn-icon {
         height: 18px;

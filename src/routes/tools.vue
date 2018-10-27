@@ -1,14 +1,14 @@
 <template>
   <div class="page tools-page">
     <div class="search-bar">
-      <tool-search-input :update-tags="updateFilters"/>
+      <tool-search-input :update-tags="updateFilters"></tool-search-input>
     </div>
     <div class="tool-scroll-container">
       <transition>
         <div
           v-if="$apollo.queries.searchTool.loading"
           class="loading-container">
-          <div class="loading"/>
+          <div class="loading"></div>
         </div>
       </transition>
       <transition>
@@ -21,13 +21,14 @@
 
       <transition-group
         name="list"
-        tag="div">
+        tag="span">
         <tool-search-result
           v-for="tool in tools"
           :tool="tool"
           :key="tool.id"
           :on-select="transitionToToolInfo"
-          :show-select="currentState !== states.INITIAL"/>
+          :show-select="currentState !== states.INITIAL">
+        </tool-search-result>
       </transition-group>
     </div>
 
@@ -39,12 +40,14 @@
           :on-click="onTransferClick"
           class="transfer-btn"
           icon-class="fa-exchange-alt"
-          button-text="TRANSFER"/>
+          button-text="TRANSFER">
+        </extended-fab>
 
         <fab
           :on-click="transitionToAdd"
           class="add-btn"
-          icon-class="fa-plus"/>
+          icon-class="fa-plus">
+        </fab>
       </div>
     </transition>
 
@@ -52,22 +55,28 @@
       <div
         v-if="currentState === states.SELECTING"
         class="nav-bar selection-action-bar">
-        <button
-          class="fas fa-times menu-icon"
-          @click="cancelTransfer">
-          <span class="icon-subtext">CANCEL</span>
-        </button>
-        <button
-          :class="{ 'fa-check-square': !showOnlySelectedTools, 'fa-square': showOnlySelectedTools }"
-          class="fas menu-icon"
-          @click="toggleViewSelected">
-          <span class="icon-subtext">{{ showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED' }}</span>
-        </button>
-        <button
-          class="fas fa-arrow-right menu-icon"
-          @click="proceedToFinalize">
-          <span class="icon-subtext">NEXT</span>
-        </button>
+        <div class="icon-text-container">
+          <button
+            class="fas fa-times menu-icon"
+            @click="cancelTransfer">
+            <span class="icon-subtext">CANCEL</span>
+          </button>
+        </div>
+        <div class="icon-text-container">
+          <button
+            :class="{ 'fa-check-square': !showOnlySelectedTools, 'fa-square': showOnlySelectedTools }"
+            class="fas menu-icon"
+            @click="toggleViewSelected">
+            <span class="icon-subtext">{{ showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED' }}</span>
+          </button>
+        </div>
+        <div class="icon-text-container">
+          <button
+            class="fas fa-arrow-right menu-icon"
+            @click="proceedToFinalize">
+            <span class="icon-subtext">NEXT</span>
+          </button>
+        </div>
       </div>
     </transition>
 
@@ -81,16 +90,13 @@
 
         <div class="finalize-row finalize-middle">
           <span class="finalize-to-text"> To </span>
-          <select
-            class="dark-dropdown"
-            placeholder="select user">
-            <option> select user </option>
-            <option
-              v-for="user in users"
-              :key="user.id">
-              {{ `${user.first_name} ${user.last_name}` }}
-            </option>
-          </select>
+          <v-select
+            :options="users"
+            :filterable="false"
+            value="select user"
+            label="full_name"
+            class="dark-input">
+          </v-select>
         </div>
 
         <div class="finalize-row finalize-footer">
@@ -99,13 +105,15 @@
             :outline-display="true"
             class="cancel-efab"
             icon-class="fa-times"
-            button-text="CANCEL"/>
+            button-text="CANCEL">
+          </extended-fab>
 
           <extended-fab
             :on-click="finalizeTransfer"
             class="finish-transfer"
             icon-class="fa-arrow-right"
-            button-text="FINISH"/>
+            button-text="FINISH">
+          </extended-fab>
         </div>
       </div>
     </transition>
@@ -117,6 +125,7 @@ import ToolSearchInput from '../components/tool-search-input.vue'
 import ToolSearchResult from '../components/tool-search-result.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab.vue'
+import vSelect from '../components/select'
 import gql from 'graphql-tag'
 
 export default {
@@ -126,7 +135,8 @@ export default {
     ToolSearchInput,
     ToolSearchResult,
     ExtendedFab,
-    Fab
+    Fab,
+    vSelect
   },
 
   apollo: {
@@ -144,18 +154,26 @@ export default {
         searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
           id
           type {
+            id
             name
           }
           brand {
+            id
             name
           }
           status
-          user {
-            first_name
-            last_name
-          }
-          location {
-            name
+          owner {
+            ... on Location {
+               id
+               name
+               type
+            }
+            ... on User {
+               id
+               first_name
+               last_name
+               type
+            }
           }
         }
       }`,
@@ -177,7 +195,8 @@ export default {
         }
 
         return options
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 
@@ -193,7 +212,7 @@ export default {
     return {
       filterMap: {
         BRAND: 'brand_ids',
-        USER: 'user_ids',
+        USER: 'owner_ids',
         TYPE: 'type_ids',
         STATUS: 'tool_statuses'
       },
@@ -218,6 +237,11 @@ export default {
     },
 
     users () {
+      if (this.getAllUser) {
+        this.getAllUser.forEach(user => {
+          user.full_name = `${user.first_name} ${user.last_name}`
+        })
+      }
       return this.getAllUser || []
     },
 
@@ -267,6 +291,7 @@ export default {
 
     cancelTransfer () {
       this.$store.commit('resetSelectedTools')
+      this.showOnlySelectedTools = false
       this.currentState = this.states.INITIAL
     },
 
@@ -277,10 +302,12 @@ export default {
     finalizeTransfer () {
       // TODO make api call to transfer tools
       this.$store.commit('resetSelectedTools')
+      this.showOnlySelectedTools = false
       this.currentState = this.states.INITIAL
     },
 
     proceedToFinalize () {
+      this.showOnlySelectedTools = true
       this.currentState = this.states.FINALIZING
     }
   }
@@ -310,6 +337,7 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 5px;
+    padding-bottom: 70px;
   }
 
   .no-tools-container {
@@ -362,11 +390,16 @@ export default {
     padding-left: 20px;
     padding-right: 20px;
 
-    .menu-icon {
-      color: $renascent-red;
+    .icon-text-container {
+      width: 95px;
+      flex: 0 0 95px;
 
-      .icon-subtext {
-        color: $renascent-dark-gray;
+      .menu-icon {
+        color: $renascent-red;
+
+        .icon-subtext {
+          color: $renascent-dark-gray;
+        }
       }
     }
   }
@@ -400,6 +433,18 @@ export default {
         font-size: 39px;
         margin-right: 13px;
       }
+
+      .dropdown {
+        width: 246px;
+
+        .selected-tag {
+          font-size: 20px;
+        }
+
+        .dropdown-menu {
+          top: -260px !important;
+        }
+      }
     }
 
     .finalize-header {
@@ -415,19 +460,9 @@ export default {
       width: 146px;
     }
   }
-}
 
-.dark-dropdown {
-  width: 243px;
-  height: 45px;
-  background-color: $renascent-dark-gray;
-  border-radius: 3px;
-  color: white;
-  // font-size: 31px;
-  font-family: Lato;
-  font-weight: 700;
-  padding-left: 7px;
-  padding-bottom: 5px;
-  font-size: 28px;
+  .form-control {
+    display: none !important;
+  }
 }
 </style>

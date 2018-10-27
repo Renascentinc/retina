@@ -1,19 +1,5 @@
-@import 'variables.scss';
-
 * {
   font-family: $font-family;
-}
-
-.icon-text-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-}
-
-.icon-subtext {
-    font-size: 10px;
-    line-height: .8;
 }
 
 .nav-bar {
@@ -27,19 +13,28 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   z-index: 1;
 
-  .menu-icon {
+  .icon-text-container {
+    flex: 0 0 58px;
+    width: 58px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: $disabled-gray;
-    background-color: transparent;
-    border: none;
-    font-size: 25px;
     cursor: pointer;
 
-    .icon-subtext {
-      margin-top: 7px;
-      font-size: 16px;
+    .menu-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: $disabled-gray;
+      background-color: transparent;
+      border: none;
+      font-size: 25px;
+      cursor: pointer;
+
+      .icon-subtext {
+        margin-top: 7px;
+        font-size: 10px;
+      }
     }
   }
 }

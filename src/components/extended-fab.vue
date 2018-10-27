@@ -1,12 +1,13 @@
 <template>
   <button
-    :class="{ outlined: outlineDisplay }"
+    :class="{ outlined: outlineDisplay, inactive: disabled }"
     class="extended-fab"
     @click="onClick">
     <div class="fab-icon-container">
       <i
         :class="iconClass"
-        class="fas"/>
+        class="fas">
+      </i>
     </div>
     <span class="efab-text">{{ buttonText }}</span>
   </button>
@@ -21,15 +22,24 @@ export default {
       type: String,
       required: true
     },
+
     buttonText: {
       type: String,
       required: true
     },
+
     onClick: {
       type: Function,
       required: true
     },
+
     outlineDisplay: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    disabled: {
       type: Boolean,
       required: false,
       default: false
@@ -60,6 +70,18 @@ export default {
         color: $renascent-red;
         border: solid 2px $renascent-red;
         background: transparent;
+
+        &.inactive {
+          background-color: transparent;
+          color: $disabled-gray;
+          border: solid 2px $disabled-gray;
+          box-shadow: none;
+        }
+      }
+
+      &.inactive {
+        background-color: $disabled-gray;
+        box-shadow: none;
       }
 
       .fab-icon-container {

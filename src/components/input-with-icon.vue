@@ -3,7 +3,8 @@
     <div class="icon-container">
       <i
         :class="iconClass"
-        class="fas"/>
+        class="fas">
+      </i>
     </div>
     <slot/>
   </div>

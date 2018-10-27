@@ -1,80 +1,82 @@
 <template>
   <div class="page tool-detail-page">
-    <div id="header">
-      <router-link
-        id="backarrow"
-        class="fas fa-arrow-left"
-        to="/tools"/>
+    <div class="header">
+      <div class="header-top">
+        <router-link
+          class="fas fa-arrow-left backarrow"
+          to="/tools">
+        </router-link>
 
-      <span id="toolid">#{{ getTool.id }} </span>
-      <div id="name">
-        {{ getTool.brand.name }} {{ getTool.type.name }}
+        <span class="toolid">#{{ getTool.id }} </span>
+
+        <span class="header-spacer"></span>
+      </div>
+      <div class="name">
+        {{ brand }} {{ type }}
       </div>
 
       <div
-        v-if="isTransferable()"
-        id="actions">
+        v-if="isTransferable"
+        class="actions">
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          :button-text="`${ formattedStatus(getTool.status) }`"/>
+          :button-text="`${ formattedStatus }`">
+        </button-dropdown>
 
         <button
           class="action-btn">
-          <i class="fas fa-exchange-alt action-icon"/>
+          <i class="fas fa-exchange-alt action-icon"></i>
           <span class="action-title">TRANSFER</span>
         </button>
       </div>
     </div>
-    <div id="cards">
-      <div
-        id="owner-card"
-        class="card">
+    <div class="cards">
+      <div class="card owner-card">
         <div class="card-title">
           Owner
         </div>
         <div class="card-details owner-details">
           <div class="user-symbol">
             <i
-              v-if="getTool.user"
-              class="fas fa-user"/>
-            <i
-              v-if="getTool.location"
-              class="fas fa-map-marker-alt"/>
+              :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
+              class="fas fa-user">
+            </i>
           </div>
-          <div id="owner-name">
+          <div class="owner-name">
             <div
-              v-if="getTool.location"
-              id="owner-location">
-              {{ getTool.location.name }}
+              v-if="owner.type === 'LOCATION'"
+              class="owner-location">
+              {{ owner.name }}
             </div>
             <div
-              v-if="getTool.user"
-              id="owner-user">
-              <span> {{ getTool.user.first_name }} </span>
-              <span> {{ getTool.user.last_name }} </span>
+              v-if="owner.type === 'USER'"
+              class="owner-user">
+              <span> {{ owner.first_name }} </span>
+              <span> {{ owner.last_name }} </span>
             </div>
           </div>
           <div class="contact-buttons">
             <fab
-              id="call-btn"
-              :on-click="phoneNumber() ? phoneCall : () => 0"
-              :active="phoneNumber"
-              icon-class="fa-phone"/>
+              :on-click="phoneCall"
+              :disabled="!phoneNumber"
+              class="call-btn"
+              icon-class="fa-phone">
+            </fab>
 
-            <div class="spacer"/>
+            <div class="spacer"></div>
 
             <fab
-              id="email-btn"
-              :on-click="email() ? sendEmail : () => 0"
-              :active="email"
-              icon-class="fa-envelope"/>
+              :on-click="sendEmail"
+              :disabled="!email"
+              class="email-btn"
+              icon-class="fa-envelope">
+            </fab>
           </div>
         </div>
       </div>
       <div
-        id="general-card"
-        class="card">
+        class="card general-card">
         <div class="card-title">
           General
         </div>
@@ -92,20 +94,19 @@
           <span class="general-data"> {{ getTool.year || '-' }} </span>
 
           <span class="general-label">Purchased From</span>
-          <span class="general-data"> {{ getTool.purchased_from.name || '-' }} </span>
+          <span class="general-data"> {{ purchasedFrom }} </span>
 
           <span class="general-label">Purchase Date</span>
-          <span class="general-data"> {{ formattedDate(getTool.date_purchased) || '-' }} </span>
+          <span class="general-data"> {{ formattedDate }} </span>
 
           <span class="general-label">Purchase Price</span>
-          <span class="general-data"> ${{ formattedPrice(getTool.price) || ' -' }} </span>
+          <span class="general-data"> ${{ formattedPrice }} </span>
         </div>
 
       </div>
 
       <div
-        id="photo-card"
-        class="card">
+        class="card photo-card">
         <div class="card-title">
           Photo
         </div>
@@ -116,8 +117,8 @@
             class="image">
           <i
             v-if="!getTool.photo"
-            id="no-image"
-            class="fas fa-image"/>
+            class="fas fa-image no-image">
+          </i>
         </div>
       </div>
     </div>
@@ -167,17 +168,20 @@ export default {
             price
             photo
 
-            location {
-              id
-              name
-            }
-
-            user {
-              id
-              first_name
-              last_name
-              email
-              phone_number
+            owner {
+              ... on Location {
+                id
+                name
+                type
+              }
+              ... on User {
+                id
+                first_name
+                last_name
+                email
+                phone_number
+                type
+              }
             }
           }
         }
@@ -197,49 +201,81 @@ export default {
     }
   },
 
-  methods: {
+  computed: {
+    owner () {
+      return this.getTool.owner || {}
+    },
+
+    brand () {
+      let brand = this.getTool.brand
+      return brand && brand.name
+    },
+
+    type () {
+      let type = this.getTool.type
+      return type && type.name
+    },
+
+    purchasedFrom () {
+      let purchasedFrom = this.getTool.purchased_from
+      return purchasedFrom ? purchasedFrom.name : '-'
+    },
+
+    formattedStatus () {
+      let status = this.getTool.status
+      return status && status.replace(/_/g, ' ').toUpperCase()
+    },
+
+    formattedDate () {
+      let datePurchased = this.getTool.date_purchased
+      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
+    },
+
+    formattedPrice () {
+      let priceString = this.getTool.price
+      return priceString ? `${priceString / 100}` : ' -'
+    },
+
     isTransferable () {
-      if (this.getTool.location) {
-        return true
-      } else if (JSON.parse(window.localStorage.getItem('currentUser')).id === this.getTool.user.id) {
-        return true
-      } else if (JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR') {
-        return true
-      }
-      return false
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
+      return (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
     },
 
     phoneNumber () {
-      if (this.getTool.user) {
-        return this.getTool.user.phone_number
-      } else if (this.getTool.location) {
-        return this.getTool.location.phone_number
+      if (this.owner.type === 'USER') {
+        return this.owner.phone_number
+      } else if (this.owner.type === 'LOCATION') {
+        return this.owner.phone_number
       }
     },
 
     email () {
-      if (this.getTool.user) {
-        return this.getTool.user.email
-      } else if (this.getTool.location) {
-        return this.getTool.location.email
+      if (this.owner.type === 'USER') {
+        return this.owner.email
+      } else if (this.owner.type === 'LOCATION') {
+        return this.owner.email
       }
-    },
+    }
+  },
 
-    formattedStatus (status) {
-      return status.replace(/_/g, ' ').toUpperCase()
-    },
-
+  methods: {
     phoneCall () {
-      window.location.href = `tel:${this.getTool.user.phone_number}`
+      window.location.href = `tel:${this.owner.phone_number}`
     },
 
     sendEmail () {
-      window.location = `mailto:${this.getTool.user.email}`
+      window.location = `mailto:${this.owner.email}`
     },
 
     updateStatus (newStatus) {
       newStatus = newStatus.replace(/ /g, '_').toUpperCase()
-      var datePurchased = this.getTool.date_purchased.replace(/\(.*\)/g, '')
+
+      // save current status in case request fails but set the tool status assuming it will succeed
+      let currentStatus = this.getTool.status
+      this.getTool.status = newStatus
+
+      // TODO: figure out why api chokes on its own dates
+      let datePurchased = this.getTool.date_purchased.replace(/\(.*\)/g, '')
 
       this.$apollo
         .mutate({
@@ -260,8 +296,7 @@ export default {
               status: newStatus,
               purchased_from_id: this.getTool.purchased_from.id,
               date_purchased: datePurchased,
-              user_id: this.getTool.user && this.getTool.user.id,
-              location_id: this.getTool.location && this.getTool.location.id,
+              owner_id: this.owner.id,
               photo: this.getTool.photo,
               price: this.getTool.price,
               year: this.getTool.year
@@ -270,23 +305,10 @@ export default {
         })
         .then(status => {
           this.getTool.status = status.data.updateTool.status
+        }).catch(() => {
+          this.getTool.status = currentStatus
+          // TODO: pop toast notifying user that request failed.
         })
-    },
-
-    formattedDate (dateString) {
-      if (dateString) {
-        return new Date(dateString).toLocaleDateString('en-US')
-      }
-
-      return null
-    },
-
-    formattedPrice (priceString) {
-      if (priceString) {
-        return `${priceString / 100}`
-      }
-
-      return null
     }
   }
 }
@@ -300,7 +322,7 @@ export default {
   display: flex;
   flex-direction: column;
 
-  #header {
+  .header {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -313,34 +335,38 @@ export default {
     z-index: 1;
     flex-shrink: 0;
 
-    #backarrow {
-      position: absolute;
-      top: 9px;
-      left: 23px;
+    .backarrow {
       color: $renascent-red;
       font-size: 30px;
-      z-index: -10;
+      width: 27px;
+      // TODO: hid arrow behind scrim while still being interactable on mobile
+      // z-index: -10;
     }
 
-    #toolid {
-      display: flex;
-      flex: 1 0 auto;
+    .toolid {
       font-size: 25px;
       font-weight: 600;
-      justify-content: center;
-      padding-top: 9px;
-      margin-right: auto;
-      margin-left: auto;
     }
 
-    #name {
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 23px;
+      align-items: center;
+    }
+
+    .header-spacer {
+      width: 27px;
+    }
+
+    .name {
       font-size: 33px;
       font-weight: 900;
       text-align: center;
       margin-top: 4px;
     }
 
-    #actions {
+    .actions {
       display: flex;
       flex: 0 1 auto;
       justify-content: space-around;
@@ -377,7 +403,7 @@ export default {
     }
   }
 
-  #cards {
+  .cards {
     overflow-y: auto;
 
     .card {
@@ -407,7 +433,7 @@ export default {
       }
     }
 
-    #general-card {
+    .general-card {
       padding-bottom: 10px;
 
       .general-details {
@@ -428,7 +454,7 @@ export default {
       }
     }
 
-    #photo-card {
+    .photo-card {
       padding-bottom: 11px;
 
       .photo-box {
@@ -444,7 +470,7 @@ export default {
           border-radius: 2px;
         }
 
-        #no-image {
+        .no-image {
           color: $background-dark-gray;
           font-size: 60px;
           width: 100%;
@@ -455,7 +481,7 @@ export default {
       }
     }
 
-    #owner-card {
+    .owner-card {
       padding-bottom: 17px;
 
       .owner-details {
@@ -463,7 +489,7 @@ export default {
         flex-direction: row;
         align-items: center;
 
-        #owner-name {
+        .owner-name {
           display: flex;
           flex-direction: column;
           font-size: 23px;
@@ -471,7 +497,7 @@ export default {
           color: $renascent-dark-gray;
           margin-left: 11px;
 
-          #owner-user {
+          .owner-user {
             display: flex;
             flex-direction: column;
           }
@@ -503,13 +529,13 @@ export default {
           margin: 11px;
         }
 
-        #email-btn {
+        .email-btn {
           margin-left: 11px;
           margin-top: 5px;
           margin-bottom: 5px;
         }
 
-        #call-btn {
+        .call-btn {
           margin-right: 11px;
           margin-bottom: 5px;
           margin-top: 5px;

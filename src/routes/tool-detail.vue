@@ -25,9 +25,10 @@
         </button-dropdown>
 
         <button
-          class="action-btn">
+          class="action-btn"
+          @click="toggleTransferStatus">
           <i class="fas fa-exchange-alt action-icon"></i>
-          <span class="action-title">TRANSFER</span>
+          <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
         </button>
       </div>
     </div>
@@ -202,6 +203,10 @@ export default {
   },
 
   computed: {
+    isToolSelected () {
+      return !!this.$store.state.selectedToolsMap[this.getTool.id]
+    },
+
     owner () {
       return this.getTool.owner || {}
     },
@@ -237,7 +242,7 @@ export default {
     },
 
     isTransferable () {
-      let currentUser = this.$store.getters.currentUser
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
       return (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
     },
 
@@ -259,6 +264,11 @@ export default {
   },
 
   methods: {
+    toggleTransferStatus () {
+      this.$store.commit('toggleToolSelection', this.getTool.id)
+      this.$router.push({ path: '/tools' })
+    },
+
     phoneCall () {
       window.location.href = `tel:${this.owner.phone_number}`
     },
@@ -383,7 +393,7 @@ export default {
         padding: 0px;
         display: flex;
         align-content: center;
-        z-index: -10;
+        // z-index: -10;
 
         .action-icon {
           font-size: 18px;

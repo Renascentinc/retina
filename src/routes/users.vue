@@ -40,10 +40,11 @@
 </template>
 
 <script>
-import UserSearchInput from '../components/user-search-input.vue'
-import UserSearchResult from '../components/user-search-result.vue'
-import Fab from '../components/fab.vue'
+import UserSearchInput from '../components/user-search-input'
+import UserSearchResult from '../components/user-search-result'
+import Fab from '../components/fab'
 import gql from 'graphql-tag'
+import Roles from '../utils/roles'
 
 export default {
   name: 'Users',
@@ -101,7 +102,7 @@ export default {
 
   computed: {
     isAdmin () {
-      return this.$store.getters.currentUser.role === 'ADMINISTRATOR'
+      return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
     },
 
     users () {

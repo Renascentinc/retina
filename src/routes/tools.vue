@@ -64,7 +64,7 @@
         </div>
         <div class="icon-text-container">
           <button
-            :class="{ 'fa-check-square': !showOnlySelectedTools, 'fa-square': showOnlySelectedTools }"
+            :class="{ 'fa-check-square': !showOnlySelectedTools, 'fa-list': showOnlySelectedTools }"
             class="fas menu-icon"
             @click="toggleViewSelected">
             <span class="icon-subtext">{{ showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED' }}</span>
@@ -91,10 +91,9 @@
         <div class="finalize-row finalize-middle">
           <span class="finalize-to-text"> To </span>
           <v-select
-            :options="users"
+            :options="transferTargets"
             :filterable="false"
-            value="select user"
-            label="full_name"
+            v-model="transferTarget"
             class="dark-input">
           </v-select>
         </div>
@@ -110,6 +109,7 @@
 
           <extended-fab
             :on-click="finalizeTransfer"
+            :disabled="!transferTarget.id || numSelectedTools === 0"
             class="finish-transfer"
             icon-class="fa-arrow-right"
             button-text="FINISH">
@@ -127,6 +127,7 @@ import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab.vue'
 import vSelect from '../components/select'
 import gql from 'graphql-tag'
+import Roles from '../utils/roles'
 
 export default {
   name: 'Tools',
@@ -140,12 +141,21 @@ export default {
   },
 
   apollo: {
+    getAllLocation: gql`query {
+      getAllLocation {
+        id
+        name
+        type
+      }
+    }`,
+
     getAllUser: gql`query {
       getAllUser {
         id
         first_name
         last_name
         role
+        type
       }
     }`,
 
@@ -217,6 +227,7 @@ export default {
         TYPE: 'type_ids',
         STATUS: 'tool_statuses'
       },
+      transferTarget: { id: null, label: 'select user' },
       searchTool: [],
       pageNumber: 0,
       pageSize: 25,
@@ -231,19 +242,37 @@ export default {
   computed: {
     tools () {
       let tools = this.searchTool || []
+
+      if (this.currentState === this.states.SELECTING && JSON.parse(window.localStorage.getItem('currentUser')).role !== Roles.ADMIN) {
+        tools = tools.filter(tool => tool.owner.type === 'LOCATION' || tool.owner.id === JSON.parse(window.localStorage.getItem('currentUser')).id)
+      }
+
       if (this.showOnlySelectedTools) {
         return tools.filter(tool => this.$store.state.selectedToolsMap[tool.id])
       }
       return tools
     },
 
+    transferTargets () {
+      return this.users.concat(this.locations)
+    },
+
     users () {
       if (this.getAllUser) {
         this.getAllUser.forEach(user => {
-          user.full_name = `${user.first_name} ${user.last_name}`
+          user.label = `${user.first_name} ${user.last_name}`
         })
       }
       return this.getAllUser || []
+    },
+
+    locations () {
+      if (this.getAllLocation) {
+        this.getAllLocation.forEach(location => {
+          location.label = location.name
+        })
+      }
+      return this.getAllLocation || []
     },
 
     numSelectedTools () {
@@ -256,7 +285,7 @@ export default {
   },
 
   created () {
-    if (this.numSelectedTools.length) {
+    if (this.numSelectedTools !== 0) {
       this.currentState = this.states.SELECTING
     }
   },
@@ -301,10 +330,47 @@ export default {
     },
 
     finalizeTransfer () {
-      // TODO make api call to transfer tools
-      this.$store.commit('resetSelectedTools')
-      this.showOnlySelectedTools = false
-      this.currentState = this.states.INITIAL
+      this.$apollo.mutate({
+        mutation: gql`mutation transferTools($tool_id_list: [ID!]!, $to_owner_id: ID!) {
+          transferMultipleTool (tool_id_list: $tool_id_list, to_owner_id: $to_owner_id) {
+            id
+            type {
+              id
+              name
+            }
+            brand {
+              id
+              name
+            }
+            status
+            owner {
+              ... on Location {
+                 id
+                 name
+                 type
+              }
+              ... on User {
+                 id
+                 first_name
+                 last_name
+                 type
+              }
+            }
+          }
+        }`,
+        variables: {
+          tool_id_list: this.$store.getters.selectedTools,
+          to_owner_id: this.transferTarget.id
+        }
+      }).then(response => {
+        response.data.transferMultipleTool.forEach(tool => {
+          let idx = this.searchTool.findIndex(entry => entry.id === tool.id)
+          this.searchTool[idx] = tool
+        })
+        this.$store.commit('resetSelectedTools')
+        this.showOnlySelectedTools = false
+        this.currentState = this.states.INITIAL
+      })
     },
 
     proceedToFinalize () {
@@ -443,7 +509,7 @@ export default {
         }
 
         .dropdown-menu {
-          top: -260px !important;
+          top: -200px !important;
         }
       }
     }

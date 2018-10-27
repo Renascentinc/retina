@@ -17,7 +17,7 @@
         id="actions">
         <button-dropdown
           :on-click="updateRole"
-          :options="['ADMINISTRATOR', 'USER']"
+          :options="roles"
           :button-text="`${ getUser.role }`"/>
       </div>
     </div>
@@ -68,8 +68,9 @@
 
 <script>
 import gql from 'graphql-tag'
-import Fab from '../components/fab.vue'
-import ButtonDropdown from '../components/button-dropdown.vue'
+import Fab from '../components/fab'
+import ButtonDropdown from '../components/button-dropdown'
+import Roles from '../utils/roles'
 
 export default {
   name: 'ToolDetail',
@@ -107,13 +108,13 @@ export default {
   data () {
     return {
       getUser: {},
-      window: window
+      roles: Object.values(Roles)
     }
   },
 
   computed: {
     isAdmin () {
-      return this.$store.getters.currentUser.role === 'ADMINISTRATOR'
+      return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
     }
   },
 

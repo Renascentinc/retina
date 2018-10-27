@@ -482,7 +482,7 @@ export default {
               serial_number: this.serialNumber,
               purchased_from_id: this.purchasedFrom && this.purchasedFrom.id,
               status: this.status ? this.status.id : Statuses.AVAILABLE,
-              owner_id: this.owner ? this.owner.id : this.$store.getters.currentUser.id,
+              owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
               price: parseInt((this.price || 0) * 100),
               year: this.modelYear
             }

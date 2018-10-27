@@ -339,7 +339,8 @@ export default {
       color: $renascent-red;
       font-size: 30px;
       width: 27px;
-      z-index: -10;
+      // TODO: hid arrow behind scrim while still being interactable on mobile
+      // z-index: -10;
     }
 
     .toolid {

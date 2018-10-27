@@ -153,8 +153,9 @@
 
         <v-date-picker
           v-model="purchaseDate"
-          mode="single"
-          show-caps>
+          :input-props="{ readonly: true }"
+          popover-direction="top"
+          mode="single">
         </v-date-picker>
 
         <div class="input-group-container">
@@ -293,9 +294,10 @@ export default {
 
     getAllConfigurableItem: gql`query {
       getAllConfigurableItem {
-        id,
-        type,
+        id
+        type
         name
+        sanctioned
       }
     }`
   },
@@ -365,7 +367,7 @@ export default {
 
   methods: {
     getConfigurableItemsForType (type) {
-      return this.getAllConfigurableItem.filter(item => item.type === type)
+      return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
     },
 
     advanceStep () {
@@ -419,7 +421,7 @@ export default {
           newConfigurableItem: {
             type: configurableItem.type,
             name: configurableItem.name,
-            sanctioned: false
+            sanctioned: true
           }
         }
       })

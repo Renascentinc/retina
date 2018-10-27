@@ -154,18 +154,22 @@ export default {
         searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
           id
           type {
+            id
             name
           }
           brand {
+            id
             name
           }
           status
           owner {
             ... on Location {
+               id
                name
                type
             }
             ... on User {
+               id
                first_name
                last_name
                type
@@ -191,7 +195,8 @@ export default {
         }
 
         return options
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 

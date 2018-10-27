@@ -14,7 +14,7 @@
         slot="autocompleteItem"
         slot-scope="props"
         class="autocomplete-item"
-        @click="() => props.performAdd(item)">
+        @click="() => props.performAdd(props.item)">
         <div class="item-name">
           {{ props.item.name }}
         </div>

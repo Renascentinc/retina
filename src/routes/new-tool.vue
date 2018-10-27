@@ -340,7 +340,7 @@ export default {
         }
       ],
       validations: {
-        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear()}`
+        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear()+1}`
       }
     }
   },
@@ -535,6 +535,7 @@ export default {
     align-items: center;
     justify-content: space-around;
     padding: 0 20px;
+    border-radius: 3px;
 
     .dropdown {
       width: 100%;

@@ -54,11 +54,20 @@ export default {
     }
   },
   apollo: {
+    getAllLocation: gql`query {
+      getAllLocation {
+        id
+        name
+        type
+      }
+    }`,
+
     getAllUser: gql`query {
       getAllUser {
         id
         first_name
         last_name
+        type
       }
     }`,
 
@@ -114,18 +123,26 @@ export default {
         }
       ]
 
-      return statuses.concat(this.users).concat(this.searchableConfigItems)
+      return statuses.concat(this.users).concat(this.searchableConfigItems).concat(this.locations)
     },
 
     filteredItems () {
       return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
     },
 
+    locations () {
+      return (this.getAllLocation || []).map(location => {
+        location.text = location.name
+        location.formattedType = 'Location'
+        location.iconClass = 'fa-map-marker-alt'
+        return location
+      })
+    },
+
     users () {
       return (this.getAllUser || []).map(user => {
         user.text = `${user.first_name} ${user.last_name}`
         user.name = user.text
-        user.type = 'USER'
         user.formattedType = 'User'
         user.iconClass = 'fa-user'
         return user

@@ -129,14 +129,19 @@ export default {
   align-items: center;
   flex: 0 0 100px;
 
-  button {
+  .checkbox {
     height: 37px;
     width: 37px;
-    background-color: $renascent-dark-gray;
+    border: 2px solid $renascent-dark-gray;
+    color: $renascent-dark-gray;
     border-radius: 3px;
     padding: 0;
     font-size: 27px;
     color: white;
+
+    &.fa-check {
+      background-color: $renascent-dark-gray;
+    }
   }
 }
 </style>

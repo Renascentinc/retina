@@ -109,7 +109,7 @@ export default {
 
   computed: {
     currentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser')) || {}
+      return JSON.parse(window.localStorage.getItem('currentUser'))
     },
 
     firstname () {

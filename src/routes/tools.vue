@@ -212,7 +212,7 @@ export default {
     return {
       filterMap: {
         BRAND: 'brand_ids',
-        USER: 'user_ids',
+        USER: 'owner_ids',
         TYPE: 'type_ids',
         STATUS: 'tool_statuses'
       },

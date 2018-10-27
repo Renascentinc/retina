@@ -9,7 +9,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-import attachFastClick from 'fastclick'
+// import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -88,7 +88,7 @@ Vue.use(VCalendar)
 Vue.use(VeeValidate)
 // Vue.use(Snotify)
 
-attachFastClick(document.body)
+// attachFastClick(document.body)
 
 new Vue({
   router,

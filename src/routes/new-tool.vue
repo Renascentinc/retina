@@ -65,7 +65,7 @@
 
         <div class="input-group-container">
           <input
-            v-validate="'required|alpha_num'"
+            v-validate="'required'"
             v-model="modelNumber"
             name="modelNumber"
             class="light-input"
@@ -81,7 +81,7 @@
 
         <div class="input-group-container">
           <input
-            v-validate="'required|alpha_num'"
+            v-validate="'required'"
             v-model="serialNumber"
             name="serialNumber"
             class="light-input"
@@ -97,7 +97,7 @@
 
         <div class="input-group-container">
           <input
-            v-validate="'date_format:YYYY|date_between:1950,2030'"
+            v-validate="validations.purchaseDate"
             v-model="modelYear"
             name="modelYear"
             class="light-input"
@@ -336,7 +336,10 @@ export default {
           name: 'Out of Service',
           id: Statuses.OUT_OF_SERVICE
         }
-      ]
+      ],
+      validations: {
+        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear()}`
+      }
     }
   },
 
@@ -626,6 +629,7 @@ export default {
       height: 19px;
       padding-left: 10px;
       color: $renascent-red;
+      font-size: 14px;
     }
   }
 

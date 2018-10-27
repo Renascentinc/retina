@@ -113,7 +113,7 @@ export default {
 
   computed: {
     isAdmin () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).role === 'ADMINISTRATOR'
+      return this.$store.getters.currentUser.role === 'ADMINISTRATOR'
     }
   },
 

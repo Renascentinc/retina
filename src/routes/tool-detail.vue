@@ -237,7 +237,7 @@ export default {
     },
 
     isTransferable () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
+      let currentUser = this.$store.getters.currentUser
       return (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
     },
 

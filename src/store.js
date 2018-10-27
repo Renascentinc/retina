@@ -16,6 +16,9 @@ export default new Vuex.Store({
         }
       })
       return selectedTools
+    },
+    currentUser () {
+      return JSON.parse(window.localStorage.getItem('currentUser'))
     }
   },
   mutations: {

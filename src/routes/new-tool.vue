@@ -1,6 +1,8 @@
 <template>
   <div class="page new-tool-page">
-    <header-card title="New Tool"></header-card>
+    <header-card
+      title="New Tool"
+      exit-link="/tools"></header-card>
 
     <transition name="card-change">
       <div

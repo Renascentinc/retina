@@ -2,7 +2,7 @@
   <div class="header-card">
     <router-link
       class="fas fa-times exit"
-      to="/tools">
+      :to= exitLink>
     </router-link>
 
     <span class="main-text"> {{ title }} </span>
@@ -16,6 +16,10 @@ export default {
   name: 'HeaderCard',
   props: {
     title: {
+      type: String,
+      required: true
+    },
+    exitLink: {
       type: String,
       required: true
     }

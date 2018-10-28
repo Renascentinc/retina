@@ -404,7 +404,6 @@ export default {
 
     canEdit () {
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      console.log(currentUser.role === 'ADMINISTRATOR')
       return (currentUser.role === 'ADMINISTRATOR')
     },
 

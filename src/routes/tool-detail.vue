@@ -9,9 +9,73 @@
       <span class="toolid">#{{ getTool.id }} </span>
 
       <span class="header-spacer"></span>
-      <div class="name">
+      <div
+        class="name"
+        v-if="!editState">
         {{ brand }} {{ type }}
       </div>
+
+      <div
+        class="input-group-container"
+        v-if="editState">
+          <v-select
+            v-validate:brand="'required'"
+            :options="brandOptions"
+            v-model="newBrand"
+            name="brand"
+            label="name"
+            class="dark-input"
+            placeholder="Brand">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => brand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                Set Brand To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
+          <div class="error-container">
+            <span
+              v-show="errors.has('brand')"
+              class="error">
+              {{ errors.first('brand') }}
+            </span>
+          </div>
+      </div>
+
+      <div
+        class="input-group-container"
+        v-if="editState">
+          <v-select
+            v-validate:type="'required'"
+            v-model="newType"
+            :options="typeOptions"
+            name="type"
+            label="name"
+            class="dark-input"
+            placeholder="Type">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => type = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                Set Type To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
+          <div class="error-container">
+            <span
+              v-show="errors.has('type')"
+              class="error">
+              {{ errors.first('type') }}
+            </span>
+          </div>
+        </div>
+
+
 
       <div
         v-if="isTransferable"
@@ -133,7 +197,9 @@
 import gql from 'graphql-tag'
 import Avatar from 'vue-avatar'
 import Fab from '../components/fab.vue'
+import vSelect from '../components/select'
 import VueLazyload from 'vue-lazyload'
+import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 
 export default {
@@ -143,10 +209,20 @@ export default {
     Avatar,
     Fab,
     ButtonDropdown,
-    VueLazyload
+    VueLazyload,
+    vSelect
   },
 
   apollo: {
+    getAllConfigurableItem: gql`query {
+      getAllConfigurableItem {
+        id
+        type
+        name
+        sanctioned
+      }
+    }`,
+
     getTool: {
       query: gql`
         query tool($tool_id: ID!) {
@@ -194,7 +270,8 @@ export default {
         let options = {}
         options.tool_id = this.$router.currentRoute.params.toolId
         return options
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 
@@ -202,6 +279,14 @@ export default {
     return {
       getTool: {},
       editState: false,
+      newBrand: {},
+      newType: {},
+      newSerial: {},
+      newModel: {},
+      newYear: {},
+      newPurchasedFrom: {},
+      newPurchaseDate: {},
+      newPrice: {},
       window: window
     }
   },
@@ -209,6 +294,14 @@ export default {
   computed: {
     isToolSelected () {
       return !!this.$store.state.selectedToolsMap[this.getTool.id]
+    },
+
+    brandOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.BRAND)
+    },
+
+    typeOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.TYPE)
     },
 
     canEdit () {
@@ -239,8 +332,8 @@ export default {
       return status && status.replace(/_/g, ' ').toUpperCase()
     },
 
-    formattedDate () {
-      let datePurchased = this.getTool.date_purchased
+    formattedDate (date) {
+      let datePurchased = date
       return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
     },
 
@@ -272,16 +365,56 @@ export default {
   },
 
   methods: {
+    getConfigurableItemsForType (type) {
+      return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
+    },
+
     toggleEditState () {
       if (this.editState) {
         this.saveTool()
       } else {
+        this.newBrand = this.getTool.brand
+        this.newType = this.getTool.type
+        this.newSerial = this.getTool.serial_number
+        this.newModel = this.getTool.model_number
+        this.newYear = this.getTool.year
+        this.newPurchasedFrom = this.getTool.purchased_from
+        this.newPurchaseDate = this.getTool.date_purchased
+        this.newPrice = this.getTool.price
         this.editState = true
       }
     },
 
     saveTool () {
-      this.editState = false
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation updateTool($tool: UpdatedTool!) {
+            updateTool(updatedTool: $tool) {
+              id
+            }
+          }`,
+
+        variables: {
+          tool: {
+            id: this.getTool.id,
+            type_id: this.newType.id,
+            brand_id: this.newBrand.id,
+            model_number: this.newModel,
+            serial_number: this.newSerial,
+            status: this.getTool.status,
+            owner_id: this.getTool.owner.id,
+            purchased_from_id: this.newPurchasedFrom.id,
+            // TODO: figure out why api chokes on its own dates
+            date_purchased: this.newPurchaseDate.replace(/\(.*\)/g, ''),
+            photo: this.getTool.photo,
+            price: this.newPrice,
+            year: this.newYear
+          }
+        }
+      }).then(result => {
+        this.$apollo.queries.getTool.refresh()
+        this.editState = false
+      })
     },
 
     toggleTransferStatus () {
@@ -391,6 +524,16 @@ export default {
       font-weight: 900;
       text-align: center;
       margin-top: 4px;
+    }
+
+    .input-group-container {
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+
+      .dropdown-toggle {
+        margin: 10px;
+      }
     }
 
     .actions {

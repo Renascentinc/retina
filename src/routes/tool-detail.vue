@@ -9,8 +9,70 @@
       <span class="toolid">#{{ getTool.id }} </span>
 
       <span class="header-spacer"></span>
-      <div class="name">
+      <div
+        v-if="!editState"
+        class="name">
         {{ brand }} {{ type }}
+      </div>
+
+      <div
+        v-if="editState"
+        class="input-group-container">
+        <v-select
+          v-validate="'required'"
+          :options="brandOptions"
+          v-model="newBrand"
+          name="brand"
+          label="name"
+          class="dark-input"
+          placeholder="Brand">
+          <template
+            slot="no-options"
+            slot-scope="props">
+            <button
+              class="no-options-btn"
+              @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+              Set Brand To "{{ props.value }}"
+            </button>
+          </template>
+        </v-select>
+        <div class="error-container">
+          <span
+            v-show="errors.has('brand')"
+            class="error">
+            {{ errors.first('brand') }}
+          </span>
+        </div>
+      </div>
+
+      <div
+        v-if="editState"
+        class="input-group-container">
+        <v-select
+          v-validate="'required'"
+          v-model="newType"
+          :options="typeOptions"
+          name="type"
+          label="name"
+          class="dark-input"
+          placeholder="Type">
+          <template
+            slot="no-options"
+            slot-scope="props">
+            <button
+              class="no-options-btn"
+              @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+              Set Type To "{{ props.value }}"
+            </button>
+          </template>
+        </v-select>
+        <div class="error-container">
+          <span
+            v-show="errors.has('type')"
+            class="error">
+            {{ errors.first('type') }}
+          </span>
+        </div>
       </div>
 
       <div
@@ -86,22 +148,112 @@
           <span class="general-data"> {{ getTool.id || '-' }} </span>
 
           <span class="general-label">Serial Number</span>
-          <span class="general-data"> {{ getTool.serial_number || '-' }} </span>
+          <span
+            v-if="!editState"
+            class="general-data"> {{ getTool.serial_number || '-' }} </span>
 
-          <span class="general-label">Model Mumber</span>
-          <span class="general-data"> {{ getTool.model_number || '-' }} </span>
+          <input
+            v-validate="'required'"
+            v-if="editState"
+            v-model="newSerial"
+            name="serial"
+            class="general-data light-input">
+          <div class="error-container">
+            <span
+              v-show="errors.has('serial')"
+              class="error">
+              {{ errors.first('serial') }}
+            </span>
+          </div>
+
+          <span class="general-label">Model Number</span>
+          <span
+            v-if="!editState"
+            class="general-data"> {{ getTool.model_number || '-' }} </span>
+
+          <input
+            v-validate="'required'"
+            v-if="editState"
+            v-model="newModel"
+            name="model"
+            class="general-data light-input">
+          <div class="error-container">
+            <span
+              v-show="errors.has('model')"
+              class="error">
+              {{ errors.first('model') }}
+            </span>
+          </div>
 
           <span class="general-label">Model Year</span>
-          <span class="general-data"> {{ getTool.year || '-' }} </span>
+          <span
+            v-if="!editState"
+            class="general-data"> {{ getTool.year || '-' }} </span>
+
+          <input
+            v-validate="validations.modelYear"
+            v-if="editState"
+            v-model="newYear"
+            name="year"
+            type="number"
+            class="general-data light-input">
+          <div class="error-container">
+            <span
+              v-show="errors.has('year')"
+              class="error">
+              {{ errors.first('year') }}
+            </span>
+          </div>
 
           <span class="general-label">Purchased From</span>
-          <span class="general-data"> {{ purchasedFrom }} </span>
+          <span
+            v-if="!editState"
+            class="general-data"> {{ purchasedFrom }} </span>
+
+          <v-select
+            v-if="editState"
+            v-model="newPurchasedFrom"
+            :options="purchasedFromOptions"
+            label="name"
+            class="general-data dark-input"
+            placeholder="Purchased From">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                Set Type To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
 
           <span class="general-label">Purchase Date</span>
-          <span class="general-data"> {{ formattedDate }} </span>
+          <span
+            v-if="!editState"
+            class="general-data"> {{ formattedDate(getTool.date_purchased) }} </span>
+
+          <v-date-picker
+            v-if="editState"
+            v-model="newPurchaseDate"
+            :input-props="{ readonly: true }"
+            class="general-data"
+            popover-direction="top"
+            mode="single">
+          </v-date-picker>
 
           <span class="general-label">Purchase Price</span>
-          <span class="general-data"> ${{ formattedPrice }} </span>
+          <span
+            v-if="!editState"
+            class="general-data"> ${{ formattedPrice }} </span>
+
+          <input
+            v-if="editState"
+            v-model="newPrice"
+            name="newPrice"
+            class="light-input"
+            placeholder="Price"
+            type="number">
         </div>
 
       </div>
@@ -123,6 +275,11 @@
         </div>
       </div>
     </div>
+    <fab
+      v-if="canEdit"
+      :on-click="toggleEditState"
+      :icon-class="editState ? 'fa-save' : 'fa-pen'"
+      class="edit"></fab>
   </div>
 </template>
 
@@ -130,7 +287,9 @@
 import gql from 'graphql-tag'
 import Avatar from '../components/avatar'
 import Fab from '../components/fab.vue'
+import vSelect from '../components/select'
 import VueLazyload from 'vue-lazyload'
+import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
 
@@ -142,10 +301,23 @@ export default {
     Fab,
     ButtonDropdown,
     VueLazyload,
+    vSelect,
     NfcEncode
   },
 
   apollo: {
+    getAllConfigurableItem: {
+      query: gql`query {
+        getAllConfigurableItem {
+          id
+          type
+          name
+          sanctioned
+        }
+      }`,
+      fetchPolicy: 'cache-and-network'
+    },
+
     getTool: {
       query: gql`
         query tool($tool_id: ID!) {
@@ -193,20 +365,50 @@ export default {
         let options = {}
         options.tool_id = this.$router.currentRoute.params.toolId
         return options
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 
   data () {
     return {
       getTool: {},
-      window: window
+      editState: false,
+      newBrand: null,
+      newType: null,
+      newSerial: null,
+      newModel: null,
+      newYear: null,
+      newPurchasedFrom: null,
+      newPurchaseDate: null,
+      newPrice: null,
+      window: window,
+      validations: {
+        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+      }
     }
   },
 
   computed: {
     isToolSelected () {
       return !!this.$store.state.selectedToolsMap[this.getTool.id]
+    },
+
+    brandOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.BRAND)
+    },
+
+    purchasedFromOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
+    },
+
+    typeOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.TYPE)
+    },
+
+    canEdit () {
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
+      return (currentUser.role === 'ADMINISTRATOR')
     },
 
     owner () {
@@ -233,11 +435,6 @@ export default {
       return status && status.replace(/_/g, ' ').toUpperCase()
     },
 
-    formattedDate () {
-      let datePurchased = this.getTool.date_purchased
-      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
-    },
-
     formattedPrice () {
       let priceString = this.getTool.price
       return priceString ? `${priceString / 100}` : ' -'
@@ -245,7 +442,7 @@ export default {
 
     isTransferable () {
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
+      return (currentUser.role === 'ADMINISTRATOR') || (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
     },
 
     phoneNumber () {
@@ -278,6 +475,104 @@ export default {
   // },
 
   methods: {
+    formattedDate (date) {
+      let datePurchased = date
+      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US', { timeZone: 'UTC' }) : '-'
+    },
+
+    getConfigurableItemsForType (type) {
+      return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
+    },
+
+    toggleEditState () {
+      if (this.editState) {
+        this.$validator.validate().then(result => {
+          if (result) {
+            this.saveTool()
+          }
+        })
+      } else {
+        this.newBrand = this.getTool.brand
+        this.newType = this.getTool.type
+        this.newSerial = this.getTool.serial_number
+        this.newModel = this.getTool.model_number
+        this.newYear = this.getTool.year
+        this.newPurchasedFrom = this.getTool.purchased_from
+        this.newPurchaseDate = new Date(this.formattedDate(this.getTool.date_purchased))
+        this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
+        this.editState = true
+      }
+    },
+
+    createNewConfigurableItem (configurableItem) {
+      return this.$apollo.mutate({
+        mutation: gql`mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
+          createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
+            id
+          }
+        }`,
+        variables: {
+          newConfigurableItem: {
+            type: configurableItem.type,
+            name: configurableItem.name,
+            sanctioned: true
+          }
+        }
+      })
+    },
+
+    saveTool () {
+      let brandRequest = this.newBrand && this.newBrand.isNewConfigurableItem ? this.createNewConfigurableItem(this.newBrand) : null
+      let typeRequest = this.newType && this.newType.isNewConfigurableItem ? this.createNewConfigurableItem(this.newType) : null
+      let purchaseRequest = this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.newPurchasedFrom) : null
+
+      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
+        let [brandResponse, typeResponse, purchaseResponse] = responses
+
+        if (brandResponse) {
+          this.newBrand.id = brandResponse.data.createConfigurableItem.id
+        }
+
+        if (typeResponse) {
+          this.newType.id = typeResponse.data.createConfigurableItem.id
+        }
+
+        if (purchaseResponse) {
+          this.newPurchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
+        }
+
+        this.$apollo.mutate({
+          mutation: gql`
+            mutation updateTool($tool: UpdatedTool!) {
+              updateTool(updatedTool: $tool) {
+                id
+              }
+            }`,
+
+          variables: {
+            tool: {
+              id: this.getTool.id,
+              type_id: this.newType.id,
+              brand_id: this.newBrand.id,
+              model_number: this.newModel,
+              serial_number: this.newSerial,
+              status: this.getTool.status,
+              owner_id: this.getTool.owner.id,
+              purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
+              date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
+              photo: this.getTool.photo,
+              price: this.newPrice ? (this.newPrice * 100).toFixed(0) : null,
+              year: this.newYear ? this.newYear : null
+            }
+          }
+        }).then(result => {
+          this.$apollo.queries.getTool.refresh()
+          this.$apollo.queries.getAllConfigurableItem.refresh()
+          this.editState = false
+        })
+      })
+    },
+
     toggleTransferStatus () {
       this.$store.commit('toggleToolSelection', this.getTool.id)
       this.$router.push({ path: '/tools' })
@@ -299,7 +594,6 @@ export default {
       this.getTool.status = newStatus
 
       // TODO: figure out why api chokes on its own dates
-      let datePurchased = this.getTool.date_purchased.replace(/\(.*\)/g, '')
 
       this.$apollo
         .mutate({
@@ -319,7 +613,7 @@ export default {
               serial_number: this.getTool.serial_number,
               status: newStatus,
               purchased_from_id: this.getTool.purchased_from.id,
-              date_purchased: datePurchased,
+              date_purchased: this.getTool.date_purchased,
               owner_id: this.owner.id,
               photo: this.getTool.photo,
               price: this.getTool.price,
@@ -412,6 +706,22 @@ export default {
       margin-top: 4px;
     }
 
+    .input-group-container {
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+
+      .dark-input {
+        height: 50px;
+
+        .dropdown-toggle {
+          margin: 10px;
+          font-size: 22px;
+          height: 50px;
+        }
+      }
+    }
+
     .actions {
       display: flex;
       flex: 0 1 auto;
@@ -497,6 +807,28 @@ export default {
         .general-data {
           color: $dark-text;
           font-weight: 600;
+        }
+
+        .error-container {
+          height: auto;
+          padding-left: 10px;
+          color: $renascent-red;
+          font-size: 14px;
+        }
+
+        .light-input {
+          font-size: 16px;
+          height: 30px;
+        }
+
+        .dark-input, .popover-container {
+          font-size: 18px;
+          height: 40px;
+
+          input {
+            font-size: 18px;
+            height: 40px;
+          }
         }
       }
     }
@@ -589,6 +921,11 @@ export default {
         }
       }
     }
+  }
+  .edit {
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
   }
 }
 </style>

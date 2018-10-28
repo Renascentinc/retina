@@ -82,7 +82,7 @@
                 v-if="!editState"
                 class="contact-text"
                 @click="phoneNumber() ? phoneCall() : () => 0">
-                {{ getUser.phone_number }}
+                {{ formattedPhone }}
               </button>
               <input
                 v-validate="{required: true, numeric: true, min: 7}"
@@ -141,13 +141,14 @@ import gql from 'graphql-tag'
 import Fab from '../components/fab'
 import ButtonDropdown from '../components/button-dropdown'
 import Roles from '../utils/roles'
+import PhoneNumberFormats from 'phone-number-formats/index.js'
 
 export default {
   name: 'ToolDetail',
 
   components: {
     Fab,
-    ButtonDropdown
+    ButtonDropdown,
   },
 
   apollo: {
@@ -194,6 +195,11 @@ export default {
 
     canEdit () {
       return this.isAdmin || JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
+    },
+
+    formattedPhone () {
+      const phoneNumberFormatter = require('phone-number-formats');
+      return new phoneNumberFormatter('1'+this.getUser.phone_number).format({type: 'domestic'}).string;
     }
   },
 

@@ -8,8 +8,41 @@
 
       <span id="userid"> #{{ getUser.id }} </span>
 
-      <div id="name">
+      <div
+        v-if="!editState"
+        class="name">
         {{ getUser.first_name }} {{ getUser.last_name }}
+      </div>
+
+      <div
+        v-if="editState"
+        class="name-inputs">
+        <input
+          v-validate="'required'"
+          v-model="newFirstName"
+          name="first name"
+          class="name light-input"
+          value="`${getUser.first_name}">
+        <div class="error-container">
+          <span
+            v-show="errors.has('first name')"
+            class="error">
+            {{ errors.first('first name') }}
+          </span>
+        </div>
+        <input
+          v-validate="'required'"
+          v-model="newLastName"
+          class="name light-input"
+          name="last name"
+          value="getUser.last_name">
+        <div class="error-container">
+          <span
+            v-show="errors.has('last name')"
+            class="error">
+            {{ errors.first('last name') }}
+          </span>
+        </div>
       </div>
 
       <div
@@ -28,6 +61,13 @@
         <div class="card-title">
           Contact
         </div>
+        <div class="error-container">
+          <span
+            v-show="errors.has('phone')"
+            class="error">
+            {{ errors.first('phone') }}
+          </span>
+        </div>
         <div class="card-details contact-details">
           <div class="contact-buttons">
             <div class="contact-item">
@@ -39,10 +79,19 @@
               </fab>
 
               <button
+                v-if="!editState"
                 class="contact-text"
                 @click="phoneNumber() ? phoneCall() : () => 0">
                 {{ getUser.phone_number }}
               </button>
+              <input
+                v-validate="{required: true, numeric: true, min: 7}"
+                v-if="editState"
+                v-model="newPhone"
+                name="phone"
+                class="contact-text light-input"
+                value="getUser.phone_number"
+                type="number">
             </div>
 
             <div class="contact-item">
@@ -50,19 +99,40 @@
                 id="email-btn"
                 :on-click="email() ? sendEmail : () => 0"
                 :active="!email()"
-                icon-class="fa-envelope">
+                icon-class="fa-envelope"
+                type="string">
               </fab>
 
               <button
+                v-if="!editState"
                 class="contact-text"
                 @click="email() ? sendEmail() : () => 0">
                 {{ getUser.email }}
               </button>
+              <input
+                v-validate="'required|email'"
+                v-if="editState"
+                v-model="newEmail"
+                name="email"
+                class="contact-text light-input"
+                value="getUser.email">
             </div>
           </div>
         </div>
+        <div class="error-container">
+          <span
+            v-show="errors.has('email')"
+            class="error">
+            {{ errors.first('email') }}
+          </span>
+        </div>
       </div>
     </div>
+    <fab
+      v-if="canEdit"
+      :on-click="toggleEditState"
+      :icon-class="editState ? 'fa-save' : 'fa-pen'"
+      class="edit"></fab>
   </div>
 </template>
 
@@ -108,17 +178,76 @@ export default {
   data () {
     return {
       getUser: {},
-      roles: Object.values(Roles)
+      roles: Object.values(Roles),
+      editState: false,
+      newFirstName: '',
+      newLastName: '',
+      newPhone: '',
+      newEmail: ''
     }
   },
 
   computed: {
     isAdmin () {
       return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
+    },
+
+    canEdit () {
+      return this.isAdmin || JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
     }
   },
 
   methods: {
+    toggleEditState () {
+      if (this.editState) {
+        this.saveUser()
+      } else {
+        this.newFirstName = this.getUser.first_name
+        this.newLastName = this.getUser.last_name
+        this.newPhone = this.getUser.phone_number
+        this.newEmail = this.getUser.email
+        this.editState = true
+      }
+    },
+
+    saveUser () {
+      this.$validator.validate().then(result => {
+        if (result) {
+          this.$apollo.mutate({
+            mutation: gql`
+              mutation updateStatus($user: UpdatedUser!) {
+                updateUser(updatedUser: $user) {
+                  id
+                  first_name
+                  last_name
+                  email
+                  phone_number
+                  role
+                  status
+                }
+              }`,
+
+            variables: {
+              user: {
+                id: this.getUser.id,
+                first_name: this.newFirstName,
+                last_name: this.newLastName,
+                email: this.newEmail,
+                phone_number: this.newPhone,
+                role: this.getUser.role,
+                status: this.getUser.status
+              }
+            }
+          }).then(result => {
+            if (result) {
+              this.$apollo.queries.getUser.refresh()
+              this.editState = false
+            }
+          })
+        }
+      })
+    },
+
     updateRole (newRole) {
       this.$apollo.mutate({
         mutation: gql`
@@ -169,6 +298,13 @@ export default {
   display: flex;
   flex-direction: column;
 
+  .error-container {
+    height: auto;
+    padding-left: 10px;
+    color: $renascent-red;
+    font-size: 14px;
+  }
+
   #header {
     width: 100%;
     display: flex;
@@ -188,8 +324,7 @@ export default {
       left: 23px;
       color: $renascent-red;
       font-size: 30px;
-      // TODO: hid arrow behind scrim while still being interactable on mobile
-      // z-index: -10;
+      z-index: -10;
     }
 
     #userid {
@@ -203,11 +338,19 @@ export default {
       margin-right: auto;
     }
 
-    #name {
+    .name-inputs {
+      margin-left: auto;
+      margin-right: auto;
+      width: 300px;
+    }
+
+    .name {
       font-size: 33px;
       font-weight: 900;
       text-align: center;
       margin-top: 4px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #actions {
@@ -280,25 +423,23 @@ export default {
     #contact-card {
       padding-bottom: 17px;
 
+      .error-container {
+        position: absolute;
+        right: 10px;
+        padding-bottom: 10px;
+      }
+
       .contact-details {
         display: flex;
         flex-direction: row;
         align-items: center;
-
-        #name {
-          display: flex;
-          flex-direction: column;
-          font-size: 23px;
-          font-weight: 800;
-          color: $renascent-dark-gray;
-          margin-left: 11px;
-        }
       }
 
       .contact-buttons {
         display: flex;
         justify-content: flex-start;
         flex-direction: column;
+        width: 100%;
 
         .contact-item {
           display: flex;
@@ -314,6 +455,7 @@ export default {
             font-weight: 700;
             color: $renascent-dark-gray;
             font-size: 16px;
+            width: 100%
           }
 
           .fab {
@@ -323,6 +465,12 @@ export default {
         }
       }
     }
+  }
+
+  .edit {
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
   }
 }
 </style>

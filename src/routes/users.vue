@@ -116,7 +116,7 @@ export default {
 
   methods: {
     transitionToAddUser () {
-      // transfer to 'add user'
+      this.$router.push({ name: 'newUser' })
     },
 
     transitionToUserInfo (userId) {

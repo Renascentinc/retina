@@ -11,6 +11,7 @@ const UserDetail = () => import('./routes/user-detail')
 const Users = () => import('./routes/users')
 const NewTool = () => import('./routes/new-tool')
 const ToolDetail = () => import('./routes/tool-detail')
+const NewUser = () => import('./routes/new-user')
 
 Vue.use(Router)
 
@@ -58,6 +59,11 @@ export default new Router({
           path: 'history',
           component: History,
           name: 'history'
+        },
+        {
+          path: 'new-user',
+          component: NewUser,
+          name: 'newUser'
         },
         {
           path: 'configuration',

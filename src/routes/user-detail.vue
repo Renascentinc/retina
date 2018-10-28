@@ -8,8 +8,23 @@
 
       <span id="userid"> #{{ getUser.id }} </span>
 
-      <div id="name">
+      <div
+        class="name"
+        v-if="!editState">
         {{ getUser.first_name }} {{ getUser.last_name }}
+      </div>
+
+      <div
+        class="name-inputs"
+        v-if="editState">
+        <input
+          v-model="newFirstName"
+          class="name light-input"
+          value="`${getUser.first_name}">
+        <input
+          v-model="newLastName"
+          class="name light-input"
+          value="getUser.last_name">
       </div>
 
       <div
@@ -39,10 +54,17 @@
               </fab>
 
               <button
+                v-if="!editState"
                 class="contact-text"
                 @click="phoneNumber() ? phoneCall() : () => 0">
                 {{ getUser.phone_number }}
               </button>
+              <input
+                v-if="editState"
+                v-model="newPhone"
+                class="contact-text light-input"
+                value="getUser.phone_number"
+                type="number">
             </div>
 
             <div class="contact-item">
@@ -50,19 +72,31 @@
                 id="email-btn"
                 :on-click="email() ? sendEmail : () => 0"
                 :active="!email()"
-                icon-class="fa-envelope">
+                icon-class="fa-envelope"
+                type="string">
               </fab>
 
               <button
+                v-if="!editState"
                 class="contact-text"
                 @click="email() ? sendEmail() : () => 0">
                 {{ getUser.email }}
               </button>
+              <input
+                v-if="editState"
+                v-model="newEmail"
+                class="contact-text light-input"
+                value="getUser.email">
             </div>
           </div>
         </div>
       </div>
     </div>
+    <fab
+      v-if="canEdit"
+      class="edit"
+      :on-click="toggleEditState"
+      :icon-class="this.editState ? 'fa-save' : 'fa-pen'"></fab>
   </div>
 </template>
 
@@ -108,17 +142,72 @@ export default {
   data () {
     return {
       getUser: {},
-      roles: Object.values(Roles)
+      roles: Object.values(Roles),
+      editState: false,
+      newFirstName: '',
+      newLastName: '',
+      newPhone: '',
+      newEmail: ''
     }
   },
 
   computed: {
     isAdmin () {
       return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
+    },
+
+    canEdit () {
+      return this.isAdmin || JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
     }
   },
 
   methods: {
+    toggleEditState () {
+      if (this.editState) {
+        this.saveUser();
+      } else {
+        this.newFirstName = this.getUser.first_name
+        this.newLastName = this.getUser.last_name
+        this.newPhone = this.getUser.phone_number
+        this.newEmail = this.getUser.email
+        this.editState = true
+      }
+    },
+
+    saveUser() {
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation updateStatus($user: UpdatedUser!) {
+            updateUser(updatedUser: $user) {
+              id
+              first_name
+              last_name
+              email
+              phone_number
+              role
+              status
+            }
+          }`,
+
+        variables: {
+          user: {
+            id: this.getUser.id,
+            first_name: this.newFirstName,
+            last_name: this.newLastName,
+            email: this.newEmail,
+            phone_number: this.newPhone,
+            role: this.getUser.role,
+            status: this.getUser.status
+          }
+        }
+      }).then(result => {
+        if (result) {
+          this.$apollo.queries.getUser.refresh()
+          this.editState = false
+        }
+      })
+    },
+
     updateRole (newRole) {
       this.$apollo.mutate({
         mutation: gql`
@@ -203,11 +292,19 @@ export default {
       margin-right: auto;
     }
 
-    #name {
+    .name-inputs {
+      margin-left: auto;
+      margin-right: auto;
+      width: 300px;
+    }
+
+    .name {
       font-size: 33px;
       font-weight: 900;
       text-align: center;
       margin-top: 4px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #actions {
@@ -284,21 +381,13 @@ export default {
         display: flex;
         flex-direction: row;
         align-items: center;
-
-        #name {
-          display: flex;
-          flex-direction: column;
-          font-size: 23px;
-          font-weight: 800;
-          color: $renascent-dark-gray;
-          margin-left: 11px;
-        }
       }
 
       .contact-buttons {
         display: flex;
         justify-content: flex-start;
         flex-direction: column;
+        width: 100%;
 
         .contact-item {
           display: flex;
@@ -314,6 +403,7 @@ export default {
             font-weight: 700;
             color: $renascent-dark-gray;
             font-size: 16px;
+            width: 100%
           }
 
           .fab {
@@ -323,6 +413,12 @@ export default {
         }
       }
     }
+  }
+
+  .edit {
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
   }
 }
 </style>

@@ -29,6 +29,8 @@
           <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
         </button>
       </div>
+
+      <nfc-encode :tool-id="getTool ? getTool.id : ''"> </nfc-encode>
     </div>
     <div class="cards">
       <div class="card owner-card">
@@ -126,10 +128,11 @@
 
 <script>
 import gql from 'graphql-tag'
-import Avatar from 'vue-avatar'
+import Avatar from '../components/avatar'
 import Fab from '../components/fab.vue'
 import VueLazyload from 'vue-lazyload'
 import ButtonDropdown from '../components/button-dropdown.vue'
+import NfcEncode from '../components/nfc-encode'
 
 export default {
   name: 'ToolDetail',
@@ -138,7 +141,8 @@ export default {
     Avatar,
     Fab,
     ButtonDropdown,
-    VueLazyload
+    VueLazyload,
+    NfcEncode
   },
 
   apollo: {
@@ -261,6 +265,18 @@ export default {
     }
   },
 
+  // mounted () {
+  //   if (this.checkIsNfcEnabled()) {
+  //     this.startNfcListener()
+  //   }
+  // },
+  //
+  // beforeDestroy () {
+  //   if (this.checkIsNfcEnabled()) {
+  //     this.closeNfcListener()
+  //   }
+  // },
+
   methods: {
     toggleTransferStatus () {
       this.$store.commit('toggleToolSelection', this.getTool.id)
@@ -318,6 +334,14 @@ export default {
           // TODO: pop toast notifying user that request failed.
         })
     }
+
+    // nfcCallback (value) {
+    //   this.transitionToToolInfo(value)
+    // },
+    //
+    // transitionToToolInfo (toolId) {
+    //   this.$router.push({ name: 'toolDetail', params: { toolId } })
+    // }
   }
 }
 </script>
@@ -329,6 +353,23 @@ export default {
   background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
+
+  .nfc-encode {
+    position: absolute;
+    right: 15px;
+    width: 120px;
+    height: 30px;
+    top: 9px;
+
+    .fab-icon-container {
+      height: 18px;
+      width: 18px;
+    }
+
+    .efab-text {
+      font-size: 10px;
+    }
+  }
 
   .header {
     width: 100%;
@@ -410,6 +451,7 @@ export default {
 
   .cards {
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
     .card {
       position: relative;

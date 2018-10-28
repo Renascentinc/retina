@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Avatar from 'vue-avatar'
+import Avatar from '../components/avatar'
 
 export default {
   name: 'UserSearchResult',

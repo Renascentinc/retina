@@ -2,7 +2,8 @@
   <div class="page new-tool-page">
     <header-card
       title="New Tool"
-      exit-link="/tools"></header-card>
+      exit-link="/tools">
+    </header-card>
 
     <transition name="card-change">
       <div
@@ -189,14 +190,7 @@
         v-if="currentState === 4"
         class="new-tool-input-card step-4">
 
-        <extended-fab
-          :disabled="nfcDisabled"
-          :on-click="prepareToEncodeTag"
-          :outline-display="true"
-          class="encode-efab"
-          icon-class="fa-times"
-          button-text="ENOCDE TAG">
-        </extended-fab>
+        <nfc-encode :tool-id="tool ? tool.id : ''"> </nfc-encode>
 
         <tool-search-result
           :tool="tool"

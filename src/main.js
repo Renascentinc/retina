@@ -9,7 +9,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-// import attachFastClick from 'fastclick'
+import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -20,6 +20,7 @@ import ApiStatusCodes from './utils/api-status-codes'
 import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
 // import Snotify from 'vue-snotify'
+import VueSVGIcon from 'vue-svgicon'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -86,9 +87,10 @@ Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
+Vue.use(VueSVGIcon)
 // Vue.use(Snotify)
 
-// attachFastClick(document.body)
+attachFastClick(document.body)
 
 new Vue({
   router,

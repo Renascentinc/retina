@@ -92,7 +92,7 @@
           <span class="finalize-to-text"> To </span>
           <v-select
             :options="transferTargets"
-            :filterable="false"
+            :searchable="false"
             v-model="transferTarget"
             class="dark-input">
           </v-select>
@@ -128,6 +128,7 @@ import Fab from '../components/fab.vue'
 import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
+import nfc from '../mixins/nfc'
 
 export default {
   name: 'Tools',
@@ -139,6 +140,8 @@ export default {
     Fab,
     vSelect
   },
+
+  mixins: [nfc],
 
   apollo: {
     getAllLocation: gql`query {
@@ -290,6 +293,18 @@ export default {
     }
   },
 
+  mounted () {
+    if (this.checkIsNfcEnabled()) {
+      this.startNfcListener()
+    }
+  },
+
+  beforeDestroy () {
+    if (this.checkIsNfcEnabled()) {
+      this.closeNfcListener()
+    }
+  },
+
   methods: {
     transitionToToolInfo (toolId) {
       this.$router.push({ name: 'toolDetail', params: { toolId } })
@@ -376,6 +391,14 @@ export default {
     proceedToFinalize () {
       this.showOnlySelectedTools = true
       this.currentState = this.states.FINALIZING
+    },
+
+    nfcCallback (value) {
+      if (this.currentState === this.states.INITIAL) {
+        this.transitionToToolInfo(value)
+      } else {
+        this.$store.commit('toggleToolSelection', value)
+      }
     }
   }
 }

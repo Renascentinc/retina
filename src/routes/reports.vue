@@ -42,6 +42,7 @@ export default {
     padding-top: 30px;
     flex: 1 1 auto;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
     .report-card {
       display: flex;

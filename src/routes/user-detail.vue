@@ -188,8 +188,7 @@ export default {
       left: 23px;
       color: $renascent-red;
       font-size: 30px;
-      // TODO: hid arrow behind scrim while still being interactable on mobile
-      // z-index: -10;
+      z-index: -10;
     }
 
     #userid {

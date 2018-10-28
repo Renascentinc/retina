@@ -1,16 +1,14 @@
 <template>
   <div class="page tool-detail-page">
     <div class="header">
-      <div class="header-top">
-        <router-link
-          class="fas fa-arrow-left backarrow"
-          to="/tools">
-        </router-link>
+      <router-link
+        class="fas fa-arrow-left backarrow"
+        to="/tools">
+      </router-link>
 
-        <span class="toolid">#{{ getTool.id }} </span>
+      <span class="toolid">#{{ getTool.id }} </span>
 
-        <span class="header-spacer"></span>
-      </div>
+      <span class="header-spacer"></span>
       <div class="name">
         {{ brand }} {{ type }}
       </div>
@@ -346,27 +344,24 @@ export default {
     flex-shrink: 0;
 
     .backarrow {
+      position: absolute;
+      top: 9px;
+      left: 23px;
       color: $renascent-red;
       font-size: 30px;
       width: 27px;
-      // TODO: hid arrow behind scrim while still being interactable on mobile
-      // z-index: -10;
+      z-index: -10;
     }
 
     .toolid {
+      display: flex;
+      flex: 1 0 auto;
       font-size: 25px;
       font-weight: 600;
-    }
-
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      padding: 9px 23px;
-      align-items: center;
-    }
-
-    .header-spacer {
-      width: 27px;
+      justify-content: center;
+      padding-top: 9px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .name {

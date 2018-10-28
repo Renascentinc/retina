@@ -54,13 +54,13 @@
               </button>
             </div>
 
-            <div class="icon-text-container">
+            <!-- <div class="icon-text-container">
               <router-link
                 class="fas fa-cog menu-icon"
                 to="/configuration">
                 <span class="icon-subtext">CONFIGURE</span>
               </router-link>
-            </div>
+            </div> -->
 
             <div class="icon-text-container">
               <router-link
@@ -72,9 +72,9 @@
 
             <div class="icon-text-container">
               <router-link
-                class="fas fa-file-alt menu-icon"
-                to="/reports">
-                <span class="icon-subtext">REPORTS</span>
+                class="fas fa-book-open menu-icon"
+                to="/history">
+                <span class="icon-subtext">HISTORY</span>
               </router-link>
             </div>
 

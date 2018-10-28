@@ -69,7 +69,10 @@
             v-model="modelNumber"
             name="modelNumber"
             class="light-input"
-            placeholder="Model no.">
+            placeholder="Model no."
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false">
           <div class="error-container">
             <span
               v-show="errors.has('modelNumber')"
@@ -85,7 +88,10 @@
             v-model="serialNumber"
             name="serialNumber"
             class="light-input"
-            placeholder="Serial no.">
+            placeholder="Serial no."
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false">
           <div class="error-container">
             <span
               v-show="errors.has('serialNumber')"
@@ -102,7 +108,9 @@
             name="modelYear"
             class="light-input"
             placeholder="Model Year"
-            type="number">
+            type="number"
+            inputmode="numeric"
+            pattern="[0-9]*">
           <div class="error-container">
             <span
               v-show="errors.has('modelYear')"

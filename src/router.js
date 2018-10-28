@@ -6,7 +6,7 @@ import Tools from './routes/tools'
 
 // lazy loaded routes
 const Configuration = () => import('./routes/configuration')
-const Reports = () => import('./routes/reports')
+const History = () => import('./routes/history')
 const UserDetail = () => import('./routes/user-detail')
 const Users = () => import('./routes/users')
 const NewTool = () => import('./routes/new-tool')
@@ -55,9 +55,9 @@ export default new Router({
           name: 'newTool'
         },
         {
-          path: 'reports',
-          component: Reports,
-          name: 'reports'
+          path: 'history',
+          component: History,
+          name: 'history'
         },
         {
           path: 'configuration',

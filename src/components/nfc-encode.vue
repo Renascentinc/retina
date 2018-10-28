@@ -69,7 +69,7 @@ export default {
 
     onClick () {
       if (!this.readyToEncode) {
-        this.startNfcListener(this.encodeTag().bind(this))
+        this.startNfcListener(() => this.encodeTag())
         this.readyToEncode = true
       } else {
         this.cancelListener()
@@ -77,7 +77,7 @@ export default {
     },
 
     cancelListener () {
-      this.closeNfcListener(this.encodeTag().bind(this))
+      this.closeNfcListener(() => this.encodeTag())
       this.readyToEncode = false
     }
   }

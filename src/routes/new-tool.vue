@@ -266,6 +266,7 @@ import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
+import NfcEncode from '../components/nfc-encode'
 
 export default {
   name: 'NewTool',
@@ -275,7 +276,8 @@ export default {
     ToolSearchResult,
     ExtendedFab,
     Fab,
-    vSelect
+    vSelect,
+    NfcEncode
   },
 
   apollo: {
@@ -488,10 +490,6 @@ export default {
           ++this.currentState
         })
       })
-    },
-
-    prepareToEncodeTag () {
-
     }
   }
 }

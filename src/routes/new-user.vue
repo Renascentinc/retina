@@ -224,7 +224,7 @@ export default {
       currentState: 1,
       firstPassword: null,
       secondPassword: null,
-      getUser: null
+      getUser: {}
     }
   },
 
@@ -245,7 +245,6 @@ export default {
 
   methods: {
     advanceStep () {
-      console.log('ROLE: ' + this.role)
       this.$validator.validate().then(result => {
         if (result) {
           if (this.currentState === 2) {

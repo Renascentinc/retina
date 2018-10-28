@@ -440,7 +440,7 @@ export default {
 
     isTransferable () {
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
+      return (currentUser.role === 'ADMINISTRATOR') || (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
     },
 
     phoneNumber () {

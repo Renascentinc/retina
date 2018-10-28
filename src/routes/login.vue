@@ -34,7 +34,10 @@
           <input
             v-model="username"
             class="username-input"
-            placeholder="username@renascentinc.com">
+            placeholder="username@renascentinc.com"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false">
         </input-with-icon>
 
         <input-with-icon
@@ -54,7 +57,10 @@
           <input
             v-model="organizationName"
             class="org-name-input"
-            placeholder="organization name">
+            placeholder="organization name"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false">
         </input-with-icon>
       </div>
 

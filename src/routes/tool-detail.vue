@@ -121,6 +121,11 @@
         </div>
       </div>
     </div>
+    <fab
+      v-if="canEdit"
+      :on-click="toggleEditState"
+      :icon-class="editState ? 'fa-save' : 'fa-pen'"
+      class="edit"></fab>
   </div>
 </template>
 
@@ -196,6 +201,7 @@ export default {
   data () {
     return {
       getTool: {},
+      editState: false,
       window: window
     }
   },
@@ -203,6 +209,10 @@ export default {
   computed: {
     isToolSelected () {
       return !!this.$store.state.selectedToolsMap[this.getTool.id]
+    },
+
+    canEdit () {
+      return true
     },
 
     owner () {
@@ -262,6 +272,18 @@ export default {
   },
 
   methods: {
+    toggleEditState () {
+      if (this.editState) {
+        this.saveTool()
+      } else {
+        this.editState = true
+      }
+    },
+
+    saveTool () {
+      this.editState = false
+    },
+
     toggleTransferStatus () {
       this.$store.commit('toggleToolSelection', this.getTool.id)
       this.$router.push({ path: '/tools' })
@@ -547,6 +569,11 @@ export default {
         }
       }
     }
+  }
+  .edit {
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
   }
 }
 </style>

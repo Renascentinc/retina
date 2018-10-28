@@ -19,7 +19,7 @@
         class="input-group-container"
         v-if="editState">
           <v-select
-            v-validate:brand="'required'"
+            v-validate="'required'"
             :options="brandOptions"
             v-model="newBrand"
             name="brand"
@@ -31,7 +31,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => brand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
                 Set Brand To "{{ props.value }}"
               </button>
             </template>
@@ -49,7 +49,7 @@
         class="input-group-container"
         v-if="editState">
           <v-select
-            v-validate:type="'required'"
+            v-validate="'required'"
             v-model="newType"
             :options="typeOptions"
             name="type"
@@ -61,7 +61,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => type = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
                 Set Type To "{{ props.value }}"
               </button>
             </template>
@@ -166,7 +166,7 @@
             </span>
           </div>
 
-          <span class="general-label">Model Mumber</span>
+          <span class="general-label">Model Number</span>
           <span
             class="general-data"
             v-if="!editState"> {{ getTool.model_number || '-' }} </span>
@@ -191,7 +191,7 @@
             v-if="!editState"> {{ getTool.year || '-' }} </span>
 
           <input
-            v-validate="'numeric'"
+            v-validate="validations.modelYear"
             v-model="newYear"
             v-if="editState"
             name="year"
@@ -222,7 +222,7 @@
             slot-scope="props">
             <button
               class="no-options-btn"
-              @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+              @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
               Set Type To "{{ props.value }}"
             </button>
           </template>
@@ -304,14 +304,17 @@ export default {
   },
 
   apollo: {
-    getAllConfigurableItem: gql`query {
-      getAllConfigurableItem {
-        id
-        type
-        name
-        sanctioned
-      }
-    }`,
+    getAllConfigurableItem: {
+      query: gql`query {
+        getAllConfigurableItem {
+          id
+          type
+          name
+          sanctioned
+        }
+      }`,
+      fetchPolicy: 'cache-and-network'
+    },
 
     getTool: {
       query: gql`
@@ -369,15 +372,18 @@ export default {
     return {
       getTool: {},
       editState: false,
-      newBrand: {},
-      newType: {},
-      newSerial: {},
-      newModel: {},
-      newYear: {},
-      newPurchasedFrom: {},
-      newPurchaseDate: '',
-      newPrice: {},
-      window: window
+      newBrand: null,
+      newType: null,
+      newSerial: null,
+      newModel: null,
+      newYear: null,
+      newPurchasedFrom: null,
+      newPurchaseDate: null,
+      newPrice: null,
+      window: window,
+      validations: {
+        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+      }
     }
   },
 
@@ -466,7 +472,11 @@ export default {
 
     toggleEditState () {
       if (this.editState) {
-        this.saveTool()
+        this.$validator.validate().then(result => {
+          if (result) {
+            this.saveTool()
+          }
+        })
       } else {
         this.newBrand = this.getTool.brand
         this.newType = this.getTool.type
@@ -475,43 +485,81 @@ export default {
         this.newYear = this.getTool.year
         this.newPurchasedFrom = this.getTool.purchased_from
         this.newPurchaseDate = new Date(this.formattedDate(this.getTool.date_purchased))
-        this.newPrice = this.getTool.price / 100
+        this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
         this.editState = true
       }
+
     },
 
-    saveTool () {
-      this.$validator.validate().then(result => {
-        if (result) {
-          this.$apollo.mutate({
-            mutation: gql`
-              mutation updateTool($tool: UpdatedTool!) {
-                updateTool(updatedTool: $tool) {
-                  id
-                }
-              }`,
-
-            variables: {
-              tool: {
-                id: this.getTool.id,
-                type_id: this.newType.id,
-                brand_id: this.newBrand.id,
-                model_number: this.newModel,
-                serial_number: this.newSerial,
-                status: this.getTool.status,
-                owner_id: this.getTool.owner.id,
-                purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
-                date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                photo: this.getTool.photo,
-                price: this.newPrice ? (this.newPrice * 100).toFixed(0) : null,
-                year: this.newYear ? this.newYear : null
-              }
-            }
-          }).then(result => {
-            this.$apollo.queries.getTool.refresh()
-            this.editState = false
-          })
+    createNewConfigurableItem (configurableItem) {
+      return this.$apollo.mutate({
+        mutation: gql`mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
+          createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
+            id
+          }
+        }`,
+        variables: {
+          newConfigurableItem: {
+            type: configurableItem.type,
+            name: configurableItem.name,
+            sanctioned: true
+          }
         }
+      })
+    },
+
+
+    saveTool () {
+      let brandRequest = this.newBrand && this.newBrand.isNewConfigurableItem ? this.createNewConfigurableItem(this.newBrand) : null
+      let typeRequest = this.newType && this.newType.isNewConfigurableItem ? this.createNewConfigurableItem(this.newType) : null
+      let purchaseRequest = this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.newPurchasedFrom) : null
+
+
+      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
+        let [brandResponse, typeResponse, purchaseResponse] = responses
+
+        if (brandResponse) {
+          this.newBrand.id = brandResponse.data.createConfigurableItem.id
+        }
+
+        if (typeResponse) {
+          this.newType.id = typeResponse.data.createConfigurableItem.id
+        }
+
+        if (purchaseResponse) {
+          this.newPurchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
+        }
+
+
+        this.$apollo.mutate({
+          mutation: gql`
+            mutation updateTool($tool: UpdatedTool!) {
+              updateTool(updatedTool: $tool) {
+                id
+              }
+            }`,
+
+          variables: {
+            tool: {
+              id: this.getTool.id,
+              type_id: this.newType.id,
+              brand_id: this.newBrand.id,
+              model_number: this.newModel,
+              serial_number: this.newSerial,
+              status: this.getTool.status,
+              owner_id: this.getTool.owner.id,
+              purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
+              date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
+              photo: this.getTool.photo,
+              price: this.newPrice ? (this.newPrice * 100).toFixed(0) : null,
+              year: this.newYear ? this.newYear : null
+            }
+          }
+        }).then(result => {
+          this.$apollo.queries.getTool.refresh()
+          this.$apollo.queries.getAllConfigurableItem.refresh()
+          this.editState = false
+        })
       })
     },
 

@@ -475,7 +475,7 @@ export default {
         this.newYear = this.getTool.year
         this.newPurchasedFrom = this.getTool.purchased_from
         this.newPurchaseDate = new Date(this.formattedDate(this.getTool.date_purchased))
-        this.newPrice = this.getTool.price
+        this.newPrice = this.getTool.price / 100
         this.editState = true
       }
     },
@@ -503,8 +503,8 @@ export default {
                 purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
                 date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
                 photo: this.getTool.photo,
-                price: this.newPrice,
-                year: this.newYear
+                price: this.newPrice ? (this.newPrice * 100).toFixed(0) : null,
+                year: this.newYear ? this.newYear : null
               }
             }
           }).then(result => {

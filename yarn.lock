@@ -2538,7 +2538,7 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
-es6-promise@^4.0.5, es6-promise@^4.1.1:
+es6-promise@^4.0.5, es6-promise@^4.2.5:
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.5.tgz#da6d0d5692efb461e082c14817fe2427d8f5d054"
   integrity sha512-n6wvpdE43VFtJq+lUDYDBFUwV8TZbuGXLV4D6wKafg13ldznKsyEvatubnmUe31zcvelSzOHF+XbaT+Bl9ObDg==
@@ -3377,14 +3377,14 @@ html2canvas@^1.0.0-alpha.12:
   dependencies:
     css-line-break "1.0.1"
 
-html2pdf.js@^0.9.1:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/html2pdf.js/-/html2pdf.js-0.9.0.tgz#30976b096da1776f70e17c31d137a1c825a70f2a"
-  integrity sha512-IIhGjx0DJ2JBLSfhLn1hphJ4PWCQNnT8OnybPxEybA9+Qz3bbsrCaGXDX0rq5zLdKPCL82g2plMjgaAKUz41mw==
+html2pdf.js@^0.9.0:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/html2pdf.js/-/html2pdf.js-0.9.1.tgz#144fbe972848cebaa1cf6f8fa66395422d9aad55"
+  integrity sha512-bneX1NQTj67PZuV4WX19fOGLZWbEIZvO8qLAGOKX5VQsbGXX62/5ZraD42oeUHlh5gSOkFpNf+J9lOjQV6qAvg==
   dependencies:
-    es6-promise "^4.1.1"
+    es6-promise "^4.2.5"
     html2canvas "^1.0.0-alpha.12"
-    jspdf "^1.3.5"
+    jspdf "^1.4.1"
 
 htmlnano@^0.1.9:
   version "0.1.10"
@@ -4029,7 +4029,7 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jspdf@^1.3.5:
+jspdf@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jspdf/-/jspdf-1.4.1.tgz#8dbd437986346d65efe20ede5361927666b8e4ca"
   integrity sha512-2vYVdrvrQUdKKPyWHw81t1jEYYAJ6uFJ/HtTcGbI4qXIQEdl18dLEuL2wTeSv2GzeQLSgUvEvwsXsszuHK+PTw==
@@ -5109,6 +5109,13 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
+phone-number-formats@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/phone-number-formats/-/phone-number-formats-2.2.0.tgz#411a9616fe65290e5895834d3a66a239d65f436c"
+  integrity sha512-Sj5kS3uqA0/rmdVwkavDrlob7ebcu/gSTo8N7i3CyB+qLoAat0el49ddxnz8bcaumkICHsBjq4FNPOITlaJoXA==
+  dependencies:
+    replace-at "^1.0.0"
+
 phonegap-nfc@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/phonegap-nfc/-/phonegap-nfc-1.0.3.tgz#6fe1baeba2e075b6352e1080601cf5f2db7de8f8"
@@ -6063,6 +6070,11 @@ repeating@^2.0.0:
   integrity sha1-UhTFOpJtNVJwdSf7q0FdvAjQbdo=
   dependencies:
     is-finite "^1.0.0"
+
+replace-at@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/replace-at/-/replace-at-1.0.0.tgz#55ccf1d1800b54d93b36dc10c3fa7ea710f0588b"
+  integrity sha512-61A/V+U+00+d55WcLC6zvbmHxuzxkRi5/W5UrkIvIVCKw4gHCWzWwjfBGH2px4XDM4cQhn2+UCKf/TxHlcR1ag==
 
 request@2.87.0:
   version "2.87.0"

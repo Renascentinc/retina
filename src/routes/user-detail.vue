@@ -82,7 +82,7 @@
                 v-if="!editState"
                 class="contact-text"
                 @click="phoneNumber() ? phoneCall() : () => 0">
-                {{ getUser.phone_number }}
+                {{ formattedPhone }}
               </button>
               <input
                 v-validate="{required: true, numeric: true, min: 7}"
@@ -194,6 +194,11 @@ export default {
 
     canEdit () {
       return this.isAdmin || JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
+    },
+
+    formattedPhone () {
+      const PhoneNumberFormatter = require('phone-number-formats')
+      return new PhoneNumberFormatter('1' + this.getUser.phone_number).format({type: 'domestic'}).string
     }
   },
 

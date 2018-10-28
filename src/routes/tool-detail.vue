@@ -403,7 +403,8 @@ export default {
     },
 
     canEdit () {
-      return true
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
+      return (currentUser.role === 'ADMINISTRATOR')
     },
 
     owner () {

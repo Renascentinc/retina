@@ -10,72 +10,70 @@
 
       <span class="header-spacer"></span>
       <div
-        class="name"
-        v-if="!editState">
+        v-if="!editState"
+        class="name">
         {{ brand }} {{ type }}
       </div>
 
       <div
-        class="input-group-container"
-        v-if="editState">
-          <v-select
-            v-validate="'required'"
-            :options="brandOptions"
-            v-model="newBrand"
-            name="brand"
-            label="name"
-            class="dark-input"
-            placeholder="Brand">
-            <template
-              slot="no-options"
-              slot-scope="props">
-              <button
-                class="no-options-btn"
-                @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
-                Set Brand To "{{ props.value }}"
-              </button>
-            </template>
-          </v-select>
-          <div class="error-container">
-            <span
-              v-show="errors.has('brand')"
-              class="error">
-              {{ errors.first('brand') }}
-            </span>
-          </div>
+        v-if="editState"
+        class="input-group-container">
+        <v-select
+          v-validate="'required'"
+          :options="brandOptions"
+          v-model="newBrand"
+          name="brand"
+          label="name"
+          class="dark-input"
+          placeholder="Brand">
+          <template
+            slot="no-options"
+            slot-scope="props">
+            <button
+              class="no-options-btn"
+              @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+              Set Brand To "{{ props.value }}"
+            </button>
+          </template>
+        </v-select>
+        <div class="error-container">
+          <span
+            v-show="errors.has('brand')"
+            class="error">
+            {{ errors.first('brand') }}
+          </span>
+        </div>
       </div>
 
       <div
-        class="input-group-container"
-        v-if="editState">
-          <v-select
-            v-validate="'required'"
-            v-model="newType"
-            :options="typeOptions"
-            name="type"
-            label="name"
-            class="dark-input"
-            placeholder="Type">
-            <template
-              slot="no-options"
-              slot-scope="props">
-              <button
-                class="no-options-btn"
-                @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
-                Set Type To "{{ props.value }}"
-              </button>
-            </template>
-          </v-select>
-          <div class="error-container">
-            <span
-              v-show="errors.has('type')"
-              class="error">
-              {{ errors.first('type') }}
-            </span>
-          </div>
+        v-if="editState"
+        class="input-group-container">
+        <v-select
+          v-validate="'required'"
+          v-model="newType"
+          :options="typeOptions"
+          name="type"
+          label="name"
+          class="dark-input"
+          placeholder="Type">
+          <template
+            slot="no-options"
+            slot-scope="props">
+            <button
+              class="no-options-btn"
+              @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+              Set Type To "{{ props.value }}"
+            </button>
+          </template>
+        </v-select>
+        <div class="error-container">
+          <span
+            v-show="errors.has('type')"
+            class="error">
+            {{ errors.first('type') }}
+          </span>
         </div>
-
-
+      </div>
 
       <div
         v-if="isTransferable"
@@ -149,13 +147,13 @@
 
           <span class="general-label">Serial Number</span>
           <span
-            class="general-data"
-            v-if="!editState"> {{ getTool.serial_number || '-' }} </span>
+            v-if="!editState"
+            class="general-data"> {{ getTool.serial_number || '-' }} </span>
 
           <input
             v-validate="'required'"
-            v-model="newSerial"
             v-if="editState"
+            v-model="newSerial"
             name="serial"
             class="general-data light-input">
           <div class="error-container">
@@ -168,13 +166,13 @@
 
           <span class="general-label">Model Number</span>
           <span
-            class="general-data"
-            v-if="!editState"> {{ getTool.model_number || '-' }} </span>
+            v-if="!editState"
+            class="general-data"> {{ getTool.model_number || '-' }} </span>
 
           <input
             v-validate="'required'"
-            v-model="newModel"
             v-if="editState"
+            v-model="newModel"
             name="model"
             class="general-data light-input">
           <div class="error-container">
@@ -187,13 +185,13 @@
 
           <span class="general-label">Model Year</span>
           <span
-            class="general-data"
-            v-if="!editState"> {{ getTool.year || '-' }} </span>
+            v-if="!editState"
+            class="general-data"> {{ getTool.year || '-' }} </span>
 
           <input
             v-validate="validations.modelYear"
-            v-model="newYear"
             v-if="editState"
+            v-model="newYear"
             name="year"
             type="number"
             class="general-data light-input">
@@ -211,41 +209,41 @@
             class="general-data"> {{ purchasedFrom }} </span>
 
           <v-select
-          v-model="newPurchasedFrom"
-          v-if="editState"
-          :options="purchasedFromOptions"
-          label="name"
-          class="general-data dark-input"
-          placeholder="Purchased From">
-          <template
-            slot="no-options"
-            slot-scope="props">
-            <button
-              class="no-options-btn"
-              @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
-              Set Type To "{{ props.value }}"
-            </button>
-          </template>
-        </v-select>
+            v-if="editState"
+            v-model="newPurchasedFrom"
+            :options="purchasedFromOptions"
+            label="name"
+            class="general-data dark-input"
+            placeholder="Purchased From">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                Set Type To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
 
           <span class="general-label">Purchase Date</span>
           <span
-            class="general-data"
-            v-if="!editState"> {{ formattedDate(getTool.date_purchased) }} </span>
+            v-if="!editState"
+            class="general-data"> {{ formattedDate(getTool.date_purchased) }} </span>
 
           <v-date-picker
-            v-model="newPurchaseDate"
-            class="general-data"
             v-if="editState"
+            v-model="newPurchaseDate"
             :input-props="{ readonly: true }"
+            class="general-data"
             popover-direction="top"
             mode="single">
           </v-date-picker>
 
           <span class="general-label">Purchase Price</span>
           <span
-            class="general-data"
-            v-if="!editState"> ${{ formattedPrice }} </span>
+            v-if="!editState"
+            class="general-data"> ${{ formattedPrice }} </span>
 
           <input
             v-if="editState"
@@ -400,7 +398,6 @@ export default {
       return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
     },
 
-
     typeOptions () {
       return this.getConfigurableItemsForType(ConfigurableItems.TYPE)
     },
@@ -463,7 +460,7 @@ export default {
   methods: {
     formattedDate (date) {
       let datePurchased = date
-      return datePurchased ? new Date(datePurchased).toLocaleDateString( 'en-US', { timeZone: 'UTC' }) : '-'
+      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US', { timeZone: 'UTC' }) : '-'
     },
 
     getConfigurableItemsForType (type) {
@@ -488,7 +485,6 @@ export default {
         this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
         this.editState = true
       }
-
     },
 
     createNewConfigurableItem (configurableItem) {
@@ -508,12 +504,10 @@ export default {
       })
     },
 
-
     saveTool () {
       let brandRequest = this.newBrand && this.newBrand.isNewConfigurableItem ? this.createNewConfigurableItem(this.newBrand) : null
       let typeRequest = this.newType && this.newType.isNewConfigurableItem ? this.createNewConfigurableItem(this.newType) : null
       let purchaseRequest = this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.newPurchasedFrom) : null
-
 
       Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
         let [brandResponse, typeResponse, purchaseResponse] = responses
@@ -529,7 +523,6 @@ export default {
         if (purchaseResponse) {
           this.newPurchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
         }
-
 
         this.$apollo.mutate({
           mutation: gql`
@@ -603,7 +596,7 @@ export default {
               serial_number: this.getTool.serial_number,
               status: newStatus,
               purchased_from_id: this.getTool.purchased_from.id,
-              date_purchased: datePurchased,
+              date_purchased: this.getTool.date_purchased,
               owner_id: this.owner.id,
               photo: this.getTool.photo,
               price: this.getTool.price,

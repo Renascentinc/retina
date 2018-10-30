@@ -54,9 +54,6 @@
           aria-label="Search for option"
           @keydown.delete="maybeDeleteValue"
           @keyup.esc="onEscape"
-          @keydown.up.prevent="typeAheadUp"
-          @keydown.down.prevent="typeAheadDown"
-          @keydown.enter.prevent="typeAheadSelect"
           @keydown.tab="onTab"
           @blur="onSearchBlur"
           @focus="onSearchFocus"
@@ -100,9 +97,8 @@
         <!-- <li
           v-for="(option, index) in filteredOptions"
           :key="index"
-          :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }"
-          role="option"
-          @mouseover="typeAheadPointer = index">
+          :class="{ active: isOptionSelected(option) }"
+          role="option">
           <a @mousedown.prevent.stop="select(option)">
             <slot
               v-bind="(typeof option === 'object') ? option : { [label] : option }"
@@ -137,13 +133,7 @@
 </template>
 
 <script>
-// import pointerScroll from '../mixins/pointerScroll'
-// import typeAheadPointer from '../mixins/typeAheadPointer'
-// import ajax from '../mixins/ajax'
-
 export default {
-  // mixins: [pointerScroll, typeAheadPointer], /* , ajax */
-
   props: {
     /**
        * Contains the currently selected value. Very similar to a

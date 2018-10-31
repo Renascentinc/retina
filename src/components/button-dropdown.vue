@@ -20,13 +20,13 @@
         </i>
       </div>
       <span
-        class="text"
-        v-if="!activated">
-          {{ buttonText }}
+        v-if="!activated"
+        class="text">
+        {{ buttonText }}
       </span>
       <i
-        class="close fas fa-times"
-        v-if="activated">
+        v-if="activated"
+        class="close fas fa-times">
       </i>
 
     </button>

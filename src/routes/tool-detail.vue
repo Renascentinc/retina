@@ -86,7 +86,7 @@
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          button-text="STATUS">
+          button-text="EDIT STATUS">
         </button-dropdown>
 
         <button

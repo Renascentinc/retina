@@ -19,7 +19,16 @@
           class="fas">
         </i>
       </div>
-      <span class="text">{{ buttonText }}</span>
+      <span
+        class="text"
+        v-if="!activated">
+          {{ buttonText }}
+      </span>
+      <i
+        class="close fas fa-times"
+        v-if="activated">
+      </i>
+
     </button>
 
     <transition name="fade">
@@ -28,7 +37,7 @@
         class="options">
 
         <button
-          v-for="option in filteredOptions()"
+          v-for="option in options"
           :key="option"
           class="option button slide-item"
           @click="clickOption(option)">
@@ -141,6 +150,12 @@ export default {
   align-content: center;
 
   .text {
+    flex: 1 0 auto;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .close {
     flex: 1 0 auto;
     margin-top: auto;
     margin-bottom: auto;

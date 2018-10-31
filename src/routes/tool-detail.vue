@@ -86,11 +86,11 @@
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          :button-text="`${ formattedStatus }`">
+          button-text="STATUS">
         </button-dropdown>
 
         <button
-          class="action-btn"
+          class="action-btn transfer-btn"
           @click="toggleTransferStatus">
           <i class="fas fa-exchange-alt action-icon"></i>
           <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
@@ -392,7 +392,7 @@ export default {
 
   computed: {
     statusClass () {
-      return this.getTool.status
+      return this.getTool.status && this.getTool.status
         .split('_')
         .join('-')
         .toLowerCase()
@@ -704,6 +704,10 @@ export default {
       flex: 0 1 auto;
       justify-content: space-around;
       margin-top: 10px;
+
+      .transfer-btn {
+        z-index: -6
+      }
 
       .action-btn {
         background-color: $renascent-red;

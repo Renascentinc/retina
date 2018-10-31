@@ -8,12 +8,17 @@
 
       <span class="toolid">#{{ getTool.id }} </span>
 
-      <span class="header-spacer"></span>
       <div
         v-if="!editState"
         class="name">
         {{ brand }} {{ type }}
       </div>
+
+      <span
+        :class="statusClass"
+        class="tool-status">
+        {{ formattedStatus }}
+      </span>
 
       <div
         v-if="editState"
@@ -386,6 +391,13 @@ export default {
   },
 
   computed: {
+    statusClass () {
+      return this.getTool.status
+        .split('_')
+        .join('-')
+        .toLowerCase()
+    },
+
     isToolSelected () {
       return !!this.$store.state.selectedToolsMap[this.getTool.id]
     },
@@ -663,6 +675,12 @@ export default {
       font-weight: 900;
       text-align: center;
       margin-top: 4px;
+    }
+
+    .tool-status {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .input-group-container {

@@ -27,7 +27,7 @@
             class="help menu-btn"
             @click="sendSupportEmail()">
             <i class="fas menu-btn-icon fa-question-circle"></i>
-            HELP
+            CONTACT SUPPORT
           </button>
           <button class="change-password menu-btn">
             <i class="fas menu-btn-icon fa-key"></i>

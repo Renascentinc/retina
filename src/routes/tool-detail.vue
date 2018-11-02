@@ -8,12 +8,17 @@
 
       <span class="toolid">#{{ getTool.id }} </span>
 
-      <span class="header-spacer"></span>
       <div
         v-if="!editState"
         class="name">
         {{ brand }} {{ type }}
       </div>
+
+      <span
+        :class="statusClass"
+        class="tool-status">
+        {{ formattedStatus }}
+      </span>
 
       <div
         v-if="editState"
@@ -81,11 +86,11 @@
         <button-dropdown
           :on-click="updateStatus"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          :button-text="`${ formattedStatus }`">
+          button-text="EDIT STATUS">
         </button-dropdown>
 
         <button
-          class="action-btn"
+          class="action-btn transfer-btn"
           @click="toggleTransferStatus">
           <i class="fas fa-exchange-alt action-icon"></i>
           <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
@@ -386,6 +391,13 @@ export default {
   },
 
   computed: {
+    statusClass () {
+      return this.getTool.status && this.getTool.status
+        .split('_')
+        .join('-')
+        .toLowerCase()
+    },
+
     isToolSelected () {
       return !!this.$store.state.selectedToolsMap[this.getTool.id]
     },
@@ -656,6 +668,7 @@ export default {
       padding-top: 9px;
       margin-left: auto;
       margin-right: auto;
+      z-index: 4;
     }
 
     .name {
@@ -663,6 +676,14 @@ export default {
       font-weight: 900;
       text-align: center;
       margin-top: 4px;
+      z-index: 4;
+    }
+
+    .tool-status {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      z-index: 4;
     }
 
     .input-group-container {
@@ -686,6 +707,11 @@ export default {
       flex: 0 1 auto;
       justify-content: space-around;
       margin-top: 10px;
+      z-index: 1;
+
+      .transfer-btn {
+        z-index: -6;
+      }
 
       .action-btn {
         background-color: $renascent-red;

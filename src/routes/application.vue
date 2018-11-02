@@ -23,6 +23,12 @@
         </div>
 
         <div class="menu-buttons">
+          <button
+            class="help menu-btn"
+            @click="sendSupportEmail()">
+            <i class="fas menu-btn-icon fa-question-circle"></i>
+            CONTACT SUPPORT
+          </button>
           <button class="change-password menu-btn">
             <i class="fas menu-btn-icon fa-key"></i>
             CHANGE PASSWORD
@@ -99,6 +105,12 @@ export default {
 
   mixins: [ authenticatedRouteMixin ],
 
+  data () {
+    return {
+      window: window
+    }
+  },
+
   computed: {
     currentUser () {
       return JSON.parse(window.localStorage.getItem('currentUser'))
@@ -122,6 +134,9 @@ export default {
   },
 
   methods: {
+    sendSupportEmail () {
+      this.window.location = 'mailto:retinasupport@renascentinc.com'
+    },
     closeDrawer () {
       this.$refs.drawer.toggle(false)
     },

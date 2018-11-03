@@ -19,6 +19,7 @@ import { onError } from 'apollo-link-error'
 import ApiStatusCodes from './utils/api-status-codes'
 import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
+import VueMq from 'vue-mq'
 // import Snotify from 'vue-snotify'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
@@ -86,6 +87,11 @@ Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
+Vue.use(VueMq, {
+  mobile: 450,
+  tablet: 1250,
+  desktop: Infinity
+})
 // Vue.use(Snotify)
 
 // attachFastClick(document.body)

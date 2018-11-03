@@ -107,7 +107,7 @@ export default {
 
   data () {
     return {
-      window: window
+      window: window,
     }
   },
 

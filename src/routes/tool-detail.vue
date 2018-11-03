@@ -470,7 +470,7 @@ export default {
   //
   // beforeDestroy () {
   //   if (this.checkIsNfcEnabled()) {
-  //     this.closeNfcListener()
+  //     this.pauseNfcListener()
   //   }
   // },
 

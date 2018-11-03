@@ -21,6 +21,7 @@ import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
 // import Snotify from 'vue-snotify'
 import VueSVGIcon from 'vue-svgicon'
+import vmodal from 'vue-js-modal'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -89,6 +90,9 @@ Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
 // Vue.use(Snotify)
+Vue.use(vmodal, {
+  dialog: true
+})
 
 // attachFastClick(document.body)
 

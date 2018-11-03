@@ -33,19 +33,12 @@ export default {
 
   data () {
     return {
-      readyToEncode: false,
-      callback: () => this.encodeTag()
-    }
-  },
-
-  beforeDestroy () {
-    if (this.readyToEncode) {
-      this.cancelListener()
+      readyToEncode: false
     }
   },
 
   methods: {
-    encodeTag (tag) {
+    _nfcCallback (tag) {
       window.console.log(tag)
 
       const record = [
@@ -71,7 +64,7 @@ export default {
 
     onClick () {
       if (!this.readyToEncode) {
-        this.startNfcListener(this.callback)
+        this.startNfcListener()
         this.readyToEncode = true
       } else {
         this.cancelListener()
@@ -79,7 +72,7 @@ export default {
     },
 
     cancelListener () {
-      this.closeNfcListener(this.callback)
+      this.pauseNfcListener()
       this.readyToEncode = false
     }
   }
@@ -124,21 +117,4 @@ export default {
         justify-content: center;
       }
   }
-
-  .svg-icon {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-}
-
-.svg-fill {
-    fill: transparent;
-    stroke: transparent;
-
-    path[pid="1"] {
-      stroke: transparent;
-      fill: $renascent-red;
-    }
-}
 </style>

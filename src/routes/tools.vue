@@ -2,6 +2,7 @@
   <div class="page tools-page">
     <div class="search-bar">
       <tool-search-input :update-tags="updateFilters"></tool-search-input>
+      <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
     <div class="tool-scroll-container">
       <transition>
@@ -121,14 +122,14 @@
 </template>
 
 <script>
-import ToolSearchInput from '../components/tool-search-input.vue'
-import ToolSearchResult from '../components/tool-search-result.vue'
-import ExtendedFab from '../components/extended-fab.vue'
+import ToolSearchInput from '../components/tool-search-input'
+import ToolSearchResult from '../components/tool-search-result'
+import ExtendedFab from '../components/extended-fab'
+import NfcScan from '../components/nfc-scan'
 import Fab from '../components/fab.vue'
 import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
-import nfc from '../mixins/nfc'
 
 export default {
   name: 'Tools',
@@ -138,10 +139,9 @@ export default {
     ToolSearchResult,
     ExtendedFab,
     Fab,
-    vSelect
+    vSelect,
+    NfcScan
   },
-
-  mixins: [nfc],
 
   apollo: {
     getAllLocation: gql`query {
@@ -303,11 +303,23 @@ export default {
   //
   // beforeDestroy () {
   //   if (this.isNfcEnabled) {
-  //     this.closeNfcListener()
+  //     this.pauseNfcListener()
   //   }
   // },
 
   methods: {
+    onScan (value) {
+      window.console.log('onScan', value)
+      // window.console.log(this.currentState)
+      if (this.currentState === this.states.INITIAL) {
+        // window.console.log('transition to tool detail route')
+        this.transitionToToolInfo(value)
+      } else {
+        // window.console.log('toggleToolSelection')
+        this.$store.commit('toggleToolSelection', value)
+      }
+    },
+
     transitionToToolInfo (toolId) {
       this.$router.push({ name: 'toolDetail', params: { toolId } })
     },
@@ -393,14 +405,6 @@ export default {
     proceedToFinalize () {
       this.showOnlySelectedTools = true
       this.currentState = this.states.FINALIZING
-    },
-
-    nfcCallback (value) {
-      if (this.currentState === this.states.INITIAL) {
-        this.transitionToToolInfo(value)
-      } else {
-        this.$store.commit('toggleToolSelection', value)
-      }
     }
   }
 }
@@ -441,10 +445,9 @@ export default {
   .floating-action-bar {
     display: inline-block;
     position: absolute;
-    bottom: 75px;
     // handle iPhone X style screens
-    bottom: calc(57px + constant(safe-area-inset-bottom));
-    bottom: calc(57px + env(safe-area-inset-bottom));
+    bottom: calc(75px + constant(safe-area-inset-bottom));
+    bottom: calc(75px + env(safe-area-inset-bottom));
     width: 100vw;
     height: 57px;
     vertical-align: bottom;

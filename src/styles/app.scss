@@ -75,6 +75,24 @@ a {
   }
 }
 
+// nfc icon
+.svg-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.svg-fill {
+    fill: transparent;
+    stroke: transparent;
+
+    path[pid="1"] {
+      stroke: transparent;
+      fill: $renascent-red;
+    }
+}
+
 .tool-status {
   &.available {
     color: black;

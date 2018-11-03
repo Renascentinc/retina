@@ -106,7 +106,7 @@
 
         <div class="input-group-container">
           <input
-            v-validate="validations.purchaseDate"
+            v-validate="validations.modelYear"
             v-model="modelYear"
             name="modelYear"
             class="light-input"
@@ -165,6 +165,7 @@
         <v-date-picker
           v-model="purchaseDate"
           :input-props="{ readonly: true }"
+          :attributes="[{ popover: { visibility: 'hidden' } }]"
           popover-direction="top"
           mode="single">
         </v-date-picker>
@@ -344,7 +345,7 @@ export default {
         }
       ],
       validations: {
-        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
     }
   },
@@ -536,6 +537,7 @@ export default {
     justify-content: space-around;
     padding: 0 20px;
     border-radius: 3px;
+    min-height: 434px;
 
     .dropdown {
       width: 100%;

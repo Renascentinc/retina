@@ -293,17 +293,19 @@ export default {
     }
   },
 
-  mounted () {
-    if (this.checkIsNfcEnabled()) {
-      this.startNfcListener()
-    }
-  },
-
-  beforeDestroy () {
-    if (this.checkIsNfcEnabled()) {
-      this.closeNfcListener()
-    }
-  },
+  // mounted () {
+  //   if (this.isNfcEnabled) {
+  //     this.startNfcListener()
+  //   } else {
+  //     window.console.log('nfc is not enabled on this device')
+  //   }
+  // },
+  //
+  // beforeDestroy () {
+  //   if (this.isNfcEnabled) {
+  //     this.closeNfcListener()
+  //   }
+  // },
 
   methods: {
     transitionToToolInfo (toolId) {
@@ -440,6 +442,9 @@ export default {
     display: inline-block;
     position: absolute;
     bottom: 75px;
+    // handle iPhone X style screens
+    bottom: calc(57px + constant(safe-area-inset-bottom));
+    bottom: calc(57px + env(safe-area-inset-bottom));
     width: 100vw;
     height: 57px;
     vertical-align: bottom;

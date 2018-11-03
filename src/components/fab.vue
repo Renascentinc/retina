@@ -1,6 +1,7 @@
 <template>
   <button
     :class="{ inactive: disabled }"
+    :disabled="disabled"
     class="fab"
     @click="onClick">
     <div class="fab-icon-container">

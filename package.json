@@ -15,7 +15,7 @@
     "start": "changeFile=false parcel index.html --port 4200",
     "test": "eslint --ext .js,.vue src",
     "build": "changeFile=false parcel build index.html --no-source-maps",
-    "build-cordova": "parcel build index.html --out-dir=www --public-url=./ --no-minify --no-source-maps",
+    "build-cordova": "parcel build index.html --out-dir=www --public-url=./ --no-minify",
     "android": "yarn build-cordova && cordova prepare && cordova run android",
     "ios": "yarn build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios --buildFlag='-UseModernBuildSystem=0'"
   },

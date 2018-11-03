@@ -15,6 +15,11 @@
 
 .popover-container {
   width: 100%;
+
+  input {
+    width: calc(100% - 30px);
+    padding: 0 15px;
+  }
 }
 
 .light-input {

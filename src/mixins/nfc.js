@@ -1,7 +1,13 @@
+import Platforms from '../utils/platforms'
+
 export default {
   computed: {
     isNfcEnabled () {
       return !!window.nfc && window.nfc.enabled
+    },
+
+    isNfcWriteEnabled () {
+      return this.isNfcEnabled && window.device.platform === Platforms.ANDROID
     }
   },
 
@@ -20,17 +26,17 @@ export default {
     },
 
     startNfcListener (callback) {
-      let setup = () => window.nfc.addNdefListener(callback || this._nfcCallback.bind(this), () => window.console.log('successfully added listener'), () => window.console.log('NFC: error adding listener'))
+      let setup = () => window.nfc.addNdefListener(callback || this._nfcCallback.bind(this), () => window.console.log('NFC: successfully added listener'), () => window.console.error('NFC: error adding listener'))
 
-      if (window.device.platform === 'IOS') {
-        window.nfc.beginSession(setup, () => window.console.log('error starting session'))
+      if (window.device.platform === Platforms.IOS) {
+        window.nfc.beginSession(setup, () => window.console.error('NFC: error starting session'))
       } else {
         setup()
       }
     },
 
     closeNfcListener (callback) {
-      window.nfc.removeNdefListener(callback || this._nfcCallback.bind(this))
+      window.nfc.removeNdefListener(callback || this._nfcCallback.bind(this), () => window.console.log('successfully removed listener'), () => window.console.log('NFC: error removing listener'))
     }
   }
 }

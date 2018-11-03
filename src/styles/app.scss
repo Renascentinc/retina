@@ -67,6 +67,10 @@ a {
       display: flex;
       flex: 1 1 auto;
       flex-direction: column;
+
+      // padding for iPhone X style screens
+      padding-top: calc(constant(safe-area-inset-top) - 10px);
+      padding-top: calc(env(safe-area-inset-top) - 10px);
     }
   }
 }

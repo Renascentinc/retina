@@ -1,6 +1,7 @@
 <template>
   <button
-    :class="{ inactive: isNfcEnabled }"
+    :class="{ inactive: !isNfcWriteEnabled }"
+    :disabled="!isNfcWriteEnabled"
     class="nfc-encode"
     @click="onClick">
     <div class="fab-icon-container">
@@ -32,7 +33,8 @@ export default {
 
   data () {
     return {
-      readyToEncode: false
+      readyToEncode: false,
+      callback: () => this.encodeTag()
     }
   },
 
@@ -47,11 +49,11 @@ export default {
       window.console.log(tag)
 
       const record = [
-        window.ndef.textRecord(`${this.toolId}`)
+        window.ndef.textRecord(`${this.toolId} - Property of Renascent inc. (http://renascentinc.com)`)
       ]
 
       const failure = (reason) => {
-        alert(reason)
+        window.console.error('NFC: failure to write tag')
       }
 
       // const lockSuccess = () => {
@@ -60,7 +62,7 @@ export default {
 
       const lock = () => {
         // window.nfc.makeReadOnly(lockSuccess, failure)
-        // alert('Success')
+        window.console.log('NFC: successfully encoded tag')
         this.cancelListener()
       }
 
@@ -69,7 +71,7 @@ export default {
 
     onClick () {
       if (!this.readyToEncode) {
-        this.startNfcListener(() => this.encodeTag())
+        this.startNfcListener(this.callback)
         this.readyToEncode = true
       } else {
         this.cancelListener()
@@ -77,7 +79,7 @@ export default {
     },
 
     cancelListener () {
-      this.closeNfcListener(() => this.encodeTag())
+      this.closeNfcListener(this.callback)
       this.readyToEncode = false
     }
   }
@@ -104,10 +106,15 @@ export default {
       width: 190px;
 
       &.inactive {
-        background-color: transparent;
+        opacity: .5;
         color: $disabled-gray;
-        border: solid 2px $disabled-gray;
+        border: solid 1px $disabled-gray;
         box-shadow: none;
+
+        path[pid="1"] {
+          stroke: transparent;
+          fill: $disabled-gray !important;
+        }
       }
 
       .fab-icon-container {

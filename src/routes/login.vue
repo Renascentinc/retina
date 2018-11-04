@@ -141,6 +141,10 @@ export default {
     }
   },
 
+  beforeRouteEnter (to, from, next) {
+    window.localStorage.getItem('token') ? next('/') : next()
+  },
+
   methods: {
     attemptUserLogin () {
       this.currentState = this.states.AUTHENTICATING

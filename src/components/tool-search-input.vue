@@ -114,9 +114,17 @@ export default {
           formattedType: 'Status'
         },
         {
-          name: 'Out of Service',
-          text: 'Out of Service',
-          id: Statuses.OUT_OF_SERVICE,
+          name: 'Beyond Repair',
+          text: 'Beyond Repair',
+          id: Statuses.BEYOND_REPAIR,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'Lost/Stolen',
+          text: 'Lost/Stolen',
+          id: Statuses.LOST_OR_STOLEN,
           iconClass: 'fa-info-circle',
           type: 'STATUS',
           formattedType: 'Status'

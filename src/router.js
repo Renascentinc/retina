@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './routes/login'
 import Application from './routes/application'
-import Tools from './routes/tools'
+import LandingPage from './routes/landing-page'
 
 // lazy loaded routes
+const Tools = () => import('./routes/tools')
 const Configuration = () => import('./routes/configuration')
 const History = () => import('./routes/history')
 const UserDetail = () => import('./routes/user-detail')
@@ -28,7 +29,8 @@ export default new Router({
       children: [
         {
           path: '/',
-          redirect: '/tools'
+          component: LandingPage,
+          name: 'landingPage'
         },
         {
           path: 'tools',

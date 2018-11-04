@@ -35,3 +35,13 @@ $tool-search-result-border-radius: 3px;
     }
   }
 }
+
+// DESKTOP
+
+.desktop {
+  .search-result {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

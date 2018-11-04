@@ -390,9 +390,9 @@ export default {
 
   .search-bar {
     padding: 10px;
-    min-height: 45px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     z-index: 5;
+    min-height: 45px;
     display: flex;
   }
 

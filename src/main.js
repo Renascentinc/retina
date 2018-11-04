@@ -88,9 +88,10 @@ Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueMq, {
-  mobile: 450,
-  tablet: 1250,
-  desktop: Infinity
+  breakpoints: {
+    mobile: 500,
+    desktop: Infinity
+  }
 })
 // Vue.use(Snotify)
 

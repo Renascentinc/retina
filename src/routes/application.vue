@@ -1,11 +1,14 @@
 <template>
-  <div class="main-application">
+  <div
+    class="main-application"
+    :class="$mq">
     <vue-drawer-layout
       ref="drawer"
       :drawer-width="270"
       :enable="false"
       :animatable="true"
       :backdrop="true"
+      :content-drawable="$mq === 'desktop' ? true : false"
       @mask-click="closeDrawer">
 
       <div

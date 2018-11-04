@@ -397,6 +397,7 @@ export default {
 
   #cards {
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
     .card {
       position: relative;

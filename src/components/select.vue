@@ -54,9 +54,6 @@
           aria-label="Search for option"
           @keydown.delete="maybeDeleteValue"
           @keyup.esc="onEscape"
-          @keydown.up.prevent="typeAheadUp"
-          @keydown.down.prevent="typeAheadDown"
-          @keydown.enter.prevent="typeAheadSelect"
           @keydown.tab="onTab"
           @blur="onSearchBlur"
           @focus="onSearchFocus"
@@ -97,12 +94,24 @@
         class="dropdown-menu"
         role="listbox"
         @mousedown="onMousedown">
+        <!-- <li
+          v-for="(option, index) in filteredOptions"
+          :key="index"
+          :class="{ active: isOptionSelected(option) }"
+          role="option">
+          <a @mousedown.prevent.stop="select(option)">
+            <slot
+              v-bind="(typeof option === 'object') ? option : { [label] : option }"
+              name="option">
+              {{ getOptionLabel(option) }}
+            </slot>
+          </a>
+        </li> -->
         <li
           v-for="(option, index) in filteredOptions"
           :key="index"
-          :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }"
-          role="option"
-          @mouseover="typeAheadPointer = index">
+          :class="{ active: isOptionSelected(option) }"
+          role="option">
           <a @mousedown.prevent.stop="select(option)">
             <slot
               v-bind="(typeof option === 'object') ? option : { [label] : option }"
@@ -124,13 +133,7 @@
 </template>
 
 <script>
-import pointerScroll from '../mixins/pointerScroll'
-import typeAheadPointer from '../mixins/typeAheadPointer'
-import ajax from '../mixins/ajax'
-
 export default {
-  mixins: [pointerScroll, typeAheadPointer, ajax],
-
   props: {
     /**
        * Contains the currently selected value. Very similar to a
@@ -1032,7 +1035,8 @@ export default {
     padding: 5px 0;
     margin: 0;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     border: 1px solid rgba(0, 0, 0, .26);
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,.15);
     border-top: none;
@@ -1140,19 +1144,9 @@ export default {
     color: #333;
     background: rgba(50, 50, 50, .1);
   }
-  .v-select .dropdown-menu > .highlight > a {
-    /*
-     * required to override bootstrap 3's
-     * .dropdown-menu > li > a:hover {} styles
-     */
-    background: #5897fb;
-    color: #fff;
-  }
-  .v-select .highlight:not(:last-child) {
-    margin-bottom: 0; /* Fixes Bulma Margin */
-  }
+
   /* Loading Spinner */
-  .v-select .spinner {
+  /* .v-select .spinner {
     align-self: center;
     opacity: 0;
     font-size: 5px;
@@ -1171,7 +1165,7 @@ export default {
     border-radius: 50%;
     width: 5em;
     height: 5em;
-  }
+  } */
 
   /* Disabled state */
   .v-select.disabled .dropdown-toggle,
@@ -1184,11 +1178,11 @@ export default {
   }
 
   /* Loading Spinner States */
-  .v-select.loading .spinner {
+  /* .v-select.loading .spinner {
     opacity: 1;
-  }
+  } */
   /* KeyFrames */
-  @-webkit-keyframes vSelectSpinner {
+  /* @-webkit-keyframes vSelectSpinner {
     0% {
       transform: rotate(0deg);
     }
@@ -1203,14 +1197,14 @@ export default {
     100% {
       transform: rotate(360deg);
     }
-  }
+  } */
   /* Dropdown Default Transition */
-  .fade-enter-active,
+  /* .fade-enter-active,
   .fade-leave-active {
     transition: opacity .15s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
   .fade-enter,
   .fade-leave-to {
     opacity: 0;
-  }
+  } */
 </style>

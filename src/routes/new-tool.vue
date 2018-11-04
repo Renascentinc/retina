@@ -2,7 +2,8 @@
   <div class="page new-tool-page">
     <header-card
       title="New Tool"
-      exit-link="/tools"></header-card>
+      exit-link="/tools">
+    </header-card>
 
     <transition name="card-change">
       <div
@@ -105,7 +106,7 @@
 
         <div class="input-group-container">
           <input
-            v-validate="validations.purchaseDate"
+            v-validate="validations.modelYear"
             v-model="modelYear"
             name="modelYear"
             class="light-input"
@@ -164,6 +165,7 @@
         <v-date-picker
           v-model="purchaseDate"
           :input-props="{ readonly: true }"
+          :attributes="[{ popover: { visibility: 'hidden' } }]"
           popover-direction="top"
           mode="single">
         </v-date-picker>
@@ -197,14 +199,7 @@
         v-if="currentState === 4"
         class="new-tool-input-card step-4">
 
-        <extended-fab
-          :disabled="nfcDisabled"
-          :on-click="prepareToEncodeTag"
-          :outline-display="true"
-          class="encode-efab"
-          icon-class="fa-times"
-          button-text="ENOCDE TAG">
-        </extended-fab>
+        <nfc-encode :tool-id="tool ? tool.id : ''"> </nfc-encode>
 
         <tool-search-result
           :tool="tool"
@@ -280,6 +275,7 @@ import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
+import NfcEncode from '../components/nfc-encode'
 
 export default {
   name: 'NewTool',
@@ -289,7 +285,8 @@ export default {
     ToolSearchResult,
     ExtendedFab,
     Fab,
-    vSelect
+    vSelect,
+    NfcEncode
   },
 
   apollo: {
@@ -348,7 +345,7 @@ export default {
         }
       ],
       validations: {
-        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
     }
   },
@@ -502,10 +499,6 @@ export default {
           ++this.currentState
         })
       })
-    },
-
-    prepareToEncodeTag () {
-
     }
   }
 }
@@ -544,6 +537,7 @@ export default {
     justify-content: space-around;
     padding: 0 20px;
     border-radius: 3px;
+    min-height: 434px;
 
     .dropdown {
       width: 100%;

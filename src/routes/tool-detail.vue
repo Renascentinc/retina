@@ -96,6 +96,8 @@
           <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
         </button>
       </div>
+
+      <nfc-encode :tool-id="getTool ? getTool.id : ''"> </nfc-encode>
     </div>
     <div class="cards">
       <div class="card owner-card">
@@ -294,6 +296,7 @@ import vSelect from '../components/select'
 import VueLazyload from 'vue-lazyload'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
+import NfcEncode from '../components/nfc-encode'
 
 export default {
   name: 'ToolDetail',
@@ -303,7 +306,8 @@ export default {
     Fab,
     ButtonDropdown,
     VueLazyload,
-    vSelect
+    vSelect,
+    NfcEncode
   },
 
   apollo: {
@@ -589,8 +593,6 @@ export default {
       let currentStatus = this.getTool.status
       this.getTool.status = newStatus
 
-      // TODO: figure out why api chokes on its own dates
-
       this.$apollo
         .mutate({
           mutation: gql`
@@ -635,6 +637,23 @@ export default {
   background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
+
+  .nfc-encode {
+    position: absolute;
+    right: 15px;
+    width: 120px;
+    height: 30px;
+    top: 9px;
+
+    .fab-icon-container {
+      height: 18px;
+      width: 18px;
+    }
+
+    .efab-text {
+      font-size: 10px;
+    }
+  }
 
   .header {
     width: 100%;
@@ -746,6 +765,7 @@ export default {
 
   .cards {
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
     .card {
       position: relative;

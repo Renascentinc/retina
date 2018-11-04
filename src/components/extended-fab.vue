@@ -1,6 +1,7 @@
 <template>
   <button
     :class="{ outlined: outlineDisplay, inactive: disabled }"
+    :disabled="disabled"
     class="extended-fab"
     @click="onClick">
     <div class="fab-icon-container">

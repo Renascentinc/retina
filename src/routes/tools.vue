@@ -2,6 +2,7 @@
   <div class="page tools-page">
     <div class="search-bar">
       <tool-search-input :update-tags="updateFilters"></tool-search-input>
+      <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
     <div class="tool-scroll-container">
       <transition>
@@ -92,7 +93,7 @@
           <span class="finalize-to-text"> To </span>
           <v-select
             :options="transferTargets"
-            :filterable="false"
+            :searchable="false"
             v-model="transferTarget"
             class="dark-input">
           </v-select>
@@ -121,9 +122,10 @@
 </template>
 
 <script>
-import ToolSearchInput from '../components/tool-search-input.vue'
-import ToolSearchResult from '../components/tool-search-result.vue'
-import ExtendedFab from '../components/extended-fab.vue'
+import ToolSearchInput from '../components/tool-search-input'
+import ToolSearchResult from '../components/tool-search-result'
+import ExtendedFab from '../components/extended-fab'
+import NfcScan from '../components/nfc-scan'
 import Fab from '../components/fab.vue'
 import vSelect from '../components/select'
 import gql from 'graphql-tag'
@@ -137,7 +139,8 @@ export default {
     ToolSearchResult,
     ExtendedFab,
     Fab,
-    vSelect
+    vSelect,
+    NfcScan
   },
 
   apollo: {
@@ -291,6 +294,14 @@ export default {
   },
 
   methods: {
+    onScan (value) {
+      if (this.currentState === this.states.INITIAL) {
+        this.transitionToToolInfo(value)
+      } else {
+        this.$store.commit('toggleToolSelection', value)
+      }
+    },
+
     transitionToToolInfo (toolId) {
       this.$router.push({ name: 'toolDetail', params: { toolId } })
     },
@@ -416,7 +427,9 @@ export default {
   .floating-action-bar {
     display: inline-block;
     position: absolute;
-    bottom: 75px;
+    // handle iPhone X style screens
+    bottom: calc(75px + constant(safe-area-inset-bottom));
+    bottom: calc(75px + env(safe-area-inset-bottom));
     width: 100vw;
     height: 57px;
     vertical-align: bottom;

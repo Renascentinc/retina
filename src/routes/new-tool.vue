@@ -338,14 +338,6 @@ export default {
         {
           name: 'Maintenance',
           id: Statuses.MAINTENANCE
-        },
-        {
-          name: 'Beyond Repair',
-          id: Statuses.BEYOND_REPAIR
-        },
-        {
-          name: 'Lost/Stolen',
-          id: Statuses.LOST_OR_STOLEN
         }
       ],
       validations: {

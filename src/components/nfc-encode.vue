@@ -45,7 +45,7 @@ export default {
 
     _nfcCallback (tag) {
       const record = [
-        window.ndef.textRecord(`${this.toolId} - Property of Renascent inc. (http://renascentinc.com)`)
+        window.ndef.textRecord(`${this.toolId} - Property of Renascent, Inc. (http://renascentinc.com)`)
       ]
 
       const lock = () => {

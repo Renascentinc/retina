@@ -285,7 +285,7 @@
 
 <script>
 import gql from 'graphql-tag'
-import Avatar from '../components/avatar'
+import Avatar from 'vue-avatar'
 import Fab from '../components/fab.vue'
 import vSelect from '../components/select'
 import VueLazyload from 'vue-lazyload'
@@ -462,18 +462,6 @@ export default {
     }
   },
 
-  // mounted () {
-  //   if (this.checkIsNfcEnabled()) {
-  //     this.startNfcListener()
-  //   }
-  // },
-  //
-  // beforeDestroy () {
-  //   if (this.checkIsNfcEnabled()) {
-  //     this.pauseNfcListener()
-  //   }
-  // },
-
   methods: {
     formattedDate (date) {
       let datePurchased = date
@@ -593,8 +581,6 @@ export default {
       let currentStatus = this.getTool.status
       this.getTool.status = newStatus
 
-      // TODO: figure out why api chokes on its own dates
-
       this.$apollo
         .mutate({
           mutation: gql`
@@ -628,14 +614,6 @@ export default {
           // TODO: pop toast notifying user that request failed.
         })
     }
-
-    // nfcCallback (value) {
-    //   this.transitionToToolInfo(value)
-    // },
-    //
-    // transitionToToolInfo (toolId) {
-    //   this.$router.push({ name: 'toolDetail', params: { toolId } })
-    // }
   }
 }
 </script>

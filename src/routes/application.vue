@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import Avatar from '../components/avatar'
+import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
 import authenticatedRouteMixin from '../mixins/authenticatedRoute'
 

@@ -427,9 +427,10 @@ export default {
   .floating-action-bar {
     display: inline-block;
     position: absolute;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
     // handle iPhone X style screens
-    bottom: calc(75px + constant(safe-area-inset-bottom));
-    bottom: calc(75px + env(safe-area-inset-bottom));
+    // bottom: calc(75px + constant(safe-area-inset-bottom));
+    // bottom: calc(75px + env(safe-area-inset-bottom));
     width: 100vw;
     height: 57px;
     vertical-align: bottom;

@@ -23,16 +23,17 @@
         <span class="tool-assignee">{{ assignee }}</span>
       </div>
     </div>
-    <div class="tool-selection-container">
-      <transition>
+    <transition>
+      <div
+        v-if="showSelect"
+        class="tool-selection-container">
         <button
-          v-if="showSelect"
           :class="{ 'fa-check': selected }"
           class="fas checkbox"
           @click="toggleSelect">
         </button>
-      </transition>
-    </div>
+      </div>
+    </transition>
   </div>
 </template>
 

@@ -3,7 +3,7 @@ import Platforms from '../utils/platforms'
 export default {
   beforeDestroy () {
     if (this.nfcListenerAdded) {
-      window.nfc.removeNdefListener(this.callback, () => window.console.log('successfully removed listener'), () => window.console.log('NFC: error removing listener'))
+      window.nfc.removeNdefListener(this.callback)
     }
   },
 
@@ -35,12 +35,15 @@ export default {
       if (param && param.tag && param.tag.ndefMessage) {
         let [{ payload }] = param.tag.ndefMessage
         value = String.fromCharCode(...payload).slice(3)
+        let [id] = value.split(' - ')
+        if (id) {
+          value = id
+        }
       }
       this.nfcCallback(value)
     },
 
     _initialNfcCallback (tag) {
-      window.console.log('SCAN')
       if (this.nfcListenerEnabled) {
         this._nfcCallback(tag)
         this.pauseNfcListener()
@@ -52,13 +55,13 @@ export default {
         this.nfcListenerEnabled = true
 
         if (!this.nfcListenerAdded) {
-          window.nfc.addNdefListener(this.callback, () => window.console.log('NFC: successfully added listener'), () => window.console.error('NFC: error adding listener'))
+          window.nfc.addNdefListener(this.callback)
           this.nfcListenerAdded = true
         }
       }
 
       if (window.device.platform === Platforms.IOS) {
-        window.nfc.beginSession(setup, () => window.console.error('NFC: error starting session'))
+        window.nfc.beginSession(setup)
       } else {
         setup()
       }

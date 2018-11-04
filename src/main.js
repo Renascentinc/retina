@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 
 import '../node_modules/v-calendar/lib/v-calendar.min.css'
-import '../node_modules/vue-snotify/styles/simple.css'
 
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
@@ -9,7 +8,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-// import attachFastClick from 'fastclick'
+import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -19,9 +18,9 @@ import { onError } from 'apollo-link-error'
 import ApiStatusCodes from './utils/api-status-codes'
 import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
-// import Snotify from 'vue-snotify'
 import VueSVGIcon from 'vue-svgicon'
-import vmodal from 'vue-js-modal'
+import VueJsModal from 'vue-js-modal'
+import Toasted from 'vue-toasted'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -89,12 +88,12 @@ Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
-// Vue.use(Snotify)
-Vue.use(vmodal, {
+Vue.use(Toasted)
+Vue.use(VueJsModal, {
   dialog: true
 })
 
-// attachFastClick(document.body)
+attachFastClick(document.body)
 
 new Vue({
   router,

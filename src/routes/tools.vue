@@ -293,29 +293,11 @@ export default {
     }
   },
 
-  // mounted () {
-  //   if (this.isNfcEnabled) {
-  //     this.startNfcListener()
-  //   } else {
-  //     window.console.log('nfc is not enabled on this device')
-  //   }
-  // },
-  //
-  // beforeDestroy () {
-  //   if (this.isNfcEnabled) {
-  //     this.pauseNfcListener()
-  //   }
-  // },
-
   methods: {
     onScan (value) {
-      window.console.log('onScan', value)
-      // window.console.log(this.currentState)
       if (this.currentState === this.states.INITIAL) {
-        // window.console.log('transition to tool detail route')
         this.transitionToToolInfo(value)
       } else {
-        // window.console.log('toggleToolSelection')
         this.$store.commit('toggleToolSelection', value)
       }
     },

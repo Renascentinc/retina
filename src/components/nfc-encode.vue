@@ -11,7 +11,7 @@
         height="22">
       </svgicon>
     </div>
-    <span class="efab-text">{{ readyToEncode ? "CANCEL" : "ENCODE TAG" }}</span>
+    <span class="efab-text">ENCODE TAG</span>
   </button>
 </template>
 
@@ -31,49 +31,35 @@ export default {
     }
   },
 
-  data () {
-    return {
-      readyToEncode: false
-    }
-  },
-
   methods: {
-    _nfcCallback (tag) {
-      window.console.log(tag)
+    onError (reason) {
+      if (reason === 'Tag is read only') {
+        this.$toasted.show('This Tag Has Already Been Encoded and Cannot Be Written Again')
+      } else {
+        this.$toasted.show('An Error Occurred Trying to Write Tag. Please Try Again or Contact Support')
+      }
 
+      this.pauseNfcListener()
+      this.$modal.hide('ready-to-scan-modal')
+    },
+
+    _nfcCallback (tag) {
       const record = [
         window.ndef.textRecord(`${this.toolId} - Property of Renascent inc. (http://renascentinc.com)`)
       ]
 
-      const failure = (reason) => {
-        window.console.error('NFC: failure to write tag')
-      }
-
-      // const lockSuccess = () => {
-      //   alert('Success')
-      // }
-
       const lock = () => {
-        // window.nfc.makeReadOnly(lockSuccess, failure)
-        window.console.log('NFC: successfully encoded tag')
-        this.cancelListener()
+        window.nfc.makeReadOnly(() => this.$toasted.show('Successfully Encoded Tag'), (reason) => this.onError(reason))
+        this.pauseNfcListener()
+        this.$modal.hide('ready-to-scan-modal')
       }
 
-      window.nfc.write(record, lock, failure)
+      window.nfc.write(record, lock, (reason) => this.onError(reason))
     },
 
     onClick () {
-      if (!this.readyToEncode) {
-        this.startNfcListener()
-        this.readyToEncode = true
-      } else {
-        this.cancelListener()
-      }
-    },
-
-    cancelListener () {
-      this.pauseNfcListener()
-      this.readyToEncode = false
+      this.startNfcListener()
+      this.$modal.show('ready-to-scan-modal')
     }
   }
 }

@@ -338,10 +338,6 @@ export default {
         {
           name: 'Maintenance',
           id: Statuses.MAINTENANCE
-        },
-        {
-          name: 'Out of Service',
-          id: Statuses.OUT_OF_SERVICE
         }
       ],
       validations: {

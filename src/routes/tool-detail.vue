@@ -85,7 +85,7 @@
         class="actions">
         <button-dropdown
           :on-click="updateStatus"
-          :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
+          :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'BEYOND REPAIR', 'LOST OR STOLEN']"
           button-text="EDIT STATUS">
         </button-dropdown>
 
@@ -97,7 +97,7 @@
         </button>
       </div>
 
-      <nfc-encode :tool-id="getTool ? getTool.id : ''"> </nfc-encode>
+      <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
     </div>
     <div class="cards">
       <div class="card owner-card">

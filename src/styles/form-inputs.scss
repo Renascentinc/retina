@@ -13,7 +13,7 @@
   max-width: 100%;
 
   &::placeholder {
-    color: #ACACAC;
+    color: $form-placeholder-color;
   }
 }
 
@@ -41,7 +41,7 @@
   outline: none;
 
   &::placeholder {
-    color: #ACACAC;
+    color: $form-placeholder-color;
     font-family: $font-family;
   }
 }
@@ -65,8 +65,7 @@
     color: white;
 
     &::placeholder {
-      // color: $background-light-gray;
-      color: #ACACAC;
+      color: $form-placeholder-color;
       font-family: $font-family;
     }
   }

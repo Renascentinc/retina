@@ -19,7 +19,7 @@
             name="brand"
             label="name"
             class="dark-input"
-            placeholder="ex. DeWalt">
+            placeholder="eg. DeWalt">
             <template
               slot="no-options"
               slot-scope="props">
@@ -48,7 +48,7 @@
             name="type"
             label="name"
             class="dark-input"
-            placeholder="ex. Saw">
+            placeholder="eg. Saw">
             <template
               slot="no-options"
               slot-scope="props">
@@ -75,7 +75,7 @@
             v-model="modelNumber"
             name="modelNumber"
             class="light-input"
-            placeholder="ex. 18392049437"
+            placeholder="eg. 18392049437"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false">
@@ -95,7 +95,7 @@
             v-model="serialNumber"
             name="serialNumber"
             class="light-input"
-            placeholder="ex. 0348529873023"
+            placeholder="eg. 0348529873023"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false">
@@ -115,7 +115,7 @@
             v-model="modelYear"
             name="modelYear"
             class="light-input"
-            placeholder="ex. 2018"
+            placeholder="eg. 2018"
             type="number"
             inputmode="numeric"
             pattern="[0-9]*">
@@ -152,7 +152,7 @@
             :options="purchasedFromOptions"
             label="name"
             class="dark-input"
-            placeholder="ex. Lowes">
+            placeholder="eg. Lowes">
             <template
               slot="no-options"
               slot-scope="props">
@@ -187,7 +187,7 @@
             <input
               slot-scope="{ inputValue, updateValue }"
               :value="inputValue"
-              :placeholder="`ex. ${new Date().toLocaleDateString('en-US')}`"
+              :placeholder="`eg. ${new Date().toLocaleDateString('en-US')}`"
               type="text"
               @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
               @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
@@ -201,7 +201,7 @@
             v-model="price"
             name="price"
             class="light-input"
-            placeholder="ex. 149.99"
+            placeholder="eg. 149.99"
             type="number">
         </div>
       </div>

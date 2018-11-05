@@ -11,6 +11,7 @@
         class="new-tool-input-card">
 
         <div class="input-group-container">
+          <span class="form-label">BRAND</span>
           <v-select
             v-validate:brand="'required'"
             :options="brandOptions"
@@ -18,7 +19,7 @@
             name="brand"
             label="name"
             class="dark-input"
-            placeholder="Brand">
+            placeholder="ex. DeWalt">
             <template
               slot="no-options"
               slot-scope="props">
@@ -39,6 +40,7 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">TYPE</span>
           <v-select
             v-validate:type="'required'"
             v-model="type"
@@ -46,7 +48,7 @@
             name="type"
             label="name"
             class="dark-input"
-            placeholder="Type">
+            placeholder="ex. Saw">
             <template
               slot="no-options"
               slot-scope="props">
@@ -67,12 +69,13 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">MODEL NUMBER</span>
           <input
             v-validate="'required'"
             v-model="modelNumber"
             name="modelNumber"
             class="light-input"
-            placeholder="Model no."
+            placeholder="ex. 18392049437"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false">
@@ -86,12 +89,13 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">SERIAL NUMBER</span>
           <input
             v-validate="'required'"
             v-model="serialNumber"
             name="serialNumber"
             class="light-input"
-            placeholder="Serial no."
+            placeholder="ex. 0348529873023"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false">
@@ -105,12 +109,13 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">MODEL YEAR</span>
           <input
             v-validate="validations.modelYear"
             v-model="modelYear"
             name="modelYear"
             class="light-input"
-            placeholder="Model Year"
+            placeholder="ex. 2018"
             type="number"
             inputmode="numeric"
             pattern="[0-9]*">
@@ -136,27 +141,29 @@
             v-model="owner"
             :options="userOptions"
             label="full_name"
-            class="dark-input"
-            placeholder="Owner">
+            class="dark-input">
           </v-select>
         </div>
 
-        <v-select
-          v-model="purchasedFrom"
-          :options="purchasedFromOptions"
-          label="name"
-          class="dark-input"
-          placeholder="Purchased from">
-          <template
-            slot="no-options"
-            slot-scope="props">
-            <button
-              class="no-options-btn"
-              @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
-              Set Type To "{{ props.value }}"
-            </button>
-          </template>
-        </v-select>
+        <div class="input-group-container">
+          <span class="form-label">PURCHASED FROM</span>
+          <v-select
+            v-model="purchasedFrom"
+            :options="purchasedFromOptions"
+            label="name"
+            class="dark-input"
+            placeholder="ex. Lowes">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                Set Type To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
+        </div>
 
         <div class="input-group-container">
           <span class="form-label">STATUS</span>
@@ -164,34 +171,37 @@
             v-model="status"
             :options="statuses"
             label="name"
-            class="dark-input"
-            placeholder="Tool Status">
+            class="dark-input">
           </v-select>
         </div>
 
-        <v-date-picker
-          v-model="purchaseDate"
-          :input-props="{ readonly: true }"
-          :attributes="[{ popover: { visibility: 'hidden' } }]"
-          :max-date="new Date()"
-          popover-direction="top"
-          mode="single">
-          <input
-            slot-scope="{ inputValue, updateValue }"
-            :value="inputValue"
-            placeholder="Purchase Date"
-            type="text"
-            @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
-            @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
-            @keyup.esc="updateValue(myDate, { formatInput: true, hidePopover: true })">
-        </v-date-picker>
+        <div class="input-group-container">
+          <span class="form-label">PURCHASE DATE</span>
+          <v-date-picker
+            v-model="purchaseDate"
+            :input-props="{ readonly: true }"
+            :attributes="[{ popover: { visibility: 'hidden' } }]"
+            :max-date="new Date()"
+            popover-direction="top"
+            mode="single">
+            <input
+              slot-scope="{ inputValue, updateValue }"
+              :value="inputValue"
+              :placeholder="`ex. ${new Date().toLocaleDateString('en-US')}`"
+              type="text"
+              @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
+              @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
+              @keyup.esc="updateValue(myDate, { formatInput: true, hidePopover: true })">
+          </v-date-picker>
+        </div>
 
         <div class="input-group-container">
+          <span class="form-label">PRICE</span>
           <input
             v-model="price"
             name="price"
             class="light-input"
-            placeholder="Price"
+            placeholder="ex. 149.99"
             type="number">
         </div>
       </div>

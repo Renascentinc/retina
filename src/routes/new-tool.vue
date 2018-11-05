@@ -129,13 +129,17 @@
       <div
         v-if="currentState === 2"
         class="new-tool-input-card">
-        <v-select
-          v-model="owner"
-          :options="userOptions"
-          label="full_name"
-          class="dark-input"
-          placeholder="Owner">
-        </v-select>
+
+        <div class="input-group-container">
+          <span class="form-label">OWNER</span>
+          <v-select
+            v-model="owner"
+            :options="userOptions"
+            label="full_name"
+            class="dark-input"
+            placeholder="Owner">
+          </v-select>
+        </div>
 
         <v-select
           v-model="purchasedFrom"
@@ -154,20 +158,32 @@
           </template>
         </v-select>
 
-        <v-select
-          v-model="status"
-          :options="statuses"
-          label="name"
-          class="dark-input"
-          placeholder="Tool Status">
-        </v-select>
+        <div class="input-group-container">
+          <span class="form-label">STATUS</span>
+          <v-select
+            v-model="status"
+            :options="statuses"
+            label="name"
+            class="dark-input"
+            placeholder="Tool Status">
+          </v-select>
+        </div>
 
         <v-date-picker
           v-model="purchaseDate"
           :input-props="{ readonly: true }"
           :attributes="[{ popover: { visibility: 'hidden' } }]"
+          :max-date="new Date()"
           popover-direction="top"
           mode="single">
+          <input
+            slot-scope="{ inputValue, updateValue }"
+            :value="inputValue"
+            placeholder="Purchase Date"
+            type="text"
+            @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
+            @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
+            @keyup.esc="updateValue(myDate, { formatInput: true, hidePopover: true })">
         </v-date-picker>
 
         <div class="input-group-container">
@@ -229,12 +245,14 @@
       <div
         v-if="currentState !== 4"
         class="pager-container">
-        <fab
-          :disabled="currentState === 1"
-          :on-click="() => --currentState"
-          class="page-back"
-          icon-class="fa-arrow-left">
-        </fab>
+        <div class="pager-btn-container">
+          <fab
+            :disabled="currentState === 1"
+            :on-click="() => --currentState"
+            class="page-back"
+            icon-class="fa-arrow-left">
+          </fab>
+        </div>
 
         <div class="pager">
           <div
@@ -255,12 +273,23 @@
           </div>
         </div>
 
-        <fab
-          :disabled="!!errors.items.length"
-          :on-click="advanceStep"
-          class="page-forward"
-          icon-class="fa-arrow-right">
-        </fab>
+        <div class="pager-btn-container">
+          <fab
+            v-if="currentState !== 3"
+            :disabled="!!errors.items.length"
+            :on-click="advanceStep"
+            class="page-forward"
+            icon-class="fa-arrow-right">
+          </fab>
+
+          <extended-fab
+            v-if="currentState === 3"
+            :on-click="advanceStep"
+            class="page-forward"
+            icon-class=""
+            button-text="FINISH">
+          </extended-fab>
+        </div>
       </div>
     </transition>
   </div>
@@ -310,36 +339,38 @@ export default {
   },
 
   data () {
+    const statuses = [
+      {
+        name: 'Available',
+        id: Statuses.AVAILABLE
+      },
+      {
+        name: 'In Use',
+        id: Statuses.IN_USE
+      },
+      {
+        name: 'Maintenance',
+        id: Statuses.MAINTENANCE
+      }
+    ]
+
     return {
       brand: null,
       type: null,
-      owner: null,
+      owner: JSON.parse(window.localStorage.getItem('currentUser')),
       modelNumber: null,
       serialNumber: null,
       modelYear: null,
       purchasedFrom: null,
       price: null,
       photo: null,
-      status: null,
-      currentState: 1,
-      purchaseDate: new Date(),
+      status: statuses[1],
+      currentState: 2,
+      purchaseDate: null,
       getAllConfigurableItem: [],
       getAllUser: [],
       tool: null,
-      statuses: [
-        {
-          name: 'Available',
-          id: Statuses.AVAILABLE
-        },
-        {
-          name: 'In Use',
-          id: Statuses.IN_USE
-        },
-        {
-          name: 'Maintenance',
-          id: Statuses.MAINTENANCE
-        }
-      ],
+      statuses,
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
@@ -540,11 +571,24 @@ export default {
     }
   }
 
+  .form-label {
+    font-weight: 900;
+    color: $renascent-dark-gray;
+    font-size: 15px;
+  }
+
   .pager-container {
     display: flex;
     flex: 0 0 90px;
     justify-content: space-around;
     align-items: center;
+
+    .pager-btn-container {
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     .pager {
       display: flex;

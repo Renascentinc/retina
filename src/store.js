@@ -3,7 +3,7 @@ import Vue from 'vue'
 
 Vue.use(Vuex)
 
-export default new Vueg.Store({
+export default new Vuex.Store({
   state: {
     selectedToolsMap: { }
   },

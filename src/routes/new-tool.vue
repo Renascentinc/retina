@@ -159,7 +159,7 @@
               <button
                 class="no-options-btn"
                 @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
-                Set Type To "{{ props.value }}"
+                Set Purchased From To "{{ props.value }}"
               </button>
             </template>
           </v-select>
@@ -188,6 +188,7 @@
               slot-scope="{ inputValue, updateValue }"
               :value="inputValue"
               :placeholder="`eg. ${new Date().toLocaleDateString('en-US')}`"
+              disabled
               type="text"
               @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
               @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
@@ -198,6 +199,7 @@
         <div class="input-group-container">
           <span class="form-label">PRICE</span>
           <input
+            v-validate="'decimal:2'"
             v-model="price"
             name="price"
             class="light-input"
@@ -382,7 +384,7 @@ export default {
       tool: null,
       statuses,
       validations: {
-        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+        modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
     }
   },

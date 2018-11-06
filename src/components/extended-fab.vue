@@ -58,13 +58,17 @@ export default {
       color: white;
       font-weight: 500;
       height: 50px;
-      font-size: 17px;
       display: flex;
-      justify-content: space-around;
+      justify-content: flex-start;
       align-items: center;
       border: none;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
       font-size: 18px;
+
+      .efab-text {
+        margin-left: auto;
+        margin-right: auto;
+      }
 
       &.outlined {
         color: $renascent-red;
@@ -88,5 +92,24 @@ export default {
         margin-right: 5px;
         font-size: 25px;
       }
+  }
+
+  // DESKTOP
+
+  .desktop {
+    .extended-fab {
+      border-radius: 5px;
+      font-size: 14px;
+      padding: 0px 5px;
+      height: 40px;
+      width: 158px;
+
+      .fab-icon-container {
+        font-size: 20px;
+        margin-right: 0px;
+        float: left;
+        margin-left: 5px;
+      }
+    }
   }
 </style>

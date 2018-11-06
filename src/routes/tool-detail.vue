@@ -705,7 +705,6 @@ export default {
     .actions {
       display: flex;
       flex: 0 1 auto;
-      justify-content: space-around;
       margin-top: 10px;
       z-index: 1;
 
@@ -749,7 +748,7 @@ export default {
 
     .card {
       position: relative;
-      width: calc(100vw - 15px);
+      width: calc(100% - 15px);
       margin-left: auto;
       margin-right: auto;
       background-color: white;
@@ -910,6 +909,36 @@ export default {
     position: absolute;
     bottom: 75px;
     right: 20px;
+  }
+}
+
+// MOBILE
+
+.mobile {
+  .actions {
+    justify-content: space-around;
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  .actions {
+    justify-content: center;
+
+    .action-btn {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+
+  .cards {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    .card {
+      max-width: 400px;
+    }
   }
 }
 </style>

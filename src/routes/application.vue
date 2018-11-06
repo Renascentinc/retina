@@ -1,7 +1,7 @@
 <template>
   <div
-    class="main-application"
-    :class="$mq">
+    :class="$mq"
+    class="main-application">
     <vue-drawer-layout
       ref="drawer"
       :drawer-width="270"
@@ -110,7 +110,7 @@ export default {
 
   data () {
     return {
-      window: window,
+      window: window
     }
   },
 

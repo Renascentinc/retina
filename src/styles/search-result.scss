@@ -22,7 +22,6 @@ $tool-search-result-border-radius: 3px;
       flex: 1 1 auto;
 
       .title {
-        font-size: 22px;
         font-weight: 900;
         margin-bottom: 5px;
       }
@@ -30,6 +29,21 @@ $tool-search-result-border-radius: 3px;
       .subtitle {
         margin-right: 8px;
         font-weight: 900;
+      }
+    }
+  }
+}
+
+// MOBILE
+
+.mobile {
+  .search-result {
+    .title {
+      font-size: 22px;
+    }
+
+    .row {
+      .subtitle {
         font-size: 15px;
       }
     }
@@ -41,7 +55,13 @@ $tool-search-result-border-radius: 3px;
 .desktop {
   .search-result {
     max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
+
+    .title {
+      font-size: 18px;
+    }
+
+    .row {
+      font-size: 14px;
+    }
   }
 }

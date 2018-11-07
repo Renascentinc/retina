@@ -320,12 +320,16 @@ $login-input-border-radius: 5px;
     .name-container {
       display: flex;
       flex-direction: column;
-      padding-left: 100px;
+      padding-left: 80px;
 
       .retina-name {
         color: $renascent-dark-gray;
         font-weight: 700;
         font-size: 50px;
+        z-index: 10;
+        background-color: white;
+        border-radius: 50px;
+        padding-left: 20px;
       }
 
       .renascent-name {
@@ -333,6 +337,7 @@ $login-input-border-radius: 5px;
         margin-bottom: 10px;
         font-weight: 500;
         font-size: 18px;
+        padding-left: 20px;
       }
     }
   }
@@ -422,6 +427,12 @@ $login-input-border-radius: 5px;
     display: flex;
     width: 90%;
     justify-content: space-around;
+  }
+
+  .reset-password {
+    margin-right: 20px;
+    font-size: 16px;
+    color: $renascent-red;
   }
 }
 </style>

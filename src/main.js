@@ -20,7 +20,20 @@ import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
 import VueSVGIcon from 'vue-svgicon'
 import VueJsModal from 'vue-js-modal'
-import Toasted from 'vue-toasted'
+import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert'
+
+function toast ({title, message, type, timeout, cb}) {
+  if (type === VueNotifications.types.warn) type = 'warning'
+  return swal(title, message, type)
+}
+
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -62,7 +75,7 @@ const authLink = setContext(({ operationName }, { headers = {} }) => {
 
 const errorLink = onError(({ graphQLErrors = [] }) => {
   graphQLErrors.map(({ extensions: { code } }) => {
-    if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login') {
+    if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
       window.localStorage.removeItem('token')
       window.confirm('Your Session Has Expired. Click Ok To Return To Log In')
       router.push({ path: '/login' })
@@ -88,7 +101,7 @@ Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
-Vue.use(Toasted)
+Vue.use(VueNotifications, options)
 Vue.use(VueJsModal, {
   dialog: true
 })
@@ -113,7 +126,8 @@ const dictionary = {
       serialNumber: 'serial number',
       modelYear: 'model year',
       purchasedFrom: 'purchased from',
-      price: 'price'
+      price: 'price',
+      passwordResetEmail: 'email'
     }
   }
 }

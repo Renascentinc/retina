@@ -6,6 +6,7 @@ import LandingPage from './routes/landing-page'
 
 // lazy loaded routes
 const Tools = () => import('./routes/tools')
+const PasswordReset = () => import('./routes/password-reset')
 const Configuration = () => import('./routes/configuration')
 const History = () => import('./routes/history')
 const UserDetail = () => import('./routes/user-detail')
@@ -21,7 +22,13 @@ export default new Router({
   routes: [
     {
       path: '/login',
-      component: Login
+      component: Login,
+      name: 'login'
+    },
+    {
+      path: '/password-reset',
+      component: PasswordReset,
+      name: 'passwordReset'
     },
     {
       path: '/',

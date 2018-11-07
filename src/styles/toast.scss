@@ -1,0 +1,23 @@
+.swal-modal {
+  width: calc(100% - 30px);
+  max-width: 350px;
+
+  .swal-icon {
+    margin-top: 15px !important;
+    margin: 5px auto;
+  }
+
+  .swal-text {
+    text-align: center;
+  }
+
+  .swal-footer {
+    display: flex;
+    justify-content: center;
+
+    .swal-button {
+      background-color: $renascent-dark-gray;
+      outline: none;
+    }
+  }
+}

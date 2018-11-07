@@ -65,7 +65,9 @@
       </div>
 
       <div class="login-action-row">
-        <button class="reset-password">
+        <button
+          class="reset-password"
+          @click="() => $modal.show('password-reset-modal')">
           RESET PASSWORD
         </button>
 
@@ -77,6 +79,54 @@
         </extended-fab>
       </div>
     </div>
+
+    <modal
+      :width="300"
+      :height="220"
+      class="ready-to-scan-modal"
+      name="password-reset-modal">
+      <div
+        v-if="!loading"
+        class="modal-content">
+        <span class="header-text"> RESET PASSWORD </span>
+
+        <div class="input-group-container">
+          <input
+            v-validate="'required|email'"
+            v-model="passwordResetEmail"
+            name="passwordResetEmail"
+            class="light-input password-reset-email-input"
+            placeholder="email address">
+
+          <span
+            class="error">
+            {{ errors.first('passwordResetEmail') }}
+          </span>
+        </div>
+
+        <div class="request-action-container">
+          <extended-fab
+            :on-click="() => $modal.hide('password-reset-modal')"
+            icon-class=""
+            class="request-reset-btn"
+            button-text="CANCEL">
+          </extended-fab>
+
+          <extended-fab
+            :on-click="requestPasswordReset"
+            :disabled="!passwordResetEmail"
+            icon-class=""
+            class="request-reset-btn"
+            button-text="SUBMIT">
+          </extended-fab>
+        </div>
+      </div>
+      <div
+        v-if="loading"
+        class="modal-content">
+        <div class="loading"></div>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -85,7 +135,8 @@
 import gql from 'graphql-tag'
 import ApiStatusCodes from '../utils/api-status-codes'
 import InputWithIcon from '../components/input-with-icon'
-import ExtendedFab from '../components/extended-fab.vue'
+import ExtendedFab from '../components/extended-fab'
+import VueNotifications from 'vue-notifications'
 
 export default {
   name: 'Login',
@@ -131,7 +182,22 @@ export default {
       domain: '@renascentinc.com',
       password: '',
       currentState: states.INITIAL,
+      passwordResetEmail: '',
+      loading: false,
       states
+    }
+  },
+
+  notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'SUCCESS',
+      message: 'Instructions for resetting your password have been sent to your email'
+    },
+    showErrorMsg: {
+      type: VueNotifications.types.error,
+      title: 'RESET FAILURE',
+      message: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support'
     }
   },
 
@@ -146,6 +212,33 @@ export default {
   },
 
   methods: {
+    requestPasswordReset () {
+      this.$validator.validate().then(result => {
+        if (result) {
+          this.loading = true
+          this.$apollo.mutate({
+            mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
+              requestPasswordReset(email: $email)
+            }`,
+            variables: {
+              email: this.passwordResetEmail
+            }
+          }).then(response => {
+            this.$modal.hide('password-reset-modal')
+            this.loading = false
+            if (response.data.requestPasswordReset) {
+              this.showSuccessMsg()
+            } else {
+              this.showErrorMsg()
+            }
+          }).catch(() => {
+            this.loading = false
+            this.showErrorMsg()
+          })
+        }
+      })
+    },
+
     attemptUserLogin () {
       this.currentState = this.states.AUTHENTICATING
 
@@ -233,6 +326,7 @@ $login-input-border-radius: 5px;
         color: $renascent-dark-gray;
         font-weight: 700;
         font-size: 50px;
+        z-index: 10;
       }
 
       .renascent-name {
@@ -293,6 +387,48 @@ $login-input-border-radius: 5px;
     .login-btn {
       width: 130px;
     }
+  }
+
+  .password-reset-email-input {
+    width: 200px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .input-group-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
+    height: 16px;
+  }
+
+  .request-reset-btn {
+    height: 40px;
+  }
+
+  .loading {
+    height: 80px;
+    width: 80px;
+
+    &::after {
+      background-color: white;
+    }
+  }
+
+  .request-action-container {
+    display: flex;
+    width: 90%;
+    justify-content: space-around;
+  }
+
+  .reset-password {
+    margin-right: 20px;
+    font-size: 16px;
+    color: $renascent-red;
   }
 }
 </style>

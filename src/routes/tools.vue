@@ -192,12 +192,7 @@ export default {
       }`,
 
       variables () {
-        let options = {
-          pagingParameters: {
-            page_number: this.pageNumber,
-            page_size: this.pageSize
-          }
-        }
+        let options = {}
 
         if (this.searchString) {
           options.query = this.searchString

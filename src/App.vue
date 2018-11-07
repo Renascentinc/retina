@@ -25,24 +25,6 @@
         </button>
       </div>
     </modal>
-
-    <modal
-      :width="300"
-      :height="120"
-      class="nfc-not-supported-modal"
-      name="nfc-not-supported-modal">
-      <div class="modal-content">
-        <span class="header-text"> NFC Not Available </span>
-
-        <span class="body-text">Please Use The Mobile App on an iOS or Android Phone</span>
-
-        <button
-          class="cancel-btn"
-          @click="() => $modal.hide('nfc-not-supported-modal')">
-          CLOSE
-        </button>
-      </div>
-    </modal>
   </div>
 </template>
 

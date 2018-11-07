@@ -1,285 +1,329 @@
 <template>
   <div class="page tool-detail-page">
-    <div class="header">
-      <router-link
-        class="fas fa-arrow-left backarrow"
-        to="/tools">
-      </router-link>
-
-      <span class="toolid">#{{ getTool.id }} </span>
-
+    <div class="info-menu-container">
       <div
-        v-if="!editState"
-        class="name">
-        {{ brand }} {{ type }}
-      </div>
-
-      <span
-        :class="statusClass"
-        class="tool-status">
-        {{ formattedStatus }}
-      </span>
-
-      <div
-        v-if="editState"
-        class="input-group-container">
-        <v-select
-          v-validate="'required'"
-          :options="brandOptions"
-          v-model="newBrand"
-          name="brand"
-          label="name"
-          class="dark-input"
-          placeholder="Brand">
-          <template
-            slot="no-options"
-            slot-scope="props">
-            <button
-              class="no-options-btn"
-              @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
-              Set Brand To "{{ props.value }}"
-            </button>
-          </template>
-        </v-select>
-        <div class="error-container">
-          <span
-            v-show="errors.has('brand')"
-            class="error">
-            {{ errors.first('brand') }}
-          </span>
-        </div>
-      </div>
-
-      <div
-        v-if="editState"
-        class="input-group-container">
-        <v-select
-          v-validate="'required'"
-          v-model="newType"
-          :options="typeOptions"
-          name="type"
-          label="name"
-          class="dark-input"
-          placeholder="Type">
-          <template
-            slot="no-options"
-            slot-scope="props">
-            <button
-              class="no-options-btn"
-              @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
-              Set Type To "{{ props.value }}"
-            </button>
-          </template>
-        </v-select>
-        <div class="error-container">
-          <span
-            v-show="errors.has('type')"
-            class="error">
-            {{ errors.first('type') }}
-          </span>
-        </div>
-      </div>
-
-      <div
-        v-if="isTransferable"
-        class="actions">
-        <button-dropdown
-          :on-click="updateStatus"
-          :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          button-text="EDIT STATUS">
-        </button-dropdown>
-
-        <button
+        class="floating-action-bar">
+        <extended-fab
+          v-if="$mq === 'desktop'"
+          icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
-          @click="toggleTransferStatus">
-          <i class="fas fa-exchange-alt action-icon"></i>
-          <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
-        </button>
+          :on-click="transitionToTools"
+          :outline-display="true"
+          button-text="BACK">
+        </extended-fab>
+
+        <extended-fab
+          v-if="canEdit && $mq === 'desktop'"
+          :on-click="toggleEditState"
+          :disabled="changingStatus"
+          :icon-class="editState ? 'fa-save' : 'fa-pen'"
+          :button-text="editState ? 'SAVE CHANGES' : 'EDIT TOOL'">
+        </extended-fab>
+
+        <extended-fab
+          v-if="$mq === 'desktop' && isTransferable"
+          icon-class="fa-exchange-alt"
+          class="action-btn transfer-btn"
+          :disabled="editState || changingStatus"
+          :on-click="toggleTransferStatus"
+          :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'">
+        </extended-fab>
+
+        <button-dropdown
+          v-if="$mq === 'desktop' && isTransferable"
+          :on-click="updateStatus"
+          :disabled="editState"
+          :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
+          button-text="CHANGE STATUS"
+          :flag="toggleChangingStatus">
+        </button-dropdown>
       </div>
-    </div>
-    <div class="cards">
-      <div class="card owner-card">
-        <div class="card-title">
-          Owner
-        </div>
-        <div class="card-details owner-details">
-          <div class="user-symbol">
-            <i
-              :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
-              class="fas fa-user">
-            </i>
+      <div>
+        <div class="header">
+          <router-link
+            v-if="$mq === 'mobile'"
+            class="fas fa-arrow-left backarrow"
+            to="/tools">
+          </router-link>
+
+          <span class="toolid">#{{ getTool.id }} </span>
+
+          <div
+            v-if="!editState"
+            class="name">
+            {{ brand }} {{ type }}
           </div>
-          <div class="owner-name">
-            <div
-              v-if="owner.type === 'LOCATION'"
-              class="owner-location">
-              {{ owner.name }}
+
+          <div
+            v-if="editState"
+            class="input-group-container">
+            <v-select
+              v-validate="'required'"
+              :options="brandOptions"
+              v-model="newBrand"
+              name="brand"
+              label="name"
+              class="dark-input"
+              placeholder="Brand">
+              <template
+                slot="no-options"
+                slot-scope="props">
+                <button
+                  class="no-options-btn"
+                  @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                  Set Brand To "{{ props.value }}"
+                </button>
+              </template>
+            </v-select>
+            <div class="error-container">
+              <span
+                v-show="errors.has('brand')"
+                class="error">
+                {{ errors.first('brand') }}
+              </span>
             </div>
-            <div
-              v-if="owner.type === 'USER'"
-              class="owner-user">
-              <span> {{ owner.first_name }} </span>
-              <span> {{ owner.last_name }} </span>
+          </div>
+
+          <div
+            v-if="editState"
+            class="input-group-container">
+            <v-select
+              v-validate="'required'"
+              v-model="newType"
+              :options="typeOptions"
+              name="type"
+              label="name"
+              class="dark-input"
+              placeholder="Type">
+              <template
+                slot="no-options"
+                slot-scope="props">
+                <button
+                  class="no-options-btn"
+                  @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                  Set Type To "{{ props.value }}"
+                </button>
+              </template>
+            </v-select>
+            <div class="error-container">
+              <span
+                v-show="errors.has('type')"
+                class="error">
+                {{ errors.first('type') }}
+              </span>
             </div>
           </div>
-          <div class="contact-buttons">
-            <fab
-              :on-click="phoneCall"
-              :disabled="!phoneNumber"
-              class="call-btn"
-              icon-class="fa-phone">
-            </fab>
 
-            <div class="spacer"></div>
+          <span
+            :class="statusClass"
+            class="tool-status">
+            {{ formattedStatus }}
+          </span>
 
-            <fab
-              :on-click="sendEmail"
-              :disabled="!email"
-              class="email-btn"
-              icon-class="fa-envelope">
-            </fab>
+          <div
+            v-if="isTransferable"
+            class="actions">
+            <button-dropdown
+              v-if="$mq === 'mobile'"
+              :on-click="updateStatus"
+              :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
+              button-text="CHANGE STATUS">
+            </button-dropdown>
+
+            <button
+              v-if="$mq === 'mobile'"
+              class="action-btn transfer-btn"
+              @click="toggleTransferStatus">
+              <i class="fas fa-exchange-alt action-icon"></i>
+              <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
+            </button>
           </div>
         </div>
-      </div>
-      <div
-        class="card general-card">
-        <div class="card-title">
-          General
-        </div>
-        <div class="card-details general-details">
-          <span class="general-label">Retina ID</span>
-          <span class="general-data"> {{ getTool.id || '-' }} </span>
+        <div class="cards">
+          <div class="card owner-card">
+            <div class="card-title">
+              Owner
+            </div>
+            <div class="card-details owner-details">
+              <div class="user-symbol">
+                <i
+                  :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
+                  class="fas fa-user">
+                </i>
+              </div>
+              <div class="owner-name">
+                <div
+                  v-if="owner.type === 'LOCATION'"
+                  class="owner-location">
+                  {{ owner.name }}
+                </div>
+                <div
+                  v-if="owner.type === 'USER'"
+                  class="owner-user">
+                  <span> {{ owner.first_name }} </span>
+                  <span> {{ owner.last_name }} </span>
+                </div>
+              </div>
+              <div class="contact-buttons">
+                <fab
+                  :on-click="phoneCall"
+                  :disabled="!phoneNumber"
+                  class="call-btn"
+                  icon-class="fa-phone">
+                </fab>
 
-          <span class="general-label">Serial Number</span>
-          <span
-            v-if="!editState"
-            class="general-data"> {{ getTool.serial_number || '-' }} </span>
+                <div class="spacer"></div>
 
-          <input
-            v-validate="'required'"
-            v-if="editState"
-            v-model="newSerial"
-            name="serial"
-            class="general-data light-input">
-          <div class="error-container">
-            <span
-              v-show="errors.has('serial')"
-              class="error">
-              {{ errors.first('serial') }}
-            </span>
+                <fab
+                  :on-click="sendEmail"
+                  :disabled="!email"
+                  class="email-btn"
+                  icon-class="fa-envelope">
+                </fab>
+              </div>
+            </div>
+          </div>
+          <div
+            class="card general-card">
+            <div class="card-title">
+              General
+            </div>
+            <div class="card-details general-details">
+              <span class="general-label">Retina ID</span>
+              <span class="general-data"> {{ getTool.id || '-' }} </span>
+
+              <span class="general-label">Serial Number</span>
+              <span
+                v-if="!editState"
+                class="general-data"> {{ getTool.serial_number || '-' }} </span>
+
+              <input
+                v-validate="'required'"
+                v-if="editState"
+                v-model="newSerial"
+                name="serial"
+                class="general-data light-input">
+              <div class="error-container">
+                <span
+                  v-show="errors.has('serial')"
+                  class="error">
+                  {{ errors.first('serial') }}
+                </span>
+              </div>
+
+              <span class="general-label">Model Number</span>
+              <span
+                v-if="!editState"
+                class="general-data"> {{ getTool.model_number || '-' }} </span>
+
+              <input
+                v-validate="'required'"
+                v-if="editState"
+                v-model="newModel"
+                name="model"
+                class="general-data light-input">
+              <div class="error-container">
+                <span
+                  v-show="errors.has('model')"
+                  class="error">
+                  {{ errors.first('model') }}
+                </span>
+              </div>
+
+              <span class="general-label">Model Year</span>
+              <span
+                v-if="!editState"
+                class="general-data"> {{ getTool.year || '-' }} </span>
+
+              <input
+                v-validate="validations.modelYear"
+                v-if="editState"
+                v-model="newYear"
+                name="year"
+                type="number"
+                class="general-data light-input">
+              <div class="error-container">
+                <span
+                  v-show="errors.has('year')"
+                  class="error">
+                  {{ errors.first('year') }}
+                </span>
+              </div>
+
+              <span class="general-label">Purchased From</span>
+              <span
+                v-if="!editState"
+                class="general-data"> {{ purchasedFrom }} </span>
+
+              <v-select
+                v-if="editState"
+                v-model="newPurchasedFrom"
+                :options="purchasedFromOptions"
+                label="name"
+                class="general-data dark-input"
+                placeholder="Purchased From">
+                <template
+                  slot="no-options"
+                  slot-scope="props">
+                  <button
+                    class="no-options-btn"
+                    @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                    Set Type To "{{ props.value }}"
+                  </button>
+                </template>
+              </v-select>
+
+              <span class="general-label">Purchase Date</span>
+              <span
+                v-if="!editState"
+                class="general-data"> {{ formattedDate(getTool.date_purchased) }} </span>
+
+              <v-date-picker
+                v-if="editState"
+                v-model="newPurchaseDate"
+                :input-props="{ readonly: true }"
+                class="general-data"
+                popover-direction="top"
+                mode="single">
+              </v-date-picker>
+
+              <span class="general-label">Purchase Price</span>
+              <span
+                v-if="!editState"
+                class="general-data"> ${{ formattedPrice }} </span>
+
+              <input
+                v-if="editState"
+                v-model="newPrice"
+                name="newPrice"
+                class="light-input"
+                placeholder="Price"
+                type="number">
+            </div>
+
           </div>
 
-          <span class="general-label">Model Number</span>
-          <span
-            v-if="!editState"
-            class="general-data"> {{ getTool.model_number || '-' }} </span>
-
-          <input
-            v-validate="'required'"
-            v-if="editState"
-            v-model="newModel"
-            name="model"
-            class="general-data light-input">
-          <div class="error-container">
-            <span
-              v-show="errors.has('model')"
-              class="error">
-              {{ errors.first('model') }}
-            </span>
+          <div
+            class="card photo-card">
+            <div class="card-title">
+              Photo
+            </div>
+            <div class="photo-box">
+              <img
+                v-lazy="`${getTool.photo}`"
+                v-if="getTool.photo"
+                class="image">
+              <i
+                v-if="!getTool.photo"
+                class="fas fa-image no-image">
+              </i>
+            </div>
           </div>
-
-          <span class="general-label">Model Year</span>
-          <span
-            v-if="!editState"
-            class="general-data"> {{ getTool.year || '-' }} </span>
-
-          <input
-            v-validate="validations.modelYear"
-            v-if="editState"
-            v-model="newYear"
-            name="year"
-            type="number"
-            class="general-data light-input">
-          <div class="error-container">
-            <span
-              v-show="errors.has('year')"
-              class="error">
-              {{ errors.first('year') }}
-            </span>
-          </div>
-
-          <span class="general-label">Purchased From</span>
-          <span
-            v-if="!editState"
-            class="general-data"> {{ purchasedFrom }} </span>
-
-          <v-select
-            v-if="editState"
-            v-model="newPurchasedFrom"
-            :options="purchasedFromOptions"
-            label="name"
-            class="general-data dark-input"
-            placeholder="Purchased From">
-            <template
-              slot="no-options"
-              slot-scope="props">
-              <button
-                class="no-options-btn"
-                @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
-                Set Type To "{{ props.value }}"
-              </button>
-            </template>
-          </v-select>
-
-          <span class="general-label">Purchase Date</span>
-          <span
-            v-if="!editState"
-            class="general-data"> {{ formattedDate(getTool.date_purchased) }} </span>
-
-          <v-date-picker
-            v-if="editState"
-            v-model="newPurchaseDate"
-            :input-props="{ readonly: true }"
-            class="general-data"
-            popover-direction="top"
-            mode="single">
-          </v-date-picker>
-
-          <span class="general-label">Purchase Price</span>
-          <span
-            v-if="!editState"
-            class="general-data"> ${{ formattedPrice }} </span>
-
-          <input
-            v-if="editState"
-            v-model="newPrice"
-            name="newPrice"
-            class="light-input"
-            placeholder="Price"
-            type="number">
-        </div>
-
-      </div>
-
-      <div
-        class="card photo-card">
-        <div class="card-title">
-          Photo
-        </div>
-        <div class="photo-box">
-          <img
-            v-lazy="`${getTool.photo}`"
-            v-if="getTool.photo"
-            class="image">
-          <i
-            v-if="!getTool.photo"
-            class="fas fa-image no-image">
-          </i>
         </div>
       </div>
     </div>
     <fab
-      v-if="canEdit"
+      v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit"></fab>
@@ -290,6 +334,7 @@
 import gql from 'graphql-tag'
 import Avatar from 'vue-avatar'
 import Fab from '../components/fab.vue'
+import ExtendedFab from '../components/extended-fab.vue'
 import vSelect from '../components/select'
 import VueLazyload from 'vue-lazyload'
 import ConfigurableItems from '../utils/configurable-items.js'
@@ -301,6 +346,7 @@ export default {
   components: {
     Avatar,
     Fab,
+    ExtendedFab,
     ButtonDropdown,
     VueLazyload,
     vSelect
@@ -373,6 +419,7 @@ export default {
 
   data () {
     return {
+      changingStatus: false,
       getTool: {},
       editState: false,
       newBrand: null,
@@ -383,6 +430,7 @@ export default {
       newPurchasedFrom: null,
       newPurchaseDate: null,
       newPrice: null,
+
       window: window,
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
@@ -471,6 +519,14 @@ export default {
   },
 
   methods: {
+    toggleChangingStatus () {
+      this.changingStatus = !this.changingStatus
+    },
+
+    transitionToTools () {
+      this.$router.push({ name: 'tools' })
+    },
+
     formattedDate (date) {
       let datePurchased = date
       return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US', { timeZone: 'UTC' }) : '-'
@@ -636,275 +692,281 @@ export default {
   display: flex;
   flex-direction: column;
 
-  .header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 12px;
-    background-color: white;
-    border-radius: 0px 0px 7px 7px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
-    color: $dark-text;
-    position: relative;
-    z-index: 1;
-    flex-shrink: 0;
+  .info-menu-container {
+    height: 100%;
+    background-color: $background-light-gray;
 
-    .backarrow {
-      position: absolute;
-      top: 9px;
-      left: 23px;
-      color: $renascent-red;
-      font-size: 30px;
-      width: 27px;
-      z-index: -10;
-    }
-
-    .toolid {
+    .header {
+      width: 100%;
       display: flex;
-      flex: 1 0 auto;
-      font-size: 25px;
-      font-weight: 600;
-      justify-content: center;
-      padding-top: 9px;
-      margin-left: auto;
-      margin-right: auto;
-      z-index: 4;
-    }
-
-    .name {
-      font-size: 33px;
-      font-weight: 900;
-      text-align: center;
-      margin-top: 4px;
-      z-index: 4;
-    }
-
-    .tool-status {
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-      z-index: 4;
-    }
-
-    .input-group-container {
-      width: 300px;
-      margin-left: auto;
-      margin-right: auto;
-
-      .dark-input {
-        height: 50px;
-
-        .dropdown-toggle {
-          margin: 10px;
-          font-size: 22px;
-          height: 50px;
-        }
-      }
-    }
-
-    .actions {
-      display: flex;
-      flex: 0 1 auto;
-      margin-top: 10px;
-      z-index: 1;
-
-      .transfer-btn {
-        z-index: -6;
-      }
-
-      .action-btn {
-        background-color: $renascent-red;
-        height: 43px;
-        width: 154px;
-        border: none !important;
-        border-radius: 5px;
-        color: white;
-        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-        padding: 0px;
-        display: flex;
-        align-content: center;
-        // z-index: -10;
-
-        .action-icon {
-          font-size: 18px;
-          padding-left: 12px;
-          float: left;
-          margin-top: auto;
-          margin-bottom: auto;
-        }
-
-        .action-title {
-          font-size: 13px;
-          flex: 1 0 auto;
-          margin-top: auto;
-          margin-bottom: auto;
-        }
-      }
-    }
-  }
-
-  .cards {
-    overflow-y: auto;
-
-    .card {
-      position: relative;
-      width: calc(100% - 15px);
-      margin-left: auto;
-      margin-right: auto;
+      flex-direction: column;
+      padding-bottom: 12px;
       background-color: white;
-      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-      z-index: 0;
-      margin-top: 6px;
-      margin-bottom: 10px;
-      border-radius: 3px;
+      border-radius: 0px 0px 7px 7px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
+      color: $dark-text;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
 
-      .card-title {
-        font-size: 25px;
-        font-weight: 900;
-        color: $dark-text;
-        padding-left: 14px;
-        padding-top: 6px;
+      .backarrow {
+        position: absolute;
+        top: 9px;
+        left: 23px;
+        color: $renascent-red;
+        font-size: 30px;
+        width: 27px;
+        z-index: -10;
       }
 
-      .card-details {
-        padding-left: 14px;
-        padding-right: 14px;
-        padding-top: 10px;
-      }
-    }
-
-    .general-card {
-      padding-bottom: 10px;
-
-      .general-details {
+      .toolid {
         display: flex;
-        flex-direction: column;
-        font-size: 16px;
-
-        .general-label {
-          padding-top: 10px;
-          color: $dark-avatar;
-          font-weight: 400;
-        }
-
-        .general-data {
-          color: $dark-text;
-          font-weight: 600;
-        }
-
-        .error-container {
-          height: auto;
-          padding-left: 10px;
-          color: $renascent-red;
-          font-size: 14px;
-        }
-
-        .light-input {
-          font-size: 16px;
-          height: 30px;
-        }
-
-        .dark-input, .popover-container {
-          font-size: 18px;
-          height: 40px;
-
-          input {
-            font-size: 18px;
-            height: 40px;
-          }
-        }
-      }
-    }
-
-    .photo-card {
-      padding-bottom: 11px;
-
-      .photo-box {
-        width: calc(100% - 23px);
+        flex: 1 0 auto;
+        font-size: 25px;
+        font-weight: 600;
+        justify-content: center;
+        padding-top: 9px;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 10px;
-        overflow: hidden;
+        z-index: 4;
+      }
 
-        .image {
-          height: 100%;
-          width: 100%;
-          border-radius: 2px;
+      .name {
+        font-size: 33px;
+        font-weight: 900;
+        text-align: center;
+        margin-top: 4px;
+        z-index: 4;
+      }
+
+      .tool-status {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        z-index: 4;
+      }
+
+      .input-group-container {
+        width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .dark-input {
+          height: 50px;
+
+          .dropdown-toggle {
+            margin: 10px;
+            font-size: 22px;
+            height: 50px;
+          }
+        }
+      }
+
+      .actions {
+        display: flex;
+        flex: 0 1 auto;
+        margin-top: 10px;
+        z-index: 1;
+
+        .transfer-btn {
+          z-index: -6;
         }
 
-        .no-image {
-          color: $background-dark-gray;
-          font-size: 60px;
-          width: 100%;
-          text-align: center;
-          margin-top: 20px;
-          margin-bottom: 20px;
+        .action-btn {
+          background-color: $renascent-red;
+          height: 43px;
+          width: 154px;
+          border: none !important;
+          border-radius: 5px;
+          color: white;
+          box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+          padding: 0px;
+          display: flex;
+          align-content: center;
+          // z-index: -10;
+
+          .action-icon {
+            font-size: 18px;
+            padding-left: 12px;
+            float: left;
+            margin-top: auto;
+            margin-bottom: auto;
+          }
+
+          .action-title {
+            font-size: 13px;
+            flex: 1 0 auto;
+            margin-top: auto;
+            margin-bottom: auto;
+          }
         }
       }
     }
 
-    .owner-card {
-      padding-bottom: 17px;
+    .cards {
+      overflow-y: auto;
 
-      .owner-details {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+      .card {
+        position: relative;
+        width: calc(100% - 15px);
+        margin-left: auto;
+        margin-right: auto;
+        background-color: white;
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+        z-index: 0;
+        margin-top: 6px;
+        margin-bottom: 10px;
+        border-radius: 3px;
 
-        .owner-name {
-          display: flex;
-          flex-direction: column;
-          font-size: 23px;
-          font-weight: 800;
-          color: $renascent-dark-gray;
-          margin-left: 11px;
-
-          .owner-user {
-            display: flex;
-            flex-direction: column;
-          }
+        .card-title {
+          font-size: 25px;
+          font-weight: 900;
+          color: $dark-text;
+          padding-left: 14px;
+          padding-top: 6px;
         }
 
-        .user-symbol {
-          height: 44px;
-          width: 44px;
-          border-radius: 50%;
-          background-color: $dark-avatar;
-          color: white;
-          margin: 0px;
-          font-size: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-shrink: 0;
+        .card-details {
+          padding-left: 14px;
+          padding-right: 14px;
+          padding-top: 10px;
         }
       }
 
-      .contact-buttons {
-        margin-left: auto;
-        display: flex;
-        justify-content: flex-end;
-        flex-direction: row;
-        flex-wrap: wrap;
+      .general-card {
+        padding-bottom: 10px;
 
-        .fab {
-          margin: 11px;
+        .general-details {
+          display: flex;
+          flex-direction: column;
+          font-size: 16px;
+
+          .general-label {
+            padding-top: 10px;
+            color: $dark-avatar;
+            font-weight: 400;
+          }
+
+          .general-data {
+            color: $dark-text;
+            font-weight: 600;
+          }
+
+          .error-container {
+            height: auto;
+            padding-left: 10px;
+            color: $renascent-red;
+            font-size: 14px;
+          }
+
+          .light-input {
+            font-size: 16px;
+            height: 30px;
+          }
+
+          .dark-input, .popover-container {
+            font-size: 18px;
+            height: 40px;
+
+            input {
+              font-size: 18px;
+              height: 40px;
+            }
+          }
+        }
+      }
+
+      .photo-card {
+        padding-bottom: 11px;
+
+        .photo-box {
+          width: calc(100% - 23px);
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: 10px;
+          overflow: hidden;
+
+          .image {
+            height: 100%;
+            width: 100%;
+            border-radius: 2px;
+          }
+
+          .no-image {
+            color: $background-dark-gray;
+            font-size: 60px;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+          }
+        }
+      }
+
+      .owner-card {
+        padding-bottom: 17px;
+
+        .owner-details {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .owner-name {
+            display: flex;
+            flex-direction: column;
+            font-size: 23px;
+            font-weight: 800;
+            color: $renascent-dark-gray;
+            margin-left: 11px;
+
+            .owner-user {
+              display: flex;
+              flex-direction: column;
+            }
+          }
+
+          .user-symbol {
+            height: 44px;
+            width: 44px;
+            border-radius: 50%;
+            background-color: $dark-avatar;
+            color: white;
+            margin: 0px;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+          }
         }
 
-        .email-btn {
-          margin-left: 11px;
-          margin-top: 5px;
-          margin-bottom: 5px;
-        }
+        .contact-buttons {
+          margin-left: auto;
+          display: flex;
+          justify-content: flex-end;
+          flex-direction: row;
+          flex-wrap: wrap;
 
-        .call-btn {
-          margin-right: 11px;
-          margin-bottom: 5px;
-          margin-top: 5px;
+          .fab {
+            margin: 11px;
+          }
+
+          .email-btn {
+            margin-left: 11px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+          }
+
+          .call-btn {
+            margin-right: 11px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+          }
         }
       }
     }
   }
+
   .edit {
     position: absolute;
     bottom: 75px;
@@ -923,21 +985,44 @@ export default {
 // DESKTOP
 
 .desktop {
-  .actions {
-    justify-content: center;
+  .info-menu-container {
+    display: flex;
+    flex-direction: row;
 
-    .action-btn {
-      margin-left: 10px;
-      margin-right: 10px;
+    .floating-action-bar {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      max-width: 300px;
+      flex: 1 1;
+      padding-top: 80px;
+      overflow-y: auto;
+
+      .container, .extended-fab{
+        margin-left: 10px;
+        margin-top: 20px;
+      }
     }
-  }
 
-  .cards {
-    padding-left: 15px;
-    padding-right: 15px;
+    .header {
+      width: 400px;
+      padding: 0px;
 
-    .card {
-      max-width: 400px;
+      .actions {
+        justify-content: center;
+
+        .action-btn {
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+      }
+    }
+    .cards {
+
+      .card {
+        width: 400px;
+      }
     }
   }
 }

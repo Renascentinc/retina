@@ -64,6 +64,8 @@ export default {
       border: none;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
       font-size: 18px;
+      cursor: pointer;
+      flex: 0 0 auto;
 
       .efab-text {
         margin-left: auto;

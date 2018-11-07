@@ -223,6 +223,7 @@ export default {
               this.showErrorMsg()
             }
           }).catch(() => {
+            this.loading = false
             this.showErrorMsg()
           })
         }

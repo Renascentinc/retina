@@ -65,7 +65,9 @@
       </div>
 
       <div class="login-action-row">
-        <button class="reset-password">
+        <button
+          class="reset-password"
+          @click="() => $modal.show('password-reset-modal')">
           RESET PASSWORD
         </button>
 
@@ -77,6 +79,38 @@
         </extended-fab>
       </div>
     </div>
+
+    <modal
+      :width="300"
+      :height="220"
+      class="ready-to-scan-modal"
+      name="password-reset-modal">
+      <div class="modal-content">
+        <span class="header-text"> RESET PASSWORD </span>
+
+        <div class="input-group-container">
+          <input
+            v-validate="'required|email'"
+            v-model="passwordResetEmail"
+            name="passwordResetEmail"
+            class="light-input password-reset-email-input"
+            placeholder="email address">
+
+          <span
+            class="error">
+            {{ errors.first('passwordResetEmail') }}
+          </span>
+        </div>
+
+        <extended-fab
+          :on-click="requestPasswordReset"
+          :disabled="!passwordResetEmail"
+          icon-class=""
+          class="request-reset-btn"
+          button-text="REQUEST">
+        </extended-fab>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -85,7 +119,8 @@
 import gql from 'graphql-tag'
 import ApiStatusCodes from '../utils/api-status-codes'
 import InputWithIcon from '../components/input-with-icon'
-import ExtendedFab from '../components/extended-fab.vue'
+import ExtendedFab from '../components/extended-fab'
+import VueNotifications from 'vue-notifications'
 
 export default {
   name: 'Login',
@@ -131,7 +166,21 @@ export default {
       domain: '@renascentinc.com',
       password: '',
       currentState: states.INITIAL,
+      passwordResetEmail: '',
       states
+    }
+  },
+
+  notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'SUCCESS',
+      message: 'Instructions for resetting your password will be sent to your email'
+    },
+    showErrorMsg: {
+      type: VueNotifications.types.error,
+      title: 'RESET FAILURE',
+      message: 'There was an error trying to reset your password. Please try again or contact support'
     }
   },
 
@@ -146,6 +195,31 @@ export default {
   },
 
   methods: {
+    requestPasswordReset () {
+      this.$validator.validate().then(result => {
+        if (result) {
+          this.$modal.hide('password-reset-modal')
+
+          this.$apollo.mutate({
+            mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
+              requestPasswordReset(email: $email)
+            }`,
+            variables: {
+              email: this.passwordResetEmail
+            }
+          }).then(response => {
+            if (response.data.requestPasswordReset) {
+              this.showSuccessMsg()
+            } else {
+              this.showErrorMsg()
+            }
+          }).catch(() => {
+            this.showErrorMsg()
+          })
+        }
+      })
+    },
+
     attemptUserLogin () {
       this.currentState = this.states.AUTHENTICATING
 
@@ -291,6 +365,27 @@ $login-input-border-radius: 5px;
     .login-btn {
       width: 130px;
     }
+  }
+
+  .password-reset-email-input {
+    width: 200px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .input-group-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
+    height: 16px;
+  }
+
+  .request-reset-btn {
+    height: 40px;
   }
 }
 </style>

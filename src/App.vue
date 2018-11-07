@@ -26,7 +26,7 @@
       </div>
     </modal>
 
-    <modal
+    <!-- <modal
       :width="300"
       :height="120"
       class="nfc-not-supported-modal"
@@ -42,7 +42,7 @@
           CLOSE
         </button>
       </div>
-    </modal>
+    </modal> -->
   </div>
 </template>
 

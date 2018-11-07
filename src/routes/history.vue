@@ -1,19 +1,5 @@
 <template>
   <div class="page history-page">
-    <!-- <header-card title="History"> </header-card> -->
-
-    <!-- <div class="history">
-      <div class="report-card">
-        <span> Tool Transactions Reports </span>
-      </div>
-      <div class="report-card">
-        <span> Weekly Transactions Reports </span>
-      </div>
-      <div class="report-card">
-        <span> Maintenance Report </span>
-      </div>
-    </div> -->
-
     <div class="report">
       <div id="export-table">
         <div class="dt-head">
@@ -60,6 +46,12 @@
       </div>
 
       <fab
+        :on-click="printTable"
+        class="print-btn"
+        icon-class="fa-print">
+      </fab>
+
+      <fab
         :on-click="exportTable"
         class="export-btn"
         icon-class="fa-file-download">
@@ -72,6 +64,7 @@
 import Avatar from 'vue-avatar'
 import Fab from '../components/fab'
 import html2pdf from 'html2pdf.js'
+import gql from 'graphql-tag'
 
 export default {
   name: 'History',
@@ -80,12 +73,96 @@ export default {
     Fab
   },
 
+  apollo: {
+    getAllTool: gql`query tools {
+      getAllTool {
+        id
+        type {
+          id
+          name
+        }
+        brand {
+          id
+          name
+        }
+      }
+    }`,
+
+    getAllUser: gql`query user {
+      getAllUser {
+        id
+        first_name
+        last_name
+      }
+    }`,
+
+    searchToolHistory: {
+      query: gql`query search($toolHistoryFilter: ToolHistoryFilter) {
+        searchToolHistory(toolHistoryFilter: $toolHistoryFilter) {
+          tool_snapshot {
+            id
+            type {
+              id
+              name
+            }
+            brand {
+              id
+              name
+            }
+            owner {
+              ... on Location {
+                 id
+                 name
+                 type
+              }
+              ... on User {
+                 id
+                 first_name
+                 last_name
+                 type
+              }
+            }
+          }
+          timestamp
+          previous_tool_snapshot_diff {
+            type {
+              id
+              name
+            }
+            brand {
+              id
+              name
+            }
+            owner {
+              ... on Location {
+                 id
+                 name
+                 type
+              }
+              ... on User {
+                 id
+                 first_name
+                 last_name
+                 type
+              }
+            }
+          }
+          tool_action
+        }
+      }`,
+      variables: {
+        toolHistoryFilter: null
+      }
+    }
+  },
+
   data () {
     let range = []
     for (let i = 0; i < 100; i++) {
       range.push(i)
     }
     return {
+      searchToolHistory: [],
       range
     }
   },
@@ -102,6 +179,10 @@ export default {
       }
 
       html2pdf().from(element).set(opt).save()
+    },
+
+    printTable () {
+
     }
   }
 }
@@ -126,6 +207,12 @@ export default {
       position: absolute;
       bottom: 80px;
       right: 50px;
+    }
+
+    .print-btn {
+      position: absolute;
+      bottom: 80px;
+      right: 120px;
     }
   }
 }

@@ -3,39 +3,51 @@
     <div class="search-bar">
       <user-search-input :update-tags="updateFilters"></user-search-input>
     </div>
-    <div class="user-scroll-container">
-      <transition>
+    <div class="users-menu-container">
         <div
-          v-if="$apollo.queries.searchUser.loading"
-          class="loading-container">
-          <div class="loading"/>
+          class="floating-action-bar">
+          <extended-fab
+            v-if="isAdmin && $mq === 'desktop'"
+            :on-click="transitionToAddUser"
+            class="add-user-fab"
+            icon-class="fa-plus"
+            button-text="ADD USER">
+          </extended-fab>
         </div>
-      </transition>
-      <transition>
-        <div
-          v-if="!$apollo.queries.searchUser.loading && !users.length"
-          class="no-users-container">
-          <span class="no-users-text">No Users To Display</span>
-        </div>
-      </transition>
+      <div class="user-scroll-container">
+        <transition>
+          <div
+            v-if="$apollo.queries.searchUser.loading"
+            class="loading-container">
+            <div class="loading"/>
+          </div>
+        </transition>
+        <transition>
+          <div
+            v-if="!$apollo.queries.searchUser.loading && !users.length"
+            class="no-users-container">
+            <span class="no-users-text">No Users To Display</span>
+          </div>
+        </transition>
 
-      <transition-group
-        name="list"
-        tag="div">
-        <user-search-result
-          v-for="user in users"
-          :user="user"
-          :key="user.id"
-          :on-select="transitionToUserInfo"/>
-      </transition-group>
-
-      <fab
-        v-if="isAdmin"
-        :on-click="transitionToAddUser"
-        class="add-user-btn"
-        icon-class="fa-plus"/>
-
+        <transition-group
+          name="list"
+          tag="div">
+          <user-search-result
+            v-for="user in users"
+            :user="user"
+            :key="user.id"
+            :on-select="transitionToUserInfo"/>
+        </transition-group>
     </div>
+
+        <fab
+          v-if="isAdmin && $mq === 'mobile'"
+          :on-click="transitionToAddUser"
+          class="add-user-btn"
+          icon-class="fa-plus"/>
+
+      </div>
   </div>
 </template>
 
@@ -45,6 +57,7 @@ import UserSearchResult from '../components/user-search-result'
 import Fab from '../components/fab'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
+import ExtendedFab from '../components/extended-fab'
 
 export default {
   name: 'Users',
@@ -52,7 +65,8 @@ export default {
   components: {
     UserSearchInput,
     UserSearchResult,
-    Fab
+    Fab,
+    ExtendedFab
   },
 
   apollo: {
@@ -145,14 +159,22 @@ export default {
     display: flex;
   }
 
-  .user-scroll-container {
-    display: flex;
-    flex-direction: column;
+  .users-menu-container {
     height: 100%;
     background-color: $background-light-gray;
+  }
+
+  .user-scroll-container {
+    background-color: $background-light-gray;
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    flex: 1 1 auto;
+    height: 100%;
 
     .add-user-btn {
       position: absolute;
@@ -189,5 +211,38 @@ export default {
   padding-left: 7px;
   padding-bottom: 5px;
   font-size: 28px;
+}
+
+// DESKTOP
+
+.desktop {
+  .users-menu-container {
+    display: flex;
+    flex-direction: row;
+
+    .user-scroll-container {
+      padding-bottom: 5px;
+      align-content: center;
+    }
+
+    .floating-action-bar {
+      position: inherit;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
+      height: auto;
+      padding-top: 15px;
+      align-items: center;
+      flex: 1 1;
+      max-width: 300px;
+
+      .extended-fab {
+        position: inherit;
+        margin-left: 10px;
+        margin-top: 20px;
+      }
+    }
+  }
 }
 </style>

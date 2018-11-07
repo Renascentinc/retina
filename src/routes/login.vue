@@ -1,5 +1,7 @@
 <template>
-  <div class="page login-page">
+  <div
+    :class="$mq"
+    class="page login-page">
     <div class="top-panel">
       <img
         class="logo"
@@ -207,16 +209,7 @@ $login-input-border-radius: 5px;
   .top-panel {
     display: flex;
     justify-content: center;
-    align-items: flex-end;
     flex: 0 0 60%;
-
-    .logo {
-      position: absolute;
-      left: -210px;
-      top: -20px;
-      height: 60vh;
-      width: 60vh;
-    }
 
     .name-container {
       display: flex;
@@ -286,6 +279,67 @@ $login-input-border-radius: 5px;
 
     .login-btn {
       width: 130px;
+    }
+  }
+}
+
+// MOBILE
+
+.mobile {
+  .top-panel {
+    align-items: flex-end;
+
+    .logo {
+      position: absolute;
+      left: -210px;
+      top: -20px;
+      height: 60vh;
+      width: 60vh;
+    }
+
+    .name-container {
+      padding-left: 100px;
+    }
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  justify-content: space-between;
+  overflow-y: auto;
+
+  .top-panel {
+    flex: 1 0 auto;
+    align-items: center;
+    flex-direction: column;
+
+    .logo {
+      position: relative;
+      height: 150px;
+      width: 150px;
+      padding-top: 10px;
+    }
+
+    .name-container {
+      padding: 0px;
+      text-align: center;
+      padding-top: 15px;
+    }
+  }
+
+  .bottom-panel {
+    flex: 0 0 auto;
+
+    .login-action-row {
+      button, .extended-fab {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+    }
+
+    .input-with-icon {
+      flex: 1 0 auto;
     }
   }
 }

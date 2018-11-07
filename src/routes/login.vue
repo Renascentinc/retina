@@ -104,13 +104,22 @@
           </span>
         </div>
 
-        <extended-fab
-          :on-click="requestPasswordReset"
-          :disabled="!passwordResetEmail"
-          icon-class=""
-          class="request-reset-btn"
-          button-text="REQUEST">
-        </extended-fab>
+        <div class="request-action-container">
+          <extended-fab
+            :on-click="() => $modal.hide('password-reset-modal')"
+            icon-class=""
+            class="request-reset-btn"
+            button-text="CANCEL">
+          </extended-fab>
+
+          <extended-fab
+            :on-click="requestPasswordReset"
+            :disabled="!passwordResetEmail"
+            icon-class=""
+            class="request-reset-btn"
+            button-text="REQUEST">
+          </extended-fab>
+        </div>
       </div>
       <div
         v-if="loading"
@@ -407,6 +416,12 @@ $login-input-border-radius: 5px;
     &::after {
       background-color: white;
     }
+  }
+
+  .request-action-container {
+    display: flex;
+    width: 90%;
+    justify-content: space-around;
   }
 }
 </style>

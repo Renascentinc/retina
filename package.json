@@ -28,6 +28,7 @@
     "apollo-link-http": "^1.5.5",
     "cordova-android": "^7.0.0",
     "cordova-ios": "^4.5.5",
+    "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-device": "^2.0.2",
     "fastclick": "^1.0.6",
     "graphql": "^14.0.2",
@@ -79,7 +80,8 @@
         "NFC_USAGE_DESCRIPTION": ""
       },
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-device": {}
+      "cordova-plugin-device": {},
+      "cordova-plugin-camera": {}
     },
     "platforms": [
       "ios",

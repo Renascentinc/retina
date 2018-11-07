@@ -215,7 +215,9 @@
         class="new-tool-input-card">
 
         <button
-          class="dark-input add-photo">
+          :class="{ disabled: !isCameraEnabled }"
+          class="dark-input add-photo"
+          @click="attemptTakePhoto">
           <i class="fas fa-camera"></i>
           <span> Add Photo </span>
         </button>
@@ -317,6 +319,7 @@ import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
 import NfcEncode from '../components/nfc-encode'
+import VueNotifications from 'vue-notifications'
 
 export default {
   name: 'NewTool',
@@ -348,6 +351,14 @@ export default {
         sanctioned
       }
     }`
+  },
+
+  notifications: {
+    showCameraDisabledMsg: {
+      type: VueNotifications.types.info,
+      title: 'CAMERA UNAVAILABLE',
+      message: 'Photos requires the native app'
+    }
   },
 
   data () {
@@ -390,6 +401,10 @@ export default {
   },
 
   computed: {
+    isCameraEnabled () {
+      return !!window.camera
+    },
+
     userOptions () {
       return this.getAllUser.map(user => {
         user.full_name = `${user.first_name} ${user.last_name}`
@@ -415,6 +430,14 @@ export default {
   },
 
   methods: {
+    attemptTakePhoto () {
+      if (this.isCameraEnabled) {
+        window.camera.getPicture((img) => window.console.log(img))
+      } else {
+        this.showCameraDisabledMsg()
+      }
+    },
+
     getConfigurableItemsForType (type) {
       return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
     },
@@ -692,6 +715,10 @@ export default {
 
   .add-photo {
     height: 250px;
+
+    &.disabled {
+      opacity: .5;
+    }
   }
 }
 

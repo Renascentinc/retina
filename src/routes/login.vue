@@ -172,6 +172,8 @@ export default {
       }).then(result => {
         let { data: { login: { token, user } } } = result
 
+        user.full_name = `${user.first_name} ${user.last_name}`
+
         window.localStorage.setItem('token', token)
         window.localStorage.setItem('currentUser', JSON.stringify(user))
         this.$router.push({ path: '/' })

@@ -85,7 +85,9 @@
       :height="220"
       class="ready-to-scan-modal"
       name="password-reset-modal">
-      <div class="modal-content">
+      <div
+        v-if="!loading"
+        class="modal-content">
         <span class="header-text"> RESET PASSWORD </span>
 
         <div class="input-group-container">
@@ -109,6 +111,11 @@
           class="request-reset-btn"
           button-text="REQUEST">
         </extended-fab>
+      </div>
+      <div
+        v-if="loading"
+        class="modal-content">
+        <div class="loading"></div>
       </div>
     </modal>
   </div>
@@ -167,6 +174,7 @@ export default {
       password: '',
       currentState: states.INITIAL,
       passwordResetEmail: '',
+      loading: false,
       states
     }
   },
@@ -175,12 +183,12 @@ export default {
     showSuccessMsg: {
       type: VueNotifications.types.success,
       title: 'SUCCESS',
-      message: 'Instructions for resetting your password will be sent to your email'
+      message: 'Instructions for resetting your password have been sent to your email'
     },
     showErrorMsg: {
       type: VueNotifications.types.error,
       title: 'RESET FAILURE',
-      message: 'There was an error trying to reset your password. Please try again or contact support'
+      message: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support'
     }
   },
 
@@ -198,8 +206,7 @@ export default {
     requestPasswordReset () {
       this.$validator.validate().then(result => {
         if (result) {
-          this.$modal.hide('password-reset-modal')
-
+          this.loading = true
           this.$apollo.mutate({
             mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
               requestPasswordReset(email: $email)
@@ -208,6 +215,8 @@ export default {
               email: this.passwordResetEmail
             }
           }).then(response => {
+            this.$modal.hide('password-reset-modal')
+            this.loading = false
             if (response.data.requestPasswordReset) {
               this.showSuccessMsg()
             } else {
@@ -388,6 +397,15 @@ $login-input-border-radius: 5px;
 
   .request-reset-btn {
     height: 40px;
+  }
+
+  .loading {
+    height: 80px;
+    width: 80px;
+
+    &::after {
+      background-color: white;
+    }
   }
 }
 </style>

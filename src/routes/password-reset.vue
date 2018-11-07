@@ -153,6 +153,10 @@ export default {
 
   .light-input {
     font-size: 15px;
+
+    &::placeholder {
+      color: $form-placeholder-color;
+    }
   }
 
   .is-danger {

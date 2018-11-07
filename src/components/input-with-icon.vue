@@ -40,6 +40,7 @@ export default {
     max-width: 500px;
 
     input {
+      -webkit-appearance: none;
       border: none;
       outline: none;
       font-size: 15px;

@@ -320,16 +320,13 @@ $login-input-border-radius: 5px;
     .name-container {
       display: flex;
       flex-direction: column;
-      padding-left: 80px;
+      padding-left: 100px;
 
       .retina-name {
         color: $renascent-dark-gray;
         font-weight: 700;
         font-size: 50px;
         z-index: 10;
-        background-color: white;
-        border-radius: 50px;
-        padding-left: 20px;
       }
 
       .renascent-name {
@@ -337,7 +334,6 @@ $login-input-border-radius: 5px;
         margin-bottom: 10px;
         font-weight: 500;
         font-size: 18px;
-        padding-left: 20px;
       }
     }
   }

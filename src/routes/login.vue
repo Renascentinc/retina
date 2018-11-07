@@ -117,7 +117,7 @@
             :disabled="!passwordResetEmail"
             icon-class=""
             class="request-reset-btn"
-            button-text="REQUEST">
+            button-text="SUBMIT">
           </extended-fab>
         </div>
       </div>

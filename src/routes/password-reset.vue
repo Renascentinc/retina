@@ -28,6 +28,7 @@
 
       <input
         v-validate="'required|confirmed:password'"
+        v-model="confirmPassword"
         :class="{'is-danger': errors.has('password_confirmation')}"
         class="light-input"
         name="password_confirmation"
@@ -37,6 +38,7 @@
 
       <extended-fab
         :on-click="attemptPasswordReset"
+        :disabled="!password || !confirmPassword"
         icon-class=""
         button-text="RESET">
       </extended-fab>
@@ -59,7 +61,8 @@ export default {
 
   data () {
     return {
-      password: ''
+      password: '',
+      confirmPassword: ''
     }
   },
 

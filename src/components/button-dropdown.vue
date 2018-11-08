@@ -95,14 +95,15 @@ export default {
   methods: {
     clickOption (selectedOption) {
       this.onClick(selectedOption)
+      this.flag()
       this.activated = false
     },
 
     toggle () {
       if (!this.disabled) {
         this.activated = !this.activated
-        this.flag()
       }
+      this.flag()
     },
 
     filteredOptions () {

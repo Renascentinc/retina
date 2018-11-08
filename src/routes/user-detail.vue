@@ -5,10 +5,10 @@
         class="floating-action-bar">
         <extended-fab
           v-if="$mq === 'desktop'"
-          icon-class="fa-arrow-left"
-          class="action-btn transfer-btn"
           :on-click="transitionToUsers"
           :outline-display="true"
+          icon-class="fa-arrow-left"
+          class="action-btn transfer-btn"
           button-text="BACK">
         </extended-fab>
 
@@ -177,14 +177,14 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import Fab from "../components/fab";
-import ExtendedFab from "../components/extended-fab";
-import ButtonDropdown from "../components/button-dropdown";
-import Roles from "../utils/roles";
+import gql from 'graphql-tag'
+import Fab from '../components/fab'
+import ExtendedFab from '../components/extended-fab'
+import ButtonDropdown from '../components/button-dropdown'
+import Roles from '../utils/roles'
 
 export default {
-  name: "ToolDetail",
+  name: 'ToolDetail',
 
   components: {
     Fab,
@@ -207,50 +207,50 @@ export default {
           }
         }
       `,
-      variables() {
-        let options = {};
-        options.user_id = this.$router.currentRoute.params.userId;
-        return options;
+      variables () {
+        let options = {}
+        options.user_id = this.$router.currentRoute.params.userId
+        return options
       },
 
-      fetchPolicy: "cache-and-network"
+      fetchPolicy: 'cache-and-network'
     }
   },
 
-  data() {
+  data () {
     return {
       getUser: {},
       roles: Object.values(Roles),
       editState: false,
-      newFirstName: "",
-      newLastName: "",
-      newPhone: "",
-      newEmail: "",
+      newFirstName: '',
+      newLastName: '',
+      newPhone: '',
+      newEmail: '',
       changingRole: false
-    };
+    }
   },
 
   computed: {
-    isAdmin() {
+    isAdmin () {
       return (
-        JSON.parse(window.localStorage.getItem("currentUser")).role ===
+        JSON.parse(window.localStorage.getItem('currentUser')).role ===
         Roles.ADMIN
-      );
+      )
     },
 
-    canEdit() {
+    canEdit () {
       return (
         this.isAdmin ||
-        JSON.parse(window.localStorage.getItem("currentUser")).id ===
+        JSON.parse(window.localStorage.getItem('currentUser')).id ===
           this.getUser.id
-      );
+      )
     },
 
-    formattedPhone() {
-      const PhoneNumberFormatter = require("phone-number-formats");
-      return new PhoneNumberFormatter("1" + this.getUser.phone_number).format({
-        type: "domestic"
-      }).string;
+    formattedPhone () {
+      const PhoneNumberFormatter = require('phone-number-formats')
+      return new PhoneNumberFormatter('1' + this.getUser.phone_number).format({
+        type: 'domestic'
+      }).string
     }
   },
 
@@ -258,23 +258,23 @@ export default {
     toggleChangingRole () {
       this.changingRole = !this.changingRole
     },
-    transitionToUsers() {
-      this.$router.push({ name: "users" });
+    transitionToUsers () {
+      this.$router.push({ name: 'users' })
     },
 
-    toggleEditState() {
+    toggleEditState () {
       if (this.editState) {
-        this.saveUser();
+        this.saveUser()
       } else {
-        this.newFirstName = this.getUser.first_name;
-        this.newLastName = this.getUser.last_name;
-        this.newPhone = this.getUser.phone_number;
-        this.newEmail = this.getUser.email;
-        this.editState = true;
+        this.newFirstName = this.getUser.first_name
+        this.newLastName = this.getUser.last_name
+        this.newPhone = this.getUser.phone_number
+        this.newEmail = this.getUser.email
+        this.editState = true
       }
     },
 
-    saveUser() {
+    saveUser () {
       this.$validator.validate().then(result => {
         if (result) {
           this.$apollo
@@ -307,15 +307,15 @@ export default {
             })
             .then(result => {
               if (result) {
-                this.$apollo.queries.getUser.refresh();
-                this.editState = false;
+                this.$apollo.queries.getUser.refresh()
+                this.editState = false
               }
-            });
+            })
         }
-      });
+      })
     },
 
-    updateRole(newRole) {
+    updateRole (newRole) {
       this.$apollo
         .mutate({
           mutation: gql`
@@ -340,28 +340,28 @@ export default {
         })
         .then(result => {
           if (result) {
-            this.$apollo.queries.getUser.refresh();
+            this.$apollo.queries.getUser.refresh()
           }
-        });
+        })
     },
 
-    phoneNumber() {
-      return this.getUser.phone_number || null;
+    phoneNumber () {
+      return this.getUser.phone_number || null
     },
 
-    email() {
-      return this.getUser.email || null;
+    email () {
+      return this.getUser.email || null
     },
 
-    phoneCall() {
-      window.location.href = `tel:${this.getUser.phone_number}`;
+    phoneCall () {
+      window.location.href = `tel:${this.getUser.phone_number}`
     },
 
-    sendEmail() {
-      window.location = `mailto:${this.getUser.email}`;
+    sendEmail () {
+      window.location = `mailto:${this.getUser.email}`
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

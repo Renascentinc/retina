@@ -1,7 +1,7 @@
 <template>
   <div
-    class="container"
-    :class="{ disabled: disabled }">
+    :class="{ disabled: disabled }"
+    class="container">
 
     <transition name="fade">
       <div

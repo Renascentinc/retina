@@ -4,22 +4,22 @@
       <user-search-input :update-tags="updateFilters"></user-search-input>
     </div>
     <div class="users-menu-container">
-        <div
-          class="floating-action-bar">
-          <extended-fab
-            v-if="isAdmin && $mq === 'desktop'"
-            :on-click="transitionToAddUser"
-            class="add-user-fab"
-            icon-class="fa-plus"
-            button-text="ADD USER">
-          </extended-fab>
+      <div
+        class="floating-action-bar">
+        <extended-fab
+          v-if="isAdmin && $mq === 'desktop'"
+          :on-click="transitionToAddUser"
+          class="add-user-fab"
+          icon-class="fa-plus"
+          button-text="ADD USER">
+        </extended-fab>
 
-          <fab
+        <fab
           v-if="isAdmin && $mq === 'mobile'"
           :on-click="transitionToAddUser"
           class="add-user-btn"
           icon-class="fa-plus"/>
-        </div>
+      </div>
       <div class="user-scroll-container">
         <transition>
           <div
@@ -46,21 +46,21 @@
             :key="user.id"
             :on-select="transitionToUserInfo"/>
         </transition-group>
-    </div>
       </div>
+    </div>
   </div>
 </template>
 
 <script>
-import UserSearchInput from "../components/user-search-input";
-import UserSearchResult from "../components/user-search-result";
-import Fab from "../components/fab";
-import gql from "graphql-tag";
-import Roles from "../utils/roles";
-import ExtendedFab from "../components/extended-fab";
+import UserSearchInput from '../components/user-search-input'
+import UserSearchResult from '../components/user-search-result'
+import Fab from '../components/fab'
+import gql from 'graphql-tag'
+import Roles from '../utils/roles'
+import ExtendedFab from '../components/extended-fab'
 
 export default {
-  name: "Users",
+  name: 'Users',
 
   components: {
     UserSearchInput,
@@ -81,7 +81,7 @@ export default {
           }
         }
       `,
-      fetchPolicy: "cache-and-network"
+      fetchPolicy: 'cache-and-network'
     },
 
     searchUser: {
@@ -95,59 +95,59 @@ export default {
           }
         }
       `,
-      variables() {
+      variables () {
         let options = {
-          query: ""
-        };
-
-        if (this.searchString) {
-          options.query = this.searchString;
+          query: ''
         }
 
-        return options;
+        if (this.searchString) {
+          options.query = this.searchString
+        }
+
+        return options
       }
     }
   },
 
-  data() {
+  data () {
     return {
       searchUser: [],
       getAllUser: [],
       searchString: null
-    };
+    }
   },
 
   computed: {
-    isAdmin() {
+    isAdmin () {
       return (
-        JSON.parse(window.localStorage.getItem("currentUser")).role ===
+        JSON.parse(window.localStorage.getItem('currentUser')).role ===
         Roles.ADMIN
-      );
+      )
     },
 
-    users() {
+    users () {
       if (this.searchUser.length > 0) {
-        return this.searchUser;
+        return this.searchUser
       } else {
-        return this.getAllUser;
+        return this.getAllUser
       }
     }
   },
 
   methods: {
-    transitionToAddUser() {
-      this.$router.push({ name: "newUser" });
+    transitionToAddUser () {
+      this.$router.push({ name: 'newUser' })
     },
 
-    transitionToUserInfo(userId) {
-      this.$router.push({ name: "userDetail", params: { userId } });
+    transitionToUserInfo (userId) {
+      this.$router.push({ name: 'userDetail', params: { userId } })
     },
 
-    updateFilters(fuzzySearch) {
-      this.searchString = fuzzySearch;
+    updateFilters (fuzzySearch) {
+      this.searchString = fuzzySearch
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

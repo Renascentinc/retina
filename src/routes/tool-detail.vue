@@ -5,10 +5,10 @@
         class="floating-action-bar">
         <extended-fab
           v-if="$mq === 'desktop'"
-          icon-class="fa-arrow-left"
-          class="action-btn transfer-btn"
           :on-click="transitionToTools"
           :outline-display="true"
+          icon-class="fa-arrow-left"
+          class="action-btn transfer-btn"
           button-text="BACK">
         </extended-fab>
 
@@ -22,11 +22,11 @@
 
         <extended-fab
           v-if="$mq === 'desktop' && isTransferable"
-          icon-class="fa-exchange-alt"
-          class="action-btn transfer-btn"
           :disabled="editState || changingStatus"
           :on-click="toggleTransferStatus"
-          :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'">
+          :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
+          icon-class="fa-exchange-alt"
+          class="action-btn transfer-btn">
         </extended-fab>
 
         <button-dropdown
@@ -34,8 +34,8 @@
           :on-click="updateStatus"
           :disabled="editState"
           :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
-          button-text="CHANGE STATUS"
-          :flag="toggleChangingStatus">
+          :flag="toggleChangingStatus"
+          button-text="CHANGE STATUS">
         </button-dropdown>
       </div>
       <div class="header-cards-container">

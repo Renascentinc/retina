@@ -456,7 +456,7 @@ export default {
   }
 
   .tools-menu-container {
-    height: 100%;
+    overflow-y: auto;
     background-color: $background-light-gray;
   }
 
@@ -470,7 +470,6 @@ export default {
     padding-left: 15px;
     padding-right: 15px;
     flex: 1 1 auto;
-    height: 100%;
   }
 
   .no-tools-container {

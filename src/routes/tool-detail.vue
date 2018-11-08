@@ -38,7 +38,7 @@
           :flag="toggleChangingStatus">
         </button-dropdown>
       </div>
-      <div>
+      <div class="header-cards-container">
         <div class="header">
           <router-link
             v-if="$mq === 'mobile'"
@@ -696,6 +696,13 @@ export default {
     height: 100%;
     background-color: $background-light-gray;
 
+    .header-cards-container {
+      height: 100%;
+      overflow-y: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
     .header {
       width: 100%;
       display: flex;
@@ -988,6 +995,7 @@ export default {
   .info-menu-container {
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 
     .floating-action-bar {
       display: flex;
@@ -1006,8 +1014,12 @@ export default {
     }
 
     .header {
-      width: 400px;
+      width: 500px;
       padding: 0px;
+      border-radius: 3px 3px 3px 3px;
+      margin-left: 28px;
+      margin-right: 28px;
+      margin-top: 10px;
 
       .actions {
         justify-content: center;
@@ -1021,7 +1033,7 @@ export default {
     .cards {
 
       .card {
-        width: 400px;
+        width: 500px;
       }
     }
   }

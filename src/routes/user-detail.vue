@@ -598,6 +598,16 @@ export default {
       margin-right: 28px;
       margin-top: 10px;
 
+      .name-inputs {
+        display: flex;
+        width: 400px;
+        height: 44px;
+
+        .name {
+          height: 39px;
+        }
+      }
+
       .actions {
         justify-content: center;
 

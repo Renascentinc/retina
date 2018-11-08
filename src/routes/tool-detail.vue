@@ -1013,6 +1013,17 @@ export default {
       }
     }
 
+    .dark-input, .popover-container {
+      width: 300px !important;
+    }
+
+    .dark-input, .dropdown-toggle {
+      height: 40px !important;
+      * {
+        font-size: 14px !important;
+      }
+    }
+
     .header {
       width: 500px;
       padding: 0px;

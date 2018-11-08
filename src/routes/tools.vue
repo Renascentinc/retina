@@ -630,6 +630,7 @@ export default {
 .desktop {
   .tools-menu-container {
     display: flex;
+    height: 100%;
     flex-direction: row;
 
     .tool-scroll-container {

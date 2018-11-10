@@ -610,7 +610,7 @@ export default {
               model_number: this.getTool.model_number,
               serial_number: this.getTool.serial_number,
               status: newStatus,
-              purchased_from_id: this.getTool.purchased_from.id,
+              purchased_from_id: this.getTool.purchased_from && this.getTool.purchased_from.id,
               date_purchased: this.getTool.date_purchased,
               owner_id: this.owner.id,
               photo: this.getTool.photo,

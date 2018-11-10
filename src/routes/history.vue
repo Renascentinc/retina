@@ -1,45 +1,100 @@
 <template>
   <div class="page history-page">
+    <div class="search-bar">
+      <history-search-input :update-tags="updateTagFilters"></history-search-input>
+      <v-date-picker
+        v-model="dateRange"
+        :input-props="{ readonly: true }"
+        :attributes="[{ popover: { visibility: 'hidden' } }]"
+        :max-date="new Date()"
+        :is-double-paned="true"
+        popover-direction="bottom"
+        popover-align="right"
+        mode="range">
+
+        <button
+          slot-scope="{ inputValue, updateValue }"
+          class="fas fa-calendar open-datepicker">
+        </button>
+      </v-date-picker>
+    </div>
     <div class="report">
       <div id="export-table">
         <div class="dt-head">
-          <div class="dt-cell">
-            id
+          <div class="dt-cell id">
+            <span>id</span>
           </div>
-          <div class="dt-cell">
-            date
+          <div class="dt-cell date">
+            <span>date</span>
           </div>
-          <div class="dt-cell">
-            action
+          <div class="dt-cell action">
+            <span>action</span>
           </div>
-          <div class="dt-cell">
-            status
+          <div class="dt-cell status">
+            <span>status</span>
           </div>
-          <div class="dt-cell">
-            owner
+          <div class="dt-cell owner">
+            <span>owner</span>
           </div>
         </div>
 
         <div class="dt-body">
           <div
-            v-for="i in range"
-            :key="i"
+            v-for="entry in searchToolHistory"
+            :key="entry.id"
             class="dt-row">
-            <div class="dt-cell">
-              93378
+            <div class="dt-cell id">
+              <span>{{ entry.tool_snapshot.id }}</span>
             </div>
-            <div class="dt-cell">
-              10/27/2018
+            <div class="dt-cell date">
+              <span>{{ `${new Date(entry.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' })} ${new Date(entry.timestamp).toLocaleTimeString('en-US')}` }}</span>
             </div>
-            <div class="dt-cell">
-              Transfer
+            <div class="dt-cell action">
+              <span>{{ entry.tool_action }}</span>
             </div>
-            <div class="dt-cell tool-status available">
-              available
+            <div class="dt-cell status">
+              <span
+                v-if="entry.previous_tool_snapshot_diff.status"
+                class="previous-snapshot">{{ entry.previous_tool_snapshot_diff.status }}</span>
+              <i
+                v-if="entry.previous_tool_snapshot_diff.status"
+                class="fas fa-long-arrow-alt-right"></i>
+
+              <span>{{ entry.tool_snapshot.status }}</span>
+
             </div>
-            <div class="dt-cell">
-              <avatar username="Josiah Campbell"></avatar>
-              Josiah Campbell
+            <div class="dt-cell owner">
+              <div v-if="entry.previous_tool_snapshot_diff.owner">
+                <div
+                  v-if="entry.previous_tool_snapshot_diff.owner.type === 'USER'"
+                  class="owner-entry previous-snapshot">
+                  <!-- <avatar :username="`${entry.previous_tool_snapshot_diff.owner.first_name} ${entry.previous_tool_snapshot_diff.owner.last_name}`"></avatar> -->
+                  {{ `${entry.previous_tool_snapshot_diff.owner.first_name} ${entry.previous_tool_snapshot_diff.owner.last_name}` }}
+                </div>
+                <div
+                  v-if="entry.previous_tool_snapshot_diff.owner.type === 'LOCATION'"
+                  class="owner-entry previous-snapshot">
+                  <i class="fas fa-map-marker-alt"></i>
+                  {{ entry.previous_tool_snapshot_diff.owner.name }}
+                </div>
+              </div>
+
+              <i
+                v-if="entry.previous_tool_snapshot_diff.owner"
+                class="fas fa-long-arrow-alt-right"></i>
+
+              <div
+                v-if="entry.tool_snapshot.owner.type === 'USER'"
+                class="owner-entry">
+                <!-- <avatar :username="`${entry.tool_snapshot.owner.first_name} ${entry.tool_snapshot.owner.last_name}`"></avatar> -->
+                {{ `${entry.tool_snapshot.owner.first_name} ${entry.tool_snapshot.owner.last_name}` }}
+              </div>
+              <div
+                v-if="entry.tool_snapshot.owner.type === 'LOCATION'"
+                class="owner-entry">
+                <!-- <i class="fas fa-map-marker-alt"></i> -->
+                {{ entry.tool_snapshot.owner.name }}
+              </div>
             </div>
           </div>
         </div>
@@ -61,6 +116,7 @@
 </template>
 
 <script>
+import HistorySearchInput from '../components/history-search-input'
 import Avatar from 'vue-avatar'
 import Fab from '../components/fab'
 import html2pdf from 'html2pdf.js'
@@ -69,36 +125,16 @@ import gql from 'graphql-tag'
 export default {
   name: 'History',
   components: {
+    HistorySearchInput,
     Avatar,
     Fab
   },
 
   apollo: {
-    getAllTool: gql`query tools {
-      getAllTool {
-        id
-        type {
-          id
-          name
-        }
-        brand {
-          id
-          name
-        }
-      }
-    }`,
-
-    getAllUser: gql`query user {
-      getAllUser {
-        id
-        first_name
-        last_name
-      }
-    }`,
-
     searchToolHistory: {
       query: gql`query search($toolHistoryFilter: ToolHistoryFilter) {
         searchToolHistory(toolHistoryFilter: $toolHistoryFilter) {
+          id
           tool_snapshot {
             id
             type {
@@ -109,6 +145,7 @@ export default {
               id
               name
             }
+            status
             owner {
               ... on Location {
                  id
@@ -125,6 +162,7 @@ export default {
           }
           timestamp
           previous_tool_snapshot_diff {
+            id
             type {
               id
               name
@@ -133,6 +171,7 @@ export default {
               id
               name
             }
+            status
             owner {
               ... on Location {
                  id
@@ -150,20 +189,51 @@ export default {
           tool_action
         }
       }`,
-      variables: {
-        toolHistoryFilter: null
-      }
+      variables () {
+        let options = {}
+
+        if (this.filters) {
+          options.toolHistoryFilter = this.filters
+        }
+
+        return options
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 
   data () {
-    let range = []
-    for (let i = 0; i < 100; i++) {
-      range.push(i)
-    }
     return {
+      filterMap: {
+        USER: 'owner_ids',
+        LOCATION: 'owner_ids',
+        ACTION: 'tool_actions',
+        TOOL: 'tool_ids'
+      },
       searchToolHistory: [],
-      range
+      tagFilters: null,
+      dateRange: null
+    }
+  },
+
+  computed: {
+    dateRangeFilter () {
+      let dateRange
+      if (this.dateRange) {
+        dateRange = {}
+        let startTime = new Date(this.dateRange.start)
+        let endTime = new Date(this.dateRange.end)
+        endTime.setDate(endTime.getDate() + 1)
+        endTime.setUTCHours(0)
+        startTime.setUTCHours(0)
+        dateRange.start_time = startTime.toISOString()
+        dateRange.end_time = endTime.toISOString()
+      }
+      return dateRange
+    },
+
+    filters () {
+      return { time_span: this.dateRangeFilter, ...this.tagFilters }
     }
   },
 
@@ -182,7 +252,21 @@ export default {
     },
 
     printTable () {
+      window.console.log(this.searchToolHistory)
+    },
 
+    updateTagFilters (filters = []) {
+      let newFilters = filters.length ? {} : null
+      filters.forEach(filter => {
+        let key = this.filterMap[filter.type]
+
+        if (!newFilters[key]) {
+          newFilters[key] = [filter.id]
+        } else {
+          newFilters[key].push(filter.id)
+        }
+      })
+      this.tagFilters = newFilters
     }
   }
 }
@@ -196,12 +280,33 @@ export default {
   flex-direction: column;
   max-width: 100vw;
 
+  .popover-container {
+    width: 55px;
+
+    .open-datepicker {
+      font-size: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .search-bar {
+    padding: 10px;
+    min-height: 45px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+    display: flex;
+  }
+
   .report {
+    display: none;
     background-color: $background-light-gray;
     display: flex;
     height: 100%;
     overflow: auto;
-    padding: 20px;
 
     .export-btn {
       position: absolute;
@@ -218,8 +323,46 @@ export default {
 }
 
 #export-table {
-  width: 1200px;
-  min-width: 1200px;
+  width: 980px;
+  min-width: 980px;
+  padding: 20px;
+
+  .dt-cell {
+    display: flex;
+    justify-content: flex-end;
+
+    &.id {
+      flex: 0 0 50px;
+      justify-content: center;
+      padding: 0;
+    }
+
+    &.action {
+      flex: 0 0 100px;
+    }
+
+    &.status {
+      flex: 0 0 240px;
+    }
+
+    &.owner {
+      flex: 0 0 280px;
+    }
+  }
+
+  .fa-long-arrow-alt-right {
+    margin: 0 10px;
+  }
+
+  .previous-snapshot {
+    color: gray;
+  }
+
+  .owner-entry {
+    text-align: center;
+    max-width: 125px;
+    word-break: break-all;
+  }
 
   .dt-head {
     display: flex;
@@ -241,15 +384,24 @@ export default {
     .dt-row {
       display: flex;
       border-radius: 3px;
-      margin-top: 10px;
+      border-bottom: solid 1px lightgray;
       background-color: white;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
 
       .dt-cell {
         display: flex;
         align-items: center;
-        height: 50px;
+        height: 85px;
         font-weight: 900;
+
+        &:first-child {
+          border-right: solid 1px lightgray;
+        }
+
+        .owner-entry {
+          display: flex;
+          align-items: center;
+        }
       }
     }
   }

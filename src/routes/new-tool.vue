@@ -587,6 +587,7 @@ export default {
     font-weight: 900;
     color: $renascent-dark-gray;
     font-size: 15px;
+    padding-left: 20px;
   }
 
   .pager-container {
@@ -728,12 +729,25 @@ export default {
     max-height: 400px;
     margin-top: auto;
     margin-bottom: auto;
+    background-color: white;
 
     * {
       font-size: 16px;
     }
 
-    .dark-input, .light-input, .popover-container {
+    .popover-container {
+      height: 45px !important;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+
+      input {
+        width: 320px !important;
+        height: 45px;
+      }
+    }
+
+    .dark-input, .light-input {
       height: 45px !important;
       margin-left: auto;
       margin-right: auto;

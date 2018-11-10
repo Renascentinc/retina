@@ -112,14 +112,6 @@ export default {
           iconClass: 'fa-info-circle',
           type: 'STATUS',
           formattedType: 'Status'
-        },
-        {
-          name: 'Out of Service',
-          text: 'Out of Service',
-          id: Statuses.OUT_OF_SERVICE,
-          iconClass: 'fa-info-circle',
-          type: 'STATUS',
-          formattedType: 'Status'
         }
       ]
 

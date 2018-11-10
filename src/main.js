@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 
 import '../node_modules/v-calendar/lib/v-calendar.min.css'
-import '../node_modules/vue-snotify/styles/simple.css'
 
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
@@ -21,6 +20,22 @@ import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
 import VueMq from 'vue-mq'
 // import Snotify from 'vue-snotify'
+import VueSVGIcon from 'vue-svgicon'
+import VueJsModal from 'vue-js-modal'
+import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert'
+
+function toast ({title, message, type, timeout, cb}) {
+  if (type === VueNotifications.types.warn) type = 'warning'
+  return swal(title, message, type)
+}
+
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -62,9 +77,9 @@ const authLink = setContext(({ operationName }, { headers = {} }) => {
 
 const errorLink = onError(({ graphQLErrors = [] }) => {
   graphQLErrors.map(({ extensions: { code } }) => {
-    if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login') {
+    if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
       window.localStorage.removeItem('token')
-      window.confirm('Your Session Has Expired. Click Ok To Return To Log In')
+      swal('SESSION EXPIRED', 'Your Session Has Expired. Please Log In Again', VueNotifications.types.error)
       router.push({ path: '/login' })
     }
   })
@@ -94,6 +109,11 @@ Vue.use(VueMq, {
   }
 })
 // Vue.use(Snotify)
+Vue.use(VueSVGIcon)
+Vue.use(VueNotifications, options)
+Vue.use(VueJsModal, {
+  dialog: true
+})
 
 // attachFastClick(document.body)
 
@@ -115,7 +135,8 @@ const dictionary = {
       serialNumber: 'serial number',
       modelYear: 'model year',
       purchasedFrom: 'purchased from',
-      price: 'price'
+      price: 'price',
+      passwordResetEmail: 'email'
     }
   }
 }

@@ -4,6 +4,7 @@
 @import 'drawer';
 @import 'navbar';
 @import 'form-inputs';
+@import 'toast';
 
 * {
   font-family: $font-family;
@@ -67,8 +68,31 @@ a {
       display: flex;
       flex: 1 1 auto;
       flex-direction: column;
+
+      // TODO: upgrade parcel version (when it become available) so we can uncomment this
+      // padding for iPhone X style screens
+      // padding-top: calc(constant(safe-area-inset-top) - 10px);
+      // padding-top: calc(env(safe-area-inset-top) - 10px);
     }
   }
+}
+
+// nfc icon
+.svg-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.svg-fill {
+    fill: transparent;
+    stroke: transparent;
+
+    path[pid="1"] {
+      stroke: transparent;
+      fill: $renascent-red;
+    }
 }
 
 .tool-status {
@@ -93,6 +117,34 @@ a {
   }
 }
 
+.ready-to-scan-modal,
+.nfc-not-supported-modal {
+  .header-text {
+    font-size: 25px;
+    font-weight: 900;
+    color: #4c4c4c;
+  }
+
+  .body-text {
+    font-size: 12px;
+  }
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+
+    .cancel-btn {
+      font-size: 15px;
+      font-weight: 900;
+      color: $renascent-dark-gray;
+      border: solid 1px $renascent-dark-gray;
+      border-radius: 10px;
+      padding: 0px 10px;
+      margin-bottom: 10px;
+      
 // DESKTOP
 
 .desktop {

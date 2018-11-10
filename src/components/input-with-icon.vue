@@ -35,10 +35,12 @@ export default {
     outline: none;
     display: flex;
     height: 40px;
+    min-height: 40px;
     margin-bottom: 5px;
     max-width: 500px;
 
     input {
+      -webkit-appearance: none;
       border: none;
       outline: none;
       font-size: 15px;

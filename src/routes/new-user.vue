@@ -67,7 +67,9 @@
             name="phone number"
             class="light-input"
             placeholder="Phone #"
-            type="number">
+            type="number"
+            inputmode="numeric"
+            pattern="[0-9]*">
 
           <div class="error-container">
             <span
@@ -298,6 +300,7 @@ export default {
 
 <style lang="scss">
 @import '../styles/variables';
+
   .card-change-enter-active {
     transition: opacity .25s;
   }

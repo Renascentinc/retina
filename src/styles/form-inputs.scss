@@ -11,10 +11,19 @@
   outline: none;
   border: none;
   max-width: 100%;
+
+  &::placeholder {
+    color: $form-placeholder-color;
+  }
 }
 
 .popover-container {
   width: 100%;
+
+  input {
+    width: calc(100% - 30px);
+    padding: 0 15px;
+  }
 }
 
 .desktop {
@@ -24,6 +33,7 @@
 }
 
 .light-input {
+  -webkit-appearance: none;
   font-family: $font-family;
   font-size: 31px;
   font-weight: 800;
@@ -37,7 +47,7 @@
   outline: none;
 
   &::placeholder {
-    color: $renascent-dark-gray;
+    color: $form-placeholder-color;
     font-family: $font-family;
   }
 }
@@ -61,7 +71,7 @@
     color: white;
 
     &::placeholder {
-      color: $background-light-gray;
+      color: $form-placeholder-color;
       font-family: $font-family;
     }
   }

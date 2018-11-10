@@ -37,6 +37,60 @@
           :flag="toggleChangingStatus"
           button-text="CHANGE STATUS">
         </button-dropdown>
+
+        <button
+          class="action-btn transfer-btn"
+          @click="toggleTransferStatus">
+          <i class="fas fa-exchange-alt action-icon"></i>
+          <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
+        </button>
+      </div>
+
+      <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
+    </div>
+    <div class="cards">
+      <div class="card owner-card">
+        <div class="card-title">
+          Owner
+        </div>
+        <div class="card-details owner-details">
+          <div class="user-symbol">
+            <i
+              :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
+              class="fas fa-user">
+            </i>
+          </div>
+          <div class="owner-name">
+            <div
+              v-if="owner.type === 'LOCATION'"
+              class="owner-location">
+              {{ owner.name }}
+            </div>
+            <div
+              v-if="owner.type === 'USER'"
+              class="owner-user">
+              <span> {{ owner.first_name }} </span>
+              <span> {{ owner.last_name }} </span>
+            </div>
+          </div>
+          <div class="contact-buttons">
+            <fab
+              :on-click="phoneCall"
+              :disabled="!phoneNumber"
+              class="call-btn"
+              icon-class="fa-phone">
+            </fab>
+
+            <div class="spacer"></div>
+
+            <fab
+              :on-click="sendEmail"
+              :disabled="!email"
+              class="email-btn"
+              icon-class="fa-envelope">
+            </fab>
+          </div>
+        </div>
       </div>
       <div class="header-cards-container">
         <div class="header">
@@ -339,6 +393,7 @@ import vSelect from '../components/select'
 import VueLazyload from 'vue-lazyload'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
+import NfcEncode from '../components/nfc-encode'
 
 export default {
   name: 'ToolDetail',
@@ -349,7 +404,8 @@ export default {
     ExtendedFab,
     ButtonDropdown,
     VueLazyload,
-    vSelect
+    vSelect,
+    NfcEncode
   },
 
   apollo: {
@@ -645,8 +701,6 @@ export default {
       let currentStatus = this.getTool.status
       this.getTool.status = newStatus
 
-      // TODO: figure out why api chokes on its own dates
-
       this.$apollo
         .mutate({
           mutation: gql`
@@ -695,6 +749,45 @@ export default {
   .info-menu-container {
     height: 100%;
     background-color: $background-light-gray;
+  .nfc-encode {
+    position: absolute;
+    right: 15px;
+    width: 120px;
+    height: 30px;
+    top: 9px;
+
+    .fab-icon-container {
+      height: 18px;
+      width: 18px;
+    }
+
+    .efab-text {
+      font-size: 10px;
+    }
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 12px;
+    background-color: white;
+    border-radius: 0px 0px 7px 7px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
+    color: $dark-text;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+
+    .backarrow {
+      position: absolute;
+      top: 9px;
+      left: 23px;
+      color: $renascent-red;
+      font-size: 30px;
+      width: 27px;
+      z-index: -10;
+    }
 
     .header-cards-container {
       height: 100%;
@@ -778,6 +871,13 @@ export default {
         .transfer-btn {
           z-index: -6;
         }
+      }
+    }
+  }
+
+  .cards {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
         .action-btn {
           background-color: $renascent-red;

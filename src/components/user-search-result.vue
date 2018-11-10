@@ -1,10 +1,11 @@
 <template>
   <div class="search-result">
-    <div class="element-container">
+    <div
+      class="element-container"
+      @click="onClick">
       <avatar :username="`${ user.first_name } ${ user.last_name }`"></avatar>
       <div
-        class="main-container"
-        @click="onClick">
+        class="main-container">
         <div class="row">
           <span class="title">{{ user.first_name }} {{ user.last_name }}</span>
         </div>
@@ -55,6 +56,7 @@ $tool-search-result-border-radius: 3px;
   flex-direction: row;
   align-items: center;
   padding-left: 10px;
+  flex: 1 1 auto;
 
   .vue-avatar--wrapper {
     background-color: $background-light-gray !important;

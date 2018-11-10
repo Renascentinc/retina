@@ -2,7 +2,8 @@
   <div class="page new-tool-page">
     <header-card
       title="New Tool"
-      exit-link="/tools"></header-card>
+      exit-link="/tools">
+    </header-card>
 
     <transition name="card-change">
       <div
@@ -10,6 +11,7 @@
         class="new-tool-input-card">
 
         <div class="input-group-container">
+          <span class="form-label">BRAND</span>
           <v-select
             v-validate:brand="'required'"
             :options="brandOptions"
@@ -17,7 +19,7 @@
             name="brand"
             label="name"
             class="dark-input"
-            placeholder="Brand">
+            placeholder="eg. DeWalt">
             <template
               slot="no-options"
               slot-scope="props">
@@ -38,6 +40,7 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">TYPE</span>
           <v-select
             v-validate:type="'required'"
             v-model="type"
@@ -45,7 +48,7 @@
             name="type"
             label="name"
             class="dark-input"
-            placeholder="Type">
+            placeholder="eg. Saw">
             <template
               slot="no-options"
               slot-scope="props">
@@ -66,12 +69,13 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">MODEL NUMBER</span>
           <input
             v-validate="'required'"
             v-model="modelNumber"
             name="modelNumber"
             class="light-input"
-            placeholder="Model no."
+            placeholder="eg. 18392049437"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false">
@@ -85,12 +89,13 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">SERIAL NUMBER</span>
           <input
             v-validate="'required'"
             v-model="serialNumber"
             name="serialNumber"
             class="light-input"
-            placeholder="Serial no."
+            placeholder="eg. 0348529873023"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false">
@@ -104,12 +109,13 @@
         </div>
 
         <div class="input-group-container">
+          <span class="form-label">MODEL YEAR</span>
           <input
-            v-validate="validations.purchaseDate"
+            v-validate="validations.modelYear"
             v-model="modelYear"
             name="modelYear"
             class="light-input"
-            placeholder="Model Year"
+            placeholder="eg. 2018"
             type="number"
             inputmode="numeric"
             pattern="[0-9]*">
@@ -128,52 +134,76 @@
       <div
         v-if="currentState === 2"
         class="new-tool-input-card">
-        <v-select
-          v-model="owner"
-          :options="userOptions"
-          label="full_name"
-          class="dark-input"
-          placeholder="Owner">
-        </v-select>
-
-        <v-select
-          v-model="purchasedFrom"
-          :options="purchasedFromOptions"
-          label="name"
-          class="dark-input"
-          placeholder="Purchased from">
-          <template
-            slot="no-options"
-            slot-scope="props">
-            <button
-              class="no-options-btn"
-              @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
-              Set Type To "{{ props.value }}"
-            </button>
-          </template>
-        </v-select>
-
-        <v-select
-          v-model="status"
-          :options="statuses"
-          label="name"
-          class="dark-input"
-          placeholder="Tool Status">
-        </v-select>
-
-        <v-date-picker
-          v-model="purchaseDate"
-          :input-props="{ readonly: true }"
-          popover-direction="top"
-          mode="single">
-        </v-date-picker>
 
         <div class="input-group-container">
+          <span class="form-label">OWNER</span>
+          <v-select
+            v-model="owner"
+            :options="userOptions"
+            label="full_name"
+            class="dark-input">
+          </v-select>
+        </div>
+
+        <div class="input-group-container">
+          <span class="form-label">PURCHASED FROM</span>
+          <v-select
+            v-model="purchasedFrom"
+            :options="purchasedFromOptions"
+            label="name"
+            class="dark-input"
+            placeholder="eg. Lowes">
+            <template
+              slot="no-options"
+              slot-scope="props">
+              <button
+                class="no-options-btn"
+                @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                Set Purchased From To "{{ props.value }}"
+              </button>
+            </template>
+          </v-select>
+        </div>
+
+        <div class="input-group-container">
+          <span class="form-label">STATUS</span>
+          <v-select
+            v-model="status"
+            :options="statuses"
+            label="name"
+            class="dark-input">
+          </v-select>
+        </div>
+
+        <div class="input-group-container">
+          <span class="form-label">PURCHASE DATE</span>
+          <v-date-picker
+            v-model="purchaseDate"
+            :input-props="{ readonly: true }"
+            :attributes="[{ popover: { visibility: 'hidden' } }]"
+            :max-date="new Date()"
+            popover-direction="top"
+            mode="single">
+            <input
+              slot-scope="{ inputValue, updateValue }"
+              :value="inputValue"
+              :placeholder="`eg. ${new Date().toLocaleDateString('en-US')}`"
+              disabled
+              type="text"
+              @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
+              @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
+              @keyup.esc="updateValue(myDate, { formatInput: true, hidePopover: true })">
+          </v-date-picker>
+        </div>
+
+        <div class="input-group-container">
+          <span class="form-label">PRICE</span>
           <input
+            v-validate="'decimal:2'"
             v-model="price"
             name="price"
             class="light-input"
-            placeholder="Price"
+            placeholder="eg. 149.99"
             type="number">
         </div>
       </div>
@@ -197,14 +227,7 @@
         v-if="currentState === 4"
         class="new-tool-input-card step-4">
 
-        <extended-fab
-          :disabled="nfcDisabled"
-          :on-click="prepareToEncodeTag"
-          :outline-display="true"
-          class="encode-efab"
-          icon-class="fa-times"
-          button-text="ENOCDE TAG">
-        </extended-fab>
+        <nfc-encode :tool-id="tool ? tool.id : ''"> </nfc-encode>
 
         <tool-search-result
           :tool="tool"
@@ -234,12 +257,14 @@
       <div
         v-if="currentState !== 4"
         class="pager-container">
-        <fab
-          :disabled="currentState === 1"
-          :on-click="() => --currentState"
-          class="page-back"
-          icon-class="fa-arrow-left">
-        </fab>
+        <div class="pager-btn-container">
+          <fab
+            :disabled="currentState === 1"
+            :on-click="() => --currentState"
+            class="page-back"
+            icon-class="fa-arrow-left">
+          </fab>
+        </div>
 
         <div class="pager">
           <div
@@ -260,12 +285,23 @@
           </div>
         </div>
 
-        <fab
-          :disabled="!!errors.items.length"
-          :on-click="advanceStep"
-          class="page-forward"
-          icon-class="fa-arrow-right">
-        </fab>
+        <div class="pager-btn-container">
+          <fab
+            v-if="currentState !== 3"
+            :disabled="!!errors.items.length"
+            :on-click="advanceStep"
+            class="page-forward"
+            icon-class="fa-arrow-right">
+          </fab>
+
+          <extended-fab
+            v-if="currentState === 3"
+            :on-click="advanceStep"
+            class="page-forward"
+            icon-class=""
+            button-text="FINISH">
+          </extended-fab>
+        </div>
       </div>
     </transition>
   </div>
@@ -280,6 +316,7 @@ import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
+import NfcEncode from '../components/nfc-encode'
 
 export default {
   name: 'NewTool',
@@ -289,7 +326,8 @@ export default {
     ToolSearchResult,
     ExtendedFab,
     Fab,
-    vSelect
+    vSelect,
+    NfcEncode
   },
 
   apollo: {
@@ -313,42 +351,40 @@ export default {
   },
 
   data () {
+    const statuses = [
+      {
+        name: 'Available',
+        id: Statuses.AVAILABLE
+      },
+      {
+        name: 'In Use',
+        id: Statuses.IN_USE
+      },
+      {
+        name: 'Maintenance',
+        id: Statuses.MAINTENANCE
+      }
+    ]
+
     return {
       brand: null,
       type: null,
-      owner: null,
+      owner: JSON.parse(window.localStorage.getItem('currentUser')),
       modelNumber: null,
       serialNumber: null,
       modelYear: null,
       purchasedFrom: null,
       price: null,
       photo: null,
-      status: null,
+      status: statuses[1],
       currentState: 1,
-      purchaseDate: new Date(),
+      purchaseDate: null,
       getAllConfigurableItem: [],
       getAllUser: [],
       tool: null,
-      statuses: [
-        {
-          name: 'Available',
-          id: Statuses.AVAILABLE
-        },
-        {
-          name: 'In Use',
-          id: Statuses.IN_USE
-        },
-        {
-          name: 'Maintenance',
-          id: Statuses.MAINTENANCE
-        },
-        {
-          name: 'Out of Service',
-          id: Statuses.OUT_OF_SERVICE
-        }
-      ],
+      statuses,
       validations: {
-        purchaseDate: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+        modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
     }
   },
@@ -502,10 +538,6 @@ export default {
           ++this.currentState
         })
       })
-    },
-
-    prepareToEncodeTag () {
-
     }
   }
 }
@@ -544,10 +576,17 @@ export default {
     justify-content: space-around;
     padding: 0 20px;
     border-radius: 3px;
+    min-height: 434px;
 
     .dropdown {
       width: 100%;
     }
+  }
+
+  .form-label {
+    font-weight: 900;
+    color: $renascent-dark-gray;
+    font-size: 15px;
   }
 
   .pager-container {
@@ -555,6 +594,13 @@ export default {
     flex: 0 0 90px;
     justify-content: space-around;
     align-items: center;
+
+    .pager-btn-container {
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     .pager {
       display: flex;

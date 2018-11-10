@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './routes/login'
 import Application from './routes/application'
-import Tools from './routes/tools'
+import LandingPage from './routes/landing-page'
 
 // lazy loaded routes
+const Tools = () => import('./routes/tools')
+const PasswordReset = () => import('./routes/password-reset')
 const Configuration = () => import('./routes/configuration')
 const History = () => import('./routes/history')
 const UserDetail = () => import('./routes/user-detail')
@@ -20,7 +22,13 @@ export default new Router({
   routes: [
     {
       path: '/login',
-      component: Login
+      component: Login,
+      name: 'login'
+    },
+    {
+      path: '/password-reset',
+      component: PasswordReset,
+      name: 'passwordReset'
     },
     {
       path: '/',
@@ -28,7 +36,8 @@ export default new Router({
       children: [
         {
           path: '/',
-          redirect: '/tools'
+          component: LandingPage,
+          name: 'landingPage'
         },
         {
           path: 'tools',

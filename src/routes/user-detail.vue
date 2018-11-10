@@ -182,6 +182,7 @@ import Fab from '../components/fab'
 import ExtendedFab from '../components/extended-fab'
 import ButtonDropdown from '../components/button-dropdown'
 import Roles from '../utils/roles'
+import PhoneNumberFormatter from 'phone-number-formats'
 
 export default {
   name: 'ToolDetail',
@@ -247,10 +248,9 @@ export default {
     },
 
     formattedPhone () {
-      const PhoneNumberFormatter = require('phone-number-formats')
-      return new PhoneNumberFormatter('1' + this.getUser.phone_number).format({
-        type: 'domestic'
-      }).string
+      if (this.getUser && this.getUser.phone_number) {
+        return new PhoneNumberFormatter(this.getUser.phone_number).format({ type: 'domestic' }).string
+      }
     }
   },
 
@@ -428,6 +428,9 @@ export default {
         margin-right: auto;
         width: 300px;
       }
+  #cards {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
       .user-role {
         text-align: center;

@@ -13,9 +13,10 @@
 
     .account-info {
       display: flex;
-      margin-top: 43px;
+      margin-top: 10px;
       justify-content: center;
       flex-direction: column;
+      flex: 1 0 auto;
     }
 
     .vue-avatar--wrapper {
@@ -80,5 +81,16 @@
         margin-left: 18px;
       }
     }
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  .menu-btn {
+    font-size: 14px !important;
+    height: 40px !important;
+    width: 200px !important;
+
   }
 }

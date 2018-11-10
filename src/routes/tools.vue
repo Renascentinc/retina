@@ -4,57 +4,116 @@
       <tool-search-input :update-tags="updateFilters"></tool-search-input>
       <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
-    <div class="tool-scroll-container">
+    <div class="tools-menu-container">
       <transition>
         <div
-          v-if="$apollo.queries.searchTool.loading"
-          class="loading-container">
-          <div class="loading"></div>
-        </div>
-      </transition>
-      <transition>
-        <div
-          v-if="!$apollo.queries.searchTool.loading && !tools.length"
-          class="no-tools-container">
-          <span class="no-tools-text">No Tools To Display</span>
-        </div>
-      </transition>
+          class="floating-action-bar">
+          <extended-fab
+            v-if="currentState === states.INITIAL"
+            :on-click="onTransferClick"
+            class="transfer-btn"
+            icon-class="fa-exchange-alt"
+            button-text="TRANSFER">
+          </extended-fab>
 
-      <transition-group
-        name="list"
-        tag="span">
-        <tool-search-result
-          v-for="tool in tools"
-          :tool="tool"
-          :key="tool.id"
-          :on-select="transitionToToolInfo"
-          :show-select="currentState !== states.INITIAL">
-        </tool-search-result>
-      </transition-group>
+          <extended-fab
+            v-if="$mq === 'desktop' && currentState === states.SELECTING"
+            :on-click="cancelTransfer"
+            class="cancel-fab-btn"
+            icon-class="fa-times"
+            button-text="CANCEL">
+          </extended-fab>
+
+          <extended-fab
+            v-if="$mq === 'desktop' && currentState === states.SELECTING"
+            :on-click="toggleViewSelected"
+            :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
+            :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
+            class="view-fab-btn">
+          </extended-fab>
+
+          <extended-fab
+            v-if="$mq === 'desktop' && currentState === states.SELECTING"
+            :on-click="proceedToFinalize"
+            class="view-fab-btn"
+            icon-class="fa-arrow-right"
+            button-text="NEXT">
+          </extended-fab>
+
+          <extended-fab
+            v-if="$mq === 'desktop' && currentState === states.INITIAL"
+            :on-click="transitionToAdd"
+            class="add-btn"
+            icon-class="fa-plus"
+            button-text="ADD TOOL">
+          </extended-fab>
+
+          <extended-fab
+            v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+            :on-click="cancelTransfer"
+            class="cancel-efab"
+            icon-class="fa-times"
+            button-text="CANCEL">
+          </extended-fab>
+
+          <v-select
+            v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+            :options="transferTargets"
+            :filterable="false"
+            v-model="transferTarget"
+            class="dark-input">
+          </v-select>
+
+          <extended-fab
+            v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+            :on-click="finalizeTransfer"
+            :disabled="!transferTarget.id || numSelectedTools === 0"
+            class="finish-transfer"
+            icon-class="fa-arrow-right"
+            button-text="FINISH">
+          </extended-fab>
+
+          <fab
+            v-if="$mq === 'mobile'"
+            :on-click="transitionToAdd"
+            class="add-btn"
+            icon-class="fa-plus">
+          </fab>
+        </div>
+      </transition>
+      <div class="tool-scroll-container">
+        <transition>
+          <div
+            v-if="$apollo.queries.searchTool.loading"
+            class="loading-container">
+            <div class="loading"></div>
+          </div>
+        </transition>
+        <transition>
+          <div
+            v-if="!$apollo.queries.searchTool.loading && !tools.length"
+            class="no-tools-container">
+            <span class="no-tools-text">No Tools To Display</span>
+          </div>
+        </transition>
+
+        <transition-group
+          name="list"
+          tag="span">
+          <tool-search-result
+            v-for="tool in tools"
+            :tool="tool"
+            :key="tool.id"
+            :on-select="transitionToToolInfo"
+            :show-select="currentState !== states.INITIAL">
+          </tool-search-result>
+        </transition-group>
+      </div>
     </div>
 
     <transition>
       <div
-        v-if="currentState === states.INITIAL"
-        class="floating-action-bar">
-        <extended-fab
-          :on-click="onTransferClick"
-          class="transfer-btn"
-          icon-class="fa-exchange-alt"
-          button-text="TRANSFER">
-        </extended-fab>
-
-        <fab
-          :on-click="transitionToAdd"
-          class="add-btn"
-          icon-class="fa-plus">
-        </fab>
-      </div>
-    </transition>
-
-    <transition>
-      <div
-        v-if="currentState === states.SELECTING"
+        v-if="$mq === 'mobile' && currentState === states.SELECTING"
         class="nav-bar selection-action-bar">
         <div class="icon-text-container">
           <button
@@ -83,7 +142,7 @@
 
     <transition>
       <div
-        v-if="currentState === states.FINALIZING"
+        v-if="$mq === 'mobile' && currentState === states.FINALIZING"
         class="finalizing-action-bar">
         <div class="finalize-row finalize-header">
           <span> Transfer {{ formattedNumSelectedTools }} </span>
@@ -396,21 +455,27 @@ export default {
 
   .search-bar {
     padding: 10px;
-    min-height: 45px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     z-index: 5;
+    min-height: 45px;
     display: flex;
   }
 
+  .tools-menu-container {
+    overflow-y: auto;
+    background-color: $background-light-gray;
+  }
+
   .tool-scroll-container {
+    background-color: $background-light-gray;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    background-color: $background-light-gray;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 5px;
-    padding-bottom: 70px;
+    padding-left: 15px;
+    padding-right: 15px;
+    flex: 1 1 auto;
   }
 
   .no-tools-container {
@@ -423,18 +488,19 @@ export default {
     display: inline-block;
     position: absolute;
     bottom: 75px;
+
     // TODO: upgrade parcel version (when it become available) so we can uncomment this
     // handle iPhone X style screens
     // bottom: calc(75px + constant(safe-area-inset-bottom));
     // bottom: calc(75px + env(safe-area-inset-bottom));
     width: 100vw;
+
     height: 57px;
     vertical-align: bottom;
 
     .transfer-btn {
       position: absolute;
       left: calc(50% - 79px);
-      width: 158px;
       bottom: 3.5px;
     }
 
@@ -541,6 +607,82 @@ export default {
 
   .form-control {
     display: none !important;
+  }
+}
+
+// MOBILE
+
+.mobile {
+  .tool-scroll-container {
+    padding-bottom: 70px;
+  }
+
+  .floating-action-bar {
+    display: inline-block;
+    position: absolute;
+    bottom: 75px;
+    width: 100%;
+    height: 57px;
+    vertical-align: bottom;
+
+    .transfer-btn {
+      position: absolute;
+      left: calc(50% - 79px);
+      bottom: 3.5px;
+      width: 158px;
+    }
+
+    .add-btn {
+      position: absolute;
+      right: 20px;
+    }
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  .tools-menu-container {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+
+    .tool-scroll-container {
+      padding-bottom: 5px;
+      align-content: center;
+    }
+
+    .floating-action-bar {
+      position: inherit;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
+      height: auto;
+      padding-top: 15px;
+      align-items: center;
+      flex: 1 1;
+      max-width: 300px;
+
+      .extended-fab {
+        position: inherit;
+        margin-left: 10px;
+        margin-top: 20px;
+      }
+
+      .dark-input {
+        width: 158px;
+        margin-left: 10px;
+        margin-top: 20px;
+        font-size: 14px;
+        height: 40px;
+        font-weight: 500;
+
+        .dropdown-menu {
+          font-size: 14px;
+        }
+      }
+    }
   }
 }
 </style>

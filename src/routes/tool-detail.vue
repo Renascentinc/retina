@@ -333,18 +333,18 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import Avatar from "vue-avatar";
-import Fab from "../components/fab.vue";
-import ExtendedFab from "../components/extended-fab.vue";
-import vSelect from "../components/select";
-import VueLazyload from "vue-lazyload";
-import ConfigurableItems from "../utils/configurable-items.js";
-import ButtonDropdown from "../components/button-dropdown.vue";
-import NfcEncode from "../components/nfc-encode";
+import gql from 'graphql-tag'
+import Avatar from 'vue-avatar'
+import Fab from '../components/fab.vue'
+import ExtendedFab from '../components/extended-fab.vue'
+import vSelect from '../components/select'
+import VueLazyload from 'vue-lazyload'
+import ConfigurableItems from '../utils/configurable-items.js'
+import ButtonDropdown from '../components/button-dropdown.vue'
+import NfcEncode from '../components/nfc-encode'
 
 export default {
-  name: "ToolDetail",
+  name: 'ToolDetail',
 
   components: {
     Avatar,
@@ -368,7 +368,7 @@ export default {
           }
         }
       `,
-      fetchPolicy: "cache-and-network"
+      fetchPolicy: 'cache-and-network'
     },
 
     getTool: {
@@ -414,16 +414,16 @@ export default {
           }
         }
       `,
-      variables() {
-        let options = {};
-        options.tool_id = this.$router.currentRoute.params.toolId;
-        return options;
+      variables () {
+        let options = {}
+        options.tool_id = this.$router.currentRoute.params.toolId
+        return options
       },
-      fetchPolicy: "cache-and-network"
+      fetchPolicy: 'cache-and-network'
     }
   },
 
-  data() {
+  data () {
     return {
       changingStatus: false,
       getTool: {},
@@ -442,143 +442,143 @@ export default {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() +
           1}`
       }
-    };
+    }
   },
 
   computed: {
-    statusClass() {
+    statusClass () {
       return (
         this.getTool.status &&
         this.getTool.status
-          .split("_")
-          .join("-")
+          .split('_')
+          .join('-')
           .toLowerCase()
-      );
+      )
     },
 
-    isToolSelected() {
-      return !!this.$store.state.selectedToolsMap[this.getTool.id];
+    isToolSelected () {
+      return !!this.$store.state.selectedToolsMap[this.getTool.id]
     },
 
-    brandOptions() {
-      return this.getConfigurableItemsForType(ConfigurableItems.BRAND);
+    brandOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.BRAND)
     },
 
-    purchasedFromOptions() {
-      return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM);
+    purchasedFromOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
     },
 
-    typeOptions() {
-      return this.getConfigurableItemsForType(ConfigurableItems.TYPE);
+    typeOptions () {
+      return this.getConfigurableItemsForType(ConfigurableItems.TYPE)
     },
 
-    canEdit() {
-      let currentUser = JSON.parse(window.localStorage.getItem("currentUser"));
-      return currentUser.role === "ADMINISTRATOR";
+    canEdit () {
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
+      return currentUser.role === 'ADMINISTRATOR'
     },
 
-    owner() {
-      return this.getTool.owner || {};
+    owner () {
+      return this.getTool.owner || {}
     },
 
-    brand() {
-      let brand = this.getTool.brand;
-      return brand && brand.name;
+    brand () {
+      let brand = this.getTool.brand
+      return brand && brand.name
     },
 
-    type() {
-      let type = this.getTool.type;
-      return type && type.name;
+    type () {
+      let type = this.getTool.type
+      return type && type.name
     },
 
-    purchasedFrom() {
-      let purchasedFrom = this.getTool.purchased_from;
-      return purchasedFrom ? purchasedFrom.name : "-";
+    purchasedFrom () {
+      let purchasedFrom = this.getTool.purchased_from
+      return purchasedFrom ? purchasedFrom.name : '-'
     },
 
-    formattedStatus() {
-      let status = this.getTool.status;
-      return status && status.replace(/_/g, " ").toUpperCase();
+    formattedStatus () {
+      let status = this.getTool.status
+      return status && status.replace(/_/g, ' ').toUpperCase()
     },
 
-    formattedPrice() {
-      let priceString = this.getTool.price;
-      return priceString ? `${priceString / 100}` : " -";
+    formattedPrice () {
+      let priceString = this.getTool.price
+      return priceString ? `${priceString / 100}` : ' -'
     },
 
-    isTransferable() {
-      let currentUser = JSON.parse(window.localStorage.getItem("currentUser"));
+    isTransferable () {
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
       return (
-        currentUser.role === "ADMINISTRATOR" ||
-        this.owner.type === "LOCATION" ||
-        (this.owner.type === "USER" && currentUser.id === this.owner.id)
-      );
+        currentUser.role === 'ADMINISTRATOR' ||
+        this.owner.type === 'LOCATION' ||
+        (this.owner.type === 'USER' && currentUser.id === this.owner.id)
+      )
     },
 
-    phoneNumber() {
-      if (this.owner.type === "USER") {
-        return this.owner.phone_number;
-      } else if (this.owner.type === "LOCATION") {
-        return this.owner.phone_number;
+    phoneNumber () {
+      if (this.owner.type === 'USER') {
+        return this.owner.phone_number
+      } else if (this.owner.type === 'LOCATION') {
+        return this.owner.phone_number
       }
     },
 
-    email() {
-      if (this.owner.type === "USER") {
-        return this.owner.email;
-      } else if (this.owner.type === "LOCATION") {
-        return this.owner.email;
+    email () {
+      if (this.owner.type === 'USER') {
+        return this.owner.email
+      } else if (this.owner.type === 'LOCATION') {
+        return this.owner.email
       }
     }
   },
 
   methods: {
-    toggleChangingStatus() {
-      this.changingStatus = !this.changingStatus;
+    toggleChangingStatus () {
+      this.changingStatus = !this.changingStatus
     },
 
-    transitionToTools() {
-      this.$router.push({ name: "tools" });
+    transitionToTools () {
+      this.$router.push({ name: 'tools' })
     },
 
-    formattedDate(date) {
-      let datePurchased = date;
+    formattedDate (date) {
+      let datePurchased = date
       return datePurchased
-        ? new Date(datePurchased).toLocaleDateString("en-US", {
-            timeZone: "UTC"
-          })
-        : "-";
+        ? new Date(datePurchased).toLocaleDateString('en-US', {
+          timeZone: 'UTC'
+        })
+        : '-'
     },
 
-    getConfigurableItemsForType(type) {
+    getConfigurableItemsForType (type) {
       return this.getAllConfigurableItem.filter(
         item => item.type === type && item.sanctioned
-      );
+      )
     },
 
-    toggleEditState() {
+    toggleEditState () {
       if (this.editState) {
         this.$validator.validate().then(result => {
           if (result) {
-            this.saveTool();
+            this.saveTool()
           }
-        });
+        })
       } else {
-        this.newBrand = this.getTool.brand;
-        this.newType = this.getTool.type;
-        this.newSerial = this.getTool.serial_number;
-        this.newModel = this.getTool.model_number;
-        this.newYear = this.getTool.year;
-        this.newPurchasedFrom = this.getTool.purchased_from;
+        this.newBrand = this.getTool.brand
+        this.newType = this.getTool.type
+        this.newSerial = this.getTool.serial_number
+        this.newModel = this.getTool.model_number
+        this.newYear = this.getTool.year
+        this.newPurchasedFrom = this.getTool.purchased_from
         this.newPurchaseDate = new Date(
           this.formattedDate(this.getTool.date_purchased)
-        );
-        this.newPrice = this.getTool.price ? this.getTool.price / 100 : null;
-        this.editState = true;
+        )
+        this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
+        this.editState = true
       }
     },
 
-    createNewConfigurableItem(configurableItem) {
+    createNewConfigurableItem (configurableItem) {
       return this.$apollo.mutate({
         mutation: gql`
           mutation newConfigurableItem(
@@ -596,38 +596,38 @@ export default {
             sanctioned: true
           }
         }
-      });
+      })
     },
 
-    saveTool() {
+    saveTool () {
       let brandRequest =
         this.newBrand && this.newBrand.isNewConfigurableItem
           ? this.createNewConfigurableItem(this.newBrand)
-          : null;
+          : null
       let typeRequest =
         this.newType && this.newType.isNewConfigurableItem
           ? this.createNewConfigurableItem(this.newType)
-          : null;
+          : null
       let purchaseRequest =
         this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem
           ? this.createNewConfigurableItem(this.newPurchasedFrom)
-          : null;
+          : null
 
       Promise.all([brandRequest, typeRequest, purchaseRequest]).then(
         responses => {
-          let [brandResponse, typeResponse, purchaseResponse] = responses;
+          let [brandResponse, typeResponse, purchaseResponse] = responses
 
           if (brandResponse) {
-            this.newBrand.id = brandResponse.data.createConfigurableItem.id;
+            this.newBrand.id = brandResponse.data.createConfigurableItem.id
           }
 
           if (typeResponse) {
-            this.newType.id = typeResponse.data.createConfigurableItem.id;
+            this.newType.id = typeResponse.data.createConfigurableItem.id
           }
 
           if (purchaseResponse) {
             this.newPurchasedFrom.id =
-              purchaseResponse.data.createConfigurableItem.id;
+              purchaseResponse.data.createConfigurableItem.id
           }
 
           this.$apollo
@@ -663,33 +663,33 @@ export default {
               }
             })
             .then(result => {
-              this.$apollo.queries.getTool.refresh();
-              this.$apollo.queries.getAllConfigurableItem.refresh();
-              this.editState = false;
-            });
+              this.$apollo.queries.getTool.refresh()
+              this.$apollo.queries.getAllConfigurableItem.refresh()
+              this.editState = false
+            })
         }
-      );
+      )
     },
 
-    toggleTransferStatus() {
-      this.$store.commit("toggleToolSelection", this.getTool.id);
-      this.$router.push({ path: "/tools" });
+    toggleTransferStatus () {
+      this.$store.commit('toggleToolSelection', this.getTool.id)
+      this.$router.push({ path: '/tools' })
     },
 
-    phoneCall() {
-      window.location.href = `tel:${this.owner.phone_number}`;
+    phoneCall () {
+      window.location.href = `tel:${this.owner.phone_number}`
     },
 
-    sendEmail() {
-      window.location = `mailto:${this.owner.email}`;
+    sendEmail () {
+      window.location = `mailto:${this.owner.email}`
     },
 
-    updateStatus(newStatus) {
-      newStatus = newStatus.replace(/ /g, "_").toUpperCase();
+    updateStatus (newStatus) {
+      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
       // save current status in case request fails but set the tool status assuming it will succeed
-      let currentStatus = this.getTool.status;
-      this.getTool.status = newStatus;
+      let currentStatus = this.getTool.status
+      this.getTool.status = newStatus
 
       this.$apollo
         .mutate({
@@ -718,15 +718,15 @@ export default {
           }
         })
         .then(status => {
-          this.getTool.status = status.data.updateTool.status;
+          this.getTool.status = status.data.updateTool.status
         })
         .catch(() => {
-          this.getTool.status = currentStatus;
+          this.getTool.status = currentStatus
           // TODO: pop toast notifying user that request failed.
-        });
+        })
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

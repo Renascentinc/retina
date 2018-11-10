@@ -83,7 +83,7 @@
 
           <div
             v-if="isAdmin"
-            id="actions">
+            class="actions">
             <button-dropdown
               v-if="$mq === 'mobile' && isAdmin"
               :on-click="updateRole"
@@ -377,67 +377,35 @@ export default {
   .info-menu-container {
     height: 100%;
     background-color: $background-light-gray;
-  }
 
-  .error-container {
-    height: auto;
-    padding-left: 10px;
-    color: $renascent-red;
-    font-size: 14px;
-  }
+    .error-container {
+      height: auto;
+      padding-left: 10px;
+      color: $renascent-red;
+      font-size: 14px;
+    }
 
-  .header-cards-container {
-    height: 100%;
-    overflow-y: hidden;
-    display: flex;
-    flex-direction: column;
-
-    .header {
-      width: 100%;
+    .header-cards-container {
+      height: 100%;
+      overflow-y: hidden;
       display: flex;
       flex-direction: column;
-      padding-bottom: 12px;
-      background-color: white;
-      border-radius: 0px 0px 7px 7px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
-      color: $dark-text;
-      position: relative;
-      z-index: 1;
-      flex-shrink: 0;
 
-      #backarrow {
-        position: absolute;
-        top: 9px;
-        left: 23px;
-        color: $renascent-red;
-        font-size: 30px;
-        z-index: -10;
-      }
-
-      #userid {
+      .header {
         display: flex;
-        flex: 1 0 auto;
-        font-size: 25px;
-        font-weight: 600;
-        justify-content: center;
-        padding-top: 9px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .name-inputs {
-        margin-left: auto;
-        margin-right: auto;
-        width: 300px;
-      }
-      #cards {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        flex-direction: column;
+        background-color: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
+        color: $dark-text;
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
 
         .user-role {
           text-align: center;
           margin-left: auto;
           margin-right: auto;
+          z-index: 4;
         }
 
         .name {
@@ -445,44 +413,39 @@ export default {
           font-weight: 900;
           text-align: center;
           margin-top: 4px;
+          z-index: 4;
+        }
+
+        #backarrow {
+          position: absolute;
+          top: 9px;
+          left: 23px;
+          color: $renascent-red;
+          font-size: 30px;
+          z-index: -10;
+        }
+
+        .actions {
+          display: flex;
+          margin-top: 10px;
+          align-items: center;
+        }
+
+        #userid {
+          display: flex;
+          flex: 1 0 auto;
+          font-size: 25px;
+          font-weight: 600;
+          justify-content: center;
+          padding-top: 9px;
           margin-left: auto;
           margin-right: auto;
         }
 
-        #actions {
-          display: flex;
-          flex: 0 1 auto;
-          justify-content: space-around;
-          margin-top: 10px;
-
-          .action-btn {
-            background-color: $renascent-red;
-            height: 43px;
-            width: 154px;
-            border: none !important;
-            border-radius: 5px;
-            color: white;
-            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-            padding: 0px;
-            display: flex;
-            align-content: center;
-            z-index: -10;
-
-            .action-icon {
-              font-size: 18px;
-              padding-left: 12px;
-              float: left;
-              margin-top: auto;
-              margin-bottom: auto;
-            }
-
-            .action-title {
-              font-size: 13px;
-              flex: 1 0 auto;
-              margin-top: auto;
-              margin-bottom: auto;
-            }
-          }
+        .name-inputs {
+          margin-left: auto;
+          margin-right: auto;
+          width: 300px;
         }
       }
 
@@ -491,7 +454,6 @@ export default {
 
         .card {
           position: relative;
-          width: calc(100vw - 15px);
           margin-left: auto;
           margin-right: auto;
           background-color: white;
@@ -563,11 +525,26 @@ export default {
         }
       }
     }
+  }
+  .edit {
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
+  }
+}
 
-    .edit {
-      position: absolute;
-      bottom: 75px;
-      right: 20px;
+// MOBILE
+
+.mobile {
+  .header {
+    width: 100%;
+    padding-bottom: 12px;
+    border-radius: 0px 0px 7px 7px;
+  }
+
+  .cards {
+    .card {
+      width: calc(100vw - 15px);
     }
   }
 }

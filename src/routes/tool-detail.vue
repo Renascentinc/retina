@@ -37,61 +37,9 @@
           :flag="toggleChangingStatus"
           button-text="CHANGE STATUS">
         </button-dropdown>
-
-        <button
-          class="action-btn transfer-btn"
-          @click="toggleTransferStatus">
-          <i class="fas fa-exchange-alt action-icon"></i>
-          <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
-        </button>
       </div>
 
       <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
-    </div>
-    <div class="cards">
-      <div class="card owner-card">
-        <div class="card-title">
-          Owner
-        </div>
-        <div class="card-details owner-details">
-          <div class="user-symbol">
-            <i
-              :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
-              class="fas fa-user">
-            </i>
-          </div>
-          <div class="owner-name">
-            <div
-              v-if="owner.type === 'LOCATION'"
-              class="owner-location">
-              {{ owner.name }}
-            </div>
-            <div
-              v-if="owner.type === 'USER'"
-              class="owner-user">
-              <span> {{ owner.first_name }} </span>
-              <span> {{ owner.last_name }} </span>
-            </div>
-          </div>
-          <div class="contact-buttons">
-            <fab
-              :on-click="phoneCall"
-              :disabled="!phoneNumber"
-              class="call-btn"
-              icon-class="fa-phone">
-            </fab>
-
-            <div class="spacer"></div>
-
-            <fab
-              :on-click="sendEmail"
-              :disabled="!email"
-              class="email-btn"
-              icon-class="fa-envelope">
-            </fab>
-          </div>
-        </div>
-      </div>
       <div class="header-cards-container">
         <div class="header">
           <router-link
@@ -385,18 +333,18 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-import Avatar from 'vue-avatar'
-import Fab from '../components/fab.vue'
-import ExtendedFab from '../components/extended-fab.vue'
-import vSelect from '../components/select'
-import VueLazyload from 'vue-lazyload'
-import ConfigurableItems from '../utils/configurable-items.js'
-import ButtonDropdown from '../components/button-dropdown.vue'
-import NfcEncode from '../components/nfc-encode'
+import gql from "graphql-tag";
+import Avatar from "vue-avatar";
+import Fab from "../components/fab.vue";
+import ExtendedFab from "../components/extended-fab.vue";
+import vSelect from "../components/select";
+import VueLazyload from "vue-lazyload";
+import ConfigurableItems from "../utils/configurable-items.js";
+import ButtonDropdown from "../components/button-dropdown.vue";
+import NfcEncode from "../components/nfc-encode";
 
 export default {
-  name: 'ToolDetail',
+  name: "ToolDetail",
 
   components: {
     Avatar,
@@ -410,15 +358,17 @@ export default {
 
   apollo: {
     getAllConfigurableItem: {
-      query: gql`query {
-        getAllConfigurableItem {
-          id
-          type
-          name
-          sanctioned
+      query: gql`
+        query {
+          getAllConfigurableItem {
+            id
+            type
+            name
+            sanctioned
+          }
         }
-      }`,
-      fetchPolicy: 'cache-and-network'
+      `,
+      fetchPolicy: "cache-and-network"
     },
 
     getTool: {
@@ -464,16 +414,16 @@ export default {
           }
         }
       `,
-      variables () {
-        let options = {}
-        options.tool_id = this.$router.currentRoute.params.toolId
-        return options
+      variables() {
+        let options = {};
+        options.tool_id = this.$router.currentRoute.params.toolId;
+        return options;
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: "cache-and-network"
     }
   },
 
-  data () {
+  data() {
     return {
       changingStatus: false,
       getTool: {},
@@ -489,136 +439,156 @@ export default {
 
       window: window,
       validations: {
-        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() +
+          1}`
       }
-    }
+    };
   },
 
   computed: {
-    statusClass () {
-      return this.getTool.status && this.getTool.status
-        .split('_')
-        .join('-')
-        .toLowerCase()
+    statusClass() {
+      return (
+        this.getTool.status &&
+        this.getTool.status
+          .split("_")
+          .join("-")
+          .toLowerCase()
+      );
     },
 
-    isToolSelected () {
-      return !!this.$store.state.selectedToolsMap[this.getTool.id]
+    isToolSelected() {
+      return !!this.$store.state.selectedToolsMap[this.getTool.id];
     },
 
-    brandOptions () {
-      return this.getConfigurableItemsForType(ConfigurableItems.BRAND)
+    brandOptions() {
+      return this.getConfigurableItemsForType(ConfigurableItems.BRAND);
     },
 
-    purchasedFromOptions () {
-      return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
+    purchasedFromOptions() {
+      return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM);
     },
 
-    typeOptions () {
-      return this.getConfigurableItemsForType(ConfigurableItems.TYPE)
+    typeOptions() {
+      return this.getConfigurableItemsForType(ConfigurableItems.TYPE);
     },
 
-    canEdit () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return (currentUser.role === 'ADMINISTRATOR')
+    canEdit() {
+      let currentUser = JSON.parse(window.localStorage.getItem("currentUser"));
+      return currentUser.role === "ADMINISTRATOR";
     },
 
-    owner () {
-      return this.getTool.owner || {}
+    owner() {
+      return this.getTool.owner || {};
     },
 
-    brand () {
-      let brand = this.getTool.brand
-      return brand && brand.name
+    brand() {
+      let brand = this.getTool.brand;
+      return brand && brand.name;
     },
 
-    type () {
-      let type = this.getTool.type
-      return type && type.name
+    type() {
+      let type = this.getTool.type;
+      return type && type.name;
     },
 
-    purchasedFrom () {
-      let purchasedFrom = this.getTool.purchased_from
-      return purchasedFrom ? purchasedFrom.name : '-'
+    purchasedFrom() {
+      let purchasedFrom = this.getTool.purchased_from;
+      return purchasedFrom ? purchasedFrom.name : "-";
     },
 
-    formattedStatus () {
-      let status = this.getTool.status
-      return status && status.replace(/_/g, ' ').toUpperCase()
+    formattedStatus() {
+      let status = this.getTool.status;
+      return status && status.replace(/_/g, " ").toUpperCase();
     },
 
-    formattedPrice () {
-      let priceString = this.getTool.price
-      return priceString ? `${priceString / 100}` : ' -'
+    formattedPrice() {
+      let priceString = this.getTool.price;
+      return priceString ? `${priceString / 100}` : " -";
     },
 
-    isTransferable () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return (currentUser.role === 'ADMINISTRATOR') || (this.owner.type === 'LOCATION') || (this.owner.type === 'USER' && currentUser.id === this.owner.id)
+    isTransferable() {
+      let currentUser = JSON.parse(window.localStorage.getItem("currentUser"));
+      return (
+        currentUser.role === "ADMINISTRATOR" ||
+        this.owner.type === "LOCATION" ||
+        (this.owner.type === "USER" && currentUser.id === this.owner.id)
+      );
     },
 
-    phoneNumber () {
-      if (this.owner.type === 'USER') {
-        return this.owner.phone_number
-      } else if (this.owner.type === 'LOCATION') {
-        return this.owner.phone_number
+    phoneNumber() {
+      if (this.owner.type === "USER") {
+        return this.owner.phone_number;
+      } else if (this.owner.type === "LOCATION") {
+        return this.owner.phone_number;
       }
     },
 
-    email () {
-      if (this.owner.type === 'USER') {
-        return this.owner.email
-      } else if (this.owner.type === 'LOCATION') {
-        return this.owner.email
+    email() {
+      if (this.owner.type === "USER") {
+        return this.owner.email;
+      } else if (this.owner.type === "LOCATION") {
+        return this.owner.email;
       }
     }
   },
 
   methods: {
-    toggleChangingStatus () {
-      this.changingStatus = !this.changingStatus
+    toggleChangingStatus() {
+      this.changingStatus = !this.changingStatus;
     },
 
-    transitionToTools () {
-      this.$router.push({ name: 'tools' })
+    transitionToTools() {
+      this.$router.push({ name: "tools" });
     },
 
-    formattedDate (date) {
-      let datePurchased = date
-      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US', { timeZone: 'UTC' }) : '-'
+    formattedDate(date) {
+      let datePurchased = date;
+      return datePurchased
+        ? new Date(datePurchased).toLocaleDateString("en-US", {
+            timeZone: "UTC"
+          })
+        : "-";
     },
 
-    getConfigurableItemsForType (type) {
-      return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
+    getConfigurableItemsForType(type) {
+      return this.getAllConfigurableItem.filter(
+        item => item.type === type && item.sanctioned
+      );
     },
 
-    toggleEditState () {
+    toggleEditState() {
       if (this.editState) {
         this.$validator.validate().then(result => {
           if (result) {
-            this.saveTool()
+            this.saveTool();
           }
-        })
+        });
       } else {
-        this.newBrand = this.getTool.brand
-        this.newType = this.getTool.type
-        this.newSerial = this.getTool.serial_number
-        this.newModel = this.getTool.model_number
-        this.newYear = this.getTool.year
-        this.newPurchasedFrom = this.getTool.purchased_from
-        this.newPurchaseDate = new Date(this.formattedDate(this.getTool.date_purchased))
-        this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
-        this.editState = true
+        this.newBrand = this.getTool.brand;
+        this.newType = this.getTool.type;
+        this.newSerial = this.getTool.serial_number;
+        this.newModel = this.getTool.model_number;
+        this.newYear = this.getTool.year;
+        this.newPurchasedFrom = this.getTool.purchased_from;
+        this.newPurchaseDate = new Date(
+          this.formattedDate(this.getTool.date_purchased)
+        );
+        this.newPrice = this.getTool.price ? this.getTool.price / 100 : null;
+        this.editState = true;
       }
     },
 
-    createNewConfigurableItem (configurableItem) {
+    createNewConfigurableItem(configurableItem) {
       return this.$apollo.mutate({
-        mutation: gql`mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
-          createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
-            id
+        mutation: gql`
+          mutation newConfigurableItem(
+            $newConfigurableItem: NewConfigurableItem!
+          ) {
+            createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
+              id
+            }
           }
-        }`,
+        `,
         variables: {
           newConfigurableItem: {
             type: configurableItem.type,
@@ -626,80 +596,100 @@ export default {
             sanctioned: true
           }
         }
-      })
+      });
     },
 
-    saveTool () {
-      let brandRequest = this.newBrand && this.newBrand.isNewConfigurableItem ? this.createNewConfigurableItem(this.newBrand) : null
-      let typeRequest = this.newType && this.newType.isNewConfigurableItem ? this.createNewConfigurableItem(this.newType) : null
-      let purchaseRequest = this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.newPurchasedFrom) : null
+    saveTool() {
+      let brandRequest =
+        this.newBrand && this.newBrand.isNewConfigurableItem
+          ? this.createNewConfigurableItem(this.newBrand)
+          : null;
+      let typeRequest =
+        this.newType && this.newType.isNewConfigurableItem
+          ? this.createNewConfigurableItem(this.newType)
+          : null;
+      let purchaseRequest =
+        this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem
+          ? this.createNewConfigurableItem(this.newPurchasedFrom)
+          : null;
 
-      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
-        let [brandResponse, typeResponse, purchaseResponse] = responses
+      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(
+        responses => {
+          let [brandResponse, typeResponse, purchaseResponse] = responses;
 
-        if (brandResponse) {
-          this.newBrand.id = brandResponse.data.createConfigurableItem.id
-        }
-
-        if (typeResponse) {
-          this.newType.id = typeResponse.data.createConfigurableItem.id
-        }
-
-        if (purchaseResponse) {
-          this.newPurchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
-        }
-
-        this.$apollo.mutate({
-          mutation: gql`
-            mutation updateTool($tool: UpdatedTool!) {
-              updateTool(updatedTool: $tool) {
-                id
-              }
-            }`,
-
-          variables: {
-            tool: {
-              id: this.getTool.id,
-              type_id: this.newType.id,
-              brand_id: this.newBrand.id,
-              model_number: this.newModel,
-              serial_number: this.newSerial,
-              status: this.getTool.status,
-              owner_id: this.getTool.owner.id,
-              purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
-              date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-              photo: this.getTool.photo,
-              price: this.newPrice ? (this.newPrice * 100).toFixed(0) : null,
-              year: this.newYear ? this.newYear : null
-            }
+          if (brandResponse) {
+            this.newBrand.id = brandResponse.data.createConfigurableItem.id;
           }
-        }).then(result => {
-          this.$apollo.queries.getTool.refresh()
-          this.$apollo.queries.getAllConfigurableItem.refresh()
-          this.editState = false
-        })
-      })
+
+          if (typeResponse) {
+            this.newType.id = typeResponse.data.createConfigurableItem.id;
+          }
+
+          if (purchaseResponse) {
+            this.newPurchasedFrom.id =
+              purchaseResponse.data.createConfigurableItem.id;
+          }
+
+          this.$apollo
+            .mutate({
+              mutation: gql`
+                mutation updateTool($tool: UpdatedTool!) {
+                  updateTool(updatedTool: $tool) {
+                    id
+                  }
+                }
+              `,
+
+              variables: {
+                tool: {
+                  id: this.getTool.id,
+                  type_id: this.newType.id,
+                  brand_id: this.newBrand.id,
+                  model_number: this.newModel,
+                  serial_number: this.newSerial,
+                  status: this.getTool.status,
+                  owner_id: this.getTool.owner.id,
+                  purchased_from_id:
+                    this.newPurchasedFrom && this.newPurchasedFrom.id,
+                  date_purchased: this.newPurchaseDate
+                    ? new Date(this.newPurchaseDate).toISOString()
+                    : null,
+                  photo: this.getTool.photo,
+                  price: this.newPrice
+                    ? (this.newPrice * 100).toFixed(0)
+                    : null,
+                  year: this.newYear ? this.newYear : null
+                }
+              }
+            })
+            .then(result => {
+              this.$apollo.queries.getTool.refresh();
+              this.$apollo.queries.getAllConfigurableItem.refresh();
+              this.editState = false;
+            });
+        }
+      );
     },
 
-    toggleTransferStatus () {
-      this.$store.commit('toggleToolSelection', this.getTool.id)
-      this.$router.push({ path: '/tools' })
+    toggleTransferStatus() {
+      this.$store.commit("toggleToolSelection", this.getTool.id);
+      this.$router.push({ path: "/tools" });
     },
 
-    phoneCall () {
-      window.location.href = `tel:${this.owner.phone_number}`
+    phoneCall() {
+      window.location.href = `tel:${this.owner.phone_number}`;
     },
 
-    sendEmail () {
-      window.location = `mailto:${this.owner.email}`
+    sendEmail() {
+      window.location = `mailto:${this.owner.email}`;
     },
 
-    updateStatus (newStatus) {
-      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
+    updateStatus(newStatus) {
+      newStatus = newStatus.replace(/ /g, "_").toUpperCase();
 
       // save current status in case request fails but set the tool status assuming it will succeed
-      let currentStatus = this.getTool.status
-      this.getTool.status = newStatus
+      let currentStatus = this.getTool.status;
+      this.getTool.status = newStatus;
 
       this.$apollo
         .mutate({
@@ -728,14 +718,15 @@ export default {
           }
         })
         .then(status => {
-          this.getTool.status = status.data.updateTool.status
-        }).catch(() => {
-          this.getTool.status = currentStatus
-          // TODO: pop toast notifying user that request failed.
+          this.getTool.status = status.data.updateTool.status;
         })
+        .catch(() => {
+          this.getTool.status = currentStatus;
+          // TODO: pop toast notifying user that request failed.
+        });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -749,44 +740,22 @@ export default {
   .info-menu-container {
     height: 100%;
     background-color: $background-light-gray;
-  .nfc-encode {
-    position: absolute;
-    right: 15px;
-    width: 120px;
-    height: 30px;
-    top: 9px;
 
-    .fab-icon-container {
-      height: 18px;
-      width: 18px;
-    }
-
-    .efab-text {
-      font-size: 10px;
-    }
-  }
-
-  .header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 12px;
-    background-color: white;
-    border-radius: 0px 0px 7px 7px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
-    color: $dark-text;
-    position: relative;
-    z-index: 1;
-    flex-shrink: 0;
-
-    .backarrow {
+    .nfc-encode {
       position: absolute;
+      right: 15px;
+      width: 120px;
+      height: 30px;
       top: 9px;
-      left: 23px;
-      color: $renascent-red;
-      font-size: 30px;
-      width: 27px;
-      z-index: -10;
+
+      .fab-icon-container {
+        height: 18px;
+        width: 18px;
+      }
+
+      .efab-text {
+        font-size: 10px;
+      }
     }
 
     .header-cards-container {
@@ -868,6 +837,31 @@ export default {
         margin-top: 10px;
         z-index: 1;
 
+        .action-btn {
+            background-color: $renascent-red;
+            height: 43px;
+            width: 154px;
+            border: none !important;
+            border-radius: 5px;
+            color: white;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+            padding: 0px;
+            display: flex;
+            align-items: center;
+            z-index: -10;
+            padding-left: 10px;
+            font-size: 13px;
+            justify-content: center;
+
+            .action-title {
+              flex: 1 1 auto;
+            }
+
+            .action-icon {
+              font-size: 18px;
+            }
+        }
+
         .transfer-btn {
           z-index: -6;
         }
@@ -879,206 +873,172 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 
-        .action-btn {
-          background-color: $renascent-red;
-          height: 43px;
-          width: 154px;
-          border: none !important;
-          border-radius: 5px;
-          color: white;
-          box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-          padding: 0px;
-          display: flex;
-          align-content: center;
-          // z-index: -10;
+    .card {
+      position: relative;
+      width: calc(100% - 15px);
+      margin-left: auto;
+      margin-right: auto;
+      background-color: white;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+      z-index: 0;
+      margin-top: 6px;
+      margin-bottom: 10px;
+      border-radius: 3px;
 
-          .action-icon {
-            font-size: 18px;
-            padding-left: 12px;
-            float: left;
-            margin-top: auto;
-            margin-bottom: auto;
-          }
+      .card-title {
+        font-size: 25px;
+        font-weight: 900;
+        color: $dark-text;
+        padding-left: 14px;
+        padding-top: 6px;
+      }
 
-          .action-title {
-            font-size: 13px;
-            flex: 1 0 auto;
-            margin-top: auto;
-            margin-bottom: auto;
-          }
-        }
+      .card-details {
+        padding-left: 14px;
+        padding-right: 14px;
+        padding-top: 10px;
       }
     }
 
-    .cards {
-      overflow-y: auto;
+    .general-card {
+      padding-bottom: 10px;
 
-      .card {
-        position: relative;
-        width: calc(100% - 15px);
-        margin-left: auto;
-        margin-right: auto;
-        background-color: white;
-        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-        z-index: 0;
-        margin-top: 6px;
-        margin-bottom: 10px;
-        border-radius: 3px;
+      .general-details {
+        display: flex;
+        flex-direction: column;
+        font-size: 16px;
 
-        .card-title {
-          font-size: 25px;
-          font-weight: 900;
-          color: $dark-text;
-          padding-left: 14px;
-          padding-top: 6px;
-        }
-
-        .card-details {
-          padding-left: 14px;
-          padding-right: 14px;
+        .general-label {
           padding-top: 10px;
+          color: $dark-avatar;
+          font-weight: 400;
         }
-      }
 
-      .general-card {
-        padding-bottom: 10px;
+        .general-data {
+          color: $dark-text;
+          font-weight: 600;
+        }
 
-        .general-details {
-          display: flex;
-          flex-direction: column;
+        .error-container {
+          height: auto;
+          padding-left: 10px;
+          color: $renascent-red;
+          font-size: 14px;
+        }
+
+        .light-input {
           font-size: 16px;
+          height: 30px;
+        }
 
-          .general-label {
-            padding-top: 10px;
-            color: $dark-avatar;
-            font-weight: 400;
-          }
+        .dark-input,
+        .popover-container {
+          font-size: 18px;
+          height: 40px;
 
-          .general-data {
-            color: $dark-text;
-            font-weight: 600;
-          }
-
-          .error-container {
-            height: auto;
-            padding-left: 10px;
-            color: $renascent-red;
-            font-size: 14px;
-          }
-
-          .light-input {
-            font-size: 16px;
-            height: 30px;
-          }
-
-          .dark-input, .popover-container {
+          input {
             font-size: 18px;
             height: 40px;
-
-            input {
-              font-size: 18px;
-              height: 40px;
-            }
-          }
-        }
-      }
-
-      .photo-card {
-        padding-bottom: 11px;
-
-        .photo-box {
-          width: calc(100% - 23px);
-          margin-left: auto;
-          margin-right: auto;
-          margin-top: 10px;
-          overflow: hidden;
-
-          .image {
-            height: 100%;
-            width: 100%;
-            border-radius: 2px;
-          }
-
-          .no-image {
-            color: $background-dark-gray;
-            font-size: 60px;
-            width: 100%;
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-          }
-        }
-      }
-
-      .owner-card {
-        padding-bottom: 17px;
-
-        .owner-details {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-
-          .owner-name {
-            display: flex;
-            flex-direction: column;
-            font-size: 23px;
-            font-weight: 800;
-            color: $renascent-dark-gray;
-            margin-left: 11px;
-
-            .owner-user {
-              display: flex;
-              flex-direction: column;
-            }
-          }
-
-          .user-symbol {
-            height: 44px;
-            width: 44px;
-            border-radius: 50%;
-            background-color: $dark-avatar;
-            color: white;
-            margin: 0px;
-            font-size: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-          }
-        }
-
-        .contact-buttons {
-          margin-left: auto;
-          display: flex;
-          justify-content: flex-end;
-          flex-direction: row;
-          flex-wrap: wrap;
-
-          .fab {
-            margin: 11px;
-          }
-
-          .email-btn {
-            margin-left: 11px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-          }
-
-          .call-btn {
-            margin-right: 11px;
-            margin-bottom: 5px;
-            margin-top: 5px;
           }
         }
       }
     }
-  }
 
-  .edit {
-    position: absolute;
-    bottom: 75px;
-    right: 20px;
+    .photo-card {
+      padding-bottom: 11px;
+
+      .photo-box {
+        width: calc(100% - 23px);
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        overflow: hidden;
+
+        .image {
+          height: 100%;
+          width: 100%;
+          border-radius: 2px;
+        }
+
+        .no-image {
+          color: $background-dark-gray;
+          font-size: 60px;
+          width: 100%;
+          text-align: center;
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+      }
+    }
+
+    .owner-card {
+      padding-bottom: 17px;
+
+      .owner-details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .owner-name {
+          display: flex;
+          flex-direction: column;
+          font-size: 23px;
+          font-weight: 800;
+          color: $renascent-dark-gray;
+          margin-left: 11px;
+
+          .owner-user {
+            display: flex;
+            flex-direction: column;
+          }
+        }
+
+        .user-symbol {
+          height: 44px;
+          width: 44px;
+          border-radius: 50%;
+          background-color: $dark-avatar;
+          color: white;
+          margin: 0px;
+          font-size: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-shrink: 0;
+        }
+      }
+
+      .contact-buttons {
+        margin-left: auto;
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .fab {
+          margin: 11px;
+        }
+
+        .email-btn {
+          margin-left: 11px;
+          margin-top: 5px;
+          margin-bottom: 5px;
+        }
+
+        .call-btn {
+          margin-right: 11px;
+          margin-bottom: 5px;
+          margin-top: 5px;
+        }
+      }
+    }
   }
+}
+
+.edit {
+  position: absolute;
+  bottom: 75px;
+  right: 20px;
 }
 
 // MOBILE
@@ -1107,17 +1067,20 @@ export default {
       padding-top: 80px;
       overflow-y: auto;
 
-      .container, .extended-fab{
+      .container,
+      .extended-fab {
         margin-left: 10px;
         margin-top: 20px;
       }
     }
 
-    .dark-input, .popover-container {
+    .dark-input,
+    .popover-container {
       width: 300px !important;
     }
 
-    .dark-input, .dropdown-toggle {
+    .dark-input,
+    .dropdown-toggle {
       height: 40px !important;
       * {
         font-size: 14px !important;
@@ -1142,7 +1105,6 @@ export default {
       }
     }
     .cards {
-
       .card {
         width: 500px;
       }

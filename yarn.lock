@@ -7204,6 +7204,7 @@ vue-mq@^0.2.1:
   integrity sha512-qWuV4peITyXsbL2rwz/KzRULxxfxt1KsHHojEmkY5jr3uT4zv70ar1Qk5lKJ90/f+RYoLFgp4VlQH7A2zwsc8g==
   dependencies:
     json2mq "^0.2.0"
+
 vue-notifications@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/vue-notifications/-/vue-notifications-0.9.0.tgz#7d25e19a5e4872442e3527f252007d538af4ba6e"
@@ -7213,6 +7214,11 @@ vue-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
   integrity sha512-vLLoY452L+JBpALMP5UHum9+7nzR9PeIBCghU9ZtJ1eWm6ieUI8Zb/DI3MYxH32bxkjzYV1LRjNv4qr8d+uX/w==
+
+vue-snotify@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/vue-snotify/-/vue-snotify-3.2.1.tgz#1e093838b67ecb4141d6227b6b19175735f4e259"
+  integrity sha512-7kETtCAK3key/mDkz47FY/LuPzDGNwHHrYmS037JuVac2FW/9GTtoCNIrOp+SNbpMHeXFdLIDktkBK0IdPdHew==
 
 vue-svgicon@^3.2.1:
   version "3.2.1"

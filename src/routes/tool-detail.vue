@@ -1094,6 +1094,7 @@ export default {
       margin-left: 28px;
       margin-right: 28px;
       margin-top: 10px;
+      padding-bottom: 12px;
 
       .actions {
         justify-content: center;

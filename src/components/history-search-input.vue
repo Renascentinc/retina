@@ -51,6 +51,10 @@ export default {
     updateTags: {
       type: Function,
       required: true
+    },
+    tags: {
+      type: Array,
+      required: true
     }
   },
   apollo: {
@@ -82,8 +86,7 @@ export default {
   },
   data () {
     return {
-      tag: '',
-      tags: []
+      tag: ''
     }
   },
 
@@ -170,7 +173,7 @@ export default {
   },
   methods: {
     tagsChanged (newTags) {
-      this.tags = newTags
+      // this.tags = newTags
       this.updateTags(newTags)
     }
 

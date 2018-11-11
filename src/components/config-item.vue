@@ -144,12 +144,25 @@ export default {
 <style lang="scss">
   @import '../styles/variables';
   @import '../styles/search-result';
+
+  .sanctioned {
+    .save-icon, .cancel-icon {
+      color: $renascent-red;
+      font-size: 30px;
+    }
+  }
+
   .unsanctioned {
     background-color: $renascent-red;
     color: white;
 
     .edit-icon {
       color: white !important;
+    }
+
+    .save-icon, .cancel-icon {
+      color: white;
+      font-size: 30px;
     }
 
     .action-group {
@@ -179,11 +192,6 @@ export default {
 
     .edit-icon {
       color: $dark-avatar;
-    }
-
-    .save-icon, .cancel-icon {
-      color: $renascent-red;
-      font-size: 30px;
     }
 
     .main-container {

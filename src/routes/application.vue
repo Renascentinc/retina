@@ -27,6 +27,7 @@
 
         <div class="menu-buttons">
           <button
+            v-if="isAdmin"
             class="config menu-btn"
             @click='transitionToConfig()'>
             <i class="fas menu-btn-icon fa-cog"></i>
@@ -139,6 +140,10 @@ export default {
 
     role () {
       return this.currentUser.role
+    },
+
+    isAdmin () {
+      return this.currentUser.role === 'ADMINISTRATOR'
     }
   },
 

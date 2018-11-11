@@ -16,7 +16,6 @@
       </i>
       <input
         v-if="editing"
-        :placeholder="configItem.name"
         v-model="changedName"/>
       <i
         class="fas fa-times cancel-icon"
@@ -93,13 +92,16 @@ export default {
 
   methods: {
     save () {
-      var changedConfig = {
-        id: this.$props.configItem.id,
-        name: this.changedName,
-        sanctioned: this.$props.configItem.sanctioned
+      if (this.$props.configItem.name !== this.changedName) {
+        var changedConfig = {
+          id: this.$props.configItem.id,
+          name: this.changedName,
+          sanctioned: this.$props.configItem.sanctioned
+        }
+
+        this.$props.onSave(changedConfig)
       }
-      console.log(changedConfig)
-      this.$props.onSave(changedConfig)
+
       this.cancelEdit()
     },
 
@@ -109,6 +111,7 @@ export default {
     },
 
     startEditing () {
+      this.changedName = this.$props.configItem.name
       this.editing = true
     },
 

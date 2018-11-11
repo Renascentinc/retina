@@ -65,7 +65,7 @@
         <div class="action-group">
           <fab
             icon-class="fa-times"
-            :on-click="onDelete">
+            :on-click="deleteConfig">
           </fab>
           DELETE
         </div>
@@ -92,6 +92,10 @@ export default {
   },
 
   methods: {
+    deleteConfig () {
+      this.$props.onDelete(this.$props.configItem)
+    },
+
     save () {
       if (this.$props.configItem.name !== this.changedName) {
         var changedConfig = {
@@ -180,6 +184,10 @@ export default {
   }
 
   .search-result {
+    .element-container {
+      padding-right: 10px;
+    }
+
     input {
       border-radius: 3px;
       border: solid $disabled-gray 1px;

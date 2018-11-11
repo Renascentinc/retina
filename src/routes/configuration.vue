@@ -1,5 +1,52 @@
 <template>
   <div class="page configuration-page">
+
+    <div
+      v-if="showReplacementModal"
+      class="replacement-scrim">
+      <div class="replacement-modal">
+        <span> {{ replacementList.length }} tools are using this item. </span>
+        <span> Replace each use of {{ replacementName }} with: </span>
+        <v-select
+          v-if="page === ConfigurableItems.BRAND"
+          v-validate:replaceBrandWith="'required'"
+          v-model="replaceBrandWith"
+          :options="brandOptions"
+          label="name"
+          class="dark-input"
+          placeholder="Brand"
+          name="replaceBrandWith">
+        </v-select>
+        <v-select
+          v-if="page === ConfigurableItems.TYPE"
+          v-validate:replaceTypeWith="'required'"
+          v-model="replaceTypeWith"
+          :options="typeOptions"
+          label="name"
+          class="dark-input"
+          placeholder="Type"
+          name="replaceTypeWith">
+        </v-select>
+        <v-select
+          v-if="page === ConfigurableItems.PURCHASED_FROM"
+          v-validate:replaceSupplierWith="'required'"
+          v-model="replaceSupplierWith"
+          :options="supplierOptions"
+          label="name"
+          class="dark-input"
+          placeholder="Supplier"
+          name="replaceSupplierWith">
+        </v-select>
+        <div class="modal-actions">
+          <i
+            class="fas fa-times"
+            @click="closeReplacementModal"></i>
+          <i
+            class="fas fa-save"
+            @click="finalizeDelete"></i>
+        </div>
+      </div>
+    </div>
     <header-card
       :title="title"
       exit-link="/">
@@ -40,7 +87,7 @@
           v-for="config in configs.unsanctioned"
           :key="config.id"
           :config-item="config"
-          :on-delete="() => 0"
+          :on-delete="deleteConfig"
           :on-sanction-toggle="toggleSanction"
           :on-save="saveChanges">
         </config-item>
@@ -49,7 +96,7 @@
           v-for="config in configs.sanctioned"
           :key="config.id"
           :config-item="config"
-          :on-delete="() => 0"
+          :on-delete="deleteConfig"
           :on-sanction-toggle="toggleSanction"
           :on-save="saveChanges">
         </config-item>
@@ -63,8 +110,9 @@ import HeaderCard from "../components/header-card";
 import ConfigItem from "../components/config-item";
 import ConfigurableItems from "../utils/configurable-items";
 import gql from "graphql-tag";
-import VueNotifications from 'vue-notifications'
-import AddResult from '../components/add-result'
+import vSelect from '../components/select'
+import VueNotifications from "vue-notifications";
+import AddResult from "../components/add-result";
 
 export default {
   name: "Configuration",
@@ -73,30 +121,57 @@ export default {
     HeaderCard,
     ConfigItem,
     ConfigurableItems,
-    AddResult
+    AddResult,
+    vSelect
   },
 
   data() {
     return {
       getAllConfigurableItem: null,
-      tab: 0
+      tab: 0,
+      showReplacementModal: false,
+      replacementList: [],
+      replacementType: '',
+      replacementName: '',
+      replaceBrandWith: null,
+      replaceTypeWith: null,
+      replaceSupplierWith: null,
+      deletedConfig: {},
+      ConfigurableItems: ConfigurableItems
     };
   },
 
   notifications: {
     showInvalidItemMsg: {
       type: VueNotifications.types.warn,
-      title: 'INVALID ITEM',
-      message: 'You cannot create a duplicate item'
+      title: "INVALID ITEM",
+      message: "You cannot create a duplicate item"
     },
     showBlankItemMsg: {
       type: VueNotifications.types.warn,
-      title: 'BLANK ITEM',
-      message: 'You cannot create a blank item'
+      title: "BLANK ITEM",
+      message: "You cannot create a blank item"
     },
+    showSuccessDelete: {
+      type: VueNotifications.types.success,
+      title: "SUCCESS",
+      message: "Item has been deleted"
+    }
   },
 
   computed: {
+    typeOptions () {
+      return this.types.sanctioned
+    },
+
+    supplierOptions () {
+      return this.suppliers.sanctioned
+    },
+
+    brandOptions () {
+      return this.brands.sanctioned
+    },
+
     titles() {
       return {
         BRAND: "Brands",
@@ -210,32 +285,139 @@ export default {
   },
 
   methods: {
-    addConfig (name) {
-      if (name === '') {
-        this.showBlankItemMsg();
-      } else {
-        this.$apollo.mutate({
-          mutation: gql`
-            mutation createConfigurableItem($item: NewConfigurableItem!) {
-              createConfigurableItem(newConfigurableItem: $item) {
-                type
-                name
-                sanctioned
+    deleteConfig(config) {
+      this.deletedConfig = config;
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation deleteConfigurableItem($id: ID!) {
+            deleteConfigurableItem(configurable_item_id: $id) {
+              toolsWithConfigurableItem {
+                id,
+                type {
+                  id
+                },
+                brand {
+                  id
+                },
+                model_number,
+                serial_number,
+                status,
+                owner {
+                  ... on Location {
+                    id
+                  }
+                  ... on User {
+                    id
+                  }
+                },
+                purchased_from {
+                  id
+                },
+                date_purchased,
+                photo,
+                price,
+                year
+              }
+              deletedConfigurableItem {
+                id
               }
             }
-          `,
-          variables: {
-            item: {
-              type: this.page,
-              name: name,
-              sanctioned: true
-            }
           }
-        }).catch(response => {
-          this.showInvalidItemMsg();
-        }).then(result => {
-        this.$apollo.queries.getAllConfigurableItem.refresh();
+        `,
+        variables: {
+          id: config.id
+        }
+      }).then(response => {
+        if (response.data.deleteConfigurableItem.deletedConfigurableItem) {
+          this.showSuccessDelete();
+          this.$apollo.queries.getAllConfigurableItem.refresh();
+        } else {
+          this.replacementList = response.data.deleteConfigurableItem.toolsWithConfigurableItem
+          this.openReplacementModal(config)
+        }
       });
+    },
+
+    openReplacementModal (config) {
+      this.replacementType = config.type.toLowerCase()
+      this.replacementName = config.name.toLowerCase()
+      this.showReplacementModal = true
+    },
+
+    closeReplacementModal () {
+      this.replacementType = ''
+      this.replacementName = ''
+      this.replacementList = []
+      this.showReplacementModal = false
+    },
+
+    finalizeDelete () {
+      this.replacementList.forEach(tool => {
+        console.log(tool)
+        this.$apollo
+            .mutate({
+              mutation: gql`
+                mutation updateTool($tool: UpdatedTool!) {
+                  updateTool(updatedTool: $tool) {
+                    id
+                  }
+                }
+              `,
+
+              variables: {
+                tool: {
+                  id: tool.id,
+                  type_id: this.page === ConfigurableItems.TYPE ? this.replaceTypeWith.id : tool.type.id,
+                  brand_id: this.page === ConfigurableItems.BRAND ? this.replaceBrandWith.id : tool.brand.id,
+                  model_number: tool.model_number,
+                  serial_number: tool.serial_number,
+                  status: tool.status,
+                  owner_id: tool.owner.id,
+                  purchased_from_id: this.page === ConfigurableItems.PURCHASED_FROM ? this.replaceSupplierWith.id : tool.purchased_from.id,
+                  date_purchased: tool.date_purchased,
+                  photo: tool.photo,
+                  price: tool.price,
+                  year: tool.year
+                }
+              }
+            })
+            .then(result => {
+              this.deleteConfig(this.deletedConfig)
+              this.closeReplacementModal()
+              this.deletedConfig = {}
+            })
+      })
+    },
+
+    addConfig (name) {
+      if (name === "") {
+        this.showBlankItemMsg();
+      } else {
+        this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation createConfigurableItem($item: NewConfigurableItem!) {
+                createConfigurableItem(newConfigurableItem: $item) {
+                  type
+                  name
+                  sanctioned
+                }
+              }
+            `,
+            variables: {
+              item: {
+                type: this.page,
+                name: name,
+                sanctioned: true
+              }
+            }
+          })
+          .catch(response => {
+            this.showInvalidItemMsg();
+          })
+          .then(result => {
+            this.$apollo.queries.getAllConfigurableItem.refresh();
+          });
       }
     },
 
@@ -258,45 +440,47 @@ export default {
             sanctioned: !config.sanctioned
           }
         }
-      })
+      });
     },
 
-    saveChanges (config) {
-      if (config.name === '') {
+    saveChanges(config) {
+      if (config.name === "") {
         this.showBlankItemMsg();
-      }
-      else {
-      this.$apollo.mutate({
-          mutation: gql`
-            mutation updateConfigurableItem($item: UpdatedConfigurableItem!) {
-              updateConfigurableItem(updatedConfigurableItem: $item) {
-                id
-                type
-                name
-                sanctioned
+      } else {
+        this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation updateConfigurableItem($item: UpdatedConfigurableItem!) {
+                updateConfigurableItem(updatedConfigurableItem: $item) {
+                  id
+                  type
+                  name
+                  sanctioned
+                }
+              }
+            `,
+            variables: {
+              item: {
+                id: config.id,
+                name: config.name,
+                sanctioned: config.sanctioned
               }
             }
-          `,
-          variables: {
-            item: {
-              id: config.id,
-              name: config.name,
-              sanctioned: config.sanctioned
-            }
-          }
-        }).catch(response => {
-          this.showInvalidItemMsg()
-        }).then(result => {
-          this.$apollo.queries.getAllConfigurableItem.refresh()
-        })
+          })
+          .catch(response => {
+            this.showInvalidItemMsg();
+          })
+          .then(result => {
+            this.$apollo.queries.getAllConfigurableItem.refresh();
+          });
       }
     },
 
-    incrementTab () {
+    incrementTab() {
       this.tab = ++this.tab % 3;
     },
 
-    decrementTab () {
+    decrementTab() {
       this.tab = (this.tab + 2) % 3;
     }
   },
@@ -327,6 +511,67 @@ export default {
   flex-direction: column;
   background-color: $background-light-gray;
   overflow-y: hidden;
+
+  .replacement-scrim {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .replacement-modal {
+      z-index: 11;
+      background-color: white;
+      border-radius: 5px;
+      width: calc(100% - 60px);
+      max-width: 350px;
+      font-size: 22px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding: 15px;
+      line-height: 30px;
+
+      .v-select {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        width: 250px;
+        font-size: 16px;
+        height: 45px;
+        margin-left: auto;
+        margin-right: auto;
+
+        * {
+          font-size: 16px;
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: space-around;
+        padding: 15px;
+        font-size: 30px;
+        color: $renascent-red;
+
+        i {
+          border: solid $renascent-red 2px;
+          border-radius: 50%;
+          color: $renascent-red;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 
   .navigation {
     position: absolute;

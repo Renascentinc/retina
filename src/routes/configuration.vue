@@ -167,15 +167,15 @@ export default {
 
   computed: {
     typeOptions () {
-      return this.types.sanctioned
+      return this.types.sanctioned.filter(type => type.name !== this.deletedConfig.name)
     },
 
     supplierOptions () {
-      return this.suppliers.sanctioned
+      return this.suppliers.sanctioned.filter(supplier => supplier.name !== this.deletedConfig.name)
     },
 
     brandOptions () {
-      return this.brands.sanctioned
+      return this.brands.sanctioned.filter(brand => brand.name !== this.deletedConfig.name)
     },
 
     titles () {

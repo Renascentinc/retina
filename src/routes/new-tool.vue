@@ -749,6 +749,7 @@ export default {
   }
 
   .img-preview {
+    max-height: 350px;
     max-width: 100%;
   }
 
@@ -773,7 +774,6 @@ export default {
 }
 
 .no-options-btn {
-  // width: 100%;
   height: 40px;
   padding: 0;
   display: flex;

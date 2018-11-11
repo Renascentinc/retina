@@ -348,7 +348,7 @@
 
         <div class="oos-actions">
           <extended-fab
-            :on-click="() => $modal.hide('confirm-oos-modal')"
+            :on-click="() => cancelDecomission()"
             class="oos-btn cancel-oos-btn"
             icon-class="fa-times"
             button-text="CANCEL">
@@ -592,6 +592,12 @@ export default {
   },
 
   methods: {
+    cancelDecomission () {
+      this.$modal.hide('confirm-oos-modal')
+      this.reason = null
+      this.oosStatus = null
+    },
+
     toggleChangingStatus () {
       this.changingStatus = !this.changingStatus
     },

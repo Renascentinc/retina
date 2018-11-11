@@ -29,7 +29,7 @@
           <button
             v-if="isAdmin"
             class="config menu-btn"
-            @click='transitionToConfig()'>
+            @click="transitionToConfig()">
             <i class="fas menu-btn-icon fa-cog"></i>
             CONFIGURATION
           </button>

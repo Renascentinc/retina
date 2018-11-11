@@ -1,71 +1,71 @@
 <template>
   <div
-    class="search-result"
-    :class="configItem.sanctioned ? 'sanctioned' : 'unsanctioned'">
+    :class="configItem.sanctioned ? 'sanctioned' : 'unsanctioned'"
+    class="search-result">
     <div
       class="element-container">
       <i
-        class="fas fa-pen edit-icon"
         v-if="!editing"
+        class="fas fa-pen edit-icon"
         @click="startEditing">
       </i>
       <i
-        class="fas fa-save save-icon"
         v-if="editing"
+        class="fas fa-save save-icon"
         @click="save">
       </i>
       <input
         v-if="editing"
         v-model="changedName"/>
       <i
-        class="fas fa-times cancel-icon"
         v-if="editing"
+        class="fas fa-times cancel-icon"
         @click="cancelEdit">
       </i>
       <div
-        class="main-container"
         v-if="!editing"
+        class="main-container"
         @click="startEditing">
         <div
-          class="row"
-          v-if="!editing">
+          v-if="!editing"
+          class="row">
           <span class="title">{{ configItem.name }}</span>
         </div>
         <div
-          class="row"
-          v-if="!editing">
+          v-if="!editing"
+          class="row">
           <span class="subtitle">{{ configItem.sanctioned ? 'CONFIRMED' : 'NOT CONFIRMED' }}</span>
         </div>
       </div>
       <div
-        class="actions"
-        v-if="!editing">
+        v-if="!editing"
+        class="actions">
         <div
-          class="action-group"
           v-if="configItem.sanctioned"
+          class="action-group"
           @click="toggleSanctioned">
           <fab
-            icon-class="fa-thumbs-down"
-            :on-click="toggleSanctioned">
+            :on-click="toggleSanctioned"
+            icon-class="fa-thumbs-down">
           </fab>
           REJECT
         </div>
 
         <div
-          class="action-group"
           v-if="!configItem.sanctioned"
+          class="action-group"
           @click="toggleSanctioned">
           <fab
-            icon-class="fa-thumbs-up"
-            :on-click="toggleSanctioned">
+            :on-click="toggleSanctioned"
+            icon-class="fa-thumbs-up">
           </fab>
           CONFIRM
         </div>
 
         <div class="action-group">
           <fab
-            icon-class="fa-times"
-            :on-click="deleteConfig">
+            :on-click="deleteConfig"
+            icon-class="fa-times">
           </fab>
           DELETE
         </div>
@@ -82,6 +82,28 @@ export default {
 
   components: {
     Fab
+  },
+
+  props: {
+    configItem: {
+      required: true,
+      type: Object
+    },
+
+    onDelete: {
+      required: true,
+      type: Function
+    },
+
+    onSanctionToggle: {
+      required: true,
+      type: Function
+    },
+
+    onSave: {
+      required: true,
+      type: Function
+    }
   },
 
   data () {
@@ -122,28 +144,6 @@ export default {
 
     toggleSanctioned () {
       this.$props.onSanctionToggle(this.$props.configItem)
-    }
-  },
-
-  props: {
-    configItem: {
-      required: true,
-      type: Object,
-    },
-
-    onDelete: {
-      required: true,
-      type: Function
-    },
-
-    onSanctionToggle: {
-      required: true,
-      type: Function
-    },
-
-    onSave: {
-      required: true,
-      type: Function
     }
   }
 }

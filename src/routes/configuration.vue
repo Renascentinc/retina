@@ -8,8 +8,8 @@
         <span> {{ replacementList.length }} tools are using this item. </span>
         <span> Replace each use of {{ replacementName }} with: </span>
         <v-select
-          v-if="page === ConfigurableItems.BRAND"
           v-validate:replaceBrandWith="'required'"
+          v-if="page === ConfigurableItems.BRAND"
           v-model="replaceBrandWith"
           :options="brandOptions"
           label="name"
@@ -18,8 +18,8 @@
           name="replaceBrandWith">
         </v-select>
         <v-select
-          v-if="page === ConfigurableItems.TYPE"
           v-validate:replaceTypeWith="'required'"
+          v-if="page === ConfigurableItems.TYPE"
           v-model="replaceTypeWith"
           :options="typeOptions"
           label="name"
@@ -28,8 +28,8 @@
           name="replaceTypeWith">
         </v-select>
         <v-select
-          v-if="page === ConfigurableItems.PURCHASED_FROM"
           v-validate:replaceSupplierWith="'required'"
+          v-if="page === ConfigurableItems.PURCHASED_FROM"
           v-model="replaceSupplierWith"
           :options="supplierOptions"
           label="name"
@@ -63,24 +63,24 @@
 
     <div class="config-menu-container">
       <div
-        class="spacer"
-        v-if="$mq === 'desktop'">
+        v-if="$mq === 'desktop'"
+        class="spacer">
       </div>
       <div class="configs">
         <add-result
           v-if="title === 'Brands'"
-          text="BRAND"
-          :on-save="addConfig">
+          :on-save="addConfig"
+          text="BRAND">
         </add-result>
         <add-result
           v-if="title === 'Types'"
-          text="TYPE"
-          :on-save="addConfig">
+          :on-save="addConfig"
+          text="TYPE">
         </add-result>
         <add-result
           v-if="title === 'Suppliers'"
-          text="SUPPLIER"
-          :on-save="addConfig">
+          :on-save="addConfig"
+          text="SUPPLIER">
         </add-result>
 
         <config-item
@@ -106,16 +106,16 @@
 </template>
 
 <script>
-import HeaderCard from "../components/header-card";
-import ConfigItem from "../components/config-item";
-import ConfigurableItems from "../utils/configurable-items";
-import gql from "graphql-tag";
+import HeaderCard from '../components/header-card'
+import ConfigItem from '../components/config-item'
+import ConfigurableItems from '../utils/configurable-items'
+import gql from 'graphql-tag'
 import vSelect from '../components/select'
-import VueNotifications from "vue-notifications";
-import AddResult from "../components/add-result";
+import VueNotifications from 'vue-notifications'
+import AddResult from '../components/add-result'
 
 export default {
-  name: "Configuration",
+  name: 'Configuration',
 
   components: {
     HeaderCard,
@@ -125,7 +125,7 @@ export default {
     vSelect
   },
 
-  data() {
+  data () {
     return {
       getAllConfigurableItem: null,
       tab: 0,
@@ -138,24 +138,24 @@ export default {
       replaceSupplierWith: null,
       deletedConfig: {},
       ConfigurableItems: ConfigurableItems
-    };
+    }
   },
 
   notifications: {
     showInvalidItemMsg: {
       type: VueNotifications.types.warn,
-      title: "INVALID ITEM",
-      message: "You cannot create a duplicate item"
+      title: 'INVALID ITEM',
+      message: 'You cannot create a duplicate item'
     },
     showBlankItemMsg: {
       type: VueNotifications.types.warn,
-      title: "BLANK ITEM",
-      message: "You cannot create a blank item"
+      title: 'BLANK ITEM',
+      message: 'You cannot create a blank item'
     },
     showSuccessDelete: {
       type: VueNotifications.types.success,
-      title: "SUCCESS",
-      message: "Item has been deleted"
+      title: 'SUCCESS',
+      message: 'Item has been deleted'
     }
   },
 
@@ -172,121 +172,121 @@ export default {
       return this.brands.sanctioned
     },
 
-    titles() {
+    titles () {
       return {
-        BRAND: "Brands",
-        TYPE: "Types",
-        PURCHASED_FROM: "Suppliers"
-      };
-    },
-
-    title() {
-      var pages = [
-        ConfigurableItems.BRAND,
-        ConfigurableItems.TYPE,
-        ConfigurableItems.PURCHASED_FROM
-      ];
-      return this.titles[pages[this.tab]];
-    },
-
-    page() {
-      var pages = [
-        ConfigurableItems.BRAND,
-        ConfigurableItems.TYPE,
-        ConfigurableItems.PURCHASED_FROM
-      ];
-      return pages[this.tab];
-    },
-
-    configs() {
-      if (this.page === "BRAND") {
-        return this.brands;
-      } else if (this.page === "TYPE") {
-        return this.types;
-      } else if (this.page === "PURCHASED_FROM") {
-        return this.suppliers;
+        BRAND: 'Brands',
+        TYPE: 'Types',
+        PURCHASED_FROM: 'Suppliers'
       }
     },
 
-    brands() {
-      var sanctionedBrands = [];
-      var unsanctionedBrands = [];
+    title () {
+      var pages = [
+        ConfigurableItems.BRAND,
+        ConfigurableItems.TYPE,
+        ConfigurableItems.PURCHASED_FROM
+      ]
+      return this.titles[pages[this.tab]]
+    },
+
+    page () {
+      var pages = [
+        ConfigurableItems.BRAND,
+        ConfigurableItems.TYPE,
+        ConfigurableItems.PURCHASED_FROM
+      ]
+      return pages[this.tab]
+    },
+
+    configs () {
+      if (this.page === 'BRAND') {
+        return this.brands
+      } else if (this.page === 'TYPE') {
+        return this.types
+      } else if (this.page === 'PURCHASED_FROM') {
+        return this.suppliers
+      }
+    },
+
+    brands () {
+      var sanctionedBrands = []
+      var unsanctionedBrands = []
 
       if (this.getAllConfigurableItem) {
         this.getAllConfigurableItem.forEach(item => {
           if (
-            item["type"] === ConfigurableItems.BRAND &&
-            item["sanctioned"] === true
+            item['type'] === ConfigurableItems.BRAND &&
+            item['sanctioned'] === true
           ) {
-            sanctionedBrands.push(item);
+            sanctionedBrands.push(item)
           } else if (
-            item["type"] === ConfigurableItems.BRAND &&
-            item["sanctioned"] === false
+            item['type'] === ConfigurableItems.BRAND &&
+            item['sanctioned'] === false
           ) {
-            unsanctionedBrands.push(item);
+            unsanctionedBrands.push(item)
           }
-        });
+        })
       }
       return {
         sanctioned: sanctionedBrands,
         unsanctioned: unsanctionedBrands
-      };
+      }
     },
 
-    types() {
-      var sanctionedTypes = [];
-      var unsanctionedTypes = [];
+    types () {
+      var sanctionedTypes = []
+      var unsanctionedTypes = []
 
       if (this.getAllConfigurableItem) {
         this.getAllConfigurableItem.forEach(item => {
           if (
-            item["type"] === ConfigurableItems.TYPE &&
-            item["sanctioned"] === true
+            item['type'] === ConfigurableItems.TYPE &&
+            item['sanctioned'] === true
           ) {
-            sanctionedTypes.push(item);
+            sanctionedTypes.push(item)
           } else if (
-            item["type"] === ConfigurableItems.TYPE &&
-            item["sanctioned"] === false
+            item['type'] === ConfigurableItems.TYPE &&
+            item['sanctioned'] === false
           ) {
-            unsanctionedTypes.push(item);
+            unsanctionedTypes.push(item)
           }
-        });
+        })
       }
       return {
         sanctioned: sanctionedTypes,
         unsanctioned: unsanctionedTypes
-      };
+      }
     },
 
-    suppliers() {
-      var sanctionedSuppliers = [];
-      var unsanctionedSuppliers = [];
+    suppliers () {
+      var sanctionedSuppliers = []
+      var unsanctionedSuppliers = []
 
       if (this.getAllConfigurableItem) {
         this.getAllConfigurableItem.forEach(item => {
           if (
-            item["type"] === ConfigurableItems.PURCHASED_FROM &&
-            item["sanctioned"] === true
+            item['type'] === ConfigurableItems.PURCHASED_FROM &&
+            item['sanctioned'] === true
           ) {
-            sanctionedSuppliers.push(item);
+            sanctionedSuppliers.push(item)
           } else if (
-            item["type"] === ConfigurableItems.PURCHASED_FROM &&
-            item["sanctioned"] === false
+            item['type'] === ConfigurableItems.PURCHASED_FROM &&
+            item['sanctioned'] === false
           ) {
-            unsanctionedSuppliers.push(item);
+            unsanctionedSuppliers.push(item)
           }
-        });
+        })
       }
       return {
         sanctioned: sanctionedSuppliers,
         unsanctioned: unsanctionedSuppliers
-      };
+      }
     }
   },
 
   methods: {
-    deleteConfig(config) {
-      this.deletedConfig = config;
+    deleteConfig (config) {
+      this.deletedConfig = config
       this.$apollo.mutate({
         mutation: gql`
           mutation deleteConfigurableItem($id: ID!) {
@@ -329,13 +329,13 @@ export default {
         }
       }).then(response => {
         if (response.data.deleteConfigurableItem.deletedConfigurableItem) {
-          this.showSuccessDelete();
-          this.$apollo.queries.getAllConfigurableItem.refresh();
+          this.showSuccessDelete()
+          this.$apollo.queries.getAllConfigurableItem.refresh()
         } else {
           this.replacementList = response.data.deleteConfigurableItem.toolsWithConfigurableItem
           this.openReplacementModal(config)
         }
-      });
+      })
     },
 
     openReplacementModal (config) {
@@ -355,8 +355,8 @@ export default {
       this.replacementList.forEach(tool => {
         console.log(tool)
         this.$apollo
-            .mutate({
-              mutation: gql`
+          .mutate({
+            mutation: gql`
                 mutation updateTool($tool: UpdatedTool!) {
                   updateTool(updatedTool: $tool) {
                     id
@@ -364,34 +364,34 @@ export default {
                 }
               `,
 
-              variables: {
-                tool: {
-                  id: tool.id,
-                  type_id: this.page === ConfigurableItems.TYPE ? this.replaceTypeWith.id : tool.type.id,
-                  brand_id: this.page === ConfigurableItems.BRAND ? this.replaceBrandWith.id : tool.brand.id,
-                  model_number: tool.model_number,
-                  serial_number: tool.serial_number,
-                  status: tool.status,
-                  owner_id: tool.owner.id,
-                  purchased_from_id: this.page === ConfigurableItems.PURCHASED_FROM ? this.replaceSupplierWith.id : tool.purchased_from.id,
-                  date_purchased: tool.date_purchased,
-                  photo: tool.photo,
-                  price: tool.price,
-                  year: tool.year
-                }
+            variables: {
+              tool: {
+                id: tool.id,
+                type_id: this.page === ConfigurableItems.TYPE ? this.replaceTypeWith.id : tool.type.id,
+                brand_id: this.page === ConfigurableItems.BRAND ? this.replaceBrandWith.id : tool.brand.id,
+                model_number: tool.model_number,
+                serial_number: tool.serial_number,
+                status: tool.status,
+                owner_id: tool.owner.id,
+                purchased_from_id: this.page === ConfigurableItems.PURCHASED_FROM ? this.replaceSupplierWith.id : tool.purchased_from.id,
+                date_purchased: tool.date_purchased,
+                photo: tool.photo,
+                price: tool.price,
+                year: tool.year
               }
-            })
-            .then(result => {
-              this.deleteConfig(this.deletedConfig)
-              this.closeReplacementModal()
-              this.deletedConfig = {}
-            })
+            }
+          })
+          .then(result => {
+            this.deleteConfig(this.deletedConfig)
+            this.closeReplacementModal()
+            this.deletedConfig = {}
+          })
       })
     },
 
     addConfig (name) {
-      if (name === "") {
-        this.showBlankItemMsg();
+      if (name === '') {
+        this.showBlankItemMsg()
       } else {
         this.$apollo
           .mutate({
@@ -413,15 +413,15 @@ export default {
             }
           })
           .catch(response => {
-            this.showInvalidItemMsg();
+            this.showInvalidItemMsg()
           })
           .then(result => {
-            this.$apollo.queries.getAllConfigurableItem.refresh();
-          });
+            this.$apollo.queries.getAllConfigurableItem.refresh()
+          })
       }
     },
 
-    toggleSanction(config) {
+    toggleSanction (config) {
       this.$apollo.mutate({
         mutation: gql`
           mutation updateConfigurableItem($item: UpdatedConfigurableItem!) {
@@ -440,12 +440,12 @@ export default {
             sanctioned: !config.sanctioned
           }
         }
-      });
+      })
     },
 
-    saveChanges(config) {
-      if (config.name === "") {
-        this.showBlankItemMsg();
+    saveChanges (config) {
+      if (config.name === '') {
+        this.showBlankItemMsg()
       } else {
         this.$apollo
           .mutate({
@@ -468,20 +468,20 @@ export default {
             }
           })
           .catch(response => {
-            this.showInvalidItemMsg();
+            this.showInvalidItemMsg()
           })
           .then(result => {
-            this.$apollo.queries.getAllConfigurableItem.refresh();
-          });
+            this.$apollo.queries.getAllConfigurableItem.refresh()
+          })
       }
     },
 
-    incrementTab() {
-      this.tab = ++this.tab % 3;
+    incrementTab () {
+      this.tab = ++this.tab % 3
     },
 
-    decrementTab() {
-      this.tab = (this.tab + 2) % 3;
+    decrementTab () {
+      this.tab = (this.tab + 2) % 3
     }
   },
 
@@ -497,10 +497,10 @@ export default {
           }
         }
       `,
-      fetchPolicy: "cache-and-network"
+      fetchPolicy: 'cache-and-network'
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

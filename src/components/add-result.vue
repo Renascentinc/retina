@@ -38,6 +38,13 @@ export default {
     }
   },
 
+  data () {
+    return {
+      creating: false,
+      newBrand: ''
+    }
+  },
+
   methods: {
     save () {
       this.creating = false
@@ -52,13 +59,6 @@ export default {
     cancelCreating () {
       this.newBrand = ''
       this.creating = false
-    }
-  },
-
-  data () {
-    return {
-      creating: false,
-      newBrand: ''
     }
   }
 }

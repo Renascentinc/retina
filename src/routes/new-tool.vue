@@ -214,13 +214,27 @@
         v-if="currentState === 3"
         class="new-tool-input-card">
 
-        <button
-          :class="{ disabled: !isCameraEnabled }"
-          class="dark-input add-photo"
-          @click="attemptTakePhoto">
+        <input
+          id="file"
+          ref="file"
+          name="file"
+          style="display: none;"
+          type="file"
+          accept="image/*"
+          capture="camera">
+
+        <label
+          v-if="!imgSrc"
+          for="file"
+          class="dark-input add-photo">
           <i class="fas fa-camera"></i>
           <span> Add Photo </span>
-        </button>
+        </label>
+
+        <img
+          v-if="imgSrc"
+          :src="imgSrc"
+          class="img-preview">
       </div>
     </transition>
 
@@ -393,6 +407,7 @@ export default {
       getAllConfigurableItem: [],
       getAllUser: [],
       tool: null,
+      imgSrc: null,
       statuses,
       validations: {
         modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
@@ -402,7 +417,7 @@ export default {
 
   computed: {
     isCameraEnabled () {
-      return !!window.camera
+      return !!navigator.camera
     },
 
     userOptions () {
@@ -430,12 +445,35 @@ export default {
   },
 
   methods: {
-    attemptTakePhoto () {
-      if (this.isCameraEnabled) {
-        window.camera.getPicture((img) => window.console.log(img))
-      } else {
-        this.showCameraDisabledMsg()
-      }
+    updateImageDisplay () {
+      this.imgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
+    },
+
+    uploadPhoto () {
+      let file = this.$refs.file.files[0]
+      let fd = new FormData()
+
+      let key = new Date().getTime() + '-' + file.name
+
+      fd.append('key', key)
+      fd.append('acl', 'public-read')
+      fd.append('Content-Type', file.type)
+      // TODO enable auth for photo upload
+      // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+      // fd.append('policy', 'YOUR POLICY')
+      // fd.append('signature', 'YOUR SIGNATURE')
+
+      fd.append('file', file)
+
+      var xhr = new XMLHttpRequest()
+
+      xhr.addEventListener('load', () => window.console.log('complete'), false)
+      xhr.addEventListener('error', (reason) => window.console.error('error uploading', reason), false)
+
+      xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+
+      xhr.send(fd)
+      return `https://s3.us-east-2.amazonaws.com/retina-images/${key}`
     },
 
     getConfigurableItemsForType (type) {
@@ -447,6 +485,9 @@ export default {
         if (result) {
           if (this.currentState === 3) {
             this.saveTool()
+          } else if (this.currentState === 2) {
+            ++this.currentState
+            this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
           } else {
             ++this.currentState
           }
@@ -500,9 +541,14 @@ export default {
     },
 
     saveTool () {
+      let photo
       let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
       let typeRequest = this.type && this.type.isNewConfigurableItem ? this.createNewConfigurableItem(this.type) : null
       let purchaseRequest = this.purchasedFrom && this.purchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.purchasedFrom) : null
+
+      if (this.imgSrc) {
+        photo = this.uploadPhoto()
+      }
 
       Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
         let [brandResponse, typeResponse, purchaseResponse] = responses
@@ -553,7 +599,8 @@ export default {
               status: this.status ? this.status.id : Statuses.AVAILABLE,
               owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
               price: parseInt((this.price || 0) * 100),
-              year: this.modelYear
+              year: this.modelYear,
+              photo
             }
           }
         }).then(response => {
@@ -713,8 +760,19 @@ export default {
     }
   }
 
+  .img-preview {
+    height: 350px;
+  }
+
   .add-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 250px;
+
+    i {
+      margin-right: 5px;
+    }
 
     &.disabled {
       opacity: .5;

@@ -63,5 +63,4 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^7.0.0" />
-    <plugin name="cordova-plugin-camera" spec="^4.0.3" />
 </widget>

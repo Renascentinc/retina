@@ -1838,11 +1838,6 @@ cordova-ios@^4.5.5:
     xml-escape "1.1.0"
     xmlbuilder "8.2.2"
 
-cordova-plugin-camera@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-camera/-/cordova-plugin-camera-4.0.3.tgz#7373a5938318c86ccfd84e3713e2382d10fe076b"
-  integrity sha1-c3Olk4MYyGzP2E43E+I4LRD+B2s=
-
 cordova-plugin-device@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.2.tgz#fc08f3722e67eef7b6c67bfc99a83df6add0baba"

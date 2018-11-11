@@ -333,7 +333,6 @@ import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
 import NfcEncode from '../components/nfc-encode'
-import VueNotifications from 'vue-notifications'
 
 export default {
   name: 'NewTool',
@@ -365,14 +364,6 @@ export default {
         sanctioned
       }
     }`
-  },
-
-  notifications: {
-    showCameraDisabledMsg: {
-      type: VueNotifications.types.info,
-      title: 'CAMERA UNAVAILABLE',
-      message: 'Photos requires the native app'
-    }
   },
 
   data () {
@@ -416,10 +407,6 @@ export default {
   },
 
   computed: {
-    isCameraEnabled () {
-      return !!navigator.camera
-    },
-
     userOptions () {
       return this.getAllUser.map(user => {
         user.full_name = `${user.first_name} ${user.last_name}`

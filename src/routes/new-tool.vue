@@ -470,7 +470,7 @@ export default {
           newConfigurableItem: {
             type: configurableItem.type,
             name: configurableItem.name,
-            sanctioned: true
+            sanctioned: false
           }
         }
       })

@@ -5,7 +5,7 @@
       class="default-text"
       @click="startCreating">
       <i class="fas fa-plus"></i>
-      {{ text }}
+      NEW {{ text }}
     </div>
     <div
       v-if="creating"
@@ -14,7 +14,7 @@
         class="fas fa-save"
         @click="save"></i>
       <input
-        :placeholder="`Enter New ${text}`"
+        :placeholder="`Enter new ${text.toLowerCase()}`"
         v-model="newBrand"/>
       <i
         class="fas fa-times"
@@ -90,6 +90,8 @@ export default {
     height: 100%;
     display: flex;
     justify-content: space-around;
+    padding-left: 10px;
+    padding-right: 10px;
     align-items: center;
 
     i {

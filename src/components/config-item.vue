@@ -4,17 +4,42 @@
     :class="configItem.sanctioned ? 'sanctioned' : 'unsanctioned'">
     <div
       class="element-container">
-      <i class="fas fa-pen edit-icon"></i>
+      <i
+        class="fas fa-pen edit-icon"
+        v-if="!editing"
+        @click="startEditing">
+      </i>
+      <i
+        class="fas fa-save save-icon"
+        v-if="editing"
+        @click="save">
+      </i>
+      <input
+        v-if="editing"
+        :placeholder="configItem.name"
+        v-model="changedName"/>
+      <i
+        class="fas fa-times cancel-icon"
+        v-if="editing"
+        @click="cancelEdit">
+      </i>
       <div
-        class="main-container">
-        <div class="row">
+        class="main-container"
+        @click="startEditing">
+        <div
+          class="row"
+          v-if="!editing">
           <span class="title">{{ configItem.name }}</span>
         </div>
-        <div class="row">
+        <div
+          class="row"
+          v-if="!editing">
           <span class="subtitle">{{ configItem.sanctioned ? 'CONFIRMED' : 'NOT CONFIRMED' }}</span>
         </div>
       </div>
-      <div class="actions">
+      <div
+        class="actions"
+        v-if="!editing">
         <div
           class="action-group"
           v-if="configItem.sanctioned"
@@ -59,7 +84,34 @@ export default {
     Fab
   },
 
+  data () {
+    return {
+      editing: false,
+      changedName: ''
+    }
+  },
+
   methods: {
+    save () {
+      var changedConfig = {
+        id: this.$props.configItem.id,
+        name: this.changedName,
+        sanctioned: this.$props.configItem.sanctioned
+      }
+      console.log(changedConfig)
+      this.$props.onSave(changedConfig)
+      this.cancelEdit()
+    },
+
+    cancelEdit () {
+      this.editing = false
+      this.changedName = ''
+    },
+
+    startEditing () {
+      this.editing = true
+    },
+
     toggleSanctioned () {
       this.$props.onSanctionToggle(this.$props.configItem)
     }
@@ -112,8 +164,26 @@ export default {
   }
 
   .search-result {
+    input {
+      border-radius: 3px;
+      border: solid $disabled-gray 1px;
+      text-indent: 3px;
+      margin-left: 10px;
+      height: 40px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 80%;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
     .edit-icon {
       color: $dark-avatar;
+    }
+
+    .save-icon {
+      color: $renascent-red;
+      font-size: 30px;
     }
 
     .main-container {

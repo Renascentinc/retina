@@ -21,7 +21,18 @@
       </div>
       <div class="configs">
         <add-result
-          :text="title"
+          v-if="title === 'Brands'"
+          text="BRAND"
+          :on-save="addConfig">
+        </add-result>
+        <add-result
+          v-if="title === 'Types'"
+          text="TYPE"
+          :on-save="addConfig">
+        </add-result>
+        <add-result
+          v-if="title === 'Suppliers'"
+          text="SUPPLIER"
           :on-save="addConfig">
         </add-result>
 
@@ -31,7 +42,7 @@
           :config-item="config"
           :on-delete="() => 0"
           :on-sanction-toggle="toggleSanction"
-          :on-save="() => 0">
+          :on-save="saveChanges">
         </config-item>
 
         <config-item
@@ -40,7 +51,7 @@
           :config-item="config"
           :on-delete="() => 0"
           :on-sanction-toggle="toggleSanction"
-          :on-save="() => 0">
+          :on-save="saveChanges">
         </config-item>
       </div>
     </div>
@@ -250,11 +261,42 @@ export default {
       })
     },
 
-    incrementTab() {
+    saveChanges (config) {
+      if (config.name === '') {
+        this.showBlankItemMsg();
+      }
+      else {
+      this.$apollo.mutate({
+          mutation: gql`
+            mutation updateConfigurableItem($item: UpdatedConfigurableItem!) {
+              updateConfigurableItem(updatedConfigurableItem: $item) {
+                id
+                type
+                name
+                sanctioned
+              }
+            }
+          `,
+          variables: {
+            item: {
+              id: config.id,
+              name: config.name,
+              sanctioned: config.sanctioned
+            }
+          }
+        }).catch(response => {
+          this.showInvalidItemMsg()
+        }).then(result => {
+          this.$apollo.queries.getAllConfigurableItem.refresh()
+        })
+      }
+    },
+
+    incrementTab () {
       this.tab = ++this.tab % 3;
     },
 
-    decrementTab() {
+    decrementTab () {
       this.tab = (this.tab + 2) % 3;
     }
   },

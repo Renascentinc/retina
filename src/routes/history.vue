@@ -10,7 +10,6 @@
         :input-props="{ readonly: true }"
         :attributes="{ popover: { visibility: 'hidden' } }"
         :max-date="new Date()"
-        :is-double-paned="true"
         popover-visibility="focus"
         popover-direction="bottom"
         popover-align="right"

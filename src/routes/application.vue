@@ -27,6 +27,13 @@
 
         <div class="menu-buttons">
           <button
+            v-if="isAdmin"
+            class="config menu-btn"
+            @click="transitionToConfig()">
+            <i class="fas menu-btn-icon fa-cog"></i>
+            CONFIGURATION
+          </button>
+          <button
             class="help menu-btn"
             @click="sendSupportEmail()">
             <i class="fas menu-btn-icon fa-question-circle"></i>
@@ -133,10 +140,18 @@ export default {
 
     role () {
       return this.currentUser.role
+    },
+
+    isAdmin () {
+      return this.currentUser.role === 'ADMINISTRATOR'
     }
   },
 
   methods: {
+    transitionToConfig () {
+      this.$router.push({ name: 'configuration' })
+      this.closeDrawer()
+    },
     sendSupportEmail () {
       this.window.location = 'mailto:retinasupport@renascentinc.com'
     },

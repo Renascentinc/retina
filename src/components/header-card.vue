@@ -1,6 +1,7 @@
 <template>
   <div class="header-card">
     <router-link
+      :v-if="exitLink !== '/'"
       :to= "exitLink"
       class="fas fa-times exit">
     </router-link>
@@ -21,7 +22,8 @@ export default {
     },
     exitLink: {
       type: String,
-      required: true
+      required: false,
+      default: '/'
     }
   }
 }

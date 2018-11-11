@@ -58,7 +58,17 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   }
 })
 
-const cache = new InMemoryCache({ fragmentMatcher })
+const cache = new InMemoryCache({
+  fragmentMatcher,
+  dataIdFromObject: object => {
+    // fixing issue on tools page where objects were getting scrambled with each other
+    // using a combination of fields to make a unique identifier for the entries
+    if (object.__typename === 'PreviousToolSnapshotDiff' || (router.currentRoute.path === '/history' && object.__typename === 'Tool')) {
+      return `${object.id}${object.__typename}${object.owner ? object.owner.id || object.owner.id : ''}${object.status}`
+    }
+    return `${object.id}${object.__typename}`
+  }
+})
 
 const httpLink = new HttpLink({
   uri: 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'

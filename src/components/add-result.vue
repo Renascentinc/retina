@@ -42,6 +42,7 @@ export default {
     save () {
       this.creating = false
       this.$props.onSave(this.newBrand)
+      this.newBrand = ''
     },
 
     startCreating () {
@@ -112,7 +113,16 @@ export default {
 
 .mobile {
   .container {
-    font-size: 18px;
+    font-size: 22px;
+    height: 60px;
+
+    input {
+      font-size: 20px;
+    }
+
+    i {
+      font-size: 30px;
+    }
   }
 }
 </style>

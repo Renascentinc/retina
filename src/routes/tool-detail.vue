@@ -128,7 +128,7 @@
             <button-dropdown
               v-if="$mq === 'mobile'"
               :on-click="updateStatus"
-              :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
+              :options="statusOptions"
               button-text="CHANGE STATUS">
             </button-dropdown>
 
@@ -329,6 +329,42 @@
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit"></fab>
+
+    <modal
+      :width="350"
+      :height="300"
+      class="confirm-oos-modal"
+      name="confirm-oos-modal">
+      <div class="modal-content">
+        <span class="header-text"> CONFIRM OUT OF SERVICE </span>
+
+        <span class="sub-header-text">This Action is Permanent and Cannot Be Undone</span>
+
+        <textarea
+          v-model="reason"
+          class="light-input reason-text"
+          placeholder="Please Explain Why This Tool Is Being Moved To Out of Service">
+        </textarea>
+
+        <div class="oos-actions">
+          <extended-fab
+            :on-click="() => $modal.hide('confirm-oos-modal')"
+            class="oos-btn cancel-oos-btn"
+            icon-class="fa-times"
+            button-text="CANCEL">
+          </extended-fab>
+
+          <extended-fab
+            :on-click="() => decomissionTool()"
+            :disabled="!reason"
+            :outline-display="true"
+            class="oos-btn decomission-btn"
+            icon-class=""
+            button-text="DECOMISSION">
+          </extended-fab>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -342,6 +378,7 @@ import VueLazyload from 'vue-lazyload'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
+import VueNotifications from 'vue-notifications'
 
 export default {
   name: 'ToolDetail',
@@ -354,6 +391,19 @@ export default {
     VueLazyload,
     vSelect,
     NfcEncode
+  },
+
+  notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'TOOL DECOMISSIONED',
+      message: 'Successfully Decomissioned Tool'
+    },
+    showErrorMsg: {
+      type: VueNotifications.types.error,
+      title: 'ERROR',
+      message: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support'
+    }
   },
 
   apollo: {
@@ -425,6 +475,7 @@ export default {
 
   data () {
     return {
+      reason: null,
       changingStatus: false,
       getTool: {},
       editState: false,
@@ -436,16 +487,24 @@ export default {
       newPurchasedFrom: null,
       newPurchaseDate: null,
       newPrice: null,
-
-      window: window,
+      oosStatus: null,
       validations: {
-        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() +
-          1}`
+        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
     }
   },
 
   computed: {
+    statusOptions () {
+      let statusOptions = ['AVAILABLE', 'IN USE', 'MAINTENANCE']
+
+      if (this.canEdit) {
+        statusOptions = statusOptions.concat(['LOST OR STOLEN', 'BEYOND REPAIR'])
+      }
+
+      return statusOptions
+    },
+
     statusClass () {
       return (
         this.getTool.status &&
@@ -599,6 +658,27 @@ export default {
       })
     },
 
+    decomissionTool () {
+      this.$apollo.mutate({
+        mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
+          decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
+            id
+          }
+        }`,
+        variables: {
+          tool_id: this.getTool.id,
+          decomissioned_status: this.oosStatus,
+          decomission_reason: this.reason
+        }
+      }).then(() => {
+        this.$modal.hide('confirm-oos-modal')
+        this.showSuccessMsg()
+        this.$router.push({ path: '/tools' })
+      }).catch(() => {
+        this.showErrorMsg()
+      })
+    },
+
     saveTool () {
       let brandRequest =
         this.newBrand && this.newBrand.isNewConfigurableItem
@@ -687,6 +767,15 @@ export default {
     updateStatus (newStatus) {
       newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
+      if (newStatus === 'LOST_OR_STOLEN' || newStatus === 'BEYOND_REPAIR') {
+        this.$modal.show('confirm-oos-modal')
+        this.oosStatus = newStatus
+      } else {
+        this.saveStatusChange(newStatus)
+      }
+    },
+
+    saveStatusChange (newStatus) {
       // save current status in case request fails but set the tool status assuming it will succeed
       let currentStatus = this.getTool.status
       this.getTool.status = newStatus
@@ -736,6 +825,51 @@ export default {
   background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
+
+  .confirm-oos-modal {
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      height: 100%
+    }
+
+    .header-text {
+      color: $renascent-dark-gray;
+      font-weight: 700;
+      font-size: 25px;
+      margin-top: 30px;
+    }
+
+    .sub-header-text {
+      color: $renascent-dark-gray;
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .reason-text {
+      height: 100px;
+      font-size: 15px;
+      width: 90%;
+    }
+
+    .oos-actions {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+
+      .oos-btn {
+        height: 40px;
+
+        &.decomission-btn {
+          .fab-icon-container {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 
   .info-menu-container {
     height: 100%;

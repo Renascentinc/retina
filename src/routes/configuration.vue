@@ -14,24 +14,30 @@
         @click="incrementTab"></i>
     </div>
 
-    <div class="configs">
-      <config-item
-        v-for="config in configs.unsanctioned"
-        :key="config.id"
-        :config-item="config"
-        :on-delete="() => 0"
-        :on-sanction-toggle="toggleSanction"
-        :on-save="() => 0">
-      </config-item>
+    <div class="config-menu-container">
+      <div
+        class="spacer"
+        v-if="$mq === 'desktop'">
+      </div>
+      <div class="configs">
+        <config-item
+          v-for="config in configs.unsanctioned"
+          :key="config.id"
+          :config-item="config"
+          :on-delete="() => 0"
+          :on-sanction-toggle="toggleSanction"
+          :on-save="() => 0">
+        </config-item>
 
-      <config-item
-        v-for="config in configs.sanctioned"
-        :key="config.id"
-        :config-item="config"
-        :on-delete="() => 0"
-        :on-sanction-toggle="toggleSanction"
-        :on-save="() => 0">
-      </config-item>
+        <config-item
+          v-for="config in configs.sanctioned"
+          :key="config.id"
+          :config-item="config"
+          :on-delete="() => 0"
+          :on-sanction-toggle="toggleSanction"
+          :on-save="() => 0">
+        </config-item>
+      </div>
     </div>
   </div>
 </template>
@@ -250,9 +256,22 @@ export default {
     z-index: 1;
   }
 
-  .configs {
-    overflow-y: auto;
-    z-index: 0;
+  .config-menu-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    .spacer {
+      min-width: 158px;
+      flex: 1 1 auto;
+      max-width: 300px;
+    }
+
+    .configs {
+      overflow-y: auto;
+      z-index: 0;
+      flex: 1 1 auto;
+    }
   }
 }
 

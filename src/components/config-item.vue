@@ -24,6 +24,7 @@
       </i>
       <div
         class="main-container"
+        v-if="!editing"
         @click="startEditing">
         <div
           class="row"

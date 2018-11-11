@@ -42,13 +42,13 @@
             <i
               class="fas fa-times"
               @click="closeReplacementModal"></i>
-              <span class="modal-text">CANCEL</span>
+            <span class="modal-text">CANCEL</span>
           </span>
           <span>
             <i
               class="fas fa-arrow-right"
               @click="finalizeDelete"></i>
-              <span class="modal-text">FINISH</span>
+            <span class="modal-text">FINISH</span>
           </span>
         </div>
       </div>

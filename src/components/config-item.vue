@@ -144,7 +144,6 @@ export default {
 <style lang="scss">
   @import '../styles/variables';
   @import '../styles/search-result';
-
   .unsanctioned {
     background-color: $renascent-red;
     color: white;
@@ -169,6 +168,7 @@ export default {
       border: solid $disabled-gray 1px;
       text-indent: 3px;
       margin-left: 10px;
+      margin-right: 10px;
       height: 40px;
       margin-top: 10px;
       margin-bottom: 10px;
@@ -181,7 +181,7 @@ export default {
       color: $dark-avatar;
     }
 
-    .save-icon {
+    .save-icon, .cancel-icon {
       color: $renascent-red;
       font-size: 30px;
     }

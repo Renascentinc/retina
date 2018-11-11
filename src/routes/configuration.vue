@@ -87,12 +87,12 @@ export default {
     showInvalidItemMsg: {
       type: VueNotifications.types.warn,
       title: 'INVALID ITEM',
-      message: 'You have entered an invalid or duplicate configuration item'
+      message: 'You cannot create a duplicate item'
     },
     showBlankItemMsg: {
       type: VueNotifications.types.warn,
       title: 'BLANK ITEM',
-      message: 'You have entered a blank configuration item'
+      message: 'You cannot create a blank item'
     },
   },
 

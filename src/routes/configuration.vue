@@ -16,21 +16,21 @@
 
     <div class="configs">
       <config-item
-        v-for="config in configs.sanctioned"
-        :key="config.id"
-        :config-item="config"
-        :on-delete="() => 0"
-        :on-sanction-toggle="() => 0"
-        :on-edit="() => 0">
-      </config-item>
-
-      <config-item
         v-for="config in configs.unsanctioned"
         :key="config.id"
         :config-item="config"
         :on-delete="() => 0"
-        :on-sanction-toggle="() => 0"
-        :on-edit="() => 0">
+        :on-sanction-toggle="toggleSanction"
+        :on-save="() => 0">
+      </config-item>
+
+      <config-item
+        v-for="config in configs.sanctioned"
+        :key="config.id"
+        :config-item="config"
+        :on-delete="() => 0"
+        :on-sanction-toggle="toggleSanction"
+        :on-save="() => 0">
       </config-item>
     </div>
   </div>
@@ -40,7 +40,7 @@
 import HeaderCard from "../components/header-card";
 import ConfigItem from "../components/config-item";
 import ConfigurableItems from "../utils/configurable-items";
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export default {
   name: "Configuration",
@@ -51,48 +51,56 @@ export default {
     ConfigurableItems
   },
 
-  data () {
+  data() {
     return {
       getAllConfigurableItem: null,
       tab: 0
-    }
+    };
   },
 
   computed: {
-    titles () {
+    titles() {
       return {
-        'BRAND': 'Brands',
-        'TYPE': 'Types',
-        "PURCHASED_FROM": 'Suppliers'
+        BRAND: "Brands",
+        TYPE: "Types",
+        PURCHASED_FROM: "Suppliers"
+      };
+    },
+
+    title() {
+      var pages = [
+        ConfigurableItems.BRAND,
+        ConfigurableItems.TYPE,
+        ConfigurableItems.PURCHASED_FROM
+      ];
+      return this.titles[pages[this.tab]];
+    },
+
+    page() {
+      var pages = [
+        ConfigurableItems.BRAND,
+        ConfigurableItems.TYPE,
+        ConfigurableItems.PURCHASED_FROM
+      ];
+      return pages[this.tab];
+    },
+
+    configs() {
+      if (this.page === "BRAND") {
+        return this.brands;
+      } else if (this.page === "TYPE") {
+        return this.types;
+      } else if (this.page === "PURCHASED_FROM") {
+        return this.suppliers;
       }
     },
 
-    title () {
-      var pages = [ConfigurableItems.BRAND, ConfigurableItems.TYPE, ConfigurableItems.PURCHASED_FROM]
-      return this.titles[pages[this.tab]]
-    },
-
-    page () {
-      var pages = [ConfigurableItems.BRAND, ConfigurableItems.TYPE, ConfigurableItems.PURCHASED_FROM]
-      return pages[this.tab]
-    },
-
-    configs () {
-      if (this.page === 'BRAND'){
-        return this.brands
-      } else if (this.page === 'TYPE') {
-        return this.types
-      } else if (this.page === 'PURCHASED_FROM') {
-        return this.suppliers
-      }
-    },
-
-    brands () {
+    brands() {
       var sanctionedBrands = [];
       var unsanctionedBrands = [];
 
-      if (this.getAllConfigurableItem){
-        this.getAllConfigurableItem.forEach((item) => {
+      if (this.getAllConfigurableItem) {
+        this.getAllConfigurableItem.forEach(item => {
           if (
             item["type"] === ConfigurableItems.BRAND &&
             item["sanctioned"] === true
@@ -112,12 +120,12 @@ export default {
       };
     },
 
-    types () {
+    types() {
       var sanctionedTypes = [];
       var unsanctionedTypes = [];
 
-      if (this.getAllConfigurableItem){
-        this.getAllConfigurableItem.forEach((item) => {
+      if (this.getAllConfigurableItem) {
+        this.getAllConfigurableItem.forEach(item => {
           if (
             item["type"] === ConfigurableItems.TYPE &&
             item["sanctioned"] === true
@@ -141,8 +149,8 @@ export default {
       var sanctionedSuppliers = [];
       var unsanctionedSuppliers = [];
 
-      if (this.getAllConfigurableItem){
-        this.getAllConfigurableItem.forEach((item) => {
+      if (this.getAllConfigurableItem) {
+        this.getAllConfigurableItem.forEach(item => {
           if (
             item["type"] === ConfigurableItems.PURCHASED_FROM &&
             item["sanctioned"] === true
@@ -164,11 +172,33 @@ export default {
   },
 
   methods: {
-    incrementTab () {
+    toggleSanction(config) {
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation updateConfigurableItem($item: UpdatedConfigurableItem!) {
+            updateConfigurableItem(updatedConfigurableItem: $item) {
+              id
+              type
+              name
+              sanctioned
+            }
+          }
+        `,
+        variables: {
+          item: {
+            id: config.id,
+            name: config.name,
+            sanctioned: !config.sanctioned
+          }
+        }
+      });
+    },
+
+    incrementTab() {
       this.tab = ++this.tab % 3;
     },
 
-    decrementTab () {
+    decrementTab() {
       this.tab = (this.tab + 2) % 3;
     }
   },
@@ -185,14 +215,14 @@ export default {
           }
         }
       `,
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: "cache-and-network"
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+@import "../styles/variables";
 
 .configuration-page {
   display: flex;

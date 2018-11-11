@@ -177,8 +177,6 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
     flex: 1 1 auto;
     height: 100%;
   }

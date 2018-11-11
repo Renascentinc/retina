@@ -17,20 +17,22 @@
       <div class="actions">
         <div
           class="action-group"
-          v-if="configItem.sanctioned">
+          v-if="configItem.sanctioned"
+          @click="toggleSanctioned">
           <fab
             icon-class="fa-thumbs-down"
-            :on-click="() => {}">
+            :on-click="toggleSanctioned">
           </fab>
           REJECT
         </div>
 
         <div
           class="action-group"
-          v-if="!configItem.sanctioned">
+          v-if="!configItem.sanctioned"
+          @click="toggleSanctioned">
           <fab
             icon-class="fa-thumbs-up"
-            :on-click="() => {}">
+            :on-click="toggleSanctioned">
           </fab>
           CONFIRM
         </div>
@@ -38,7 +40,7 @@
         <div class="action-group">
           <fab
             icon-class="fa-times"
-            :on-click="() => {}">
+            :on-click="onDelete">
           </fab>
           DELETE
         </div>
@@ -57,6 +59,12 @@ export default {
     Fab
   },
 
+  methods: {
+    toggleSanctioned () {
+      this.$props.onSanctionToggle(this.$props.configItem)
+    }
+  },
+
   props: {
     configItem: {
       required: true,
@@ -73,7 +81,7 @@ export default {
       type: Function
     },
 
-    onEdit: {
+    onSave: {
       required: true,
       type: Function
     }

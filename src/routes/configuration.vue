@@ -38,12 +38,18 @@
           name="replaceSupplierWith">
         </v-select>
         <div class="modal-actions">
-          <i
-            class="fas fa-times"
-            @click="closeReplacementModal"></i>
-          <i
-            class="fas fa-save"
-            @click="finalizeDelete"></i>
+          <span>
+            <i
+              class="fas fa-times"
+              @click="closeReplacementModal"></i>
+              <span class="modal-text">CANCEL</span>
+          </span>
+          <span>
+            <i
+              class="fas fa-arrow-right"
+              @click="finalizeDelete"></i>
+              <span class="modal-text">FINISH</span>
+          </span>
         </div>
       </div>
     </div>
@@ -557,6 +563,11 @@ export default {
         padding: 15px;
         font-size: 30px;
         color: $renascent-red;
+
+        .modal-text {
+          font-size: 14px;
+          color: $renascent-dark-gray;
+        }
 
         i {
           border: solid $renascent-red 2px;

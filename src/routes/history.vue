@@ -8,9 +8,10 @@
       <v-date-picker
         v-model="dateRange"
         :input-props="{ readonly: true }"
-        :attributes="[{ popover: { visibility: 'hidden' } }]"
+        :attributes="{ popover: { visibility: 'hidden' } }"
         :max-date="new Date()"
         :is-double-paned="true"
+        popover-visibility="focus"
         popover-direction="bottom"
         popover-align="right"
         mode="range"
@@ -105,7 +106,15 @@
             </div>
           </div>
 
+          <div class="loading-container">
+            <div
+              v-if="$apollo.queries.searchToolHistory.loading"
+              class="loading">
+            </div>
+          </div>
+
           <div
+            v-if="!$apollo.queries.searchToolHistory.loading"
             class="dt-body"
             style="display: flex;
               flex-direction: column;">
@@ -479,6 +488,10 @@ export default {
   display: flex;
   flex-direction: column;
   max-width: 100vw;
+
+  .loading-container {
+    width: calc(100% - 40px);
+  }
 
   .history-main-content {
     display: flex;

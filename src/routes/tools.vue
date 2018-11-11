@@ -514,9 +514,6 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    // position: absolute;
-    // top: 100px;
-    // left: 0;
     width: 100%;
     min-height: 40px;
   }

@@ -9,7 +9,7 @@
       :autocomplete-items="filteredItems"
       :add-only-from-autocomplete="true"
       placeholder="Search"
-      @tags-changed="tagsChanged">
+      @tags-changed="updateTags">
 
       <button
         slot="autocompleteItem"
@@ -155,35 +155,6 @@ export default {
         return user
       })
     }
-
-    // searchableConfigItems () {
-    //   let searchItems = []
-    //   let items = (this.getAllConfigurableItem || [])
-    //   items.forEach(item => {
-    //     if (item.type !== ConfigurableItems.PURCHASED_FROM) {
-    //       item.formattedType = item.type.split('_')[0].toLowerCase()
-    //       item.text = `${item.formattedType} ${item.name}`
-    //       item.iconClass = this.getTagIconClass(item.type)
-    //       searchItems.push(item)
-    //     }
-    //   })
-    //
-    //   return searchItems
-    // }
-  },
-  methods: {
-    tagsChanged (newTags) {
-      // this.tags = newTags
-      this.updateTags(newTags)
-    }
-
-    // getTagIconClass (type) {
-    //   if (type === ConfigurableItems.BRAND) {
-    //     return 'fa-tag'
-    //   } else if (type === ConfigurableItems.TYPE) {
-    //     return 'fa-wrench'
-    //   }
-    // }
   }
 }
 </script>

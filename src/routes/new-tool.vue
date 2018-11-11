@@ -761,7 +761,7 @@ export default {
   }
 
   .img-preview {
-    height: 350px;
+    max-width: 100%;
   }
 
   .add-photo {

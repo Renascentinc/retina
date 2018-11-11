@@ -384,4 +384,42 @@ export default {
     }
   }
 
+// DESKTOP
+
+.desktop {
+  .header-card {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0;
+    margin-bottom: 10px;
+  }
+
+  .new-user-input-card {
+    padding-top: 5px;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 400px;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    * {
+      font-size: 16px;
+    }
+
+    .dark-input, .light-input, .popover-container {
+      height: 45px !important;
+      margin-left: auto;
+      margin-right: auto;
+      width: 350px;
+    }
+  }
+
+  .user-preview {
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+  }
+}
 </style>

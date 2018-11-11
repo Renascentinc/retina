@@ -26,6 +26,12 @@
   }
 }
 
+.desktop {
+  .light-input {
+    height: 40px;
+  }
+}
+
 .light-input {
   -webkit-appearance: none;
   font-family: $font-family;

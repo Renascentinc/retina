@@ -4,8 +4,8 @@
   border: solid 1px #727272;
   border-radius: 7px;
   padding-left: 8px;
-  min-height: 45px;
   width: 100%;
+  min-height: 45px;
 
   .search-icon-container {
     display: flex;
@@ -25,5 +25,15 @@
     .input {
       border: none;
     }
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  .search-input {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: 20px;
   }
 }

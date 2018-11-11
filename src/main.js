@@ -18,6 +18,8 @@ import { onError } from 'apollo-link-error'
 import ApiStatusCodes from './utils/api-status-codes'
 import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
+import VueMq from 'vue-mq'
+// import Snotify from 'vue-snotify'
 import VueSVGIcon from 'vue-svgicon'
 import VueJsModal from 'vue-js-modal'
 import VueNotifications from 'vue-notifications'
@@ -100,6 +102,13 @@ Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
+Vue.use(VueMq, {
+  breakpoints: {
+    mobile: 500,
+    desktop: Infinity
+  }
+})
+// Vue.use(Snotify)
 Vue.use(VueSVGIcon)
 Vue.use(VueNotifications, options)
 Vue.use(VueJsModal, {

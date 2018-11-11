@@ -1,5 +1,7 @@
 <template>
-  <div class="container">
+  <div
+    :class="{ disabled: disabled }"
+    class="container">
 
     <transition name="fade">
       <div
@@ -71,6 +73,16 @@ export default {
     onClick: {
       type: Function,
       required: true
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    flag: {
+      type: Function,
+      required: false,
+      default: () => {}
     }
   },
 
@@ -83,11 +95,15 @@ export default {
   methods: {
     clickOption (selectedOption) {
       this.onClick(selectedOption)
+      this.flag()
       this.activated = false
     },
 
     toggle () {
-      this.activated = !this.activated
+      if (!this.disabled) {
+        this.activated = !this.activated
+      }
+      this.flag()
     },
 
     filteredOptions () {
@@ -135,6 +151,14 @@ export default {
   z-index: -5;
 }
 
+.disabled {
+  .button {
+    background-color: $disabled-gray;
+    box-shadow: none;
+    cursor: default;
+  }
+}
+
 .button {
   background-color: $renascent-red;
   height: 43px;
@@ -148,6 +172,7 @@ export default {
   font-size: 13px;
   display: flex;
   align-content: center;
+  cursor: pointer;
 
   .text {
     flex: 1 0 auto;
@@ -163,6 +188,15 @@ export default {
 
   .fas {
     font-size: 18px;
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  .button {
+    width: 158px;
+    height: 40px;
   }
 }
 </style>

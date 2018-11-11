@@ -657,6 +657,7 @@ export default {
     font-weight: 900;
     color: $renascent-dark-gray;
     font-size: 15px;
+    padding-left: 20px;
   }
 
   .pager-container {
@@ -792,5 +793,51 @@ export default {
   color: black;
   font-size: 23px;
   font-weight: 700;
+}
+
+// DESKTOP
+
+.desktop {
+  .header-card {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0;
+    margin-bottom: 10px;
+  }
+
+  .new-tool-input-card {
+    padding-top: 5px;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 400px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: white;
+
+    * {
+      font-size: 16px;
+    }
+
+    .popover-container {
+      height: 45px !important;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+
+      input {
+        width: 320px !important;
+        height: 45px;
+      }
+    }
+
+    .dark-input, .light-input {
+      height: 45px !important;
+      margin-left: auto;
+      margin-right: auto;
+      width: 350px;
+    }
+  }
 }
 </style>

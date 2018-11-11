@@ -147,3 +147,19 @@ a {
     }
   }
 }
+
+// DESKTOP
+
+.desktop {
+  .main-content {
+    flex-direction: row-reverse !important;
+  }
+
+  .nav-bar {
+    padding-top: 20px;
+
+    .icon-text-container {
+      margin-bottom: 15px;
+    }
+  }
+}

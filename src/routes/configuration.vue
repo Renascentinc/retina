@@ -20,6 +20,11 @@
         v-if="$mq === 'desktop'">
       </div>
       <div class="configs">
+        <add-result
+          :text="title"
+          :on-save="addConfig">
+        </add-result>
+
         <config-item
           v-for="config in configs.unsanctioned"
           :key="config.id"
@@ -47,6 +52,8 @@ import HeaderCard from "../components/header-card";
 import ConfigItem from "../components/config-item";
 import ConfigurableItems from "../utils/configurable-items";
 import gql from "graphql-tag";
+import VueNotifications from 'vue-notifications'
+import AddResult from '../components/add-result'
 
 export default {
   name: "Configuration",
@@ -54,7 +61,8 @@ export default {
   components: {
     HeaderCard,
     ConfigItem,
-    ConfigurableItems
+    ConfigurableItems,
+    AddResult
   },
 
   data() {
@@ -62,6 +70,19 @@ export default {
       getAllConfigurableItem: null,
       tab: 0
     };
+  },
+
+  notifications: {
+    showInvalidItemMsg: {
+      type: VueNotifications.types.warn,
+      title: 'INVALID ITEM',
+      message: 'You have entered an invalid or duplicate configuration item'
+    },
+    showBlankItemMsg: {
+      type: VueNotifications.types.warn,
+      title: 'BLANK ITEM',
+      message: 'You have entered a blank configuration item'
+    },
   },
 
   computed: {
@@ -178,6 +199,35 @@ export default {
   },
 
   methods: {
+    addConfig (name) {
+      if (name === '') {
+        this.showBlankItemMsg();
+      } else {
+        this.$apollo.mutate({
+          mutation: gql`
+            mutation createConfigurableItem($item: NewConfigurableItem!) {
+              createConfigurableItem(newConfigurableItem: $item) {
+                type
+                name
+                sanctioned
+              }
+            }
+          `,
+          variables: {
+            item: {
+              type: this.page,
+              name: name,
+              sanctioned: true
+            }
+          }
+        }).catch(response => {
+          this.showInvalidItemMsg();
+        }).then(result => {
+        this.$apollo.queries.getAllConfigurableItem.refresh();
+      });
+      }
+    },
+
     toggleSanction(config) {
       this.$apollo.mutate({
         mutation: gql`
@@ -197,7 +247,7 @@ export default {
             sanctioned: !config.sanctioned
           }
         }
-      });
+      })
     },
 
     incrementTab() {

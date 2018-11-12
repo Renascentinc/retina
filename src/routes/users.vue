@@ -13,12 +13,6 @@
           icon-class="fa-plus"
           button-text="ADD USER">
         </extended-fab>
-
-        <fab
-          v-if="isAdmin && $mq === 'mobile'"
-          :on-click="transitionToAddUser"
-          class="add-user-btn"
-          icon-class="fa-plus"/>
       </div>
       <div class="user-scroll-container">
         <transition>
@@ -40,6 +34,12 @@
           name="list"
           class="users"
           tag="div">
+          <add-button
+            v-if="$mq === 'mobile'"
+            key="2"
+            text="USER"
+            :on-click="transitionToAddUser">
+          </add-button>
           <user-search-result
             v-for="user in users"
             :user="user"
@@ -54,10 +54,10 @@
 <script>
 import UserSearchInput from '../components/user-search-input'
 import UserSearchResult from '../components/user-search-result'
-import Fab from '../components/fab'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
 import ExtendedFab from '../components/extended-fab'
+import AddButton from '../components/add-button'
 
 export default {
   name: 'Users',
@@ -65,8 +65,8 @@ export default {
   components: {
     UserSearchInput,
     UserSearchResult,
-    Fab,
-    ExtendedFab
+    ExtendedFab,
+    AddButton
   },
 
   apollo: {

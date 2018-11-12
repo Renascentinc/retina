@@ -100,6 +100,12 @@
         <transition-group
           name="list"
           tag="span">
+          <add-button
+            v-if="$mq === 'mobile'"
+            key="2"
+            text="TOOL"
+            :on-click="transitionToAdd">
+          </add-button>
           <tool-search-result
             v-for="tool in tools"
             :tool="tool"
@@ -185,7 +191,7 @@ import ToolSearchInput from '../components/tool-search-input'
 import ToolSearchResult from '../components/tool-search-result'
 import ExtendedFab from '../components/extended-fab'
 import NfcScan from '../components/nfc-scan'
-import Fab from '../components/fab.vue'
+import AddButton from '../components/add-button'
 import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
@@ -197,9 +203,9 @@ export default {
     ToolSearchInput,
     ToolSearchResult,
     ExtendedFab,
-    Fab,
     vSelect,
-    NfcScan
+    NfcScan,
+    AddButton
   },
 
   apollo: {

@@ -36,7 +36,7 @@
           tag="div">
           <add-button
             v-if="$mq === 'mobile'"
-            key="2"
+            :key="0"
             text="USER"
             :on-click="transitionToAddUser">
           </add-button>

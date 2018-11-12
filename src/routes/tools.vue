@@ -72,13 +72,6 @@
             icon-class="fa-arrow-right"
             button-text="FINISH">
           </extended-fab>
-
-          <fab
-            v-if="$mq === 'mobile'"
-            :on-click="transitionToAdd"
-            class="add-btn"
-            icon-class="fa-plus">
-          </fab>
         </div>
       </transition>
       <div class="tool-scroll-container">
@@ -102,7 +95,7 @@
           tag="span">
           <add-button
             v-if="$mq === 'mobile'"
-            key="2"
+            :key="0"
             text="TOOL"
             :on-click="transitionToAdd">
           </add-button>

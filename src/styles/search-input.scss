@@ -25,6 +25,11 @@
 
     .input {
       border: none;
+
+      .tags {
+        max-height: 87px;
+        overflow-y: auto;
+      }
     }
   }
 }

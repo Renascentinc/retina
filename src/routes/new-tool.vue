@@ -774,15 +774,14 @@ export default {
 }
 
 .no-options-btn {
-  height: 40px;
+  min-height: 40px;
   padding: 0;
   display: flex;
   color: black;
   font-size: 23px;
   font-weight: 700;
+  word-break: break-word;
 }
-
-// DESKTOP
 
 .desktop {
   .header-card {

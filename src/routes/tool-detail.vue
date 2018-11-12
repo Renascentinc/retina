@@ -33,7 +33,7 @@
           v-if="$mq === 'desktop' && isTransferable"
           :on-click="updateStatus"
           :disabled="editState"
-          :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
+          :options="statusOptions"
           :flag="toggleChangingStatus"
           button-text="CHANGE STATUS">
         </button-dropdown>

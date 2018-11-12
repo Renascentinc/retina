@@ -96,8 +96,8 @@
           <add-button
             v-if="$mq === 'mobile'"
             :key="0"
-            text="TOOL"
-            :on-click="transitionToAdd">
+            :on-click="transitionToAdd"
+            text="TOOL">
           </add-button>
           <tool-search-result
             v-for="tool in tools"

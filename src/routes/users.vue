@@ -37,8 +37,8 @@
           <add-button
             v-if="$mq === 'mobile'"
             :key="0"
-            text="USER"
-            :on-click="transitionToAddUser">
+            :on-click="transitionToAddUser"
+            text="USER">
           </add-button>
           <user-search-result
             v-for="user in users"

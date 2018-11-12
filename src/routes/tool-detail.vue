@@ -285,6 +285,7 @@
                 v-model="newPurchaseDate"
                 :input-props="{ readonly: true }"
                 class="general-data"
+                popover-visibility="focus"
                 popover-direction="top"
                 mode="single">
               </v-date-picker>

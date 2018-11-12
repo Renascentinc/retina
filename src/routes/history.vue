@@ -539,7 +539,7 @@ export default {
 
   .print-btn {
     position: absolute;
-    right: 110px;
+    right: 30px;
   }
 }
 </style>

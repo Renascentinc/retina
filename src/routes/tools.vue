@@ -467,6 +467,7 @@ export default {
     overflow-y: auto;
     background-color: $background-light-gray;
     flex: 1 1 auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .tool-scroll-container {
@@ -503,6 +504,7 @@ export default {
       position: absolute;
       left: calc(50% - 79px);
       bottom: 3.5px;
+      z-index: 1;
     }
 
     .add-btn {

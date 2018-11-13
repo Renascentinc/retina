@@ -22,7 +22,7 @@
             <div class="loading"/>
           </div>
         </transition>
-        <transition>
+        <transition-group>
           <add-button
             v-if="$mq === 'mobile'"
             :key="0"
@@ -31,10 +31,11 @@
           </add-button>
           <div
             v-if="!$apollo.queries.searchUser.loading && !users.length"
+            :key="1"
             class="no-users-container">
             <span class="no-users-text">No Users To Display</span>
           </div>
-        </transition>
+        </transition-group>
 
         <transition-group
           name="list"

@@ -82,7 +82,7 @@
             <div class="loading"></div>
           </div>
         </transition>
-        <transition>
+        <transition-group>
           <add-button
             v-if="$mq === 'mobile'"
             :key="0"
@@ -91,10 +91,11 @@
           </add-button>
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
+            :key="1"
             class="no-tools-container">
             <span class="no-tools-text">No Tools To Display</span>
           </div>
-        </transition>
+        </transition-group>
 
         <transition-group
           name="list"

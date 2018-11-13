@@ -8,7 +8,7 @@
       <v-date-picker
         v-model="dateRange"
         :input-props="{ readonly: true }"
-        :attributes="{ popover: { visibility: 'hidden' } }"
+        :attributes="[{ popover: { visibility: 'hidden' } }]"
         :max-date="new Date()"
         popover-visibility="focus"
         popover-direction="bottom"

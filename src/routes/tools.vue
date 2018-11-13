@@ -320,7 +320,7 @@ export default {
           user.label = `${user.first_name} ${user.last_name}`
         })
       }
-      return this.getAllUser.filter(user => user.status === 'ACTIVE') || []
+      return this.getAllUser || []
     },
 
     locations () {

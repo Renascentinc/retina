@@ -23,6 +23,12 @@
           </div>
         </transition>
         <transition>
+          <add-button
+            v-if="$mq === 'mobile'"
+            :key="0"
+            :on-click="transitionToAddUser"
+            text="USER">
+          </add-button>
           <div
             v-if="!$apollo.queries.searchUser.loading && !users.length"
             class="no-users-container">
@@ -34,12 +40,6 @@
           name="list"
           class="users"
           tag="div">
-          <add-button
-            v-if="$mq === 'mobile'"
-            :key="0"
-            :on-click="transitionToAddUser"
-            text="USER">
-          </add-button>
           <user-search-result
             v-for="user in users"
             :user="user"

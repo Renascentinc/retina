@@ -86,7 +86,7 @@
               class="dt-cell action"
               style="display: flex;
                 justify-content: flex-end;
-                flex: 0 0 100px;">
+                flex: 0 0 120px;">
               <span>action</span>
             </div>
             <div
@@ -100,7 +100,7 @@
               class="dt-cell owner"
               style="display: flex;
                 justify-content: flex-end;
-                flex: 0 0 280px;">
+                flex: 0 0 260px;">
               <span>owner</span>
             </div>
           </div>
@@ -152,7 +152,8 @@
               <div
                 class="dt-cell action"
                 style="display: flex;
-                  justify-content: flex-end; flex: 0 0 100px;
+                  justify-content: flex-end;
+                  flex: 0 0 120px;
                   display: flex;
                   align-items: center;
                   height: 85px;
@@ -182,7 +183,8 @@
               <div
                 class="dt-cell owner"
                 style="display: flex;
-                  justify-content: flex-end; flex: 0 0 280px;
+                  justify-content: flex-end;
+                  flex: 0 0 260px;
                   display: flex;
                   align-items: center;
                   height: 85px;

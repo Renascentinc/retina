@@ -72,13 +72,6 @@
             icon-class="fa-arrow-right"
             button-text="FINISH">
           </extended-fab>
-
-          <fab
-            v-if="$mq === 'mobile'"
-            :on-click="transitionToAdd"
-            class="add-btn"
-            icon-class="fa-plus">
-          </fab>
         </div>
       </transition>
       <div class="tool-scroll-container">
@@ -90,6 +83,12 @@
           </div>
         </transition>
         <transition>
+          <add-button
+            v-if="$mq === 'mobile'"
+            :key="0"
+            :on-click="transitionToAdd"
+            text="TOOL">
+          </add-button>
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
             class="no-tools-container">
@@ -185,7 +184,7 @@ import ToolSearchInput from '../components/tool-search-input'
 import ToolSearchResult from '../components/tool-search-result'
 import ExtendedFab from '../components/extended-fab'
 import NfcScan from '../components/nfc-scan'
-import Fab from '../components/fab.vue'
+import AddButton from '../components/add-button'
 import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
@@ -197,9 +196,9 @@ export default {
     ToolSearchInput,
     ToolSearchResult,
     ExtendedFab,
-    Fab,
     vSelect,
-    NfcScan
+    NfcScan,
+    AddButton
   },
 
   apollo: {

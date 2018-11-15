@@ -24,9 +24,9 @@ import VueJsModal from 'vue-js-modal'
 import VueNotifications from 'vue-notifications'
 import swal from 'sweetalert'
 
-function toast ({title, message, type, timeout, cb}) {
+function toast ({title, message, type, options, timeout, cb}) {
   if (type === VueNotifications.types.warn) type = 'warning'
-  return swal(title, message, type)
+  return swal(title, message, type, options || {})
 }
 
 const options = {

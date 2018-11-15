@@ -151,8 +151,9 @@ export default {
     showInvalidItemMsg: {
       type: VueNotifications.types.warn,
       title: 'INVALID ITEM',
-      message: 'You cannot create a duplicate item'
+      message: 'You cannot create a duplicate item',
     },
+
     showBlankItemMsg: {
       type: VueNotifications.types.warn,
       title: 'BLANK ITEM',

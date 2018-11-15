@@ -33,7 +33,7 @@
           v-if="$mq === 'desktop' && isTransferable"
           :on-click="updateStatus"
           :disabled="editState"
-          :options="['AVAILABLE', 'IN USE', 'MAINTENANCE', 'OUT OF SERVICE']"
+          :options="statusOptions"
           :flag="toggleChangingStatus"
           button-text="CHANGE STATUS">
         </button-dropdown>
@@ -285,6 +285,7 @@
                 v-model="newPurchaseDate"
                 :input-props="{ readonly: true }"
                 class="general-data"
+                popover-visibility="focus"
                 popover-direction="top"
                 mode="single">
               </v-date-picker>
@@ -569,7 +570,7 @@ export default {
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
       return (
         currentUser.role === 'ADMINISTRATOR' ||
-        this.owner.type === 'LOCATION' ||
+        (this.owner.type === 'LOCATION' && this.status === 'AVAILABLE') ||
         (this.owner.type === 'USER' && currentUser.id === this.owner.id)
       )
     },
@@ -635,9 +636,7 @@ export default {
         this.newModel = this.getTool.model_number
         this.newYear = this.getTool.year
         this.newPurchasedFrom = this.getTool.purchased_from
-        this.newPurchaseDate = new Date(
-          this.formattedDate(this.getTool.date_purchased)
-        )
+        this.newPurchaseDate = this.getTool.date_purchased && new Date(this.getTool.date_purchased)
         this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
         this.editState = true
       }
@@ -737,9 +736,7 @@ export default {
                   owner_id: this.getTool.owner.id,
                   purchased_from_id:
                     this.newPurchasedFrom && this.newPurchasedFrom.id,
-                  date_purchased: this.newPurchaseDate
-                    ? new Date(this.newPurchaseDate).toISOString()
-                    : null,
+                  date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
                   photo: this.getTool.photo,
                   price: this.newPrice
                     ? (this.newPrice * 100).toFixed(0)

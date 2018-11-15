@@ -182,6 +182,7 @@
             :input-props="{ readonly: true }"
             :attributes="[{ popover: { visibility: 'hidden' } }]"
             :max-date="new Date()"
+            popover-visibility="focus"
             popover-direction="top"
             mode="single">
             <input
@@ -583,6 +584,7 @@ export default {
               model_number: this.modelNumber,
               serial_number: this.serialNumber,
               purchased_from_id: this.purchasedFrom && this.purchasedFrom.id,
+              date_purchased: this.purchaseDate,
               status: this.status ? this.status.id : Statuses.AVAILABLE,
               owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
               price: parseInt((this.price || 0) * 100),
@@ -774,15 +776,14 @@ export default {
 }
 
 .no-options-btn {
-  height: 40px;
+  min-height: 40px;
   padding: 0;
   display: flex;
   color: black;
   font-size: 23px;
   font-weight: 700;
+  word-break: break-word;
 }
-
-// DESKTOP
 
 .desktop {
   .header-card {

@@ -218,6 +218,7 @@ export default {
         last_name
         role
         type
+        status
       }
     }`,
 
@@ -301,7 +302,7 @@ export default {
       let tools = this.searchTool || []
 
       if (this.currentState === this.states.SELECTING && JSON.parse(window.localStorage.getItem('currentUser')).role !== Roles.ADMIN) {
-        tools = tools.filter(tool => tool.owner.type === 'LOCATION' || tool.owner.id === JSON.parse(window.localStorage.getItem('currentUser')).id)
+        tools = tools.filter(tool => (tool.owner.type === 'LOCATION' && tool.status === 'AVAILABLE') || tool.owner.id === JSON.parse(window.localStorage.getItem('currentUser')).id)
       }
 
       if (this.showOnlySelectedTools) {
@@ -459,11 +460,14 @@ export default {
     z-index: 5;
     min-height: 45px;
     display: flex;
+    min-height: fit-content;
   }
 
   .tools-menu-container {
     overflow-y: auto;
     background-color: $background-light-gray;
+    flex: 1 1 auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .tool-scroll-container {
@@ -500,6 +504,7 @@ export default {
       position: absolute;
       left: calc(50% - 79px);
       bottom: 3.5px;
+      z-index: 1;
     }
 
     .add-btn {

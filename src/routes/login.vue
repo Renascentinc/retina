@@ -343,6 +343,7 @@ $login-input-border-radius: 5px;
       display: flex;
       align-items: center;
       color: #CE352F;
+      text-align: center;
     }
 
     .organization-container {

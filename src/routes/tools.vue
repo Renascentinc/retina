@@ -502,6 +502,7 @@ export default {
 
     .transfer-btn {
       position: absolute;
+      pointer-events: auto;
       left: calc(50% - 79px);
       bottom: 3.5px;
       z-index: 1;
@@ -619,6 +620,7 @@ export default {
 
   .floating-action-bar {
     display: inline-block;
+    pointer-events: none;
     position: absolute;
     bottom: 75px;
     width: 100%;
@@ -627,14 +629,10 @@ export default {
 
     .transfer-btn {
       position: absolute;
+      pointer-events: auto;
       left: calc(50% - 79px);
       bottom: 3.5px;
       width: 158px;
-    }
-
-    .add-btn {
-      position: absolute;
-      right: 20px;
     }
   }
 }

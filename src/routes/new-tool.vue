@@ -182,18 +182,17 @@
             :input-props="{ readonly: true }"
             :attributes="[{ popover: { visibility: 'hidden' } }]"
             :max-date="new Date()"
-            popover-visibility="focus"
+            :popover-visibility="datePickerVisibility"
             popover-direction="top"
-            mode="single">
-            <input
-              slot-scope="{ inputValue, updateValue }"
-              :value="inputValue"
-              :placeholder="`eg. ${new Date().toLocaleDateString('en-US')}`"
-              disabled
-              type="text"
-              @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
-              @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
-              @keyup.esc="updateValue(myDate, { formatInput: true, hidePopover: true })">
+            mode="single"
+            @input="toggleDatepicker">
+              <button
+                slot-scope="{ inputValue, updateValue }"
+                :class="{ placeholder: !inputValue }"
+                class="dark-input purchase-date-input"
+                @click="toggleDatepicker">
+                {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
+              </button>
           </v-date-picker>
         </div>
 
@@ -228,8 +227,10 @@
           v-if="!imgSrc"
           for="file"
           class="dark-input add-photo">
-          <i class="fas fa-camera"></i>
-          <span> Add Photo </span>
+          <label
+            for="file"
+            class="fas fa-camera"></label>
+          Add Photo
         </label>
 
         <img
@@ -394,8 +395,9 @@ export default {
       price: null,
       photo: null,
       status: statuses[1],
-      currentState: 1,
+      currentState: 2,
       purchaseDate: null,
+      datePickerVisibility: 'hidden',
       getAllConfigurableItem: [],
       getAllUser: [],
       tool: null,
@@ -433,6 +435,14 @@ export default {
   },
 
   methods: {
+    toggleDatepicker() {
+      if (this.datePickerVisibility === 'visible') {
+        this.datePickerVisibility = 'hidden'
+      } else {
+        this.datePickerVisibility = 'visible'
+      }
+    },
+
     updateImageDisplay () {
       this.imgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
     },
@@ -624,6 +634,14 @@ export default {
   flex-direction: column;
   background-color: $background-light-gray;
 
+  .purchase-date-input {
+    text-align: left;
+
+    &.placeholder {
+      color: $form-placeholder-color;
+    }
+  }
+
   .new-tool-input-card {
     display: flex;
     flex: 1 1 auto;
@@ -761,7 +779,7 @@ export default {
     justify-content: center;
     height: 250px;
 
-    i {
+    .fa-camera {
       margin-right: 5px;
     }
 

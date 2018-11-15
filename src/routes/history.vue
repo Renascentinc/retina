@@ -10,18 +10,16 @@
         :input-props="{ readonly: true }"
         :attributes="[{ popover: { visibility: 'hidden' } }]"
         :max-date="new Date()"
-        popover-visibility="focus"
+        :popover-visibility="datePickerVisibility"
         popover-direction="bottom"
         popover-align="right"
         mode="range"
-        @popover-did-appear="() => isDatepickerShown = true"
-        @popover-did-disappear="() => { isDatepickerShown = false; updateDateFilterTag() }">
-
+        @input="toggleDatepicker">
         <button
-          slot-scope="{ inputValue, updateValue }"
+          slot-scope="scope"
           :class="{ active: !!dateRange }"
           class="fas fa-calendar-alt open-datepicker"
-          @click="() => toggleDatepicker(inputValue, updateValue)">
+          @click="toggleDatepicker">
         </button>
       </v-date-picker>
     </div>
@@ -348,6 +346,9 @@ export default {
   },
 
   computed: {
+    datePickerVisibility () {
+      return this.isDatepickerShown ? 'visible' : 'hidden'
+    },
     isNativeApp () {
       return !!window.device && !!window.device.cordova
     },
@@ -392,8 +393,9 @@ export default {
       }
     },
 
-    toggleDatepicker (inputValue, updateValue) {
-      updateValue(inputValue, { formatInput: true, hidePopover: this.isDatepickerShown })
+    toggleDatepicker () {
+      this.isDatepickerShown = !this.isDatepickerShown
+      this.updateDateFilterTag()
     },
 
     exportTable () {

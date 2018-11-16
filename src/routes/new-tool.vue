@@ -186,13 +186,13 @@
             popover-direction="top"
             mode="single"
             @input="toggleDatepicker">
-              <button
-                slot-scope="{ inputValue, updateValue }"
-                :class="{ placeholder: !inputValue }"
-                class="dark-input purchase-date-input"
-                @click="toggleDatepicker">
-                {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
-              </button>
+            <button
+              slot-scope="{ inputValue, updateValue }"
+              :class="{ placeholder: !inputValue }"
+              class="dark-input purchase-date-input"
+              @click="toggleDatepicker">
+              {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
+            </button>
           </v-date-picker>
         </div>
 
@@ -435,7 +435,7 @@ export default {
   },
 
   methods: {
-    toggleDatepicker() {
+    toggleDatepicker () {
       if (this.datePickerVisibility === 'visible') {
         this.datePickerVisibility = 'hidden'
       } else {

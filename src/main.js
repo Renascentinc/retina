@@ -8,7 +8,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-import attachFastClick from 'fastclick'
+// import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -123,7 +123,7 @@ Vue.use(VueJsModal, {
   dialog: true
 })
 
-attachFastClick(document.body)
+// attachFastClick(document.body, { tapDelay: 200 })
 
 new Vue({
   router,

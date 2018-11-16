@@ -395,7 +395,7 @@ export default {
       price: null,
       photo: null,
       status: statuses[1],
-      currentState: 2,
+      currentState: 1,
       purchaseDate: null,
       datePickerVisibility: 'hidden',
       getAllConfigurableItem: [],

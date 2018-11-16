@@ -539,11 +539,13 @@ export default {
   .export-btn {
     position: absolute;
     right: 30px;
+    pointer-events: auto;
   }
 
   .print-btn {
     position: absolute;
     right: 30px;
+    pointer-events: auto;
   }
 }
 </style>

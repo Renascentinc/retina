@@ -2,7 +2,6 @@
   <button
     :class="{ outlined: outlineDisplay, inactive: disabled }"
     :disabled="disabled"
-    :type="buttonType"
     class="extended-fab"
     @click="onClick">
     <div class="fab-icon-container">
@@ -45,12 +44,6 @@ export default {
       type: Boolean,
       required: false,
       default: false
-    },
-
-    buttonType: {
-      type: String,
-      required: false,
-      default: ''
     }
   }
 }

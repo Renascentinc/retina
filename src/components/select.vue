@@ -111,9 +111,10 @@
         </li>
         <li
           v-if="!filteredOptions.length"
-          class="no-options">
+          class="no-options"
+          role="option">
           <slot
-            v-bind="{ value: search }"
+            v-bind="{ value: search, select }"
             name="no-options">Sorry, no matching options.</slot>
         </li>
       </ul>
@@ -815,7 +816,10 @@ export default {
         this.mousedown = false
       } else {
         if (this.clearSearchOnBlur) {
-          this.search = ''
+          setTimeout(() => {
+            this.search = ''
+            this.open = false
+          }, 100)
         }
         this.$emit('search:blur')
       }

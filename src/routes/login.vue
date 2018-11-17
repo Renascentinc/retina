@@ -18,7 +18,7 @@
         </span>
       </div>
     </div>
-    <form class="bottom-panel">
+    <div class="bottom-panel">
       <div class="status-message">
         <transition name="fade">
           <span
@@ -78,11 +78,10 @@
           :on-click="attemptUserLogin"
           class="login-btn"
           icon-class="fa-arrow-right"
-          button-text="SIGN IN"
-          button-type="submit">
+          button-text="SIGN IN">
         </extended-fab>
       </div>
-    </form>
+    </div>
 
     <modal
       :width="300"

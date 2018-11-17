@@ -24,8 +24,8 @@
               slot="no-options"
               slot-scope="props">
               <button
-                class="no-options-btn"
-                @click="() => brand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                class="option-container"
+                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
                 Set Brand To "{{ props.value }}"
               </button>
             </template>
@@ -54,7 +54,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => type = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
                 Set Type To "{{ props.value }}"
               </button>
             </template>
@@ -158,7 +158,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
                 Set Purchased From To "{{ props.value }}"
               </button>
             </template>
@@ -801,6 +801,7 @@ export default {
   font-size: 23px;
   font-weight: 700;
   word-break: break-word;
+  width: 100%;
 }
 
 .desktop {

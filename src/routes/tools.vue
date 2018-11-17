@@ -4,76 +4,81 @@
       <tool-search-input :update-tags="updateFilters"></tool-search-input>
       <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
+    <extended-fab
+      v-if="$mq === 'mobile' && currentState === states.INITIAL"
+      :on-click="onTransferClick"
+      class="transfer-btn"
+      icon-class="fa-exchange-alt"
+      button-text="TRANSFER">
+    </extended-fab>
     <div class="tools-menu-container">
-      <transition>
-        <div
-          class="floating-action-bar">
-          <extended-fab
-            v-if="currentState === states.INITIAL"
-            :on-click="onTransferClick"
-            class="transfer-btn"
-            icon-class="fa-exchange-alt"
-            button-text="TRANSFER">
-          </extended-fab>
+      <div
+        class="floating-action-bar">
+        <extended-fab
+          v-if="$mq === 'desktop' && currentState === states.INITIAL"
+          :on-click="onTransferClick"
+          class="transfer-btn"
+          icon-class="fa-exchange-alt"
+          button-text="TRANSFER">
+        </extended-fab>
 
-          <extended-fab
-            v-if="$mq === 'desktop' && currentState === states.SELECTING"
-            :on-click="cancelTransfer"
-            class="cancel-fab-btn"
-            icon-class="fa-times"
-            button-text="CANCEL">
-          </extended-fab>
+        <extended-fab
+          v-if="$mq === 'desktop' && currentState === states.SELECTING"
+          :on-click="cancelTransfer"
+          class="cancel-fab-btn"
+          icon-class="fa-times"
+          button-text="CANCEL">
+        </extended-fab>
 
-          <extended-fab
-            v-if="$mq === 'desktop' && currentState === states.SELECTING"
-            :on-click="toggleViewSelected"
-            :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
-            :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
-            class="view-fab-btn">
-          </extended-fab>
+        <extended-fab
+          v-if="$mq === 'desktop' && currentState === states.SELECTING"
+          :on-click="toggleViewSelected"
+          :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
+          :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
+          class="view-fab-btn">
+        </extended-fab>
 
-          <extended-fab
-            v-if="$mq === 'desktop' && currentState === states.SELECTING"
-            :on-click="proceedToFinalize"
-            class="view-fab-btn"
-            icon-class="fa-arrow-right"
-            button-text="NEXT">
-          </extended-fab>
+        <extended-fab
+          v-if="$mq === 'desktop' && currentState === states.SELECTING"
+          :on-click="proceedToFinalize"
+          class="view-fab-btn"
+          icon-class="fa-arrow-right"
+          button-text="NEXT">
+        </extended-fab>
 
-          <extended-fab
-            v-if="$mq === 'desktop' && currentState === states.INITIAL"
-            :on-click="transitionToAdd"
-            class="add-btn"
-            icon-class="fa-plus"
-            button-text="ADD TOOL">
-          </extended-fab>
+        <extended-fab
+          v-if="$mq === 'desktop' && currentState === states.INITIAL"
+          :on-click="transitionToAdd"
+          class="add-btn"
+          icon-class="fa-plus"
+          button-text="ADD TOOL">
+        </extended-fab>
 
-          <extended-fab
-            v-if="$mq === 'desktop' && currentState === states.FINALIZING"
-            :on-click="cancelTransfer"
-            class="cancel-efab"
-            icon-class="fa-times"
-            button-text="CANCEL">
-          </extended-fab>
+        <extended-fab
+          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+          :on-click="cancelTransfer"
+          class="cancel-efab"
+          icon-class="fa-times"
+          button-text="CANCEL">
+        </extended-fab>
 
-          <v-select
-            v-if="$mq === 'desktop' && currentState === states.FINALIZING"
-            :options="transferTargets"
-            :filterable="false"
-            v-model="transferTarget"
-            class="dark-input">
-          </v-select>
+        <v-select
+          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+          :options="transferTargets"
+          :filterable="false"
+          v-model="transferTarget"
+          class="dark-input">
+        </v-select>
 
-          <extended-fab
-            v-if="$mq === 'desktop' && currentState === states.FINALIZING"
-            :on-click="finalizeTransfer"
-            :disabled="!transferTarget.id || numSelectedTools === 0"
-            class="finish-transfer"
-            icon-class="fa-arrow-right"
-            button-text="FINISH">
-          </extended-fab>
-        </div>
-      </transition>
+        <extended-fab
+          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+          :on-click="finalizeTransfer"
+          :disabled="!transferTarget.id || numSelectedTools === 0"
+          class="finish-transfer"
+          icon-class="fa-arrow-right"
+          button-text="FINISH">
+        </extended-fab>
+      </div>
       <div class="tool-scroll-container">
         <transition name="list-loading">
           <div
@@ -630,14 +635,14 @@ export default {
     width: 100%;
     height: 57px;
     vertical-align: bottom;
+  }
 
-    .transfer-btn {
-      position: absolute;
-      pointer-events: auto;
-      left: calc(50% - 79px);
-      bottom: 3.5px;
-      width: 158px;
-    }
+  .transfer-btn {
+    position: absolute;
+    left: calc(50% - 79px);
+    bottom: 70px;
+    width: 158px;
+    z-index: 100;
   }
 }
 

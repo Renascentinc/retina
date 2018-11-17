@@ -633,6 +633,7 @@ export default {
   background-color: $background-light-gray;
 
   .purchase-date-input {
+    padding-left: 10px;
     text-align: left;
 
     &.placeholder {

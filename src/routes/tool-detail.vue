@@ -284,10 +284,20 @@
                 v-if="editState"
                 v-model="newPurchaseDate"
                 :input-props="{ readonly: true }"
-                class="general-data"
-                popover-visibility="focus"
+                :attributes="[{ popover: { visibility: 'hidden' } }]"
+                :max-date="new Date()"
+                :popover-visibility="datePickerVisibility"
                 popover-direction="top"
-                mode="single">
+                class="general-data"
+                mode="single"
+                @input="toggleDatepicker">
+                <button
+                  slot-scope="{ inputValue, updateValue }"
+                  :class="{ placeholder: !inputValue }"
+                  class="dark-input purchase-date-input"
+                  @click="toggleDatepicker">
+                  {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
+                </button>
               </v-date-picker>
 
               <span class="general-label">Purchase Price</span>
@@ -303,7 +313,6 @@
                 placeholder="Price"
                 type="number">
             </div>
-
           </div>
 
           <div
@@ -343,7 +352,7 @@
                 <label
                   for="file"
                   class="fas fa-camera"></label>
-                Add Photo
+                {{ getTool.photo ? 'UPDATE PHOTO' : 'Add Photo' }}
               </label>
 
               <img
@@ -519,6 +528,7 @@ export default {
       newPurchaseDate: null,
       newPrice: null,
       oosStatus: null,
+      datePickerVisibility: 'hidden',
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
@@ -623,6 +633,14 @@ export default {
   },
 
   methods: {
+    toggleDatepicker () {
+      if (this.datePickerVisibility === 'visible') {
+        this.datePickerVisibility = 'hidden'
+      } else {
+        this.datePickerVisibility = 'visible'
+      }
+    },
+
     cancelDecomission () {
       this.$modal.hide('confirm-oos-modal')
       this.reason = null
@@ -1108,6 +1126,15 @@ export default {
 
     .general-card {
       padding-bottom: 10px;
+
+      .purchase-date-input {
+        padding-left: 10px;
+        text-align: left;
+
+        &.placeholder {
+          color: $form-placeholder-color;
+        }
+      }
 
       .general-details {
         display: flex;

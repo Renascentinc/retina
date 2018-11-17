@@ -23,6 +23,15 @@
     border-radius: 5px;
     max-width: 100% !important;
 
+    .selected-item {
+      background-color: $renascent-red;
+
+      .item-name,
+      .item-category {
+        color: #fff;
+      }
+    }
+
     .input {
       border: none;
 

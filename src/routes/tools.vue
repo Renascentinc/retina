@@ -75,30 +75,31 @@
         </div>
       </transition>
       <div class="tool-scroll-container">
-        <transition>
+        <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchTool.loading"
             class="loading-container">
             <div class="loading"></div>
           </div>
         </transition>
-        <transition-group>
-          <add-button
-            v-if="$mq === 'mobile'"
-            :key="0"
-            :on-click="transitionToAdd"
-            text="TOOL">
-          </add-button>
+        <add-button
+          v-if="$mq === 'mobile'"
+          :key="0"
+          :on-click="transitionToAdd"
+          text="TOOL">
+        </add-button>
+
+        <transition name="fade">
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
             :key="1"
             class="no-tools-container">
             <span class="no-tools-text">No Tools To Display</span>
           </div>
-        </transition-group>
+        </transition>
 
         <transition-group
-          name="list"
+          name="list-element"
           tag="span">
           <tool-search-result
             v-for="tool in tools"
@@ -181,6 +182,7 @@
 </template>
 
 <script>
+import VueNotifications from 'vue-notifications'
 import ToolSearchInput from '../components/tool-search-input'
 import ToolSearchResult from '../components/tool-search-result'
 import ExtendedFab from '../components/extended-fab'
@@ -200,6 +202,14 @@ export default {
     vSelect,
     NfcScan,
     AddButton
+  },
+
+  notifications: {
+    showTransferSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'TRANSFER SUCCESS',
+      message: 'Successfully Transferred Tools'
+    }
   },
 
   apollo: {
@@ -436,6 +446,7 @@ export default {
         this.$store.commit('resetSelectedTools')
         this.showOnlySelectedTools = false
         this.currentState = this.states.INITIAL
+        this.showTransferSuccessMsg()
       })
     },
 
@@ -455,6 +466,7 @@ export default {
   flex-direction: column;
 
   .search-bar {
+    background-color: #fff;
     padding: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     z-index: 5;
@@ -502,6 +514,7 @@ export default {
 
     .transfer-btn {
       position: absolute;
+      pointer-events: auto;
       left: calc(50% - 79px);
       bottom: 3.5px;
       z-index: 1;
@@ -511,14 +524,6 @@ export default {
       position: absolute;
       right: 20px;
     }
-  }
-
-  .loading-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    min-height: 40px;
   }
 
   .selection-action-bar {
@@ -619,6 +624,7 @@ export default {
 
   .floating-action-bar {
     display: inline-block;
+    pointer-events: none;
     position: absolute;
     bottom: 75px;
     width: 100%;
@@ -627,14 +633,10 @@ export default {
 
     .transfer-btn {
       position: absolute;
+      pointer-events: auto;
       left: calc(50% - 79px);
       bottom: 3.5px;
       width: 158px;
-    }
-
-    .add-btn {
-      position: absolute;
-      right: 20px;
     }
   }
 }
@@ -643,7 +645,7 @@ export default {
 
 .desktop {
   .tools-menu-container {
-    display: flex;
+    display: flex !important;
     height: 100%;
     flex-direction: row;
 

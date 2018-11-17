@@ -69,6 +69,7 @@
       <div class="login-action-row">
         <button
           class="reset-password"
+          type="reset"
           @click="() => $modal.show('password-reset-modal')">
           RESET PASSWORD
         </button>
@@ -304,6 +305,7 @@ $login-input-border-radius: 5px;
 .login-page {
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 
   .top-panel {
     display: flex;

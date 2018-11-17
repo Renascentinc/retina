@@ -24,8 +24,8 @@
               slot="no-options"
               slot-scope="props">
               <button
-                class="no-options-btn"
-                @click="() => brand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                class="option-container"
+                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
                 Set Brand To "{{ props.value }}"
               </button>
             </template>
@@ -54,7 +54,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => type = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
                 Set Type To "{{ props.value }}"
               </button>
             </template>
@@ -158,7 +158,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => purchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
                 Set Purchased From To "{{ props.value }}"
               </button>
             </template>
@@ -182,18 +182,17 @@
             :input-props="{ readonly: true }"
             :attributes="[{ popover: { visibility: 'hidden' } }]"
             :max-date="new Date()"
-            popover-visibility="focus"
+            :popover-visibility="datePickerVisibility"
             popover-direction="top"
-            mode="single">
-            <input
+            mode="single"
+            @input="toggleDatepicker">
+            <button
               slot-scope="{ inputValue, updateValue }"
-              :value="inputValue"
-              :placeholder="`eg. ${new Date().toLocaleDateString('en-US')}`"
-              disabled
-              type="text"
-              @input="updateValue($event.target.value, { formatInput: false, hidePopover: false })"
-              @change="updateValue($event.target.value, { formatInput: true, hidePopover: false })"
-              @keyup.esc="updateValue(myDate, { formatInput: true, hidePopover: true })">
+              :class="{ placeholder: !inputValue }"
+              class="dark-input purchase-date-input"
+              @click="toggleDatepicker">
+              {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
+            </button>
           </v-date-picker>
         </div>
 
@@ -228,8 +227,10 @@
           v-if="!imgSrc"
           for="file"
           class="dark-input add-photo">
-          <i class="fas fa-camera"></i>
-          <span> Add Photo </span>
+          <label
+            for="file"
+            class="fas fa-camera"></label>
+          Add Photo
         </label>
 
         <img
@@ -396,6 +397,7 @@ export default {
       status: statuses[1],
       currentState: 1,
       purchaseDate: null,
+      datePickerVisibility: 'hidden',
       getAllConfigurableItem: [],
       getAllUser: [],
       tool: null,
@@ -433,6 +435,14 @@ export default {
   },
 
   methods: {
+    toggleDatepicker () {
+      if (this.datePickerVisibility === 'visible') {
+        this.datePickerVisibility = 'hidden'
+      } else {
+        this.datePickerVisibility = 'visible'
+      }
+    },
+
     updateImageDisplay () {
       this.imgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
     },
@@ -624,6 +634,14 @@ export default {
   flex-direction: column;
   background-color: $background-light-gray;
 
+  .purchase-date-input {
+    text-align: left;
+
+    &.placeholder {
+      color: $form-placeholder-color;
+    }
+  }
+
   .new-tool-input-card {
     display: flex;
     flex: 1 1 auto;
@@ -761,7 +779,7 @@ export default {
     justify-content: center;
     height: 250px;
 
-    i {
+    .fa-camera {
       margin-right: 5px;
     }
 
@@ -783,6 +801,7 @@ export default {
   font-size: 23px;
   font-weight: 700;
   word-break: break-word;
+  width: 100%;
 }
 
 .desktop {

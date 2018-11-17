@@ -938,6 +938,7 @@ export default {
       }
 
       .name {
+        word-break: break-word;
         font-size: 33px;
         font-weight: 900;
         text-align: center;

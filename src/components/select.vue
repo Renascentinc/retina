@@ -6,7 +6,7 @@
     <div
       ref="toggle"
       class="dropdown-toggle"
-      @mousedown.prevent="toggleDropdown">
+      @click="toggleDropdown">
 
       <div
         ref="selectedOptions"
@@ -94,37 +94,27 @@
         class="dropdown-menu"
         role="listbox"
         @mousedown="onMousedown">
-        <!-- <li
-          v-for="(option, index) in filteredOptions"
-          :key="index"
-          :class="{ active: isOptionSelected(option) }"
-          role="option">
-          <a @mousedown.prevent.stop="select(option)">
-            <slot
-              v-bind="(typeof option === 'object') ? option : { [label] : option }"
-              name="option">
-              {{ getOptionLabel(option) }}
-            </slot>
-          </a>
-        </li> -->
         <li
           v-for="(option, index) in filteredOptions"
           :key="index"
           :class="{ active: isOptionSelected(option) }"
           role="option">
-          <a @mousedown.prevent.stop="select(option)">
+          <button
+            class="option-container"
+            @click="select(option)">
             <slot
               v-bind="(typeof option === 'object') ? option : { [label] : option }"
               name="option">
               {{ getOptionLabel(option) }}
             </slot>
-          </a>
+          </button>
         </li>
         <li
           v-if="!filteredOptions.length"
-          class="no-options">
+          class="no-options"
+          role="option">
           <slot
-            v-bind="{ value: search }"
+            v-bind="{ value: search, select }"
             name="no-options">Sorry, no matching options.</slot>
         </li>
       </ul>
@@ -740,16 +730,13 @@ export default {
        * @param  {Event} e
        * @return {void}
        */
-    toggleDropdown (e) {
-      if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle ||
-            e.target.classList.contains('selected-tag') || e.target === this.$el) {
+    toggleDropdown () {
+      this.open = !this.open
+      if (this.searchable) {
         if (this.open) {
-          this.$refs.search.blur() // dropdown will close on blur
+          this.$refs.search.focus()
         } else {
-          if (!this.disabled) {
-            this.open = true
-            this.$refs.search.focus()
-          }
+          this.$refs.search.blur()
         }
       }
     },
@@ -829,9 +816,11 @@ export default {
         this.mousedown = false
       } else {
         if (this.clearSearchOnBlur) {
-          this.search = ''
+          setTimeout(() => {
+            this.search = ''
+            this.open = false
+          }, 100)
         }
-        this.open = false
         this.$emit('search:blur')
       }
     },
@@ -842,7 +831,6 @@ export default {
        * @return {void}
        */
     onSearchFocus () {
-      this.open = true
       this.$emit('search:focus')
     },
 
@@ -1127,9 +1115,6 @@ export default {
   }
 
   /* List Items */
-  .v-select li {
-    line-height: 1.42857143; /* Normalize line height */
-  }
   .v-select li > a {
     display: block;
     padding: 3px 20px;
@@ -1145,27 +1130,22 @@ export default {
     background: rgba(50, 50, 50, .1);
   }
 
-  /* Loading Spinner */
-  /* .v-select .spinner {
-    align-self: center;
-    opacity: 0;
-    font-size: 5px;
-    text-indent: -9999em;
-    overflow: hidden;
-    border-top: .9em solid rgba(100, 100, 100, .1);
-    border-right: .9em solid rgba(100, 100, 100, .1);
-    border-bottom: .9em solid rgba(100, 100, 100, .1);
-    border-left: .9em solid rgba(60, 60, 60, .45);
-    transform: translateZ(0);
-    animation: vSelectSpinner 1.1s infinite linear;
-    transition: opacity .1s;
+  .v-select .option-container {
+    height: 40px;
+    width: 100%;
+    text-align: left;
+    font-size: 20px;
+    font-weight: 700;
   }
-  .v-select .spinner,
-  .v-select .spinner:after {
-    border-radius: 50%;
-    width: 5em;
-    height: 5em;
-  } */
+
+  .v-select li.active {
+    /* background-color: #CE352F; */
+  }
+
+  .v-select li.active .option-container{
+    color: white;
+    background-color: #CE352F;
+  }
 
   /* Disabled state */
   .v-select.disabled .dropdown-toggle,
@@ -1176,35 +1156,4 @@ export default {
     cursor: not-allowed;
     background-color: rgb(248, 248, 248);
   }
-
-  /* Loading Spinner States */
-  /* .v-select.loading .spinner {
-    opacity: 1;
-  } */
-  /* KeyFrames */
-  /* @-webkit-keyframes vSelectSpinner {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  @keyframes vSelectSpinner {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  } */
-  /* Dropdown Default Transition */
-  /* .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity .15s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-  }
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  } */
 </style>

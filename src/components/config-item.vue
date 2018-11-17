@@ -153,37 +153,37 @@ export default {
   @import '../styles/variables';
   @import '../styles/search-result';
 
-  .sanctioned {
-    .save-icon, .cancel-icon {
-      color: $renascent-red;
-      font-size: 30px;
-    }
-  }
-
-  .unsanctioned {
-    background-color: $renascent-red;
-    color: white;
-
-    .edit-icon {
-      color: white !important;
-    }
-
-    .save-icon, .cancel-icon {
-      color: white;
-      font-size: 30px;
-    }
-
-    .action-group {
-      color: white !important;
-
-      .fab {
+  .search-result {
+    &.sanctioned {
+      .save-icon, .cancel-icon {
         color: $renascent-red;
-        background-color: white;
+        font-size: 30px;
       }
     }
-  }
 
-  .search-result {
+    &.unsanctioned {
+      background-color: $renascent-red;
+      color: white;
+
+      .edit-icon {
+        color: white !important;
+      }
+
+      .save-icon, .cancel-icon {
+        color: white;
+        font-size: 30px;
+      }
+
+      .action-group {
+        color: white !important;
+
+        .fab {
+          color: $renascent-red;
+          background-color: white;
+        }
+      }
+    }
+
     .element-container {
       padding-right: 10px;
     }
@@ -220,7 +220,7 @@ export default {
     .actions {
       display: flex;
       flex-direction: row;
-      flex: 1 1 50%;
+      flex: 0 0 50%;
       justify-content: space-around;
       height: 100%;
 
@@ -235,6 +235,7 @@ export default {
         color: $renascent-dark-gray;
         padding-top: 5px;
         padding-bottom: 5px;
+        width: 50px;
 
         .fab {
           height: 32px;

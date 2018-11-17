@@ -15,30 +15,30 @@
         </extended-fab>
       </div>
       <div class="user-scroll-container">
-        <transition>
+        <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchUser.loading"
             class="loading-container">
             <div class="loading"/>
           </div>
         </transition>
-        <transition-group>
-          <add-button
-            v-if="$mq === 'mobile'"
-            :key="0"
-            :on-click="transitionToAddUser"
-            text="USER">
-          </add-button>
+        <add-button
+          v-if="$mq === 'mobile'"
+          :key="0"
+          :on-click="transitionToAddUser"
+          text="USER">
+        </add-button>
+        <transition name="fade">
           <div
             v-if="!$apollo.queries.searchUser.loading && !users.length"
             :key="1"
             class="no-users-container">
             <span class="no-users-text">No Users To Display</span>
           </div>
-        </transition-group>
+        </transition>
 
         <transition-group
-          name="list"
+          name="list-element"
           class="users"
           tag="div">
           <user-search-result
@@ -159,6 +159,7 @@ export default {
   flex-direction: column;
 
   .search-bar {
+    background-color: #fff;
     padding: 10px;
     min-height: 45px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
@@ -194,15 +195,15 @@ export default {
     padding-top: 50px;
   }
 
-  .loading-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: absolute;
-    top: 100px;
-    left: 0;
-    width: 100vw;
-  }
+  // .loading-container {
+  //   display: flex;
+  //   justify-content: flex-start;
+  //   align-items: center;
+  //   position: absolute;
+  //   top: 100px;
+  //   left: 0;
+  //   width: 100vw;
+  // }
 }
 
 .dark-dropdown {

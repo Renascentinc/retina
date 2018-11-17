@@ -13,6 +13,7 @@
   "scripts": {
     "generate-icons": "vsvg -s ./svg-icons -t ./src/assets/icons/svg",
     "start": "changeFile=false parcel index.html --port 4200",
+    "clean-start": "rm -rf .cache && yarn start",
     "test": "eslint --ext .js,.vue src",
     "build": "changeFile=false parcel build index.html --no-source-maps",
     "build-cordova": "parcel build index.html --out-dir=www --public-url=./ --no-minify",

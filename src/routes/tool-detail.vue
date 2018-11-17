@@ -311,7 +311,9 @@
             <div class="card-title">
               Photo
             </div>
-            <div class="photo-box">
+            <div
+              v-if="!editState"
+              class="photo-box">
               <img
                 v-lazy="`${getTool.photo}`"
                 v-if="getTool.photo"
@@ -321,6 +323,34 @@
                 class="fas fa-image no-image">
               </i>
             </div>
+
+            <div
+              v-if="editState"
+              class="add-photo-container">
+              <input
+                id="file"
+                ref="file"
+                name="file"
+                style="display: none;"
+                type="file"
+                accept="image/*"
+                capture="camera">
+
+              <label
+                v-if="!newImgSrc"
+                for="file"
+                class="dark-input add-photo">
+                <label
+                  for="file"
+                  class="fas fa-camera"></label>
+                Add Photo
+              </label>
+
+              <img
+                v-if="newImgSrc"
+                :src="newImgSrc"
+                class="img-preview">
+            </div>
           </div>
         </div>
       </div>
@@ -329,7 +359,8 @@
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
-      class="edit"></fab>
+      class="edit">
+    </fab>
 
     <modal
       :width="350"
@@ -375,7 +406,6 @@ import Avatar from 'vue-avatar'
 import Fab from '../components/fab.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import vSelect from '../components/select'
-import VueLazyload from 'vue-lazyload'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
@@ -389,7 +419,6 @@ export default {
     Fab,
     ExtendedFab,
     ButtonDropdown,
-    VueLazyload,
     vSelect,
     NfcEncode
   },
@@ -476,6 +505,7 @@ export default {
 
   data () {
     return {
+      newImgSrc: null,
       reason: null,
       changingStatus: false,
       getTool: {},
@@ -609,11 +639,8 @@ export default {
 
     formattedDate (date) {
       let datePurchased = date
-      return datePurchased
-        ? new Date(datePurchased).toLocaleDateString('en-US', {
-          timeZone: 'UTC'
-        })
-        : '-'
+      // return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US', { timeZone: 'UTC' }) : '-'
+      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
     },
 
     getConfigurableItemsForType (type) {
@@ -639,6 +666,7 @@ export default {
         this.newPurchaseDate = this.getTool.date_purchased && new Date(this.getTool.date_purchased)
         this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
         this.editState = true
+        this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
       }
     },
 
@@ -684,6 +712,37 @@ export default {
       })
     },
 
+    updateImageDisplay () {
+      this.newImgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
+    },
+
+    uploadPhoto () {
+      let file = this.$refs.file.files[0]
+      let fd = new FormData()
+
+      let key = `tool_preview-${new Date().getTime()}`
+
+      fd.append('key', key)
+      fd.append('acl', 'public-read')
+      fd.append('Content-Type', file.type)
+      // TODO enable auth for photo upload
+      // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+      // fd.append('policy', 'YOUR POLICY')
+      // fd.append('signature', 'YOUR SIGNATURE')
+
+      fd.append('file', file)
+
+      var xhr = new XMLHttpRequest()
+
+      xhr.addEventListener('load', () => window.console.log('complete'), false)
+      xhr.addEventListener('error', (reason) => window.console.error('error uploading', reason), false)
+
+      xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+
+      xhr.send(fd)
+      return `https://s3.us-east-2.amazonaws.com/retina-images/${key}`
+    },
+
     saveTool () {
       let brandRequest =
         this.newBrand && this.newBrand.isNewConfigurableItem
@@ -715,6 +774,11 @@ export default {
               purchaseResponse.data.createConfigurableItem.id
           }
 
+          let photo = this.getTool.photo
+          if (this.newImgSrc) {
+            photo = this.uploadPhoto()
+          }
+
           this.$apollo
             .mutate({
               mutation: gql`
@@ -737,11 +801,11 @@ export default {
                   purchased_from_id:
                     this.newPurchasedFrom && this.newPurchasedFrom.id,
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  photo: this.getTool.photo,
                   price: this.newPrice
                     ? (this.newPrice * 100).toFixed(0)
                     : null,
-                  year: this.newYear ? this.newYear : null
+                  year: this.newYear ? this.newYear : null,
+                  photo
                 }
               }
             })
@@ -1105,6 +1169,30 @@ export default {
           text-align: center;
           margin-top: 20px;
           margin-bottom: 20px;
+        }
+      }
+
+      .add-photo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        padding: 20px;
+
+        .img-preview {
+          max-height: 175px;
+          max-width: 100%;
+        }
+
+        .add-photo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100px;
+
+          .fa-camera {
+            margin-right: 5px;
+          }
         }
       }
     }

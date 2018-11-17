@@ -36,7 +36,7 @@
           <input
             v-model="username"
             class="username-input"
-            placeholder="username@renascentinc.com"
+            placeholder="username"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false">
@@ -206,6 +206,9 @@ export default {
 
   computed: {
     email () {
+      if (this.username.indexOf('@') > -1) {
+        return this.username
+      }
       return `${this.username}${this.domain}`
     }
   },

@@ -23,7 +23,7 @@
           </div>
         </transition>
         <add-button
-          v-if="$mq === 'mobile'"
+          v-if="$mq === 'mobile' && isAdmin"
           :key="0"
           :on-click="transitionToAddUser"
           text="USER">
@@ -121,8 +121,7 @@ export default {
   computed: {
     isAdmin () {
       return (
-        JSON.parse(window.localStorage.getItem('currentUser')).role ===
-        Roles.ADMIN
+        JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
       )
     },
 

@@ -105,9 +105,7 @@ Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
-Vue.use(VueLazyload, {
-  attempt: 5
-})
+Vue.use(VueLazyload)
 Vue.use(VueJsModal, {
   dialog: true
 })

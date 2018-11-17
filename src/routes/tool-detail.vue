@@ -639,7 +639,6 @@ export default {
 
     formattedDate (date) {
       let datePurchased = date
-      // return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US', { timeZone: 'UTC' }) : '-'
       return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
     },
 
@@ -716,33 +715,6 @@ export default {
       this.newImgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
     },
 
-    uploadPhoto () {
-      let file = this.$refs.file.files[0]
-      let fd = new FormData()
-
-      let key = `tool_preview-${new Date().getTime()}`
-
-      fd.append('key', key)
-      fd.append('acl', 'public-read')
-      fd.append('Content-Type', file.type)
-      // TODO enable auth for photo upload
-      // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-      // fd.append('policy', 'YOUR POLICY')
-      // fd.append('signature', 'YOUR SIGNATURE')
-
-      fd.append('file', file)
-
-      var xhr = new XMLHttpRequest()
-
-      xhr.addEventListener('load', () => window.console.log('complete'), false)
-      xhr.addEventListener('error', (reason) => window.console.error('error uploading', reason), false)
-
-      xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
-
-      xhr.send(fd)
-      return `https://s3.us-east-2.amazonaws.com/retina-images/${key}`
-    },
-
     saveTool () {
       let brandRequest =
         this.newBrand && this.newBrand.isNewConfigurableItem
@@ -756,10 +728,41 @@ export default {
         this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem
           ? this.createNewConfigurableItem(this.newPurchasedFrom)
           : null
+      let photoRequest = new Promise((resolve) => {
+        let file = this.$refs.file.files[0]
 
-      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(
+        if (file) {
+          let fd = new FormData()
+
+          let key = `tool_preview-${new Date().getTime()}`
+
+          fd.append('key', key)
+          fd.append('acl', 'public-read')
+          fd.append('Content-Type', file.type)
+          // TODO enable auth for photo upload
+          // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+          // fd.append('policy', 'YOUR POLICY')
+          // fd.append('signature', 'YOUR SIGNATURE')
+
+          fd.append('file', file)
+
+          var xhr = new XMLHttpRequest()
+
+          xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+
+          xhr.onload = () => {
+            resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+          }
+
+          xhr.send(fd)
+        } else {
+          resolve(null)
+        }
+      })
+
+      Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(
         responses => {
-          let [brandResponse, typeResponse, purchaseResponse] = responses
+          let [brandResponse, typeResponse, purchaseResponse, photoRequest] = responses
 
           if (brandResponse) {
             this.newBrand.id = brandResponse.data.createConfigurableItem.id
@@ -775,8 +778,9 @@ export default {
           }
 
           let photo = this.getTool.photo
-          if (this.newImgSrc) {
-            photo = this.uploadPhoto()
+          if (photoRequest) {
+            photo = photoRequest
+            this.newImgSrc = null
           }
 
           this.$apollo

@@ -465,9 +465,6 @@ export default {
 
       var xhr = new XMLHttpRequest()
 
-      xhr.addEventListener('load', () => window.console.log('complete'), false)
-      xhr.addEventListener('error', (reason) => window.console.error('error uploading', reason), false)
-
       xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
 
       xhr.send(fd)

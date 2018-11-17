@@ -75,30 +75,31 @@
         </div>
       </transition>
       <div class="tool-scroll-container">
-        <transition>
+        <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchTool.loading"
             class="loading-container">
             <div class="loading"></div>
           </div>
         </transition>
-        <transition-group>
-          <add-button
-            v-if="$mq === 'mobile'"
-            :key="0"
-            :on-click="transitionToAdd"
-            text="TOOL">
-          </add-button>
+        <add-button
+          v-if="$mq === 'mobile'"
+          :key="0"
+          :on-click="transitionToAdd"
+          text="TOOL">
+        </add-button>
+
+        <transition name="fade">
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
             :key="1"
             class="no-tools-container">
             <span class="no-tools-text">No Tools To Display</span>
           </div>
-        </transition-group>
+        </transition>
 
         <transition-group
-          name="list"
+          name="list-element"
           tag="span">
           <tool-search-result
             v-for="tool in tools"
@@ -181,6 +182,7 @@
 </template>
 
 <script>
+import VueNotifications from 'vue-notifications'
 import ToolSearchInput from '../components/tool-search-input'
 import ToolSearchResult from '../components/tool-search-result'
 import ExtendedFab from '../components/extended-fab'
@@ -200,6 +202,14 @@ export default {
     vSelect,
     NfcScan,
     AddButton
+  },
+
+  notifications: {
+    showTransferSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'TRANSFER SUCCESS',
+      message: 'Successfully Transferred Tools'
+    }
   },
 
   apollo: {
@@ -436,6 +446,7 @@ export default {
         this.$store.commit('resetSelectedTools')
         this.showOnlySelectedTools = false
         this.currentState = this.states.INITIAL
+        this.showTransferSuccessMsg()
       })
     },
 
@@ -465,6 +476,7 @@ export default {
   }
 
   .tools-menu-container {
+    display: flex;
     overflow-y: auto;
     background-color: $background-light-gray;
     flex: 1 1 auto;
@@ -513,14 +525,6 @@ export default {
       position: absolute;
       right: 20px;
     }
-  }
-
-  .loading-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    min-height: 40px;
   }
 
   .selection-action-bar {

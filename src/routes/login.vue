@@ -18,7 +18,7 @@
         </span>
       </div>
     </div>
-    <div class="bottom-panel">
+    <form class="bottom-panel">
       <div class="status-message">
         <transition name="fade">
           <span
@@ -69,6 +69,7 @@
       <div class="login-action-row">
         <button
           class="reset-password"
+          type="reset"
           @click="() => $modal.show('password-reset-modal')">
           RESET PASSWORD
         </button>
@@ -77,10 +78,11 @@
           :on-click="attemptUserLogin"
           class="login-btn"
           icon-class="fa-arrow-right"
-          button-text="SIGN IN">
+          button-text="SIGN IN"
+          button-type="submit">
         </extended-fab>
       </div>
-    </div>
+    </form>
 
     <modal
       :width="300"
@@ -304,6 +306,7 @@ $login-input-border-radius: 5px;
 .login-page {
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 
   .top-panel {
     display: flex;

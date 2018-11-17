@@ -8,7 +8,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-// import attachFastClick from 'fastclick'
+import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -27,13 +27,6 @@ import swal from 'sweetalert'
 function toast ({title, message, type, timeout, cb}) {
   if (type === VueNotifications.types.warn) type = 'warning'
   return swal(title, message, type)
-}
-
-const options = {
-  success: toast,
-  error: toast,
-  info: toast,
-  warn: toast
 }
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
@@ -60,8 +53,8 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 const cache = new InMemoryCache({
   fragmentMatcher,
   dataIdFromObject: object => {
-    // fixing issue on tools page where objects were getting scrambled with each other
-    // using a combination of fields to make a unique identifier for the entries
+    // fixing issue on history page where objects were getting scrambled with each other (same ids but different data at different snapshots in time).
+    // using a combination of fields to create a unique identifier for the entries
     if (object.__typename === 'PreviousToolSnapshotDiff' || (router.currentRoute.path === '/history' && object.__typename === 'Tool')) {
       return `${object.id}${object.__typename}${object.owner ? object.owner.id || object.owner.id : ''}${object.status}`
     }
@@ -69,6 +62,7 @@ const cache = new InMemoryCache({
   }
 })
 
+// TODO: dynamically switch between prod and develop api's
 const httpLink = new HttpLink({
   uri: 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })
@@ -111,19 +105,24 @@ Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
+Vue.use(VueSVGIcon)
+Vue.use(VueJsModal, {
+  dialog: true
+})
+Vue.use(VueNotifications, {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+})
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 500,
     desktop: Infinity
   }
 })
-Vue.use(VueSVGIcon)
-Vue.use(VueNotifications, options)
-Vue.use(VueJsModal, {
-  dialog: true
-})
 
-// attachFastClick(document.body, { tapDelay: 200 })
+attachFastClick(document.body, { tapDelay: 200 })
 
 new Vue({
   router,

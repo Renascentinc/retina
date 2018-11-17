@@ -103,30 +103,33 @@
             </div>
           </div>
 
-          <div class="loading-container">
+          <transition name="list-loading">
             <div
               v-if="$apollo.queries.searchToolHistory.loading"
-              class="loading">
+              class="loading-container">
+              <div
+                class="loading">
+              </div>
             </div>
-          </div>
+          </transition>
 
           <div
-            v-if="!$apollo.queries.searchToolHistory.loading"
             class="dt-body"
             style="display: flex;
               flex-direction: column;">
-            <div
-              v-for="entry in searchToolHistory"
-              :key="entry.id"
-              class="dt-row"
-              style="display: flex;
+            <transition-group name="list-element">
+              <div
+                v-for="entry in searchToolHistory"
+                :key="entry.id"
+                class="dt-row"
+                style="display: flex;
                 border-radius: 3px;
                 border-bottom: solid 1px lightgray;
                 background-color: white;
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);">
-              <div
-                class="dt-cell id"
-                style="display: flex;
+                <div
+                  class="dt-cell id"
+                  style="display: flex;
                   justify-content: flex-end;
                   flex: 0 0 50px;
                   justify-content: center;
@@ -135,103 +138,104 @@
                   align-items: center;
                   height: 85px;
                   font-weight: 900; border-right: solid 1px lightgray;">
-                <span>{{ entry.tool_snapshot.id }}</span>
-              </div>
-              <div
-                class="dt-cell date"
-                style="display: flex;
+                  <span>{{ entry.tool_snapshot.id }}</span>
+                </div>
+                <div
+                  class="dt-cell date"
+                  style="display: flex;
                   justify-content: flex-end;
                   display: flex;
                   align-items: center;
                   height: 85px;
                   font-weight: 900; flex: 0 0 200px;">
-                <span>{{ `${new Date(entry.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' })} ${new Date(entry.timestamp).toLocaleTimeString('en-US')}` }}</span>
-              </div>
-              <div
-                class="dt-cell action"
-                style="display: flex;
+                  <span>{{ `${new Date(entry.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' })} ${new Date(entry.timestamp).toLocaleTimeString('en-US')}` }}</span>
+                </div>
+                <div
+                  class="dt-cell action"
+                  style="display: flex;
                   justify-content: flex-end;
                   flex: 0 0 120px;
                   display: flex;
                   align-items: center;
                   height: 85px;
                   font-weight: 900;">
-                <span>{{ entry.tool_action }}</span>
-              </div>
-              <div
-                class="dt-cell status"
-                style="display: flex;
+                  <span>{{ entry.tool_action }}</span>
+                </div>
+                <div
+                  class="dt-cell status"
+                  style="display: flex;
                   justify-content: flex-end; flex: 0 0 270px;
                   display: flex;
                   align-items: center;
                   height: 85px;
                   font-weight: 900;">
-                <span
-                  v-if="entry.previous_tool_snapshot_diff.status"
-                  class="previous-snapshot"
-                  style="color: gray;">{{ entry.previous_tool_snapshot_diff.status }}</span>
-                <i
-                  v-if="entry.previous_tool_snapshot_diff.status"
-                  class="fas fa-long-arrow-alt-right"
-                  style="margin: 0 10px; content: '\f30b'"></i>
+                  <span
+                    v-if="entry.previous_tool_snapshot_diff.status"
+                    class="previous-snapshot"
+                    style="color: gray;">{{ entry.previous_tool_snapshot_diff.status }}</span>
+                  <i
+                    v-if="entry.previous_tool_snapshot_diff.status"
+                    class="fas fa-long-arrow-alt-right"
+                    style="margin: 0 10px; content: '\f30b'"></i>
 
-                <span>{{ entry.tool_snapshot.status }}</span>
+                  <span>{{ entry.tool_snapshot.status }}</span>
 
-              </div>
-              <div
-                class="dt-cell owner"
-                style="display: flex;
+                </div>
+                <div
+                  class="dt-cell owner"
+                  style="display: flex;
                   justify-content: flex-end;
                   flex: 0 0 260px;
                   display: flex;
                   align-items: center;
                   height: 85px;
                   font-weight: 900;">
-                <div v-if="entry.previous_tool_snapshot_diff.owner">
-                  <div
-                    v-if="entry.previous_tool_snapshot_diff.owner.type === 'USER'"
-                    class="owner-entry previous-snapshot"
-                    style="color: gray;
+                  <div v-if="entry.previous_tool_snapshot_diff.owner">
+                    <div
+                      v-if="entry.previous_tool_snapshot_diff.owner.type === 'USER'"
+                      class="owner-entry previous-snapshot"
+                      style="color: gray;
                       text-align: center;
                       max-width: 125px;
                       word-break: break-all;">
-                    {{ `${entry.previous_tool_snapshot_diff.owner.first_name} ${entry.previous_tool_snapshot_diff.owner.last_name}` }}
-                  </div>
-                  <div
-                    v-if="entry.previous_tool_snapshot_diff.owner.type === 'LOCATION'"
-                    class="owner-entry previous-snapshot"
-                    style="color: gray;
+                      {{ `${entry.previous_tool_snapshot_diff.owner.first_name} ${entry.previous_tool_snapshot_diff.owner.last_name}` }}
+                    </div>
+                    <div
+                      v-if="entry.previous_tool_snapshot_diff.owner.type === 'LOCATION'"
+                      class="owner-entry previous-snapshot"
+                      style="color: gray;
                       text-align: center;
                       max-width: 125px;
                       word-break: break-all;">
-                    <i class="fas fa-map-marker-alt"></i>
-                    {{ entry.previous_tool_snapshot_diff.owner.name }}
+                      <i class="fas fa-map-marker-alt"></i>
+                      {{ entry.previous_tool_snapshot_diff.owner.name }}
+                    </div>
                   </div>
-                </div>
 
-                <i
-                  v-if="entry.previous_tool_snapshot_diff.owner"
-                  class="fas fa-long-arrow-alt-right"
-                  style="margin: 0 10px; content: '\f30b'"></i>
+                  <i
+                    v-if="entry.previous_tool_snapshot_diff.owner"
+                    class="fas fa-long-arrow-alt-right"
+                    style="margin: 0 10px; content: '\f30b'"></i>
 
-                <div
-                  v-if="entry.tool_snapshot.owner.type === 'USER'"
-                  class="owner-entry"
-                  style="text-align: center;
+                  <div
+                    v-if="entry.tool_snapshot.owner.type === 'USER'"
+                    class="owner-entry"
+                    style="text-align: center;
                     max-width: 125px;
                     word-break: break-all;">
-                  {{ `${entry.tool_snapshot.owner.first_name} ${entry.tool_snapshot.owner.last_name}` }}
-                </div>
-                <div
-                  v-if="entry.tool_snapshot.owner.type === 'LOCATION'"
-                  class="owner-entry"
-                  style="text-align: center;
+                    {{ `${entry.tool_snapshot.owner.first_name} ${entry.tool_snapshot.owner.last_name}` }}
+                  </div>
+                  <div
+                    v-if="entry.tool_snapshot.owner.type === 'LOCATION'"
+                    class="owner-entry"
+                    style="text-align: center;
                     max-width: 125px;
                     word-break: break-all;">
-                  {{ entry.tool_snapshot.owner.name }}
+                    {{ entry.tool_snapshot.owner.name }}
+                  </div>
                 </div>
               </div>
-            </div>
+            </transition-group>
           </div>
         </div>
       </div>
@@ -449,9 +453,13 @@ export default {
 
 .desktop {
   .history-page {
+    .loading-container {
+      max-width: 100%;
+    }
+
     .search-bar {
       background-color: #fff;
-      width: calc(100% - 70px);
+      width: calc(100vw - 80px);
     }
 
     .search-input {
@@ -524,7 +532,6 @@ export default {
   .search-bar {
     background-color: #fff;
     padding: 10px;
-    min-height: 45px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     z-index: 5;
     display: flex;

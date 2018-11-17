@@ -5,6 +5,7 @@
 @import 'navbar';
 @import 'form-inputs';
 @import 'toast';
+@import 'transitions';
 
 * {
   font-family: $font-family;
@@ -21,10 +22,6 @@ html, body, #app {
   height: 100%;
   margin: 0;
   overflow: hidden;
-}
-
-body {
-  background-color: $renascent-dark-gray;
 }
 
 button {
@@ -56,7 +53,8 @@ a {
   opacity: 0;
 }
 
-.page-change-leave-to {
+.page-change-leave-to,
+.page-change-leave-active {
   display: none;
 }
 

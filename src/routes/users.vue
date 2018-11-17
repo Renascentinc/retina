@@ -38,7 +38,7 @@
         </transition>
 
         <transition-group
-          name="list"
+          name="list-element"
           class="users"
           tag="div">
           <user-search-result

@@ -159,6 +159,7 @@ export default {
   flex-direction: column;
 
   .search-bar {
+    background-color: #fff;
     padding: 10px;
     min-height: 45px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);

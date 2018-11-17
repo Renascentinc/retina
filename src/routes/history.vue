@@ -450,6 +450,7 @@ export default {
 .desktop {
   .history-page {
     .search-bar {
+      background-color: #fff;
       width: calc(100% - 70px);
     }
 
@@ -521,6 +522,7 @@ export default {
   }
 
   .search-bar {
+    background-color: #fff;
     padding: 10px;
     min-height: 45px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);

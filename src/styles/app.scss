@@ -23,6 +23,10 @@ html, body, #app {
   overflow: hidden;
 }
 
+body {
+  background-color: $renascent-dark-gray;
+}
+
 button {
   outline: none;
   border: none;

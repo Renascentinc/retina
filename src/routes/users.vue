@@ -126,11 +126,11 @@ export default {
     },
 
     users () {
-      if (this.searchUser.length > 0) {
-        return this.searchUser
-      } else {
+      if (!this.searchString) {
         return this.getAllUser
       }
+
+      return this.searchUser
     }
   },
 

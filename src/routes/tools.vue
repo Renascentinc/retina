@@ -476,7 +476,6 @@ export default {
   }
 
   .tools-menu-container {
-    display: flex;
     overflow-y: auto;
     background-color: $background-light-gray;
     flex: 1 1 auto;
@@ -646,7 +645,7 @@ export default {
 
 .desktop {
   .tools-menu-container {
-    display: flex;
+    display: flex !important;
     height: 100%;
     flex-direction: row;
 

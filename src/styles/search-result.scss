@@ -22,6 +22,7 @@ $tool-search-result-border-radius: 3px;
       flex: 1 1 auto;
 
       .title {
+        word-break: break-word;
         font-weight: 900;
         margin-bottom: 5px;
       }

@@ -142,22 +142,6 @@ export default {
   },
 
   notifications: {
-    showPasswordResetModal: {
-      type: VueNotifications.types.info,
-      title: 'RESET PASSWORD',
-      text: 'Enter your email address',
-      input: 'email',
-      inputPlaceholder: 'email@example.com',
-      reverseButtons: true,
-      showCancelButton: true,
-      cancelButtonText: 'CANCEL',
-      confirmButtonText: 'SUBMIT',
-    },
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Instructions for resetting your password have been sent to your email'
-    },
     showErrorMsg: {
       type: VueNotifications.types.error,
       title: 'RESET FAILURE',
@@ -199,7 +183,11 @@ export default {
             }
           }).then(response => {
             if (response.data.requestPasswordReset) {
-              this.showSuccessMsg()
+              swal({
+                type: VueNotifications.types.success,
+                title: 'SUCCESS',
+                message: 'Instructions for resetting your password have been sent to your email'
+              })
             } else {
               this.showErrorMsg()
             }

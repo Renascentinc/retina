@@ -119,6 +119,7 @@ import gql from 'graphql-tag'
 import vSelect from '../components/select'
 import VueNotifications from 'vue-notifications'
 import AddResult from '../components/add-result'
+import swal from 'sweetalert2'
 
 export default {
   name: 'Configuration',
@@ -340,7 +341,24 @@ export default {
           this.$apollo.queries.getAllConfigurableItem.refresh()
         } else {
           this.replacementList = response.data.deleteConfigurableItem.toolsWithConfigurableItem
-          this.openReplacementModal(config)
+          // this.openReplacementModal(config)
+          swal({
+            title: 'DELETE ITEM',
+            text: 'X tools are using this item. Replace with :',
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'CANCEL',
+            confirmButtonText: 'REPLACE',
+            confirmButtonColor: '#CE352F',
+            input: 'select',
+            inputPlaceholder: 'Brand',
+            inputOptions: {
+              'this': 'THIS',
+              'that': 'THAT',
+              'these': 'THESE',
+              'those': 'THOSE'
+            }
+          })
         }
       })
     },

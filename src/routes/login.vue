@@ -69,7 +69,7 @@
       <div class="login-action-row">
         <button
           class="reset-password"
-          @click="() => $modal.show('password-reset-modal')">
+          @click="showPasswordResetModal()">
           RESET PASSWORD
         </button>
 
@@ -191,6 +191,24 @@ export default {
   },
 
   notifications: {
+    showPasswordResetModal: {
+      type: VueNotifications.types.info,
+      title: 'RESET PASSWORD',
+      message: 'Enter your email address',
+      options: {
+        content: {
+          element: 'input',
+          attributes: {
+            placeholder: 'email address'
+          }
+        },
+        buttons: {
+          'CANCEL': true,
+          'FINISH': true
+        }
+      },
+      cb: (value) => { console.log('callback ran: ' + value) }
+    },
     showSuccessMsg: {
       type: VueNotifications.types.success,
       title: 'SUCCESS',

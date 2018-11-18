@@ -26,7 +26,7 @@ import swal from 'sweetalert'
 
 function toast ({title, message, type, options, timeout, cb}) {
   if (type === VueNotifications.types.warn) type = 'warning'
-  return swal(title, message, type, options || {})
+  swal(title, message, type, options || {}).then((value) => { if(value) cb(value) })
 }
 
 const options = {

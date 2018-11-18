@@ -451,7 +451,7 @@ export default {
       let file = this.$refs.file.files[0]
       let fd = new FormData()
 
-      let key = new Date().getTime() + '-' + file.name
+      let key = `tool_preview-${new Date().getTime()}`
 
       fd.append('key', key)
       fd.append('acl', 'public-read')
@@ -464,9 +464,6 @@ export default {
       fd.append('file', file)
 
       var xhr = new XMLHttpRequest()
-
-      xhr.addEventListener('load', () => window.console.log('complete'), false)
-      xhr.addEventListener('error', (reason) => window.console.error('error uploading', reason), false)
 
       xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
 
@@ -510,7 +507,7 @@ export default {
       this.photo = null
       this.tool = null
       this.status = null
-      this.purchaseDate = new Date()
+      this.purchaseDate = null
     },
 
     transitionToToolInfo (toolId) {
@@ -543,6 +540,7 @@ export default {
       let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
       let typeRequest = this.type && this.type.isNewConfigurableItem ? this.createNewConfigurableItem(this.type) : null
       let purchaseRequest = this.purchasedFrom && this.purchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.purchasedFrom) : null
+      let purchaseDate = this.purchaseDate && new Date(this.purchaseDate).toISOString()
 
       if (this.imgSrc) {
         photo = this.uploadPhoto()
@@ -594,7 +592,7 @@ export default {
               model_number: this.modelNumber,
               serial_number: this.serialNumber,
               purchased_from_id: this.purchasedFrom && this.purchasedFrom.id,
-              date_purchased: this.purchaseDate,
+              date_purchased: purchaseDate,
               status: this.status ? this.status.id : Statuses.AVAILABLE,
               owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
               price: parseInt((this.price || 0) * 100),
@@ -635,6 +633,7 @@ export default {
   background-color: $background-light-gray;
 
   .purchase-date-input {
+    padding-left: 10px;
     text-align: left;
 
     &.placeholder {
@@ -781,10 +780,6 @@ export default {
 
     .fa-camera {
       margin-right: 5px;
-    }
-
-    &.disabled {
-      opacity: .5;
     }
   }
 }

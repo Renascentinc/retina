@@ -100,12 +100,12 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.config.productionTip = false
-Vue.use(VueLazyload)
 Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
+Vue.use(VueLazyload)
 Vue.use(VueJsModal, {
   dialog: true
 })

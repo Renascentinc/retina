@@ -284,10 +284,20 @@
                 v-if="editState"
                 v-model="newPurchaseDate"
                 :input-props="{ readonly: true }"
-                class="general-data"
-                popover-visibility="focus"
+                :attributes="[{ popover: { visibility: 'hidden' } }]"
+                :max-date="new Date()"
+                :popover-visibility="datePickerVisibility"
                 popover-direction="top"
-                mode="single">
+                class="general-data"
+                mode="single"
+                @input="toggleDatepicker">
+                <button
+                  slot-scope="{ inputValue, updateValue }"
+                  :class="{ placeholder: !inputValue }"
+                  class="dark-input purchase-date-input"
+                  @click="toggleDatepicker">
+                  {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
+                </button>
               </v-date-picker>
 
               <span class="general-label">Purchase Price</span>
@@ -303,7 +313,6 @@
                 placeholder="Price"
                 type="number">
             </div>
-
           </div>
 
           <div
@@ -311,7 +320,9 @@
             <div class="card-title">
               Photo
             </div>
-            <div class="photo-box">
+            <div
+              v-if="!editState"
+              class="photo-box">
               <img
                 v-lazy="`${getTool.photo}`"
                 v-if="getTool.photo"
@@ -321,6 +332,34 @@
                 class="fas fa-image no-image">
               </i>
             </div>
+
+            <div
+              v-if="editState"
+              class="add-photo-container">
+              <input
+                id="file"
+                ref="file"
+                name="file"
+                style="display: none;"
+                type="file"
+                accept="image/*"
+                capture="camera">
+
+              <label
+                v-if="!newImgSrc"
+                for="file"
+                class="dark-input add-photo">
+                <label
+                  for="file"
+                  class="fas fa-camera"></label>
+                {{ getTool.photo ? 'UPDATE PHOTO' : 'Add Photo' }}
+              </label>
+
+              <img
+                v-if="newImgSrc"
+                :src="newImgSrc"
+                class="img-preview">
+            </div>
           </div>
         </div>
       </div>
@@ -329,7 +368,8 @@
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
-      class="edit"></fab>
+      class="edit">
+    </fab>
 
     <modal
       :width="350"
@@ -375,7 +415,6 @@ import Avatar from 'vue-avatar'
 import Fab from '../components/fab.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import vSelect from '../components/select'
-import VueLazyload from 'vue-lazyload'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
@@ -389,7 +428,6 @@ export default {
     Fab,
     ExtendedFab,
     ButtonDropdown,
-    VueLazyload,
     vSelect,
     NfcEncode
   },
@@ -476,6 +514,7 @@ export default {
 
   data () {
     return {
+      newImgSrc: null,
       reason: null,
       changingStatus: false,
       getTool: {},
@@ -489,6 +528,7 @@ export default {
       newPurchaseDate: null,
       newPrice: null,
       oosStatus: null,
+      datePickerVisibility: 'hidden',
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       }
@@ -593,6 +633,14 @@ export default {
   },
 
   methods: {
+    toggleDatepicker () {
+      if (this.datePickerVisibility === 'visible') {
+        this.datePickerVisibility = 'hidden'
+      } else {
+        this.datePickerVisibility = 'visible'
+      }
+    },
+
     cancelDecomission () {
       this.$modal.hide('confirm-oos-modal')
       this.reason = null
@@ -609,11 +657,7 @@ export default {
 
     formattedDate (date) {
       let datePurchased = date
-      return datePurchased
-        ? new Date(datePurchased).toLocaleDateString('en-US', {
-          timeZone: 'UTC'
-        })
-        : '-'
+      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
     },
 
     getConfigurableItemsForType (type) {
@@ -639,6 +683,7 @@ export default {
         this.newPurchaseDate = this.getTool.date_purchased && new Date(this.getTool.date_purchased)
         this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
         this.editState = true
+        this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
       }
     },
 
@@ -684,6 +729,10 @@ export default {
       })
     },
 
+    updateImageDisplay () {
+      this.newImgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
+    },
+
     saveTool () {
       let brandRequest =
         this.newBrand && this.newBrand.isNewConfigurableItem
@@ -697,10 +746,41 @@ export default {
         this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem
           ? this.createNewConfigurableItem(this.newPurchasedFrom)
           : null
+      let photoRequest = new Promise((resolve) => {
+        let file = this.$refs.file.files[0]
 
-      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(
+        if (file) {
+          let fd = new FormData()
+
+          let key = `tool_preview-${new Date().getTime()}`
+
+          fd.append('key', key)
+          fd.append('acl', 'public-read')
+          fd.append('Content-Type', file.type)
+          // TODO enable auth for photo upload
+          // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+          // fd.append('policy', 'YOUR POLICY')
+          // fd.append('signature', 'YOUR SIGNATURE')
+
+          fd.append('file', file)
+
+          var xhr = new XMLHttpRequest()
+
+          xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+
+          xhr.onload = () => {
+            resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+          }
+
+          xhr.send(fd)
+        } else {
+          resolve(null)
+        }
+      })
+
+      Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(
         responses => {
-          let [brandResponse, typeResponse, purchaseResponse] = responses
+          let [brandResponse, typeResponse, purchaseResponse, photoRequest] = responses
 
           if (brandResponse) {
             this.newBrand.id = brandResponse.data.createConfigurableItem.id
@@ -713,6 +793,12 @@ export default {
           if (purchaseResponse) {
             this.newPurchasedFrom.id =
               purchaseResponse.data.createConfigurableItem.id
+          }
+
+          let photo = this.getTool.photo
+          if (photoRequest) {
+            photo = photoRequest
+            this.newImgSrc = null
           }
 
           this.$apollo
@@ -737,11 +823,11 @@ export default {
                   purchased_from_id:
                     this.newPurchasedFrom && this.newPurchasedFrom.id,
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  photo: this.getTool.photo,
                   price: this.newPrice
                     ? (this.newPrice * 100).toFixed(0)
                     : null,
-                  year: this.newYear ? this.newYear : null
+                  year: this.newYear ? this.newYear : null,
+                  photo
                 }
               }
             })
@@ -1041,6 +1127,15 @@ export default {
     .general-card {
       padding-bottom: 10px;
 
+      .purchase-date-input {
+        padding-left: 10px;
+        text-align: left;
+
+        &.placeholder {
+          color: $form-placeholder-color;
+        }
+      }
+
       .general-details {
         display: flex;
         flex-direction: column;
@@ -1105,6 +1200,30 @@ export default {
           text-align: center;
           margin-top: 20px;
           margin-bottom: 20px;
+        }
+      }
+
+      .add-photo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        padding: 20px;
+
+        .img-preview {
+          max-height: 175px;
+          max-width: 100%;
+        }
+
+        .add-photo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100px;
+
+          .fa-camera {
+            margin-right: 5px;
+          }
         }
       }
     }

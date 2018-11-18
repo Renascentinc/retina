@@ -22,11 +22,18 @@ import VueMq from 'vue-mq'
 import VueSVGIcon from 'vue-svgicon'
 import VueJsModal from 'vue-js-modal'
 import VueNotifications from 'vue-notifications'
-import swal from 'sweetalert'
+import swal from 'sweetalert2'
 
-function toast ({title, message, type, options, timeout, cb}) {
-  if (type === VueNotifications.types.warn) type = 'warning'
-  swal(title, message, type, options || {}).then((value) => { if(value) cb(value) })
+function toast (config) {
+  if (config.type === VueNotifications.types.warn) config.type = 'warning'
+  var callback = config.cb
+  delete config.cb
+  delete config.timeout
+
+  swal(config)
+  .then(value => {
+    if (callback !== undefined) callback(value)
+  })
 }
 
 const options = {

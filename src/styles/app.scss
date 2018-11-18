@@ -23,6 +23,10 @@ html, body, #app {
   overflow: hidden;
 }
 
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+  height: 100vh !important;
+}
+
 button {
   outline: none;
   border: none;

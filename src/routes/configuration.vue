@@ -359,6 +359,7 @@ export default {
 
     finalizeDelete () {
       this.replacementList.forEach(tool => {
+        console.log(tool)
         this.$apollo
           .mutate({
             mutation: gql`
@@ -378,7 +379,7 @@ export default {
                 serial_number: tool.serial_number,
                 status: tool.status,
                 owner_id: tool.owner.id,
-                purchased_from_id: this.page === ConfigurableItems.PURCHASED_FROM ? this.replaceSupplierWith.id : tool.purchased_from && tool.purchased_from.id,
+                purchased_from_id: this.page === ConfigurableItems.PURCHASED_FROM ? this.replaceSupplierWith.id : tool.purchased_from.id,
                 date_purchased: tool.date_purchased,
                 photo: tool.photo,
                 price: tool.price,

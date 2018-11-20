@@ -37,8 +37,8 @@
         <extended-fab
           v-if="$mq === 'desktop'"
           :on-click="exportTable"
-          icon-class="fa-file-download"
-          button-text="EXPORT PDF">
+          icon-class="fa-file-pdf"
+          button-text="DOWNLOAD">
         </extended-fab>
 
         <fab
@@ -51,57 +51,54 @@
       <div class="report">
         <div
           id="export-table"
-          style="width: 980px; min-width: 980px; padding: 20px;">
+          style="width: 100%; font-size: 14px; padding: 12px;">
           <div
             class="dt-head"
             style="display: flex;
+            position: fixed;
+            calc(100% - 24px);
             border-radius: 3px;
             background-color: #404040;
-            font-size: 20px;
+            font-size: 16px;
             height: 40px;
             align-items: center;
             color: #fff;
             text-align: left;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-            font-weight: 900;">
+            font-weight: 600;">
             <div
               class="dt-cell id"
               style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 50px;
+                flex: 0 0 40px;
                 justify-content: center;
                 padding: 0;">
               <span>id</span>
             </div>
             <div
+              class="dt-cell tool"
+              style="display: flex;
+                justify-content: center;
+                flex: 0 0 calc(33% - 14px);
+                margin-left: 10px">
+              <span>tool</span>
+            </div>
+            <div
               class="dt-cell date"
               style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 200px;">
+                justify-content: center;
+                flex: 0 0 calc(33% - 14px);">
               <span>date</span>
             </div>
             <div
               class="dt-cell action"
               style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 120px;">
+                justify-content: center;
+                flex: 0 0 calc(33% - 14px);">
               <span>action</span>
             </div>
-            <div
-              class="dt-cell status"
-              style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 240px;">
-              <span>status</span>
-            </div>
-            <div
-              class="dt-cell owner"
-              style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 260px;">
-              <span>owner</span>
-            </div>
           </div>
+
+          <div class="spacer" style="height: 40px"></div>
 
           <transition name="list-loading">
             <div
@@ -130,109 +127,49 @@
                 <div
                   class="dt-cell id"
                   style="display: flex;
-                  justify-content: flex-end;
-                  flex: 0 0 50px;
+                  flex: 0 0 40px;
                   justify-content: center;
                   padding: 0;
                   display: flex;
                   align-items: center;
-                  height: 85px;
-                  font-weight: 900; border-right: solid 1px lightgray;">
+                  height: 45px;
+                  font-weight: 600; border-right: solid 1px lightgray;">
                   <span>{{ entry.tool_snapshot.id }}</span>
+                </div>
+                <div
+                  class="dt-cell name"
+                  style="display: flex;
+                  justify-content: flex-start;
+                  margin-left: 10px;
+                  display: flex;
+                  align-items: center;
+                  flex-direction: row;
+                  height: 45px;
+                  font-weight: 600;
+                  flex: 0 0 calc(33% - 14px);">
+                  <span>{{ `${ entry.tool_snapshot.brand.name } ${ entry.tool_snapshot.type.name }` }}</span>
                 </div>
                 <div
                   class="dt-cell date"
                   style="display: flex;
-                  justify-content: flex-end;
+                  justify-content: center;
                   display: flex;
                   align-items: center;
-                  height: 85px;
-                  font-weight: 900; flex: 0 0 200px;">
-                  <span>{{ `${new Date(entry.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' })} ${new Date(entry.timestamp).toLocaleTimeString('en-US')}` }}</span>
+                  height: 45px;
+                  font-weight: 600;
+                  flex: 0 0 calc(33% - 14px);">
+                  <span>{{ new Date(entry.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' }) }}</span>
                 </div>
                 <div
                   class="dt-cell action"
                   style="display: flex;
-                  justify-content: flex-end;
-                  flex: 0 0 120px;
+                  justify-content: center;
+                  flex: 0 0 calc(33% - 14px);
                   display: flex;
                   align-items: center;
-                  height: 85px;
-                  font-weight: 900;">
+                  height: 45px;
+                  font-weight: 600;">
                   <span>{{ entry.tool_action }}</span>
-                </div>
-                <div
-                  class="dt-cell status"
-                  style="display: flex;
-                  justify-content: flex-end; flex: 0 0 270px;
-                  display: flex;
-                  align-items: center;
-                  height: 85px;
-                  font-weight: 900;">
-                  <span
-                    v-if="entry.previous_tool_snapshot_diff.status"
-                    class="previous-snapshot"
-                    style="color: gray;">{{ entry.previous_tool_snapshot_diff.status }}</span>
-                  <i
-                    v-if="entry.previous_tool_snapshot_diff.status"
-                    class="fas fa-long-arrow-alt-right"
-                    style="margin: 0 10px; content: '\f30b'"></i>
-
-                  <span>{{ entry.tool_snapshot.status }}</span>
-
-                </div>
-                <div
-                  class="dt-cell owner"
-                  style="display: flex;
-                  justify-content: flex-end;
-                  flex: 0 0 260px;
-                  display: flex;
-                  align-items: center;
-                  height: 85px;
-                  font-weight: 900;">
-                  <div v-if="entry.previous_tool_snapshot_diff.owner">
-                    <div
-                      v-if="entry.previous_tool_snapshot_diff.owner.type === 'USER'"
-                      class="owner-entry previous-snapshot"
-                      style="color: gray;
-                      text-align: center;
-                      max-width: 125px;
-                      word-break: break-all;">
-                      {{ `${entry.previous_tool_snapshot_diff.owner.first_name} ${entry.previous_tool_snapshot_diff.owner.last_name}` }}
-                    </div>
-                    <div
-                      v-if="entry.previous_tool_snapshot_diff.owner.type === 'LOCATION'"
-                      class="owner-entry previous-snapshot"
-                      style="color: gray;
-                      text-align: center;
-                      max-width: 125px;
-                      word-break: break-all;">
-                      <i class="fas fa-map-marker-alt"></i>
-                      {{ entry.previous_tool_snapshot_diff.owner.name }}
-                    </div>
-                  </div>
-
-                  <i
-                    v-if="entry.previous_tool_snapshot_diff.owner"
-                    class="fas fa-long-arrow-alt-right"
-                    style="margin: 0 10px; content: '\f30b'"></i>
-
-                  <div
-                    v-if="entry.tool_snapshot.owner.type === 'USER'"
-                    class="owner-entry"
-                    style="text-align: center;
-                    max-width: 125px;
-                    word-break: break-all;">
-                    {{ `${entry.tool_snapshot.owner.first_name} ${entry.tool_snapshot.owner.last_name}` }}
-                  </div>
-                  <div
-                    v-if="entry.tool_snapshot.owner.type === 'LOCATION'"
-                    class="owner-entry"
-                    style="text-align: center;
-                    max-width: 125px;
-                    word-break: break-all;">
-                    {{ entry.tool_snapshot.owner.name }}
-                  </div>
                 </div>
               </div>
             </transition-group>
@@ -543,6 +480,7 @@ export default {
     display: flex;
     height: 100%;
     overflow: auto;
+    flex: 1 1 auto;
   }
 
   .export-btn {

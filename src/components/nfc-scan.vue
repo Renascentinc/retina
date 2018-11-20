@@ -18,7 +18,7 @@
 import VueNotifications from 'vue-notifications'
 import ExtendedFab from '../components/extended-fab'
 import Platforms from '../utils/platforms'
-import nfc from '../mixins/nfc'
+import nfcMixin from '../mixins/nfc'
 import '../assets/icons/svg/nfc'
 
 export default {
@@ -28,7 +28,7 @@ export default {
     ExtendedFab
   },
 
-  mixins: [nfc],
+  mixins: [nfcMixin],
 
   props: {
     onScan: {
@@ -46,7 +46,7 @@ export default {
     showNfcDisabledMsg: {
       type: VueNotifications.types.info,
       title: 'NFC NOT AVAILABLE',
-      message: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Phone'
+      message: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device'
     }
   },
 

@@ -69,6 +69,10 @@ export default {
 
     pauseNfcListener () {
       this.nfcListenerEnabled = false
+    },
+
+    nfcCallback () {
+      // default noop callback for nfc
     }
   }
 }

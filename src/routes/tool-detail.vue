@@ -39,7 +39,6 @@
         </button-dropdown>
       </div>
 
-      <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
       <div class="header-cards-container">
         <div class="header">
           <router-link
@@ -192,7 +191,8 @@
             </div>
             <div class="card-details general-details">
               <span class="general-label">Retina ID</span>
-              <span class="general-data"> {{ getTool.id || '-' }} </span>
+              <span class="general-data"> {{ getTool.id }} </span>
+              <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
 
               <span class="general-label">Serial Number</span>
               <span
@@ -780,7 +780,7 @@ export default {
 
       Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(
         responses => {
-          let [brandResponse, typeResponse, purchaseResponse, photoRequest] = responses
+          let [brandResponse, typeResponse, purchaseResponse, photoResponse] = responses
 
           if (brandResponse) {
             this.newBrand.id = brandResponse.data.createConfigurableItem.id
@@ -791,13 +791,12 @@ export default {
           }
 
           if (purchaseResponse) {
-            this.newPurchasedFrom.id =
-              purchaseResponse.data.createConfigurableItem.id
+            this.newPurchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
           }
 
           let photo = this.getTool.photo
-          if (photoRequest) {
-            photo = photoRequest
+          if (photoResponse) {
+            photo = photoResponse
             this.newImgSrc = null
           }
 
@@ -820,12 +819,9 @@ export default {
                   serial_number: this.newSerial,
                   status: this.getTool.status,
                   owner_id: this.getTool.owner.id,
-                  purchased_from_id:
-                    this.newPurchasedFrom && this.newPurchasedFrom.id,
+                  purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  price: this.newPrice
-                    ? (this.newPrice * 100).toFixed(0)
-                    : null,
+                  price: this.newPrice ? (this.newPrice * 100).toFixed(0) : null,
                   year: this.newYear ? this.newYear : null,
                   photo
                 }

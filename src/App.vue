@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition>
+    <transition name="page-change">
       <router-view></router-view>
     </transition>
 

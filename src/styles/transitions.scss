@@ -9,6 +9,7 @@
   flex: 0 0 40px;
 }
 
+// Transition Name: "list-loading"
 .list-loading-enter-active, .list-loading-leave-active {
   transition: all .15s ease;
   height: 40px;
@@ -18,6 +19,7 @@
   height: 0;
 }
 
+// Transition Name: "list-element"
 .list-element-move {
   transition: transform .5s ease;
 }
@@ -36,4 +38,12 @@
 
 .list-element-leave-to {
   height: 0;
+}
+
+// Transition Name: "fade"
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }

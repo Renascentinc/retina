@@ -231,15 +231,15 @@ export default {
             }
           }).then(response => {
             this.$modal.hide('password-reset-modal')
-            this.loading = false
             if (response.data.requestPasswordReset) {
               this.showSuccessMsg()
             } else {
               this.showErrorMsg()
             }
           }).catch(() => {
-            this.loading = false
             this.showErrorMsg()
+          }).finally(() => {
+            this.loading = false
           })
         }
       })

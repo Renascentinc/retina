@@ -117,7 +117,7 @@
       </div>
     </div>
 
-    <transition>
+    <transition name="fade">
       <div
         v-if="$mq === 'mobile' && currentState === states.SELECTING"
         class="nav-bar selection-action-bar">
@@ -146,7 +146,7 @@
       </div>
     </transition>
 
-    <transition>
+    <transition name="fade">
       <div
         v-if="$mq === 'mobile' && currentState === states.FINALIZING"
         class="finalizing-action-bar">
@@ -622,7 +622,7 @@ export default {
 
 // MOBILE
 
-.mobile {
+.mobile .tools-page {
   .tool-scroll-container {
     padding-bottom: 70px;
   }
@@ -648,7 +648,7 @@ export default {
 
 // DESKTOP
 
-.desktop {
+.desktop .tools-page {
   .tools-menu-container {
     display: flex !important;
     height: 100%;

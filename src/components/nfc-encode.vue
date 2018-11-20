@@ -17,13 +17,13 @@
 
 <script>
 import VueNotifications from 'vue-notifications'
-import nfc from '../mixins/nfc'
+import nfcMixin from '../mixins/nfc'
 import '../assets/icons/svg/nfc'
 
 export default {
   name: 'NfcEncode',
 
-  mixins: [nfc],
+  mixins: [nfcMixin],
 
   props: {
     toolId: {

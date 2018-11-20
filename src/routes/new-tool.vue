@@ -315,6 +315,7 @@
           <extended-fab
             v-if="currentState === 3"
             :on-click="advanceStep"
+            :loading="isSavingTool"
             class="page-forward"
             icon-class=""
             button-text="FINISH">
@@ -335,6 +336,7 @@ import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
 import NfcEncode from '../components/nfc-encode'
+import VueNotifications from 'vue-notifications'
 
 export default {
   name: 'NewTool',
@@ -346,6 +348,19 @@ export default {
     Fab,
     vSelect,
     NfcEncode
+  },
+
+  notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'SUCCESS',
+      message: 'Successfully Added Tool'
+    },
+    showErrorMsg: {
+      type: VueNotifications.types.error,
+      title: 'RESET FAILURE',
+      message: 'There was an issue saving new tool. Please try again or contact support'
+    }
   },
 
   apollo: {
@@ -402,6 +417,7 @@ export default {
       getAllUser: [],
       tool: null,
       imgSrc: null,
+      isSavingTool: false,
       statuses,
       validations: {
         modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
@@ -536,18 +552,49 @@ export default {
     },
 
     saveTool () {
-      let photo
+      if (this.isSavingTool) {
+        return
+      }
+
+      this.isSavingTool = true
       let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
       let typeRequest = this.type && this.type.isNewConfigurableItem ? this.createNewConfigurableItem(this.type) : null
       let purchaseRequest = this.purchasedFrom && this.purchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.purchasedFrom) : null
       let purchaseDate = this.purchaseDate && new Date(this.purchaseDate).toISOString()
+      let photoRequest = new Promise((resolve) => {
+        let file = this.$refs.file.files[0]
 
-      if (this.imgSrc) {
-        photo = this.uploadPhoto()
-      }
+        if (file) {
+          let fd = new FormData()
 
-      Promise.all([brandRequest, typeRequest, purchaseRequest]).then(responses => {
-        let [brandResponse, typeResponse, purchaseResponse] = responses
+          let key = `tool_preview-${new Date().getTime()}`
+
+          fd.append('key', key)
+          fd.append('acl', 'public-read')
+          fd.append('Content-Type', file.type)
+          // TODO enable auth for photo upload
+          // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+          // fd.append('policy', 'YOUR POLICY')
+          // fd.append('signature', 'YOUR SIGNATURE')
+
+          fd.append('file', file)
+
+          var xhr = new XMLHttpRequest()
+
+          xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+
+          xhr.onload = () => {
+            resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+          }
+
+          xhr.send(fd)
+        } else {
+          resolve(null)
+        }
+      })
+
+      Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(responses => {
+        let [brandResponse, typeResponse, purchaseResponse, photoResponse] = responses
 
         if (brandResponse) {
           this.brand.id = brandResponse.data.createConfigurableItem.id
@@ -597,12 +644,17 @@ export default {
               owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
               price: parseInt((this.price || 0) * 100),
               year: this.modelYear,
-              photo
+              photo: photoResponse
             }
           }
         }).then(response => {
           this.tool = response.data.createTool
           ++this.currentState
+          this.showSuccessMsg()
+        }).catch(() => {
+          this.showErrorMsg()
+        }).finally(() => {
+          this.isSavingTool = false
         })
       })
     }

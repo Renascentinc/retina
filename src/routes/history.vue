@@ -328,8 +328,7 @@ export default {
         }
 
         return options
-      },
-      fetchPolicy: 'cache-and-network'
+      }
     }
   },
 

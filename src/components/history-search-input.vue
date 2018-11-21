@@ -63,8 +63,7 @@ export default {
         getAllTool {
           id
         }
-      }`,
-      fetchPolicy: 'cache-and-network'
+      }`
     },
 
     getAllLocation: gql`query {

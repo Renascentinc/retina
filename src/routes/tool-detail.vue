@@ -456,8 +456,7 @@ export default {
             sanctioned
           }
         }
-      `,
-      fetchPolicy: 'cache-and-network'
+      `
     },
 
     getTool: {
@@ -507,8 +506,7 @@ export default {
         let options = {}
         options.tool_id = this.$router.currentRoute.params.toolId
         return options
-      },
-      fetchPolicy: 'cache-and-network'
+      }
     }
   },
 

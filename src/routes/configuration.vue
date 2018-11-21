@@ -501,8 +501,7 @@ export default {
             sanctioned
           }
         }
-      `,
-      fetchPolicy: 'cache-and-network'
+      `
     }
   }
 }

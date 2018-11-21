@@ -81,8 +81,7 @@ export default {
             role
           }
         }
-      `,
-      fetchPolicy: 'cache-and-network'
+      `
     },
 
     searchUser: {

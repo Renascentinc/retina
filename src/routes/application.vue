@@ -41,7 +41,7 @@
           </button>
           <button
             class="change-password menu-btn"
-            @click="requestPasswordReset">
+            @click="() => 0">
             <span v-if="!passwordResetLoading">
               <i class="fas menu-btn-icon fa-key"></i>
               CHANGE PASSWORD
@@ -110,7 +110,7 @@
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
 import authenticatedRouteMixin from '../mixins/authenticatedRoute'
-import VueNotifications from 'vue-notifications'
+// import VueNotifications from 'vue-notifications'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
 
@@ -122,19 +122,6 @@ export default {
   },
 
   mixins: [ authenticatedRouteMixin, nfcMixin ],
-
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Instructions for resetting your password have been sent to your email'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'RESET FAILURE',
-      message: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support'
-    }
-  },
 
   data () {
     return {
@@ -176,29 +163,6 @@ export default {
   },
 
   methods: {
-    requestPasswordReset () {
-      if (this.passwordResetLoading) {
-        return
-      }
-
-      this.passwordResetLoading = true
-      this.$apollo.mutate({
-        mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
-          requestPasswordReset(email: $email)
-        }`,
-        variables: {
-          email: this.email
-        }
-      }).then(response => {
-        this.showSuccessMsg()
-        this.signout()
-      }).catch(() => {
-        this.showErrorMsg()
-      }).finally(() => {
-        this.passwordResetLoading = false
-      })
-    },
-
     transitionToConfig () {
       this.$router.push({ name: 'configuration' })
       this.closeDrawer()

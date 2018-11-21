@@ -212,9 +212,7 @@ export default {
         let options = {}
         options.user_id = this.$router.currentRoute.params.userId
         return options
-      },
-
-      fetchPolicy: 'cache-and-network'
+      }
     }
   },
 

@@ -119,7 +119,7 @@ export default {
     },
 
     filteredItems () {
-      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
+      return this.autocompleteItems.filter(i => i.text.indexOf(this.tag) > -1)
     },
 
     locations () {

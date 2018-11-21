@@ -54,7 +54,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
+                @click="() => props.select({ name: props.value, type: 'TYPE', isNewConfigurableItem: true })">
                 Set Type To "{{ props.value }}"
               </button>
             </template>
@@ -158,7 +158,7 @@
               slot-scope="props">
               <button
                 class="no-options-btn"
-                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
+                @click="() => props.select({ name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true })">
                 Set Purchased From To "{{ props.value }}"
               </button>
             </template>

@@ -69,8 +69,7 @@
       <div class="login-action-row">
         <button
           class="reset-password"
-          type="reset"
-          @click="() => $modal.show('password-reset-modal')">
+          @click="requestPasswordReset()">
           RESET PASSWORD
         </button>
 
@@ -82,54 +81,6 @@
         </extended-fab>
       </div>
     </div>
-
-    <modal
-      :width="300"
-      :height="220"
-      class="ready-to-scan-modal"
-      name="password-reset-modal">
-      <div
-        v-if="!loading"
-        class="modal-content">
-        <span class="header-text"> RESET PASSWORD </span>
-
-        <div class="input-group-container">
-          <input
-            v-validate="'required|email'"
-            v-model="passwordResetEmail"
-            name="passwordResetEmail"
-            class="light-input password-reset-email-input"
-            placeholder="email address">
-
-          <span
-            class="error">
-            {{ errors.first('passwordResetEmail') }}
-          </span>
-        </div>
-
-        <div class="request-action-container">
-          <extended-fab
-            :on-click="() => $modal.hide('password-reset-modal')"
-            icon-class=""
-            class="request-reset-btn"
-            button-text="CANCEL">
-          </extended-fab>
-
-          <extended-fab
-            :on-click="requestPasswordReset"
-            :disabled="!passwordResetEmail"
-            icon-class=""
-            class="request-reset-btn"
-            button-text="SUBMIT">
-          </extended-fab>
-        </div>
-      </div>
-      <div
-        v-if="loading"
-        class="modal-content">
-        <div class="loading"></div>
-      </div>
-    </modal>
   </div>
 </template>
 
@@ -140,6 +91,7 @@ import ApiStatusCodes from '../utils/api-status-codes'
 import InputWithIcon from '../components/input-with-icon'
 import ExtendedFab from '../components/extended-fab'
 import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 
 export default {
   name: 'Login',
@@ -185,18 +137,11 @@ export default {
       domain: '@renascentinc.com',
       password: '',
       currentState: states.INITIAL,
-      passwordResetEmail: '',
-      loading: false,
       states
     }
   },
 
   notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Instructions for resetting your password have been sent to your email'
-    },
     showErrorMsg: {
       type: VueNotifications.types.error,
       title: 'RESET FAILURE',
@@ -219,20 +164,33 @@ export default {
 
   methods: {
     requestPasswordReset () {
-      this.$validator.validate().then(result => {
-        if (result) {
-          this.loading = true
+      swal({
+        type: VueNotifications.types.info,
+        title: 'RESET PASSWORD',
+        text: 'Enter your email address',
+        input: 'email',
+        inputPlaceholder: 'email@example.com',
+        reverseButtons: true,
+        showCancelButton: true,
+        cancelButtonText: 'CANCEL',
+        confirmButtonText: 'SUBMIT',
+        confirmButtonColor: '#404040'
+      }).then(result => {
+        if (result && result.value) {
           this.$apollo.mutate({
             mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
               requestPasswordReset(email: $email)
             }`,
             variables: {
-              email: this.passwordResetEmail
+              email: result.value
             }
           }).then(response => {
-            this.$modal.hide('password-reset-modal')
             if (response.data.requestPasswordReset) {
-              this.showSuccessMsg()
+              swal({
+                type: VueNotifications.types.success,
+                title: 'SUCCESS',
+                message: 'Instructions for resetting your password have been sent to your email'
+              })
             } else {
               this.showErrorMsg()
             }

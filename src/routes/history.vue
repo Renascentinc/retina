@@ -63,6 +63,7 @@
             border-radius: 3px;
             background-color: #404040;
             font-size: 16px;
+            max-height: 40px;
             height: 40px;
             align-items: center;
             color: #fff;
@@ -117,6 +118,7 @@
             style="display: flex;
               flex-direction: column;
               overflow: auto;
+              -webkit-overflow-scrolling: touch;
               padding: 4px;">
             <transition-group name="list-element">
               <div
@@ -249,7 +251,6 @@ export default {
       return this.isDatepickerShown ? 'visible' : 'hidden'
     },
     isNativeApp () {
-      console.log(this.searchToolHistoryEntry)
       return !!window.device && !!window.device.cordova
     },
 
@@ -305,6 +306,10 @@ export default {
         filename: 'transactions_export.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2 },
+        margin: 0.5,
+        pagebreak: {
+          mode: 'avoid-all'
+        },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
       }
 

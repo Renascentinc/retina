@@ -51,12 +51,15 @@
       <div class="report">
         <div
           id="export-table"
-          style="width: 100%; font-size: 14px; padding: 12px;">
+          style="width: 100%;
+          font-size: 14px;
+          padding: 12px 12px 0px 12px;
+          display: flex;
+          flex-direction: column">
           <div
             class="dt-head"
             style="display: flex;
-            position: fixed;
-            calc(100% - 24px);
+            flex: 1 0 auto;
             border-radius: 3px;
             background-color: #404040;
             font-size: 16px;
@@ -78,7 +81,7 @@
               class="dt-cell tool"
               style="display: flex;
                 justify-content: center;
-                flex: 0 0 calc(33% - 14px);
+                flex: 0 0 calc(33% - 15px);
                 margin-left: 10px">
               <span>tool</span>
             </div>
@@ -86,23 +89,22 @@
               class="dt-cell date"
               style="display: flex;
                 justify-content: center;
-                flex: 0 0 calc(33% - 14px);">
+                flex: 0 0 calc(33% - 15px);">
               <span>date</span>
             </div>
             <div
               class="dt-cell action"
               style="display: flex;
                 justify-content: center;
-                flex: 0 0 calc(33% - 14px);">
+                flex: 0 0 calc(33% - 15px);">
               <span>action</span>
             </div>
           </div>
 
-          <div class="spacer" style="height: 40px"></div>
 
           <transition name="list-loading">
             <div
-              v-if="$apollo.queries.searchToolHistory.loading"
+              v-if="$apollo.queries.searchToolHistoryEntry.loading"
               class="loading-container">
               <div
                 class="loading">
@@ -113,10 +115,12 @@
           <div
             class="dt-body"
             style="display: flex;
-              flex-direction: column;">
+              flex-direction: column;
+              overflow: auto;
+              padding: 4px;">
             <transition-group name="list-element">
               <div
-                v-for="entry in searchToolHistory"
+                v-for="entry in searchToolHistoryEntry"
                 :key="entry.id"
                 class="dt-row"
                 style="display: flex;
@@ -146,7 +150,7 @@
                   flex-direction: row;
                   height: 45px;
                   font-weight: 600;
-                  flex: 0 0 calc(33% - 14px);">
+                  flex: 0 0 calc(33% - 15px);">
                   <span>{{ `${ entry.tool_snapshot.brand.name } ${ entry.tool_snapshot.type.name }` }}</span>
                 </div>
                 <div
@@ -157,19 +161,19 @@
                   align-items: center;
                   height: 45px;
                   font-weight: 600;
-                  flex: 0 0 calc(33% - 14px);">
-                  <span>{{ new Date(entry.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' }) }}</span>
+                  flex: 0 0 calc(33% - 15px);">
+                  <span>{{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' }) }}</span>
                 </div>
                 <div
                   class="dt-cell action"
                   style="display: flex;
                   justify-content: center;
-                  flex: 0 0 calc(33% - 14px);
+                  flex: 0 0 calc(33% - 15px);
                   display: flex;
                   align-items: center;
                   height: 45px;
                   font-weight: 600;">
-                  <span>{{ entry.tool_action }}</span>
+                  <span>{{ entry.metadata.tool_action }}</span>
                 </div>
               </div>
             </transition-group>
@@ -199,73 +203,27 @@ export default {
   },
 
   apollo: {
-    searchToolHistory: {
-      query: gql`query search($toolHistoryFilter: ToolHistoryFilter) {
-        searchToolHistory(toolHistoryFilter: $toolHistoryFilter) {
-          id
+    searchToolHistoryEntry: {
+      query: gql`query searchToolHistoryEntry{
+        searchToolHistoryEntry {
+          id,
           tool_snapshot {
-            id
+            id,
             type {
-              id
+              id,
               name
-            }
+            },
             brand {
-              id
+              id,
               name
             }
-            status
-            owner {
-              ... on Location {
-                 id
-                 name
-                 type
-              }
-              ... on User {
-                 id
-                 first_name
-                 last_name
-                 type
-              }
-            }
+          },
+          metadata {
+            timestamp,
+            tool_action
           }
-          timestamp
-          previous_tool_snapshot_diff {
-            id
-            type {
-              id
-              name
-            }
-            brand {
-              id
-              name
-            }
-            status
-            owner {
-              ... on Location {
-                 id
-                 name
-                 type
-              }
-              ... on User {
-                 id
-                 first_name
-                 last_name
-                 type
-              }
-            }
-          }
-          tool_action
         }
       }`,
-      variables () {
-        let options = {}
-
-        if (this.filters) {
-          options.toolHistoryFilter = this.filters
-        }
-
-        return options
-      },
       fetchPolicy: 'cache-and-network'
     }
   },
@@ -278,7 +236,7 @@ export default {
         ACTION: 'tool_actions',
         TOOL: 'tool_ids'
       },
-      searchToolHistory: [],
+      searchToolHistoryEntry: [],
       tags: [],
       tagFilters: null,
       dateRange: null,
@@ -291,6 +249,7 @@ export default {
       return this.isDatepickerShown ? 'visible' : 'hidden'
     },
     isNativeApp () {
+      console.log(this.searchToolHistoryEntry)
       return !!window.device && !!window.device.cordova
     },
 
@@ -479,7 +438,6 @@ export default {
     display: none;
     display: flex;
     height: 100%;
-    overflow: auto;
     flex: 1 1 auto;
   }
 

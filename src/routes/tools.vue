@@ -4,6 +4,14 @@
       <tool-search-input :update-tags="updateFilters"></tool-search-input>
       <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
+    <div
+      v-if="transferInProgress"
+      class="overlay">
+      <div class="half-circle-spinner">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+      </div>
+    </div>
     <extended-fab
       v-if="$mq === 'mobile' && currentState === states.INITIAL"
       :on-click="onTransferClick"
@@ -11,7 +19,12 @@
       icon-class="fa-exchange-alt"
       button-text="TRANSFER">
     </extended-fab>
-    <div class="tools-menu-container">
+    <div
+      v-infinite-scroll="loadMore"
+      ref="scrollElement"
+      :infinite-scroll-immediate-check="false"
+      :infinite-scroll-throttle-delay="200"
+      class="tools-menu-container">
       <div
         class="floating-action-bar">
         <extended-fab
@@ -117,6 +130,17 @@
             :show-select="currentState !== states.INITIAL">
           </tool-search-result>
         </transition-group>
+
+        <transition name="list-loading">
+          <div
+            v-if="$apollo.queries.searchTool.loading && paginationLoading"
+            class="loading-container">
+            <div class="half-circle-spinner">
+              <div class="circle circle-1"></div>
+              <div class="circle circle-2"></div>
+            </div>
+          </div>
+        </transition>
       </div>
     </div>
 
@@ -190,7 +214,7 @@
 </template>
 
 <script>
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 import ToolSearchInput from '../components/tool-search-input'
 import ToolSearchResult from '../components/tool-search-result'
 import ExtendedFab from '../components/extended-fab'
@@ -210,14 +234,6 @@ export default {
     vSelect,
     NfcScan,
     AddButton
-  },
-
-  notifications: {
-    showTransferSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'TRANSFER SUCCESS',
-      message: 'Successfully Transferred Tools'
-    }
   },
 
   apollo: {
@@ -270,7 +286,12 @@ export default {
       }`,
 
       variables () {
-        let options = {}
+        let options = {
+          pagingParameters: {
+            page_size: this.pageSize,
+            page_number: this.pageNumber
+          }
+        }
 
         if (this.searchString) {
           options.query = this.searchString
@@ -305,10 +326,13 @@ export default {
       transferTarget: { id: null, label: 'select user' },
       searchTool: [],
       pageNumber: 0,
-      pageSize: 25,
+      infiniteScrollPageNumber: 0,
+      pageSize: 15,
       searchString: null,
       filters: null,
       showOnlySelectedTools: false,
+      paginationLoading: false,
+      transferInProgress: false,
       currentState,
       states
     }
@@ -366,6 +390,32 @@ export default {
   },
 
   methods: {
+    showTransferSuccessMsg () {
+      swal({
+        type: 'success',
+        title: 'TRANSFER SUCCESS',
+        text: 'Successfully Transferred Tools'
+      })
+    },
+
+    showTransferErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'TRANSFER ERROR',
+        text: 'Error Transferring Tools. Please Try Again or Contact Support'
+      })
+    },
+
+    resetInfiniteScroll () {
+      this.infiniteScrollPageNumber = parseInt(this.tools.length / this.pageSize)
+      this.hasLoadedLastPage = false
+      this.resetScrollPosition()
+    },
+
+    resetScrollPosition () {
+      this.$refs.scrollElement.scrollTo(0, 0)
+    },
+
     onScan (value) {
       if (this.currentState === this.states.INITIAL) {
         this.transitionToToolInfo(value)
@@ -396,6 +446,7 @@ export default {
         }
       })
       this.filters = newFilters
+      this.resetInfiniteScroll()
     },
 
     onTransferClick () {
@@ -406,13 +457,53 @@ export default {
       this.$store.commit('resetSelectedTools')
       this.showOnlySelectedTools = false
       this.currentState = this.states.INITIAL
+      this.resetScrollPosition()
     },
 
     toggleViewSelected () {
       this.showOnlySelectedTools = !this.showOnlySelectedTools
+      this.resetScrollPosition()
+    },
+
+    loadMore () {
+      if (this.hasLoadedLastPage || !this.tools.length || this.$apollo.queries.searchTool.loading || this.showOnlySelectedTools) {
+        return
+      }
+
+      this.paginationLoading = true
+      this.infiniteScrollPageNumber++
+
+      let options = {
+        pagingParameters: {
+          page_size: this.pageSize,
+          page_number: this.infiniteScrollPageNumber
+        }
+      }
+
+      if (this.searchString) {
+        options.query = this.searchString
+      }
+
+      if (this.filters) {
+        options.toolFilter = this.filters
+      }
+
+      this.$apollo.queries.searchTool.fetchMore({
+        variables: options,
+
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          this.hasLoadedLastPage = !fetchMoreResult.searchTool.length
+          return {
+            searchTool: [...previousResult.searchTool, ...fetchMoreResult.searchTool]
+          }
+        }
+      }).then(() => {
+        this.paginationLoading = false
+      })
     },
 
     finalizeTransfer () {
+      this.transferInProgress = true
       this.$apollo.mutate({
         mutation: gql`mutation transferTools($tool_id_list: [ID!]!, $to_owner_id: ID!) {
           transferMultipleTool (tool_id_list: $tool_id_list, to_owner_id: $to_owner_id) {
@@ -446,6 +537,7 @@ export default {
           to_owner_id: this.transferTarget.id
         }
       }).then(response => {
+        this.resetScrollPosition()
         response.data.transferMultipleTool.forEach(tool => {
           let idx = this.searchTool.findIndex(entry => entry.id === tool.id)
           this.searchTool[idx] = tool
@@ -454,12 +546,18 @@ export default {
         this.showOnlySelectedTools = false
         this.currentState = this.states.INITIAL
         this.showTransferSuccessMsg()
+        this.$apollo.queries.searchTool.refresh()
+      }).catch(() => {
+        this.showTrasnferErrorMsg()
+      }).finally(() => {
+        this.transferInProgress = false
       })
     },
 
     proceedToFinalize () {
       this.showOnlySelectedTools = true
       this.currentState = this.states.FINALIZING
+      this.resetScrollPosition()
     }
   }
 }

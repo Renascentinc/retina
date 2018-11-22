@@ -8,7 +8,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-import attachFastClick from 'fastclick'
+// import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -22,6 +22,7 @@ import VueMq from 'vue-mq'
 import VueSVGIcon from 'vue-svgicon'
 import VueJsModal from 'vue-js-modal'
 import swal from 'sweetalert2'
+import VueInfiniteScroll from 'vue-infinite-scroll'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -94,6 +95,7 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.config.productionTip = false
+Vue.use(VueInfiniteScroll)
 Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
@@ -110,7 +112,7 @@ Vue.use(VueMq, {
   }
 })
 
-attachFastClick(document.body, { tapDelay: 200 })
+// attachFastClick(document.body, { tapDelay: 200 })
 
 new Vue({
   router,

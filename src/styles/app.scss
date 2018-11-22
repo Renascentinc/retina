@@ -56,6 +56,7 @@ a {
 
   .content-wrap {
     display: flex;
+    min-height: 500px;
 
     .main-content {
       display: flex;
@@ -154,10 +155,12 @@ a {
 
   .half-circle-spinner {
     height: 35vw;
+    max-height: 120px;
     width: 35vw;
+    max-width: 120px;
 
     .circle {
-      border-width: 2vw;
+      border-width: 7px;
     }
   }
 }

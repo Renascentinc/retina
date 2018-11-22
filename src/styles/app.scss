@@ -49,19 +49,6 @@ a {
   flex: 1 1 auto;
 }
 
-.page-change-enter-active {
-  transition: opacity .25s;
-}
-
-.page-change-enter {
-  opacity: 0;
-}
-
-.page-change-leave-to,
-.page-change-leave-active {
-  display: none;
-}
-
 .main-application {
   display: flex;
   height: 100%;
@@ -150,6 +137,27 @@ a {
       border-radius: 10px;
       padding: 0px 10px;
       margin-bottom: 10px;
+    }
+  }
+}
+
+.overlay {
+  background-color: black;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  opacity: .5;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .half-circle-spinner {
+    height: 35vw;
+    width: 35vw;
+
+    .circle {
+      border-width: 2vw;
     }
   }
 }

@@ -179,10 +179,12 @@ export default {
         mutation: gql`mutation logout {
            logout
         }`
-      }).then(() => {
+      })
+
+      setTimeout(() => {
         window.localStorage.removeItem('token')
         this.$router.push({ path: '/login' })
-      })
+      }, 100)
     }
   }
 }

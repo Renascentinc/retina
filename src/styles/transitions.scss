@@ -50,3 +50,17 @@
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+// Transition Name: "page-change"
+.page-change-enter-active {
+  transition: opacity .25s;
+}
+
+.page-change-enter {
+  opacity: 0;
+}
+
+.page-change-leave-to,
+.page-change-leave-active {
+  display: none;
+}

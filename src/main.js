@@ -21,20 +21,7 @@ import VeeValidate, { Validator } from 'vee-validate'
 import VueMq from 'vue-mq'
 import VueSVGIcon from 'vue-svgicon'
 import VueJsModal from 'vue-js-modal'
-import VueNotifications from 'vue-notifications'
 import swal from 'sweetalert2'
-
-function toast (config) {
-  if (config.type === VueNotifications.types.warn) config.type = 'warning'
-  var callback = config.cb
-  delete config.cb
-  delete config.timeout
-
-  swal(config)
-  .then(value => {
-    if (callback !== undefined) callback(value)
-  })
-}
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -76,7 +63,7 @@ const httpLink = new HttpLink({
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {
   const token = localStorage.getItem('token')
-  if (token && operationName !== 'attemptUserLogin') {
+  if (token && operationName !== 'attemptUserLogin' && operationName !== 'attemptPasswordReset') {
     headers.authorization = `Bearer ${token}`
   }
 
@@ -89,7 +76,7 @@ const errorLink = onError(({ graphQLErrors = [] }) => {
   graphQLErrors.map(({ extensions: { code } }) => {
     if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
       window.localStorage.removeItem('token')
-      swal('SESSION EXPIRED', 'Your Session Has Expired. Please Log In Again', VueNotifications.types.error)
+      swal('SESSION EXPIRED', 'Your Session Has Expired. Please Log In Again', 'error')
       router.push({ path: '/login' })
     }
   })
@@ -115,12 +102,6 @@ Vue.use(VueSVGIcon)
 Vue.use(VueLazyload)
 Vue.use(VueJsModal, {
   dialog: true
-})
-Vue.use(VueNotifications, {
-  success: toast,
-  error: toast,
-  info: toast,
-  warn: toast
 })
 Vue.use(VueMq, {
   breakpoints: {

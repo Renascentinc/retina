@@ -2,6 +2,16 @@
   <div
     :class="$mq"
     class="page login-page">
+
+    <div
+      v-if="currentState === states.AUTHENTICATING"
+      class="overlay">
+      <div class="half-circle-spinner">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+      </div>
+    </div>
+
     <div class="top-panel">
       <img
         class="logo"
@@ -90,7 +100,6 @@ import gql from 'graphql-tag'
 import ApiStatusCodes from '../utils/api-status-codes'
 import InputWithIcon from '../components/input-with-icon'
 import ExtendedFab from '../components/extended-fab'
-import VueNotifications from 'vue-notifications'
 import swal from 'sweetalert2'
 
 export default {
@@ -141,14 +150,6 @@ export default {
     }
   },
 
-  notifications: {
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'RESET FAILURE',
-      message: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support'
-    }
-  },
-
   computed: {
     email () {
       if (this.username.indexOf('@') > -1) {
@@ -163,9 +164,16 @@ export default {
   },
 
   methods: {
+    showPasswordResetError () {
+      swal({
+        type: 'error',
+        title: 'RESET FAILURE',
+        text: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support'
+      })
+    },
+
     requestPasswordReset () {
       swal({
-        type: VueNotifications.types.info,
         title: 'RESET PASSWORD',
         text: 'Enter your email address',
         input: 'email',
@@ -185,19 +193,16 @@ export default {
               email: result.value
             }
           }).then(response => {
-            if (response.data.requestPasswordReset) {
-              swal({
-                type: VueNotifications.types.success,
-                title: 'SUCCESS',
-                message: 'Instructions for resetting your password have been sent to your email'
-              })
-            } else {
-              this.showErrorMsg()
+            if (!response.data.requestPasswordReset) {
+              this.showPasswordResetError()
             }
           }).catch(() => {
-            this.showErrorMsg()
-          }).finally(() => {
-            this.loading = false
+            this.showPasswordResetError()
+          })
+
+          swal({
+            type: 'success',
+            text: 'Instructions for resetting your password will be sent to your email'
           })
         }
       })
@@ -337,11 +342,12 @@ $login-input-border-radius: 5px;
 
   .login-action-row {
     display: flex;
-    height: 70px;
+    height: 15vh;
     align-items: center;
     justify-content: space-around;
 
     .login-btn {
+      height: 45px;
       width: 130px;
     }
   }

@@ -15,23 +15,27 @@
         </extended-fab>
       </div>
       <div class="user-scroll-container">
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchUser.loading"
-            class="loading-container">
-            <div class="loading"/>
-          </div>
-        </transition>
         <add-button
           v-if="$mq === 'mobile' && isAdmin"
           :key="0"
           :on-click="transitionToAddUser"
           text="USER">
         </add-button>
+
+        <transition name="list-loading">
+          <div
+            v-if="$apollo.queries.searchUser.loading"
+            class="loading-container">
+            <div class="half-circle-spinner">
+              <div class="circle circle-1"></div>
+              <div class="circle circle-2"></div>
+            </div>
+          </div>
+        </transition>
+
         <transition name="fade">
           <div
             v-if="!$apollo.queries.searchUser.loading && !users.length"
-            :key="1"
             class="no-users-container">
             <span class="no-users-text">No Users To Display</span>
           </div>
@@ -126,10 +130,10 @@ export default {
 
     users () {
       if (!this.searchString) {
-        return this.getAllUser
+        return this.getAllUser || []
       }
 
-      return this.searchUser
+      return this.searchUser || []
     }
   },
 
@@ -192,16 +196,6 @@ export default {
     justify-content: center;
     padding-top: 50px;
   }
-
-  // .loading-container {
-  //   display: flex;
-  //   justify-content: flex-start;
-  //   align-items: center;
-  //   position: absolute;
-  //   top: 100px;
-  //   left: 0;
-  //   width: 100vw;
-  // }
 }
 
 .dark-dropdown {

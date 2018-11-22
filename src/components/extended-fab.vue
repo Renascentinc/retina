@@ -5,7 +5,6 @@
     class="extended-fab"
     @click="onClick">
     <div
-      v-if="!loading"
       class="fab-icon-container">
       <i
         :class="iconClass"
@@ -13,14 +12,9 @@
       </i>
     </div>
     <span
-      v-if="!loading"
       class="efab-text">
       {{ buttonText }}
     </span>
-    <div
-      v-if="loading"
-      class="loading">
-    </div>
   </button>
 </template>
 
@@ -54,12 +48,6 @@ export default {
       type: Boolean,
       required: false,
       default: false
-    },
-
-    loading: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   }
 }
@@ -83,19 +71,6 @@ export default {
       font-size: 18px;
       cursor: pointer;
       flex: 0 0 auto;
-
-      .loading {
-        top: -45px;
-        background: linear-gradient(to right, #fff 10%, rgba(64, 64, 64, 0) 42%);
-
-        &::before {
-          background: #fff;
-        }
-
-        &::after {
-          background-color: $renascent-red;
-        }
-      }
 
       .efab-text {
         margin-left: auto;

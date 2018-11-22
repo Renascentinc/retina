@@ -2858,10 +2858,9 @@ fast-levenshtein@~2.0.4:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-fastclick@^1.0.6:
+"fastclick@https://github.com/Renascentinc/fastclick.git":
   version "1.0.6"
-  resolved "https://registry.yarnpkg.com/fastclick/-/fastclick-1.0.6.tgz#161625b27b1a5806405936bda9a2c1926d06be6a"
-  integrity sha1-FhYlsnsaWAZAWTa9qaLBkm0Gvmo=
+  resolved "https://github.com/Renascentinc/fastclick.git#ae86091e9c4831178c8f3050907764893dea335a"
 
 fclone@^1.0.11:
   version "1.0.11"
@@ -6712,10 +6711,10 @@ svgo@^1.0.0, svgo@^1.0.5:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-sweetalert2@^7.29.0:
-  version "7.29.0"
-  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-7.29.0.tgz#636aa5e0a57bbbb75501ef39104fc68a1a26b351"
-  integrity sha512-QYMpgj+W1nmE5I6hQ+Kvj+xSAJ78o5oawNOm65fq+0DRuZqmNPwGNnyfMcA3/porpje6RjXJd41NCJN8Rj83wQ==
+sweetalert2@^7.29.1:
+  version "7.29.1"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-7.29.1.tgz#506d2d5c4a862c8469f67384d374432a03c49005"
+  integrity sha512-cSq4MTBLTQbU8VvkkgaHcqapTHlXeNJU4iLVcHC3nWL+MvSbKrM6hdfzuiAx7NivaHe/z1xcJGVMNpvEzosvFg==
 
 symbol-observable@^1.0.2:
   version "1.2.0"
@@ -7206,11 +7205,6 @@ vue-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
   integrity sha512-vLLoY452L+JBpALMP5UHum9+7nzR9PeIBCghU9ZtJ1eWm6ieUI8Zb/DI3MYxH32bxkjzYV1LRjNv4qr8d+uX/w==
-
-vue-snotify@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/vue-snotify/-/vue-snotify-3.2.1.tgz#1e093838b67ecb4141d6227b6b19175735f4e259"
-  integrity sha512-7kETtCAK3key/mDkz47FY/LuPzDGNwHHrYmS037JuVac2FW/9GTtoCNIrOp+SNbpMHeXFdLIDktkBK0IdPdHew==
 
 vue-svgicon@^3.2.1:
   version "3.2.1"

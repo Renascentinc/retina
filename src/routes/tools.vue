@@ -80,13 +80,6 @@
         </extended-fab>
       </div>
       <div class="tool-scroll-container">
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchTool.loading"
-            class="loading-container">
-            <div class="loading"></div>
-          </div>
-        </transition>
         <add-button
           v-if="$mq === 'mobile'"
           :key="0"
@@ -94,10 +87,20 @@
           text="TOOL">
         </add-button>
 
+        <transition name="list-loading">
+          <div
+            v-if="$apollo.queries.searchTool.loading"
+            class="loading-container">
+            <div class="half-circle-spinner">
+              <div class="circle circle-1"></div>
+              <div class="circle circle-2"></div>
+            </div>
+          </div>
+        </transition>
+
         <transition name="fade">
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
-            :key="1"
             class="no-tools-container">
             <span class="no-tools-text">No Tools To Display</span>
           </div>

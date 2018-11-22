@@ -42,14 +42,10 @@
           <button
             class="change-password menu-btn"
             @click="() => 0">
-            <span v-if="!passwordResetLoading">
+            <span>
               <i class="fas menu-btn-icon fa-key"></i>
               CHANGE PASSWORD
             </span>
-            <div
-              v-if="passwordResetLoading"
-              class="loading">
-            </div>
           </button>
           <button
             class="sign-out menu-btn"

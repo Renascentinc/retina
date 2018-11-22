@@ -315,7 +315,6 @@
           <extended-fab
             v-if="currentState === 3"
             :on-click="advanceStep"
-            :loading="isSavingTool"
             class="page-forward"
             icon-class=""
             button-text="FINISH">
@@ -417,7 +416,6 @@ export default {
       getAllUser: [],
       tool: null,
       imgSrc: null,
-      isSavingTool: false,
       statuses,
       validations: {
         modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
@@ -552,11 +550,6 @@ export default {
     },
 
     saveTool () {
-      if (this.isSavingTool) {
-        return
-      }
-
-      this.isSavingTool = true
       let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
       let typeRequest = this.type && this.type.isNewConfigurableItem ? this.createNewConfigurableItem(this.type) : null
       let purchaseRequest = this.purchasedFrom && this.purchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.purchasedFrom) : null
@@ -653,8 +646,6 @@ export default {
           this.showSuccessMsg()
         }).catch(() => {
           this.showErrorMsg()
-        }).finally(() => {
-          this.isSavingTool = false
         })
       })
     }

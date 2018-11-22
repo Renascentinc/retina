@@ -122,7 +122,7 @@ export default {
     },
 
     filteredItems () {
-      return this.autocompleteItems.filter(i => i.text.indexOf(this.tag) > -1)
+      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag) > -1)
     },
 
     locations () {

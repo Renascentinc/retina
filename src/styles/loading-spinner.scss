@@ -1,48 +1,91 @@
-.loading {
-  font-size: 10px;
-  margin: 50px auto;
-  text-indent: -9999em;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: $renascent-dark-gray;
-  background: linear-gradient(to right, $renascent-dark-gray 10%, rgba(64, 64, 64, 0) 42%);
+// .loading {
+//   font-size: 10px;
+//   margin: 50px auto;
+//   text-indent: -9999em;
+//   width: 30px;
+//   height: 30px;
+//   border-radius: 50%;
+//   background: $renascent-dark-gray;
+//   background: linear-gradient(to right, $renascent-dark-gray 10%, rgba(64, 64, 64, 0) 42%);
+//   position: relative;
+//   animation: load3 1.4s infinite linear;
+//   transform: translateZ(0);
+// }
+//
+// .loading::before {
+//   width: 50%;
+//   height: 50%;
+//   background: $renascent-dark-gray;
+//   border-radius: 100% 0 0 0;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   content: '';
+// }
+//
+// .loading::after {
+//   background: $background-light-gray;
+//   width: 75%;
+//   height: 75%;
+//   border-radius: 50%;
+//   content: '';
+//   margin: auto;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   bottom: 0;
+//   right: 0;
+// }
+//
+// @keyframes load3 {
+//   0% {
+//     transform: rotate(0deg);
+//   }
+//
+//   100% {
+//     transform: rotate(360deg);
+//   }
+// }
+
+$spinner-size: 30px;
+$tenth-spinner-size: $spinner-size / 10;
+
+.half-circle-spinner, .half-circle-spinner * {
+  box-sizing: border-box;
+}
+
+.half-circle-spinner {
+  width: $spinner-size;
+  height: $spinner-size;
+  border-radius: 100%;
   position: relative;
-  animation: load3 1.4s infinite linear;
-  transform: translateZ(0);
 }
 
-.loading::before {
-  width: 50%;
-  height: 50%;
-  background: $renascent-dark-gray;
-  border-radius: 100% 0 0 0;
+.half-circle-spinner .circle {
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  content: '';
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  border: $tenth-spinner-size solid transparent;
 }
 
-.loading::after {
-  background: $background-light-gray;
-  width: 75%;
-  height: 75%;
-  border-radius: 50%;
-  content: '';
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+.half-circle-spinner .circle.circle-1 {
+  border-top-color: $renascent-dark-gray;
+  animation: half-circle-spinner-animation 1s infinite;
 }
 
-@keyframes load3 {
+.half-circle-spinner .circle.circle-2 {
+  border-bottom-color: $renascent-dark-gray;
+  animation: half-circle-spinner-animation 1s infinite;
+}
+
+@keyframes half-circle-spinner-animation {
   0% {
     transform: rotate(0deg);
-  }
 
-  100% {
+  }
+  100%{
     transform: rotate(360deg);
   }
 }

@@ -124,12 +124,14 @@
               <div
                 v-for="entry in searchToolHistoryEntry"
                 :key="entry.id"
+                @click="selectToolHistory(entry.tool_snapshot.id)"
                 class="dt-row"
                 style="display: flex;
                 border-radius: 3px;
                 border-bottom: solid 1px lightgray;
                 background-color: white;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);">
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+                cursor: pointer;">
                 <div
                   class="dt-cell id"
                   style="display: flex;
@@ -275,6 +277,10 @@ export default {
   },
 
   methods: {
+    selectToolHistory(id) {
+      console.log(id)
+    },
+
     updateDateFilterTag () {
       if (this.dateRange) {
         let idx = this.tags.findIndex(tag => tag.isDatespanFilter)
@@ -310,7 +316,7 @@ export default {
         pagebreak: {
           mode: 'avoid-all'
         },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       }
 
       html2pdf().from(element).set(opt).save()
@@ -376,7 +382,7 @@ export default {
     align-items: center;
     max-width: 300px;
     flex: 1 1 auto;
-    padding-top: 80px;
+    padding-top: 15px;
     overflow-y: auto;
 
     .extended-fab {

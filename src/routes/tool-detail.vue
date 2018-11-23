@@ -418,7 +418,7 @@ import vSelect from '../components/select'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 
 export default {
   name: 'ToolDetail',
@@ -430,19 +430,6 @@ export default {
     ButtonDropdown,
     vSelect,
     NfcEncode
-  },
-
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'TOOL DECOMISSIONED',
-      message: 'Successfully Decomissioned Tool'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'ERROR',
-      message: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support'
-    }
   },
 
   apollo: {
@@ -506,6 +493,12 @@ export default {
         let options = {}
         options.tool_id = this.$router.currentRoute.params.toolId
         return options
+      },
+      result (apiResult) {
+        if (!apiResult.data.getTool) {
+          this.showInvalidIDMsg()
+          this.$router.push({ path: '/tools' })
+        }
       }
     }
   },
@@ -631,6 +624,30 @@ export default {
   },
 
   methods: {
+    showInvalidIDMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'Invalid Tool ID'
+      })
+    },
+
+    showSuccessMsg () {
+      swal({
+        type: 'success',
+        title: 'TOOL DECOMISSIONED',
+        text: 'Successfully Decomissioned Tool'
+      })
+    },
+
+    showErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support'
+      })
+    },
+
     toggleDatepicker () {
       if (this.datePickerVisibility === 'visible') {
         this.datePickerVisibility = 'hidden'
@@ -826,8 +843,8 @@ export default {
               }
             })
             .then(result => {
-              this.$apollo.queries.getTool.refresh()
-              this.$apollo.queries.getAllConfigurableItem.refresh()
+              this.$apollo.queries.getTool.refetch()
+              this.$apollo.queries.getAllConfigurableItem.refetch()
               this.editState = false
             })
         }

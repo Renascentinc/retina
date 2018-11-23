@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 import ExtendedFab from '../components/extended-fab'
 import Platforms from '../utils/platforms'
 import nfcMixin from '../mixins/nfc'
@@ -37,20 +37,23 @@ export default {
     }
   },
 
-  notifications: {
-    showBlankTagMsg: {
-      type: VueNotifications.types.info,
-      title: 'BLANK TAG',
-      message: 'This Tag is Blank'
-    },
-    showNfcDisabledMsg: {
-      type: VueNotifications.types.info,
-      title: 'NFC NOT AVAILABLE',
-      message: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device'
-    }
-  },
-
   methods: {
+    showBlankTagMsg () {
+      swal({
+        type: 'info',
+        title: 'BLANK TAG',
+        text: 'This Tag is Blank'
+      })
+    },
+
+    showNfcDisabledMsg () {
+      swal({
+        type: 'info',
+        title: 'NFC NOT AVAILABLE',
+        text: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device'
+      })
+    },
+
     nfcCallback (value) {
       if (value) {
         this.onScan(value)

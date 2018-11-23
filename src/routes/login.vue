@@ -3,14 +3,16 @@
     :class="$mq"
     class="page login-page">
 
-    <div
-      v-if="currentState === states.AUTHENTICATING"
-      class="overlay">
-      <div class="half-circle-spinner">
-        <div class="circle circle-1"></div>
-        <div class="circle circle-2"></div>
+    <transition name="fade">
+      <div
+        v-if="currentState === states.AUTHENTICATING"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
       </div>
-    </div>
+    </transition>
 
     <div class="top-panel">
       <img
@@ -80,7 +82,7 @@
         <button
           class="reset-password"
           @click="requestPasswordReset()">
-          RESET PASSWORD
+          FORGOT PASSWORD?
         </button>
 
         <extended-fab

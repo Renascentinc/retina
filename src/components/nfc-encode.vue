@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 import nfcMixin from '../mixins/nfc'
 import '../assets/icons/svg/nfc'
 
@@ -32,25 +32,31 @@ export default {
     }
   },
 
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Successfully encoded tag'
-    },
-    showInfoMsg: {
-      type: VueNotifications.types.info,
-      title: 'LOCKED TAG',
-      message: 'This Tag Has Already Been Encoded and Cannot Be Written Again'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'ERROR',
-      message: 'An Error Occurred Trying to Write Tag. Please Try Again or Contact Support'
-    }
-  },
-
   methods: {
+    showSuccessMsg () {
+      swal({
+        type: 'success',
+        title: 'SUCCESS',
+        text: 'Successfully encoded tag'
+      })
+    },
+
+    showInfoMsg () {
+      swal({
+        type: 'info',
+        title: 'LOCKED TAG',
+        text: 'This Tag Has Already Been Encoded and Cannot Be Written Again'
+      })
+    },
+
+    showErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'An Error Occurred Trying to Write Tag. Please Try Again or Contact Support'
+      })
+    },
+
     onError (reason) {
       if (reason === 'Tag is read only') {
         this.showInfoMsg()

@@ -45,7 +45,7 @@ a {
 
 .page {
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
   flex: 1 1 auto;
 }
 
@@ -56,7 +56,6 @@ a {
 
   .content-wrap {
     display: flex;
-    min-height: 500px;
 
     .main-content {
       display: flex;

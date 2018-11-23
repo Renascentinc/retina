@@ -307,7 +307,7 @@ export default {
             })
             .then(result => {
               if (result) {
-                this.$apollo.queries.getUser.refresh()
+                this.$apollo.queries.getUser.refetch()
                 this.editState = false
               }
             })
@@ -340,7 +340,7 @@ export default {
         })
         .then(result => {
           if (result) {
-            this.$apollo.queries.getUser.refresh()
+            this.$apollo.queries.getUser.refetch()
           }
         })
     },

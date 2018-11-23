@@ -4,14 +4,18 @@
       <tool-search-input :update-tags="updateFilters"></tool-search-input>
       <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
-    <div
-      v-if="transferInProgress"
-      class="overlay">
-      <div class="half-circle-spinner">
-        <div class="circle circle-1"></div>
-        <div class="circle circle-2"></div>
+
+    <transition name="fade">
+      <div
+        v-if="transferInProgress"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
       </div>
-    </div>
+    </transition>
+
     <extended-fab
       v-if="$mq === 'mobile' && currentState === states.INITIAL"
       :on-click="onTransferClick"
@@ -546,7 +550,7 @@ export default {
         this.showOnlySelectedTools = false
         this.currentState = this.states.INITIAL
         this.showTransferSuccessMsg()
-        this.$apollo.queries.searchTool.refresh()
+        this.$apollo.queries.searchTool.refetch()
       }).catch(() => {
         this.showTrasnferErrorMsg()
       }).finally(() => {

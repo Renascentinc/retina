@@ -5,6 +5,17 @@
       exit-link="/tools">
     </header-card>
 
+    <transition name="fade">
+      <div
+        v-if="isSavingTool"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
+      </div>
+    </transition>
+
     <transition name="card-change">
       <div
         v-if="currentState === 1"
@@ -335,7 +346,7 @@ import gql from 'graphql-tag'
 import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
 import NfcEncode from '../components/nfc-encode'
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 
 export default {
   name: 'NewTool',
@@ -347,19 +358,6 @@ export default {
     Fab,
     vSelect,
     NfcEncode
-  },
-
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Successfully Added Tool'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'RESET FAILURE',
-      message: 'There was an issue saving new tool. Please try again or contact support'
-    }
   },
 
   apollo: {
@@ -416,6 +414,7 @@ export default {
       getAllUser: [],
       tool: null,
       imgSrc: null,
+      isSavingTool: false,
       statuses,
       validations: {
         modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
@@ -449,6 +448,21 @@ export default {
   },
 
   methods: {
+    showSuccessMsg () {
+      swal({
+        type: 'success',
+        title: 'SUCCESS',
+        text: 'Successfully Added Tool'
+      })
+    },
+    showErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'SAVE FAILURE',
+        text: 'There was an issue saving new tool. Please try again or contact support'
+      })
+    },
+
     toggleDatepicker () {
       if (this.datePickerVisibility === 'visible') {
         this.datePickerVisibility = 'hidden'
@@ -550,6 +564,7 @@ export default {
     },
 
     saveTool () {
+      this.isSavingTool = true
       let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
       let typeRequest = this.type && this.type.isNewConfigurableItem ? this.createNewConfigurableItem(this.type) : null
       let purchaseRequest = this.purchasedFrom && this.purchasedFrom.isNewConfigurableItem ? this.createNewConfigurableItem(this.purchasedFrom) : null
@@ -647,6 +662,11 @@ export default {
         }).catch(() => {
           this.showErrorMsg()
         })
+      }).catch(() => {
+        this.showErrorMsg()
+      }).finally(() => {
+        this.isSavingTool = false
+        this.$apollo.queries.getAllConfigurableItem.refetch()
       })
     }
   }
@@ -686,7 +706,7 @@ export default {
 
   .new-tool-input-card {
     display: flex;
-    flex: 1 1 auto;
+    flex: 1 0 434px;
     flex-direction: column;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
     margin: 10px 10px 0 10px;
@@ -695,7 +715,6 @@ export default {
     justify-content: space-around;
     padding: 0 20px;
     border-radius: 3px;
-    min-height: 434px;
 
     .dropdown {
       width: 100%;

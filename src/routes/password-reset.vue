@@ -59,6 +59,25 @@ export default {
     ExtendedFab
   },
 
+  apollo: {
+    isPasswordResetCodeValid: {
+      query: gql`query checkResetCode($password_reset_code: ID!) {
+        isPasswordResetCodeValid(password_reset_code: $password_reset_code)
+      }`,
+      variables () {
+        return {
+          password_reset_code: this.$route.query.code
+        }
+      },
+      result (response) {
+        if (!response.data.isPasswordResetCodeValid) {
+          this.showInvalidTokenError()
+          this.$router.push({ path: '/login' })
+        }
+      }
+    }
+  },
+
   data () {
     return {
       password: '',

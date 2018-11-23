@@ -18,7 +18,7 @@
 
     <extended-fab
       v-if="$mq === 'mobile' && currentState === states.INITIAL"
-      :on-click="onTransferClick"
+      :on-click="moveToSelectingState"
       class="transfer-btn"
       icon-class="fa-exchange-alt"
       button-text="TRANSFER">
@@ -73,10 +73,10 @@
 
         <extended-fab
           v-if="$mq === 'desktop' && currentState === states.FINALIZING"
-          :on-click="cancelTransfer"
-          class="cancel-efab"
-          icon-class="fa-times"
-          button-text="CANCEL">
+          :on-click="moveToSelectingState"
+          class="back-efab"
+          icon-class="fa-arrow-left"
+          button-text="BACK">
         </extended-fab>
 
         <v-select
@@ -96,9 +96,11 @@
           button-text="FINISH">
         </extended-fab>
       </div>
-      <div class="tool-scroll-container">
+      <div
+        :class="{ finalizing: currentState === states.FINALIZING }"
+        class="tool-scroll-container">
         <add-button
-          v-if="$mq === 'mobile'"
+          v-if="$mq === 'mobile' && currentState === states.INITIAL"
           :key="0"
           :on-click="transitionToAdd"
           text="TOOL">
@@ -169,7 +171,9 @@
         </div>
         <div class="icon-text-container">
           <button
-            class="fas fa-arrow-right menu-icon"
+            :disabed="numSelectedTools === 0"
+            :class="{ disabled: numSelectedTools === 0 }"
+            class="fas fa-arrow-right menu-icon next-btn"
             @click="proceedToFinalize">
             <span class="icon-subtext">NEXT</span>
           </button>
@@ -197,11 +201,11 @@
 
         <div class="finalize-row finalize-footer">
           <extended-fab
-            :on-click="cancelTransfer"
+            :on-click="moveToSelectingState"
             :outline-display="true"
-            class="cancel-efab"
-            icon-class="fa-times"
-            button-text="CANCEL">
+            class="back-efab"
+            icon-class="fa-arrow-left"
+            button-text="BACK">
           </extended-fab>
 
           <extended-fab
@@ -260,6 +264,41 @@ export default {
       }
     }`,
 
+    getMultipleTool: {
+      query: gql`query selectedTools($tool_ids: [ID!]!) {
+        getMultipleTool(tool_ids: $tool_ids) {
+          id
+          type {
+            id
+            name
+          }
+          brand {
+            id
+            name
+          }
+          status
+          owner {
+            ... on Location {
+               id
+               name
+               type
+            }
+            ... on User {
+               id
+               first_name
+               last_name
+               type
+            }
+          }
+        }
+      }`,
+      variables () {
+        return {
+          tool_ids: this.$store.getters.selectedTools
+        }
+      }
+    },
+
     searchTool: {
       query: gql`query tools($query: String, $toolFilter: ToolFilter, $pagingParameters: PagingParameters) {
         searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
@@ -306,6 +345,11 @@ export default {
         }
 
         return options
+      },
+      result (response) {
+        // depending on how many results are cached the response may be different lengths
+        // need to make sure that the infinite scroll loads the correct next page
+        this.infiniteScrollPageNumber = parseInt(response.data.searchTool.length / this.pageSize)
       }
     }
   },
@@ -351,7 +395,7 @@ export default {
       }
 
       if (this.showOnlySelectedTools) {
-        return tools.filter(tool => this.$store.state.selectedToolsMap[tool.id])
+        return this.getMultipleTool || []
       }
       return tools
     },
@@ -453,7 +497,8 @@ export default {
       this.resetInfiniteScroll()
     },
 
-    onTransferClick () {
+    moveToSelectingState () {
+      this.showOnlySelectedTools = false
       this.currentState = this.states.SELECTING
     },
 
@@ -648,6 +693,10 @@ export default {
     padding-left: 20px;
     padding-right: 20px;
 
+    .next-btn.disabled {
+      opacity: .5;
+    }
+
     .icon-text-container {
       width: 95px;
       flex: 0 0 95px;
@@ -725,10 +774,13 @@ export default {
 }
 
 // MOBILE
-
 .mobile .tools-page {
   .tool-scroll-container {
     padding-bottom: 70px;
+
+    &.finalizing {
+      padding-bottom: 200px;
+    }
   }
 
   .floating-action-bar {

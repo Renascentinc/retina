@@ -21,6 +21,14 @@
         </extended-fab>
 
         <extended-fab
+          v-if="editState && $mq === 'desktop'"
+          :on-click="cancelEdit"
+          :disabled="changingStatus"
+          icon-class="fa-times"
+          button-text="CANCEL">
+        </extended-fab>
+
+        <extended-fab
           v-if="$mq === 'desktop' && isTransferable"
           :disabled="editState || changingStatus"
           :on-click="toggleTransferStatus"
@@ -364,6 +372,14 @@
         </div>
       </div>
     </div>
+
+    <fab
+      v-if="editState && $mq === 'mobile'"
+      :on-click="cancelEdit"
+      icon-class="fa-times"
+      class="cancel">
+    </fab>
+
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
@@ -679,6 +695,10 @@ export default {
       return this.getAllConfigurableItem.filter(
         item => item.type === type && item.sanctioned
       )
+    },
+
+    cancelEdit () {
+      this.editState = false
     },
 
     toggleEditState () {
@@ -1301,12 +1321,18 @@ export default {
       }
     }
   }
-}
 
-.edit {
-  position: absolute;
-  bottom: 75px;
-  right: 20px;
+  .edit {
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
+  }
+
+  .cancel {
+    position: absolute;
+    bottom: 75px;
+    right: 80px;
+  }
 }
 
 // MOBILE

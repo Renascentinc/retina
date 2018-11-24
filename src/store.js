@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     selectedToolsMap: { },
-    transferState: 'INITIAL'
+    transferState: 'INITIAL',
+    showOnlySelectedTools: false
   },
   getters: {
     selectedTools (state) {
@@ -30,6 +31,14 @@ export default new Vuex.Store({
 
     updateTransferStatus (state, newStatus) {
       state.transferState = newStatus
+    },
+
+    toggleShowOnlySelectedTools (state) {
+      state.showOnlySelectedTools = !state.showOnlySelectedTools
+    },
+
+    setShowOnlySelectedTools (state, newState) {
+      state.showOnlySelectedTools = newState
     }
   }
 })

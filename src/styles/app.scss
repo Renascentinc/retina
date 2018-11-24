@@ -43,6 +43,11 @@ a {
   }
 }
 
+img[lazy=loading] {
+  height: 200px;
+  max-height: 200px;
+}
+
 .page {
   height: 100%;
   overflow: auto;

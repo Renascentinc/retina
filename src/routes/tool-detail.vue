@@ -1,5 +1,16 @@
 <template>
   <div class="page tool-detail-page">
+    <transition name="fade">
+      <div
+        v-if="saving"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
+      </div>
+    </transition>
+
     <div class="info-menu-container">
       <div
         class="floating-action-bar">
@@ -398,42 +409,6 @@
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit">
     </fab>
-
-    <modal
-      :width="350"
-      :height="300"
-      class="confirm-oos-modal"
-      name="confirm-oos-modal">
-      <div class="modal-content">
-        <span class="header-text"> CONFIRM OUT OF SERVICE </span>
-
-        <span class="sub-header-text">This Action is Permanent and Cannot Be Undone</span>
-
-        <textarea
-          v-model="reason"
-          class="light-input reason-text"
-          placeholder="Please Explain Why This Tool Is Being Moved To Out of Service">
-        </textarea>
-
-        <div class="oos-actions">
-          <extended-fab
-            :on-click="() => cancelDecomission()"
-            class="oos-btn cancel-oos-btn"
-            icon-class="fa-times"
-            button-text="CANCEL">
-          </extended-fab>
-
-          <extended-fab
-            :on-click="() => decomissionTool()"
-            :disabled="!reason"
-            :outline-display="true"
-            class="oos-btn decomission-btn"
-            icon-class=""
-            button-text="DECOMISSION">
-          </extended-fab>
-        </div>
-      </div>
-    </modal>
   </div>
 </template>
 
@@ -547,6 +522,7 @@ export default {
       newPurchaseDate: null,
       newPrice: null,
       oosStatus: null,
+      saving: false,
       datePickerVisibility: 'hidden',
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
@@ -676,11 +652,19 @@ export default {
       })
     },
 
-    showErrorMsg () {
+    showDecomissionErrorMsg () {
       swal({
         type: 'error',
         title: 'ERROR',
         text: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support'
+      })
+    },
+
+    showSaveErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'An Error Occurred Trying to Save Tool. Please Try Again or Contact Support'
       })
     },
 
@@ -696,12 +680,6 @@ export default {
       this.$refs.file.value = ''
       this.newImgSrc = null
       this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
-    },
-
-    cancelDecomission () {
-      this.$modal.hide('confirm-oos-modal')
-      this.reason = null
-      this.oosStatus = null
     },
 
     toggleChangingStatus () {
@@ -769,32 +747,12 @@ export default {
       })
     },
 
-    decomissionTool () {
-      this.$apollo.mutate({
-        mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
-          decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
-            id
-          }
-        }`,
-        variables: {
-          tool_id: this.getTool.id,
-          decomissioned_status: this.oosStatus,
-          decomission_reason: this.reason
-        }
-      }).then(() => {
-        this.$modal.hide('confirm-oos-modal')
-        this.showSuccessMsg()
-        this.$router.push({ path: '/tools' })
-      }).catch(() => {
-        this.showErrorMsg()
-      })
-    },
-
     updateImageDisplay () {
       this.newImgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
     },
 
     saveTool () {
+      this.saving = true
       let brandRequest =
         this.newBrand && this.newBrand.isNewConfigurableItem
           ? this.createNewConfigurableItem(this.newBrand)
@@ -894,11 +852,18 @@ export default {
               this.editState = false
             })
         }
-      )
+      ).catch(() => {
+        this.showSaveErrorMsg()
+      }).finally(() => {
+        this.saving = false
+      })
     },
 
     toggleTransferStatus () {
       this.$store.commit('toggleToolSelection', this.getTool.id)
+      if (this.$store.state.transferState === 'INITIAL') {
+        this.$store.commit('updateTransferStatus', 'SELECTING')
+      }
       this.$router.push({ path: '/tools' })
     },
 
@@ -911,11 +876,44 @@ export default {
     },
 
     updateStatus (newStatus) {
-      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
+      if (newStatus === 'LOST OR STOLEN' || newStatus === 'BEYOND REPAIR') {
+        swal({
+          type: 'warning',
+          title: 'CONFIRM DECOMISSION',
+          text: `Are you sure you want to mark this tool as ${newStatus}? This action cannot be undone.`,
+          input: 'textarea',
+          inputPlaceholder: `Please Explain Why This Tool is Being Marked as ${newStatus}`,
+          reverseButtons: true,
+          showCancelButton: true,
+          cancelButtonText: 'CANCEL',
+          confirmButtonText: 'SUBMIT',
+          confirmButtonColor: '#404040',
+          inputValidator: (value) => {
+            return !value && `Decomission Reason is Required`
+          }
+        }).then(result => {
+          if (result.value) {
+            newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
-      if (newStatus === 'LOST_OR_STOLEN' || newStatus === 'BEYOND_REPAIR') {
-        this.$modal.show('confirm-oos-modal')
-        this.oosStatus = newStatus
+            this.$apollo.mutate({
+              mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
+              decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
+                id
+              }
+            }`,
+              variables: {
+                tool_id: this.getTool.id,
+                decomissioned_status: newStatus,
+                decomission_reason: result.value
+              }
+            }).then(() => {
+              this.showSuccessMsg()
+              this.$router.push({ path: '/tools' })
+            }).catch(() => {
+              this.showDecomissionErrorMsg()
+            })
+          }
+        })
       } else {
         this.saveStatusChange(newStatus)
       }
@@ -971,51 +969,6 @@ export default {
   background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
-
-  .confirm-oos-modal {
-    .modal-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      height: 100%
-    }
-
-    .header-text {
-      color: $renascent-dark-gray;
-      font-weight: 700;
-      font-size: 25px;
-      margin-top: 30px;
-    }
-
-    .sub-header-text {
-      color: $renascent-dark-gray;
-      font-weight: 900;
-      font-size: 15px;
-    }
-
-    .reason-text {
-      height: 100px;
-      font-size: 15px;
-      width: 90%;
-    }
-
-    .oos-actions {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-
-      .oos-btn {
-        height: 40px;
-
-        &.decomission-btn {
-          .fab-icon-container {
-            display: none;
-          }
-        }
-      }
-    }
-  }
 
   .info-menu-container {
     height: 100%;

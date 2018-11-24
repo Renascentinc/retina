@@ -376,7 +376,6 @@ export default {
       pageSize: 15,
       searchString: null,
       filters: null,
-      showOnlySelectedTools: false,
       paginationLoading: false,
       transferInProgress: false,
       states
@@ -384,6 +383,10 @@ export default {
   },
 
   computed: {
+    showOnlySelectedTools () {
+      return this.$store.state.showOnlySelectedTools
+    },
+
     currentState () {
       return this.$store.state.transferState
     },
@@ -493,19 +496,19 @@ export default {
     },
 
     moveToSelectingState () {
-      this.showOnlySelectedTools = false
+      this.$store.commit('setShowOnlySelectedTools', false)
       this.$store.commit('updateTransferStatus', this.states.SELECTING)
     },
 
     cancelTransfer () {
       this.$store.commit('resetSelectedTools')
-      this.showOnlySelectedTools = false
+      this.$store.commit('setShowOnlySelectedTools', false)
       this.$store.commit('updateTransferStatus', this.states.INITIAL)
       this.resetScrollPosition()
     },
 
     toggleViewSelected () {
-      this.showOnlySelectedTools = !this.showOnlySelectedTools
+      this.$store.commit('toggleShowOnlySelectedTools')
       this.resetScrollPosition()
     },
 
@@ -587,7 +590,7 @@ export default {
           this.searchTool[idx] = tool
         })
         this.$store.commit('resetSelectedTools')
-        this.showOnlySelectedTools = false
+        this.$store.commit('setShowOnlySelectedTools', false)
         this.$store.commit('updateTransferStatus', this.states.INITIAL)
         this.showTransferSuccessMsg()
         this.$apollo.queries.searchTool.refetch()
@@ -599,7 +602,7 @@ export default {
     },
 
     proceedToFinalize () {
-      this.showOnlySelectedTools = true
+      this.$store.commit('setShowOnlySelectedTools', true)
       this.$store.commit('updateTransferStatus', this.states.FINALIZING)
       this.resetScrollPosition()
     }

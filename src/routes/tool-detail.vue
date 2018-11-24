@@ -314,12 +314,11 @@
                 class="general-data"> ${{ formattedPrice }} </span>
 
               <input
+                v-money="moneyInputConfig"
                 v-if="editState"
                 v-model="newPrice"
                 name="newPrice"
-                class="light-input"
-                placeholder="Price"
-                type="number">
+                class="light-input">
             </div>
           </div>
 
@@ -538,6 +537,14 @@ export default {
       datePickerVisibility: 'hidden',
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+      },
+      moneyInputConfig: {
+        decimal: '.',
+        thousands: ',',
+        prefix: '$ ',
+        suffix: '',
+        precision: 2,
+        masked: false
       }
     }
   },
@@ -856,7 +863,7 @@ export default {
                   owner_id: this.getTool.owner.id,
                   purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  price: this.newPrice ? (this.newPrice * 100).toFixed(0) : null,
+                  price: this.newPrice ? this.newPrice.slice(2) * 100 : null,
                   year: this.newYear ? this.newYear : null,
                   photo
                 }

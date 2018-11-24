@@ -361,8 +361,6 @@ export default {
       FINALIZING: 'FINALIZING'
     }
 
-    let currentState = states.INITIAL
-
     return {
       filterMap: {
         BRAND: 'brand_ids',
@@ -381,12 +379,15 @@ export default {
       showOnlySelectedTools: false,
       paginationLoading: false,
       transferInProgress: false,
-      currentState,
       states
     }
   },
 
   computed: {
+    currentState () {
+      return this.$store.state.transferState
+    },
+
     tools () {
       let tools = this.searchTool || []
 
@@ -428,12 +429,6 @@ export default {
 
     formattedNumSelectedTools () {
       return `${this.numSelectedTools} ${this.numSelectedTools === 1 ? 'tool' : 'tools'}`
-    }
-  },
-
-  created () {
-    if (this.numSelectedTools !== 0) {
-      this.currentState = this.states.SELECTING
     }
   },
 
@@ -499,13 +494,13 @@ export default {
 
     moveToSelectingState () {
       this.showOnlySelectedTools = false
-      this.currentState = this.states.SELECTING
+      this.$store.commit('updateTransferStatus', this.states.SELECTING)
     },
 
     cancelTransfer () {
       this.$store.commit('resetSelectedTools')
       this.showOnlySelectedTools = false
-      this.currentState = this.states.INITIAL
+      this.$store.commit('updateTransferStatus', this.states.INITIAL)
       this.resetScrollPosition()
     },
 
@@ -593,7 +588,7 @@ export default {
         })
         this.$store.commit('resetSelectedTools')
         this.showOnlySelectedTools = false
-        this.currentState = this.states.INITIAL
+        this.$store.commit('updateTransferStatus', this.states.INITIAL)
         this.showTransferSuccessMsg()
         this.$apollo.queries.searchTool.refetch()
       }).catch(() => {
@@ -605,7 +600,7 @@ export default {
 
     proceedToFinalize () {
       this.showOnlySelectedTools = true
-      this.currentState = this.states.FINALIZING
+      this.$store.commit('updateTransferStatus', this.states.FINALIZING)
       this.resetScrollPosition()
     }
   }

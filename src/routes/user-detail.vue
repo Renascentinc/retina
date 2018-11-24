@@ -123,7 +123,7 @@
                     {{ formattedPhone }}
                   </button>
                   <input
-                    v-validate="{required: true, numeric: true, min: 7}"
+                    v-validate="{required: true, numeric: true, min: 10}"
                     v-if="editState"
                     v-model="newPhone"
                     name="phone"

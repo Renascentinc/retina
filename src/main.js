@@ -23,6 +23,7 @@ import VueSVGIcon from 'vue-svgicon'
 import VueJsModal from 'vue-js-modal'
 import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
+import money from 'v-money'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -102,9 +103,8 @@ Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
 Vue.use(VueLazyload)
-Vue.use(VueJsModal, {
-  dialog: true
-})
+Vue.use(money, { precision: 2 })
+Vue.use(VueJsModal, { dialog: true })
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 500,

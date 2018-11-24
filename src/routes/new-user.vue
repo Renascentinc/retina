@@ -62,7 +62,7 @@
         </div>
         <div class="input-group-container">
           <input
-            v-validate="{ required: true, numeric: true, min: 7 }"
+            v-validate="{ required: true, numeric: true, min: 10 }"
             v-model="phoneNumber"
             name="phone number"
             class="light-input"
@@ -292,6 +292,7 @@ export default {
         }
       }).then(result => {
         this.getUser = result.data.createUser
+        this.$apollo.queries.getAllUser.refetch()
       })
     }
   }

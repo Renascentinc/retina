@@ -24,7 +24,7 @@
         <div class="input-group-container">
           <span class="form-label">BRAND</span>
           <v-select
-            v-validate:brand="'required'"
+            v-validate:brand="'required|length:40'"
             :options="brandOptions"
             v-model="brand"
             name="brand"
@@ -53,7 +53,7 @@
         <div class="input-group-container">
           <span class="form-label">TYPE</span>
           <v-select
-            v-validate:type="'required'"
+            v-validate:type="'required|length:40'"
             v-model="type"
             :options="typeOptions"
             name="type"
@@ -82,7 +82,7 @@
         <div class="input-group-container">
           <span class="form-label">MODEL NUMBER</span>
           <input
-            v-validate="'required'"
+            v-validate="'required|length:40'"
             v-model="modelNumber"
             name="modelNumber"
             class="light-input"
@@ -102,7 +102,7 @@
         <div class="input-group-container">
           <span class="form-label">SERIAL NUMBER</span>
           <input
-            v-validate="'required'"
+            v-validate="'required|length:40'"
             v-model="serialNumber"
             name="serialNumber"
             class="light-input"
@@ -159,6 +159,7 @@
         <div class="input-group-container">
           <span class="form-label">PURCHASED FROM</span>
           <v-select
+            v-validate="'length:40'"
             v-model="purchasedFrom"
             :options="purchasedFromOptions"
             label="name"
@@ -210,12 +211,10 @@
         <div class="input-group-container">
           <span class="form-label">PRICE</span>
           <input
-            v-validate="'decimal:2'"
+            v-money="moneyInputConfig"
             v-model="price"
             name="price"
-            class="light-input"
-            placeholder="eg. 149.99"
-            type="number">
+            class="light-input">
         </div>
       </div>
     </transition>
@@ -418,6 +417,14 @@ export default {
       statuses,
       validations: {
         modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+      },
+      moneyInputConfig: {
+        decimal: '.',
+        thousands: ',',
+        prefix: '$ ',
+        suffix: '',
+        precision: 2,
+        masked: false
       }
     }
   },
@@ -650,7 +657,7 @@ export default {
               date_purchased: purchaseDate,
               status: this.status ? this.status.id : Statuses.AVAILABLE,
               owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
-              price: parseInt((this.price || 0) * 100),
+              price: this.price ? this.price.slice(2) * 100 : null,
               year: this.modelYear,
               photo: photoResponse
             }

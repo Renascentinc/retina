@@ -29,19 +29,19 @@
           <button
             v-if="isAdmin"
             class="config menu-btn"
-            @click="transitionToConfig()">
+            @click="transitionToConfig">
             <i class="fas menu-btn-icon fa-cog"></i>
             CONFIGURATION
           </button>
           <button
             class="help menu-btn"
-            @click="sendSupportEmail()">
+            @click="sendSupportEmail">
             <i class="fas menu-btn-icon fa-question-circle"></i>
             CONTACT SUPPORT
           </button>
           <button
             class="change-password menu-btn"
-            @click="() => 0">
+            @click="changePassword">
             <span>
               <i class="fas menu-btn-icon fa-key"></i>
               CHANGE PASSWORD
@@ -49,7 +49,7 @@
           </button>
           <button
             class="sign-out menu-btn"
-            @click="signout()">
+            @click="signout">
             <i class="fas menu-btn-icon fa-sign-out-alt"></i>
             SIGN OUT
           </button>
@@ -108,6 +108,7 @@ import gql from 'graphql-tag'
 import authenticatedRouteMixin from '../mixins/authenticatedRoute'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
+import swal from 'sweetalert2'
 
 export default {
   name: 'Application',
@@ -184,6 +185,101 @@ export default {
         window.localStorage.removeItem('token')
         this.$router.push({ path: '/login' })
       }, 100)
+    },
+
+    changePassword () {
+      swal({
+        title: 'CHANGE PASSWORD',
+        html:
+          '<input id="current-password" type="password" class="swal2-input" placeholder="Current Password">' +
+          '<input id="password" type="password" class="swal2-input" placeholder="New Password">' +
+          '<input id="confirm-password" type="password" class="swal2-input" placeholder="Confirm New Password">',
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'RESET',
+        cancelButtonText: 'CANCEL',
+        confirmButtonColor: '#404040',
+        reverseButtons: true,
+        preConfirm: () => {
+          let currentPassword = document.getElementById('current-password')
+          let password = document.getElementById('password')
+          let confirmPassword = document.getElementById('confirm-password')
+
+          let reset = () => {
+            swal.resetValidationMessage()
+            currentPassword.classList.remove('error')
+            confirmPassword.classList.remove('error')
+            password.classList.remove('error')
+          }
+
+          if (!currentPassword.value) {
+            swal.showValidationMessage('Current Password field is required')
+            currentPassword.classList.add('error')
+            setTimeout(reset, 3000)
+            return false
+          }
+
+          if (!password.value) {
+            swal.showValidationMessage('New Password field is required')
+            password.classList.add('error')
+            setTimeout(reset, 3000)
+            return false
+          }
+
+          if (!confirmPassword.value) {
+            swal.showValidationMessage('Confirm New Password field is required')
+            confirmPassword.classList.add('error')
+            setTimeout(reset, 3000)
+            return false
+          }
+
+          if (password.value !== confirmPassword.value) {
+            swal.showValidationMessage('Passwords do not match')
+            password.classList.add('error')
+            confirmPassword.classList.add('error')
+            setTimeout(reset, 3000)
+            return false
+          }
+
+          return [
+            currentPassword.value,
+            password.value
+          ]
+        }
+      }).then(result => {
+        if (result.dismiss) {
+          return
+        }
+
+        let [currentPassword, newPassword] = result.value
+
+        this.$apollo.mutate({
+          mutation: gql`mutation changePassword($current_password: String!, $new_password: String!) {
+            updateCurrentUserPassword(current_password: $current_password, new_password: $new_password)
+          }`,
+          variables: {
+            current_password: currentPassword,
+            new_password: newPassword
+          }
+        }).then(({ data: { updateCurrentUserPassword } }) => {
+          if (updateCurrentUserPassword) {
+            swal({
+              type: 'success',
+              title: 'SUCCESS',
+              text: 'Successfully Changed Password'
+            })
+          } else {
+            this.changePassword()
+            swal.showValidationMessage('Current Password is invalid')
+          }
+        }).catch(() => {
+          swal({
+            type: 'error',
+            title: 'ERROR',
+            text: 'There was an error changing your password. Please try again or contact support'
+          })
+        })
+      })
     }
   }
 }
@@ -192,5 +288,9 @@ export default {
 <style lang="scss">
 .menu-btn .loading {
   top: -43px;
+}
+
+.error {
+  border-color: red !important;
 }
 </style>

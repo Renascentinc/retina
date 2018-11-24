@@ -20,6 +20,14 @@
           :button-text="editState ? 'SAVE CHANGES' : 'EDIT USER'">
         </extended-fab>
 
+        <extended-fab
+          v-if="editState && $mq === 'desktop'"
+          :on-click="cancelEdit"
+          :disabled="changingRole"
+          icon-class="fa-times"
+          button-text="CANCEL">
+        </extended-fab>
+
         <button-dropdown
           v-if="$mq === 'desktop' && isAdmin"
           :on-click="updateRole"
@@ -52,8 +60,7 @@
               v-validate="'required'"
               v-model="newFirstName"
               name="first name"
-              class="name light-input"
-              value="`${getUser.first_name}">
+              class="name light-input">
             <div class="error-container">
               <span
                 v-show="errors.has('first name')"
@@ -65,8 +72,7 @@
               v-validate="'required'"
               v-model="newLastName"
               class="name light-input"
-              name="last name"
-              value="getUser.last_name">
+              name="last name">
             <div class="error-container">
               <span
                 v-show="errors.has('last name')"
@@ -128,7 +134,7 @@
                     v-model="newPhone"
                     name="phone"
                     class="contact-text light-input"
-                    value="getUser.phone_number"
+
                     type="number">
                 </div>
 
@@ -152,8 +158,7 @@
                     v-if="editState"
                     v-model="newEmail"
                     name="email"
-                    class="contact-text light-input"
-                    value="getUser.email">
+                    class="contact-text light-input">
                 </div>
               </div>
             </div>
@@ -165,14 +170,32 @@
               </span>
             </div>
           </div>
+          <div
+            v-if="editState && isAdmin && !isCurrentUser"
+            class="container search-result"
+            @click="deactivateUser">
+            <div class="default-text">
+              <i class="fas fa-times"></i>
+              DELETE USER
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <fab
+      v-if="editState && $mq === 'mobile'"
+      :on-click="cancelEdit"
+      icon-class="fa-times"
+      class="cancel">
+    </fab>
+
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
-      class="edit"></fab>
+      class="edit">
+    </fab>
   </div>
 </template>
 
@@ -183,6 +206,7 @@ import ExtendedFab from '../components/extended-fab'
 import ButtonDropdown from '../components/button-dropdown'
 import Roles from '../utils/roles'
 import PhoneNumberFormatter from 'phone-number-formats'
+import swal from 'sweetalert2'
 
 export default {
   name: 'ToolDetail',
@@ -230,19 +254,16 @@ export default {
   },
 
   computed: {
+    isCurrentUser () {
+      return JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
+    },
+
     isAdmin () {
-      return (
-        JSON.parse(window.localStorage.getItem('currentUser')).role ===
-        Roles.ADMIN
-      )
+      return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
     },
 
     canEdit () {
-      return (
-        this.isAdmin ||
-        JSON.parse(window.localStorage.getItem('currentUser')).id ===
-          this.getUser.id
-      )
+      return this.isAdmin || this.isCurrentUser
     },
 
     formattedPhone () {
@@ -255,11 +276,61 @@ export default {
   },
 
   methods: {
+    showSuccessfulDeleteMsg () {
+      swal({
+        type: 'success',
+        title: 'SUCCESS',
+        text: 'Successfully Delete User'
+      })
+    },
+
+    deactivateUser () {
+      swal({
+        type: 'warning',
+        title: 'CONFIRM DELETE USER',
+        text: `Are You Sure You Want To Delete ${this.getUser.first_name} ${this.getUser.last_name}? This Action Cannot Be Undone`,
+        reverseButtons: true,
+        showCancelButton: true,
+        confirmButtonText: 'DELETE',
+        cancelButtonText: 'CANCEL',
+        confirmButtonColor: '#CE352F'
+      }).then(result => {
+        if (result.value) {
+          this.getUser.status = 'INACTIVE'
+          this.$apollo.mutate({
+            mutation: gql`mutation deleteUser($updatedUser: UpdatedUser!) {
+              updateUser(updatedUser: $updatedUser) {
+                id
+              }
+            }`,
+            variables: {
+              updatedUser: {
+                id: this.getUser.id,
+                first_name: this.newFirstName,
+                last_name: this.newLastName,
+                email: this.newEmail,
+                phone_number: this.newPhone,
+                role: this.getUser.role,
+                status: this.getUser.status
+              }
+            }
+          }).then(() => {
+            this.showSuccessfulDeleteMsg()
+            this.transitionToUsers()
+          })
+        }
+      })
+    },
+
     toggleChangingRole () {
       this.changingRole = !this.changingRole
     },
     transitionToUsers () {
       this.$router.push({ name: 'users' })
+    },
+
+    cancelEdit () {
+      this.editState = false
     },
 
     toggleEditState () {
@@ -346,11 +417,11 @@ export default {
     },
 
     phoneNumber () {
-      return this.getUser.phone_number || null
+      return this.getUser.phone_number
     },
 
     email () {
-      return this.getUser.email || null
+      return this.getUser.email
     },
 
     phoneCall () {
@@ -528,6 +599,12 @@ export default {
     position: absolute;
     bottom: 75px;
     right: 20px;
+  }
+
+  .cancel {
+    position: absolute;
+    bottom: 75px;
+    right: 80px;
   }
 }
 

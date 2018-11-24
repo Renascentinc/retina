@@ -3,16 +3,18 @@
     <div class="search-icon-container">
       <i class="fas fa-search"/>
     </div>
-    <vue-tags-input
-      v-model="tag"
-      :tags="tags"
+    <input
+      ref="searchInput"
+      v-model="search"
       placeholder="Search"
-      @tags-changed="tagsChanged"></vue-tags-input>
+      class="user-search-input"
+      @keydown.enter="searchAndBlur">
   </div>
 </template>
 
 <script>
 import VueTagsInput from '@johmun/vue-tags-input'
+import debounce from 'debounce'
 
 export default {
   name: 'UserSearchInput',
@@ -27,19 +29,19 @@ export default {
   },
   data () {
     return {
-      tag: '',
-      tags: []
+      search: ''
     }
   },
+  watch: {
+    search: debounce(function (search) {
+      this.updateTags(search)
+    }, 300)
+  },
+
   methods: {
-    tagsChanged (newTags) {
-      let fuzzySearch = null
-      if (newTags.some(tag => !tag.name)) {
-        fuzzySearch = newTags.pop().text
-        this.tag = fuzzySearch
-      }
-      this.tags = newTags
-      this.updateTags(fuzzySearch)
+    searchAndBlur () {
+      this.updateTags(this.search)
+      this.$refs.searchInput.blur()
     }
   }
 }
@@ -48,4 +50,11 @@ export default {
 <style lang="scss">
 @import '../styles/variables';
 @import '../styles/search-input';
+
+.user-search-input {
+  font-weight: bold;
+  font-size: 20px;
+  width: 100%;
+  padding-left: 10px;
+}
 </style>

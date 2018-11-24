@@ -51,7 +51,8 @@
             placeholder="username"
             autocorrect="off"
             autocapitalize="off"
-            spellcheck="false">
+            spellcheck="false"
+            @keydown.enter="attemptUserLogin">
         </input-with-icon>
 
         <input-with-icon
@@ -61,7 +62,8 @@
             v-model="password"
             class="password-input"
             placeholder="password"
-            type="password">
+            type="password"
+            @keydown.enter="attemptUserLogin">
         </input-with-icon>
 
         <input-with-icon
@@ -74,7 +76,8 @@
             placeholder="organization name"
             autocorrect="off"
             autocapitalize="off"
-            spellcheck="false">
+            spellcheck="false"
+            @keydown.enter="attemptUserLogin">
         </input-with-icon>
       </div>
 

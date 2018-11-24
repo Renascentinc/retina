@@ -24,7 +24,7 @@
         <div class="input-group-container">
           <span class="form-label">BRAND</span>
           <v-select
-            v-validate:brand="'required|length:40'"
+            v-validate:brand="'required|max:40'"
             :options="brandOptions"
             v-model="brand"
             name="brand"
@@ -53,7 +53,7 @@
         <div class="input-group-container">
           <span class="form-label">TYPE</span>
           <v-select
-            v-validate:type="'required|length:40'"
+            v-validate:type="'required|max:40'"
             v-model="type"
             :options="typeOptions"
             name="type"
@@ -82,7 +82,7 @@
         <div class="input-group-container">
           <span class="form-label">MODEL NUMBER</span>
           <input
-            v-validate="'required|length:40'"
+            v-validate="'required|max:40'"
             v-model="modelNumber"
             name="modelNumber"
             class="light-input"
@@ -102,7 +102,7 @@
         <div class="input-group-container">
           <span class="form-label">SERIAL NUMBER</span>
           <input
-            v-validate="'required|length:40'"
+            v-validate="'required|max:40'"
             v-model="serialNumber"
             name="serialNumber"
             class="light-input"
@@ -159,7 +159,6 @@
         <div class="input-group-container">
           <span class="form-label">PURCHASED FROM</span>
           <v-select
-            v-validate="'length:40'"
             v-model="purchasedFrom"
             :options="purchasedFromOptions"
             label="name"
@@ -222,7 +221,7 @@
     <transition name="card-change">
       <div
         v-if="currentState === 3"
-        class="new-tool-input-card">
+        class="new-tool-input-card photo-input-card">
 
         <input
           id="file"
@@ -243,10 +242,22 @@
           Add Photo
         </label>
 
-        <img
+        <div
           v-if="imgSrc"
-          :src="imgSrc"
-          class="img-preview">
+          class="image-container">
+          <img
+            :src="imgSrc"
+            class="img-preview">
+        </div>
+
+        <extended-fab
+          v-if="imgSrc"
+          :on-click="deletePhoto"
+          :outline-display="true"
+          class="delete-photo-efab"
+          icon-class="fa-times"
+          button-text="REMOVE PHOTO">
+        </extended-fab>
       </div>
     </transition>
 
@@ -406,7 +417,7 @@ export default {
       price: null,
       photo: null,
       status: statuses[1],
-      currentState: 1,
+      currentState: 2,
       purchaseDate: null,
       datePickerVisibility: 'hidden',
       getAllConfigurableItem: [],
@@ -480,6 +491,12 @@ export default {
 
     updateImageDisplay () {
       this.imgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
+    },
+
+    deletePhoto () {
+      this.$refs.file.value = ''
+      this.imgSrc = null
+      this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
     },
 
     uploadPhoto () {
@@ -723,6 +740,18 @@ export default {
     padding: 0 20px;
     border-radius: 3px;
 
+    &.photo-input-card {
+      justify-content: center;
+
+      .image-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 350px;
+        width: 100%;
+      }
+    }
+
     .dropdown {
       width: 100%;
     }
@@ -771,6 +800,12 @@ export default {
   .add-another-efab {
     border-color: transparent;
     box-shadow: none;
+  }
+
+  .delete-photo-efab {
+    border-color: transparent;
+    box-shadow: none;
+    font-size: 15px;
   }
 
   .tool-search-result {

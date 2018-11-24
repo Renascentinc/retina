@@ -7,6 +7,7 @@
       v-model="tag"
       :tags="tags"
       :autocomplete-items="filteredItems"
+      :add-on-blur="false"
       placeholder="Search"
       @tags-changed="tagsChanged">
 
@@ -156,12 +157,22 @@ export default {
       return searchItems
     }
   },
+
+  watch: {
+    tag (fuzzySearch) {
+      if (!fuzzySearch) {
+        this.tagsChanged(this.tags)
+      }
+    }
+  },
   methods: {
     tagsChanged (newTags) {
       let fuzzySearch = null
       if (newTags.some(tag => !tag.name)) {
         fuzzySearch = newTags.pop().text
         this.tag = fuzzySearch
+        document.querySelector('.fa-search').click()
+        document.querySelector('.new-tag-input').blur()
       }
       this.tags = newTags
       this.updateTags(newTags, fuzzySearch)

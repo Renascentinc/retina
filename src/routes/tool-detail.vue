@@ -362,10 +362,23 @@
                 {{ getTool.photo ? 'UPDATE PHOTO' : 'Add Photo' }}
               </label>
 
-              <img
+              <div
                 v-if="newImgSrc"
-                :src="newImgSrc"
-                class="img-preview">
+                class="image-container">
+                <img
+                  v-if="newImgSrc"
+                  :src="newImgSrc"
+                  class="img-preview">
+              </div>
+
+              <extended-fab
+                v-if="newImgSrc"
+                :on-click="deletePhoto"
+                :outline-display="true"
+                class="delete-photo-efab"
+                icon-class="fa-times"
+                button-text="REMOVE PHOTO">
+              </extended-fab>
             </div>
           </div>
         </div>
@@ -677,6 +690,12 @@ export default {
       } else {
         this.datePickerVisibility = 'visible'
       }
+    },
+
+    deletePhoto () {
+      this.$refs.file.value = ''
+      this.newImgSrc = null
+      this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
     },
 
     cancelDecomission () {
@@ -1217,6 +1236,7 @@ export default {
 
     .photo-card {
       padding-bottom: 11px;
+      margin-bottom: 80px;
 
       .photo-box {
         width: calc(100% - 23px);
@@ -1243,10 +1263,11 @@ export default {
 
       .add-photo-container {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 200px;
-        padding: 20px;
+        height: 275px;
+        padding: 0 20px;
 
         .img-preview {
           max-height: 175px;
@@ -1262,6 +1283,20 @@ export default {
           .fa-camera {
             margin-right: 5px;
           }
+        }
+
+        .delete-photo-efab {
+          border-color: transparent;
+          box-shadow: none;
+          font-size: 15px;
+        }
+
+        .image-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 175px;
+          width: 100%;
         }
       }
     }

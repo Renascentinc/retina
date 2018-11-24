@@ -31,6 +31,7 @@
     "cordova-ios": "^4.5.5",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-printer": "^0.7.3",
+    "debounce": "^1.2.0",
     "fastclick": "https://github.com/Renascentinc/fastclick.git",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",

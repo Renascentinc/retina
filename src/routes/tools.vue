@@ -750,6 +750,10 @@ export default {
     &.finalizing {
       padding-bottom: 200px;
     }
+
+    .floating-action-bar {
+      display: none !important;
+    }
   }
 
   .transfer-btn {

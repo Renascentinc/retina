@@ -466,7 +466,7 @@ export default {
     }
   }
 
-  .floating-action-bar {
+  .floating-action-bar .history-page {
     min-width: 180px;
     display: flex;
     flex-direction: column;
@@ -484,7 +484,7 @@ export default {
   }
 }
 
-.mobile {
+.mobile .history-page {
   .floating-action-bar {
     display: inline-block;
     position: absolute;

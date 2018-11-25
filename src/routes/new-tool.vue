@@ -147,7 +147,7 @@
         class="new-tool-input-card">
 
         <div class="input-group-container">
-          <span class="form-label">OWNER</span>
+          <span class="form-label">ASSIGN TO USER</span>
           <v-select
             v-model="owner"
             :options="userOptions"

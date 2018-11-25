@@ -162,7 +162,7 @@
         <div class="cards">
           <div class="card owner-card">
             <div class="card-title">
-              Owner
+              Assigned To
             </div>
             <div class="card-details owner-details">
               <div class="user-symbol">

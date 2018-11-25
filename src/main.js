@@ -77,7 +77,13 @@ const errorLink = onError(({ graphQLErrors = [] }) => {
   graphQLErrors.map(({ extensions: { code } }) => {
     if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
       window.localStorage.removeItem('token')
-      swal('SESSION EXPIRED', 'Your Session Has Expired. Please Log In Again', 'error')
+      swal({
+        type: 'error',
+        title: 'SESSION EXPIRED',
+        text: 'Your Session Has Expired. Please Log In Again',
+        timer: 2000,
+        showConfirmButton: false
+      })
       router.push({ path: '/login' })
     }
   })

@@ -404,7 +404,7 @@ $login-input-border-radius: 5px;
   }
 }
 
-.mobile .login-page {
+.mobile.login-page {
   .top-panel {
     align-items: flex-end;
 
@@ -422,7 +422,7 @@ $login-input-border-radius: 5px;
   }
 }
 
-.desktop .login-page {
+.desktop.login-page {
   justify-content: space-between;
   overflow-y: auto;
 

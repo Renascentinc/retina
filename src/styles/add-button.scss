@@ -1,5 +1,6 @@
 .container {
   height: 50px;
+  min-height: 50px;
   color: $renascent-red;
   background-color: #F9F9F9;
   font-weight: 700;
@@ -46,8 +47,6 @@
 .mobile {
   .container {
     font-size: 18px;
-    height: 60px;
-    min-height: 60px;
 
     input {
       font-size: 20px;

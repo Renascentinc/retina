@@ -1,14 +1,19 @@
 <template>
-  <div class="header-card">
+  <div
+    :class="{ 'no-link': !exitLink }"
+    class="header-card">
     <router-link
-      :v-if="exitLink !== '/'"
+      v-if="exitLink"
       :to= "exitLink"
       class="fas fa-times exit">
     </router-link>
 
     <span class="main-text"> {{ title }} </span>
 
-    <div class="spacer"></div>
+    <div
+      v-if="exitLink"
+      class="spacer">
+    </div>
   </div>
 </template>
 
@@ -23,7 +28,7 @@ export default {
     exitLink: {
       type: String,
       required: false,
-      default: '/'
+      default: null
     }
   }
 }
@@ -42,6 +47,11 @@ export default {
   border-bottom-left-radius: 7px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.16);
   padding: 0 20px;
+
+  &.no-link {
+    justify-content: center;
+    padding: 0;
+  }
 
   .exit {
     font-size: 30px;

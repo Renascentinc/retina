@@ -53,7 +53,9 @@
         <extended-fab
           v-if="$mq === 'desktop' && currentState === states.SELECTING"
           :on-click="proceedToFinalize"
-          class="view-fab-btn"
+          :disabed="numSelectedTools === 0"
+          :class="{ disabled: numSelectedTools === 0 }"
+          class="view-fab-btn next-btn"
           icon-class="fa-arrow-right"
           button-text="NEXT">
         </extended-fab>
@@ -651,6 +653,10 @@ export default {
     padding-top: 50px;
   }
 
+  .next-btn.disabled {
+    opacity: .5;
+  }
+
   .selection-action-bar {
     position: absolute;
     bottom: 0;
@@ -663,10 +669,6 @@ export default {
     justify-content: space-between;
     padding-left: 20px;
     padding-right: 20px;
-
-    .next-btn.disabled {
-      opacity: .5;
-    }
 
     .icon-text-container {
       width: 95px;
@@ -772,7 +774,6 @@ export default {
       display: flex;
       justify-content: flex-start;
       flex-direction: column;
-      height: 100%;
       padding-top: 15px;
       align-items: center;
       flex: 1 1 auto;

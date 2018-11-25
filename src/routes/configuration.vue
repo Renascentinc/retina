@@ -12,8 +12,7 @@
     </transition>
 
     <header-card
-      :title="title"
-      exit-link="/">
+      :title="title">
     </header-card>
 
     <div class="navigation">
@@ -26,10 +25,10 @@
     </div>
 
     <div class="config-menu-container">
-      <div
+      <!-- <div
         v-if="$mq === 'desktop'"
         class="spacer">
-      </div>
+      </div> -->
       <div class="configs">
         <add-result
           v-if="title === 'Brands'"
@@ -547,19 +546,14 @@ export default {
 
   .config-menu-container {
     display: flex;
+    justify-content: center;
     flex-direction: row;
     width: 100%;
 
-    .spacer {
-      min-width: 158px;
-      flex: 1 1 auto;
-      max-width: 300px;
-    }
-
     .configs {
       overflow-y: auto;
-      z-index: 0;
       flex: 1 1 auto;
+      max-width: 500px;
     }
   }
 }

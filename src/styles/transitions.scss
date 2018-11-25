@@ -52,7 +52,7 @@
 
 // Transition Name: "page-change"
 .page-change-enter-active {
-  transition: opacity .3s;
+  transition: all .3s;
 }
 
 .page-change-enter {
@@ -62,4 +62,5 @@
 .page-change-leave-to,
 .page-change-leave-active {
   display: none;
+  visibility: hidden;
 }

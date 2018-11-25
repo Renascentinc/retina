@@ -1439,6 +1439,14 @@ export default {
         width: 500px;
       }
     }
+
+    .add-photo {
+      font-size: 19px;
+
+      .fa-camera {
+        font-size: 18px !important;
+      }
+    }
   }
 }
 </style>

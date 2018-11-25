@@ -643,8 +643,7 @@ export default {
   mounted () {
     if (this.checkIsNfcEnabled() && window.device.platform === Platforms.ANDROID) {
       // add a noop nfc listener to keep nfc scans on android from bubbling up to the OS
-      window.console.log('setting up tool detail level nfc noop')
-      window.nfc.addNdefListener(() => window.console.log('swallowing nfc read'))
+      window.nfc.addNdefListener(() => 0)
     }
   },
 
@@ -1375,17 +1374,13 @@ export default {
   }
 }
 
-// MOBILE
-
-.mobile {
+.mobile .tool-detail-page {
   .actions {
     justify-content: space-around;
   }
 }
 
-// DESKTOP
-
-.desktop {
+.desktop .tool-detail-page {
   .info-menu-container {
     display: flex;
     flex-direction: row;

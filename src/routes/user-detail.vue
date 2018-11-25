@@ -665,7 +665,7 @@ export default {
 
 // MOBILE
 
-.mobile {
+.mobile .user-detail-page {
   .header {
     width: 100%;
     padding-bottom: 12px;
@@ -680,7 +680,7 @@ export default {
 }
 
 // DESKTOP
-.desktop {
+.desktop .user-detail-page {
   .info-menu-container {
     display: flex;
     flex-direction: row;

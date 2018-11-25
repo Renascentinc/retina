@@ -35,18 +35,14 @@ $tool-search-result-border-radius: 3px;
   }
 }
 
-// MOBILE
+.mobile .search-result {
+  .title {
+    font-size: 22px;
+  }
 
-.mobile {
-  .search-result {
-    .title {
-      font-size: 22px;
-    }
-
-    .row {
-      .subtitle {
-        font-size: 15px;
-      }
+  .row {
+    .subtitle {
+      font-size: 15px;
     }
   }
 }

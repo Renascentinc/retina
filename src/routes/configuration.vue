@@ -564,9 +564,7 @@ export default {
   }
 }
 
-// MOBILE
-
-.mobile {
+.mobile .configuration-page {
   .navigation {
     width: 100%;
 
@@ -576,9 +574,7 @@ export default {
   }
 }
 
-// DESKTOP
-
-.desktop {
+.desktop .configuration-page {
   .navigation {
     width: calc(100% - 60px);
 

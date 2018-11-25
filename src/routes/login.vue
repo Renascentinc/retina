@@ -404,9 +404,7 @@ $login-input-border-radius: 5px;
   }
 }
 
-// MOBILE
-
-.mobile {
+.mobile .login-page {
   .top-panel {
     align-items: flex-end;
 
@@ -424,9 +422,7 @@ $login-input-border-radius: 5px;
   }
 }
 
-// DESKTOP
-
-.desktop {
+.desktop .login-page {
   justify-content: space-between;
   overflow-y: auto;
 

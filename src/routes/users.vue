@@ -211,9 +211,7 @@ export default {
   font-size: 28px;
 }
 
-// MOBILE
-
-.mobile {
+.mobile .users-page {
   .users-menu-container {
     overflow-y: hidden;
 
@@ -228,9 +226,7 @@ export default {
   }
 }
 
-// DESKTOP
-
-.desktop {
+.desktop .users-page {
   .users-menu-container {
     display: flex;
     flex-direction: row;

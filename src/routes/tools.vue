@@ -23,12 +23,7 @@
       icon-class="fa-exchange-alt"
       button-text="TRANSFER">
     </extended-fab>
-    <div
-      v-infinite-scroll="loadMore"
-      ref="scrollElement"
-      :infinite-scroll-immediate-check="false"
-      :infinite-scroll-throttle-delay="200"
-      class="tools-menu-container">
+    <div class="tools-menu-container">
       <div
         class="floating-action-bar">
         <extended-fab
@@ -96,8 +91,12 @@
           button-text="FINISH">
         </extended-fab>
       </div>
+
       <div
+        v-infinite-scroll="loadMore"
+        ref="scrollElement"
         :class="{ finalizing: currentState === states.FINALIZING }"
+        infinite-scroll-throttle-delay="200"
         class="tool-scroll-container">
         <add-button
           v-if="$mq === 'mobile' && currentState === states.INITIAL"
@@ -631,10 +630,9 @@ export default {
   }
 
   .tools-menu-container {
-    overflow-y: auto;
+    display: flex;
     background-color: $background-light-gray;
     flex: 1 1 auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   .tool-scroll-container {
@@ -651,16 +649,6 @@ export default {
     display: flex;
     justify-content: center;
     padding-top: 50px;
-  }
-
-  .floating-action-bar {
-    display: inline-block;
-    position: absolute;
-    bottom: 75px;
-    width: 100vw;
-
-    height: 57px;
-    vertical-align: bottom;
   }
 
   .selection-action-bar {
@@ -750,13 +738,8 @@ export default {
       width: 146px;
     }
   }
-
-  .form-control {
-    display: none !important;
-  }
 }
 
-// MOBILE
 .mobile .tools-page {
   .tool-scroll-container {
     padding-bottom: 70px;
@@ -779,33 +762,23 @@ export default {
   }
 }
 
-// DESKTOP
-
 .desktop .tools-page {
   .tools-menu-container {
-    display: flex !important;
-    height: 100%;
-    flex-direction: row;
-
     .tool-scroll-container {
       padding-bottom: 5px;
-      align-content: center;
     }
 
     .floating-action-bar {
-      position: inherit;
-      z-index: 100;
       display: flex;
       justify-content: flex-start;
       flex-direction: column;
-      height: auto;
+      height: 100%;
       padding-top: 15px;
       align-items: center;
-      flex: 1 1;
+      flex: 1 1 auto;
       max-width: 300px;
 
       .extended-fab {
-        position: inherit;
         margin-left: 10px;
         margin-top: 20px;
       }

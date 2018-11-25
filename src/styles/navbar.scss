@@ -42,21 +42,12 @@
   }
 }
 
-// MOBILE
-
-.mobile {
-  .nav-bar {
-    flex-direction: row;
-    justify-content: space-around;
-  }
+.mobile .nav-bar {
+  flex-direction: row;
+  justify-content: space-around;
 }
 
-
-// DESKTOP
-
-.desktop {
-  .nav-bar {
-    flex-direction: column;
-    justify-content: flex-start
-  }
+.desktop .nav-bar {
+  flex-direction: column;
+  justify-content: flex-start;
 }

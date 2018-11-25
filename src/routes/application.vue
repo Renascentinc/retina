@@ -154,8 +154,7 @@ export default {
   mounted () {
     if (this.checkIsNfcEnabled() && window.device.platform === Platforms.ANDROID) {
       // add a noop nfc listener to keep nfc scans on android from bubbling up to the OS
-      window.console.log('setting up application level nfc noop')
-      window.nfc.addNdefListener(() => window.console.log('swallowing nfc read'))
+      window.nfc.addNdefListener(() => 0)
     }
   },
 

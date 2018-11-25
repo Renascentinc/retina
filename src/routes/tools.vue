@@ -633,6 +633,7 @@ export default {
 
   .tools-menu-container {
     display: flex;
+    height: calc(100% - 67px);
     background-color: $background-light-gray;
     flex: 1 1 auto;
   }

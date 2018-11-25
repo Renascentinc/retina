@@ -33,7 +33,7 @@
         class="floating-action-bar">
         <extended-fab
           v-if="$mq === 'desktop' && currentState === states.INITIAL"
-          :on-click="onTransferClick"
+          :on-click="moveToSelectingState"
           class="transfer-btn"
           icon-class="fa-exchange-alt"
           button-text="TRANSFER">
@@ -349,7 +349,7 @@ export default {
       result (response) {
         // depending on how many results are cached the response may be different lengths
         // need to make sure that the infinite scroll loads the correct next page
-        this.infiniteScrollPageNumber = parseInt(response.data.searchTool.length / this.pageSize)
+        this.infiniteScrollPageNumber = Math.ceil(response.data.searchTool.length / this.pageSize)
       }
     }
   },
@@ -440,7 +440,9 @@ export default {
       swal({
         type: 'success',
         title: 'TRANSFER SUCCESS',
-        text: 'Successfully Transferred Tools'
+        text: 'Successfully Transferred Tools',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
 
@@ -448,7 +450,9 @@ export default {
       swal({
         type: 'error',
         title: 'TRANSFER ERROR',
-        text: 'Error Transferring Tools. Please Try Again or Contact Support'
+        text: 'Error Transferring Tools. Please Try Again or Contact Support',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -518,12 +522,11 @@ export default {
       }
 
       this.paginationLoading = true
-      this.infiniteScrollPageNumber++
 
       let options = {
         pagingParameters: {
           page_size: this.pageSize,
-          page_number: this.infiniteScrollPageNumber
+          page_number: this.infiniteScrollPageNumber + 1
         }
       }
 
@@ -654,28 +657,10 @@ export default {
     display: inline-block;
     position: absolute;
     bottom: 75px;
-
-    // TODO: upgrade parcel version (when it become available) so we can uncomment this
-    // handle iPhone X style screens
-    bottom: calc(75px + constant(safe-area-inset-bottom));
-    bottom: calc(75px + env(safe-area-inset-bottom));
     width: 100vw;
 
     height: 57px;
     vertical-align: bottom;
-
-    .transfer-btn {
-      position: absolute;
-      pointer-events: auto;
-      left: calc(50% - 79px);
-      bottom: 3.5px;
-      z-index: 1;
-    }
-
-    .add-btn {
-      position: absolute;
-      right: 20px;
-    }
   }
 
   .selection-action-bar {
@@ -781,20 +766,14 @@ export default {
     }
   }
 
-  .floating-action-bar {
-    display: inline-block;
-    pointer-events: none;
-    position: absolute;
-    bottom: 75px;
-    width: 100%;
-    height: 57px;
-    vertical-align: bottom;
-  }
-
   .transfer-btn {
     position: absolute;
     left: calc(50% - 79px);
     bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
     width: 158px;
     z-index: 100;
   }

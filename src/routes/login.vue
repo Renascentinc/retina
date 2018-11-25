@@ -84,7 +84,7 @@
       <div class="login-action-row">
         <button
           class="reset-password"
-          @click="requestPasswordReset()">
+          @click="requestPasswordReset">
           FORGOT PASSWORD?
         </button>
 
@@ -173,7 +173,9 @@ export default {
       swal({
         type: 'error',
         title: 'RESET FAILURE',
-        text: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support'
+        text: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 

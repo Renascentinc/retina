@@ -37,7 +37,9 @@ export default {
       swal({
         type: 'success',
         title: 'SUCCESS',
-        text: 'Successfully encoded tag'
+        text: 'Successfully encoded tag',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
 
@@ -45,7 +47,9 @@ export default {
       swal({
         type: 'info',
         title: 'LOCKED TAG',
-        text: 'This Tag Has Already Been Encoded and Cannot Be Written Again'
+        text: 'This Tag Has Already Been Encoded and Cannot Be Written Again',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -53,7 +57,9 @@ export default {
       swal({
         type: 'error',
         title: 'ERROR',
-        text: 'An Error Occurred Trying to Write Tag. Please Try Again or Contact Support'
+        text: 'An Error Occurred Trying to Write Tag. Please Try Again or Contact Support',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -65,7 +71,6 @@ export default {
       }
 
       this.pauseNfcListener()
-      this.$modal.hide('ready-to-scan-modal')
     },
 
     _nfcCallback (tag) {
@@ -76,7 +81,6 @@ export default {
       const lock = () => {
         window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
         this.pauseNfcListener()
-        this.$modal.hide('ready-to-scan-modal')
       }
 
       window.nfc.write(record, lock, (reason) => this.onError(reason))
@@ -84,7 +88,7 @@ export default {
 
     onClick () {
       this.startNfcListener()
-      this.$modal.show('ready-to-scan-modal')
+      this.showReadyToScanModal()
     }
   }
 }

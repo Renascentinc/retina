@@ -154,7 +154,8 @@ export default {
   mounted () {
     if (this.checkIsNfcEnabled() && window.device.platform === Platforms.ANDROID) {
       // add a noop nfc listener to keep nfc scans on android from bubbling up to the OS
-      this.startNfcListener()
+      window.console.log('setting up application level nfc noop')
+      window.nfc.addNdefListener(() => window.console.log('swallowing nfc read'))
     }
   },
 
@@ -164,7 +165,7 @@ export default {
       this.closeDrawer()
     },
     sendSupportEmail () {
-      this.window.location = 'mailto:retinasupport@renascentinc.com'
+      window.location = 'mailto:retinasupport@renascentinc.com'
     },
     closeDrawer () {
       this.$refs.drawer.toggle(false)
@@ -194,7 +195,7 @@ export default {
           '<input id="current-password" type="password" class="swal2-input" placeholder="Current Password">' +
           '<input id="password" type="password" class="swal2-input" placeholder="New Password">' +
           '<input id="confirm-password" type="password" class="swal2-input" placeholder="Confirm New Password">',
-        focusConfirm: false,
+        focusConfirm: true,
         showCancelButton: true,
         confirmButtonText: 'RESET',
         cancelButtonText: 'CANCEL',

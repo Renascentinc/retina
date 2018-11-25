@@ -20,7 +20,6 @@ import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
 import VueMq from 'vue-mq'
 import VueSVGIcon from 'vue-svgicon'
-import VueJsModal from 'vue-js-modal'
 import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
@@ -104,7 +103,6 @@ Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
 Vue.use(VueLazyload)
 Vue.use(money, { precision: 2 })
-Vue.use(VueJsModal, { dialog: true })
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 500,
@@ -112,7 +110,7 @@ Vue.use(VueMq, {
   }
 })
 
-attachFastClick(document.body, { tapDelay: 200 })
+attachFastClick(document.body, { tapDelay: 50 })
 
 new Vue({
   router,

@@ -42,7 +42,9 @@ export default {
       swal({
         type: 'info',
         title: 'BLANK TAG',
-        text: 'This Tag is Blank'
+        text: 'This Tag is Blank',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -50,19 +52,21 @@ export default {
       swal({
         type: 'info',
         title: 'NFC NOT AVAILABLE',
-        text: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device'
+        text: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
     nfcCallback (value) {
       if (value) {
+        if (window.device.platform === Platforms.ANDROID) {
+          swal.close()
+        }
+
         this.onScan(value)
       } else {
         this.showBlankTagMsg()
-      }
-
-      if (window.device.platform === Platforms.ANDROID) {
-        this.$modal.hide('ready-to-scan-modal')
       }
     },
 
@@ -71,7 +75,7 @@ export default {
         this.startNfcListener()
 
         if (window.device.platform === Platforms.ANDROID) {
-          this.$modal.show('ready-to-scan-modal')
+          this.showReadyToScanModal()
         }
       } else {
         this.showNfcDisabledMsg()

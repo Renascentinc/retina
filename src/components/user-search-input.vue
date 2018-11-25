@@ -56,5 +56,6 @@ export default {
   font-size: 20px;
   width: 100%;
   padding-left: 10px;
+  border: none;
 }
 </style>

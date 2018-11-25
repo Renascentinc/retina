@@ -117,15 +117,15 @@
                 <div class="contact-item">
                   <fab
                     id="call-btn"
-                    :on-click="phoneNumber() ? phoneCall : () => 0"
-                    :active="!phoneNumber()"
+                    :on-click="phoneNumber ? phoneCall : () => 0"
+                    :active="!phoneNumber"
                     icon-class="fa-phone">
                   </fab>
 
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="phoneNumber() ? phoneCall() : () => 0">
+                    @click="phoneNumber ? phoneCall() : () => 0">
                     {{ formattedPhone }}
                   </button>
                   <input
@@ -141,8 +141,8 @@
                 <div class="contact-item">
                   <fab
                     id="email-btn"
-                    :on-click="email() ? sendEmail : () => 0"
-                    :active="!email()"
+                    :on-click="email ? sendEmail : () => 0"
+                    :active="!email"
                     icon-class="fa-envelope"
                     type="string">
                   </fab>
@@ -150,7 +150,7 @@
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="email() ? sendEmail() : () => 0">
+                    @click="email ? sendEmail() : () => 0">
                     {{ getUser.email }}
                   </button>
                   <input
@@ -272,6 +272,14 @@ export default {
           type: 'domestic'
         }).string
       }
+    },
+
+    phoneNumber () {
+      return this.getUser.phone_number
+    },
+
+    email () {
+      return this.getUser.email
     }
   },
 
@@ -280,7 +288,9 @@ export default {
       swal({
         type: 'success',
         title: 'SUCCESS',
-        text: 'Successfully Delete User'
+        text: 'Successfully Delete User',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
 
@@ -325,6 +335,7 @@ export default {
     toggleChangingRole () {
       this.changingRole = !this.changingRole
     },
+
     transitionToUsers () {
       this.$router.push({ name: 'users' })
     },
@@ -414,14 +425,6 @@ export default {
             this.$apollo.queries.getUser.refetch()
           }
         })
-    },
-
-    phoneNumber () {
-      return this.getUser.phone_number
-    },
-
-    email () {
-      return this.getUser.email
     },
 
     phoneCall () {
@@ -597,13 +600,21 @@ export default {
   }
   .edit {
     position: absolute;
-    bottom: 75px;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
     right: 20px;
   }
 
   .cancel {
     position: absolute;
-    bottom: 75px;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
     right: 80px;
   }
 }

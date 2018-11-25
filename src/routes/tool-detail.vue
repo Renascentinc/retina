@@ -422,6 +422,9 @@ import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
 import swal from 'sweetalert2'
+import nfcMixin from '../mixins/nfc'
+import Platforms from '../utils/platforms'
+import imageCompression from 'browser-image-compression'
 
 export default {
   name: 'ToolDetail',
@@ -434,6 +437,8 @@ export default {
     vSelect,
     NfcEncode
   },
+
+  mixins: [ nfcMixin ],
 
   apollo: {
     getAllConfigurableItem: {
@@ -635,12 +640,22 @@ export default {
     }
   },
 
+  mounted () {
+    if (this.checkIsNfcEnabled() && window.device.platform === Platforms.ANDROID) {
+      // add a noop nfc listener to keep nfc scans on android from bubbling up to the OS
+      window.console.log('setting up tool detail level nfc noop')
+      window.nfc.addNdefListener(() => window.console.log('swallowing nfc read'))
+    }
+  },
+
   methods: {
     showInvalidIDMsg () {
       swal({
         type: 'error',
         title: 'ERROR',
-        text: 'Invalid Tool ID'
+        text: 'Invalid Tool ID',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -648,7 +663,9 @@ export default {
       swal({
         type: 'success',
         title: 'TOOL DECOMISSIONED',
-        text: 'Successfully Decomissioned Tool'
+        text: 'Successfully Decomissioned Tool',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
 
@@ -656,7 +673,9 @@ export default {
       swal({
         type: 'error',
         title: 'ERROR',
-        text: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support'
+        text: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -664,7 +683,9 @@ export default {
       swal({
         type: 'error',
         title: 'ERROR',
-        text: 'An Error Occurred Trying to Save Tool. Please Try Again or Contact Support'
+        text: 'An Error Occurred Trying to Save Tool. Please Try Again or Contact Support',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -769,29 +790,31 @@ export default {
         let file = this.$refs.file.files[0]
 
         if (file) {
-          let fd = new FormData()
+          imageCompression(file, 1, 1920).then(compressedImage => {
+            let fd = new FormData()
 
-          let key = `tool_preview-${new Date().getTime()}`
+            let key = `tool_preview-${new Date().getTime()}`
 
-          fd.append('key', key)
-          fd.append('acl', 'public-read')
-          fd.append('Content-Type', file.type)
-          // TODO enable auth for photo upload
-          // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-          // fd.append('policy', 'YOUR POLICY')
-          // fd.append('signature', 'YOUR SIGNATURE')
+            fd.append('key', key)
+            fd.append('acl', 'public-read')
+            fd.append('Content-Type', compressedImage.type)
+            // TODO enable auth for photo upload
+            // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+            // fd.append('policy', 'YOUR POLICY')
+            // fd.append('signature', 'YOUR SIGNATURE')
 
-          fd.append('file', file)
+            fd.append('file', compressedImage)
 
-          var xhr = new XMLHttpRequest()
+            var xhr = new XMLHttpRequest()
 
-          xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+            xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
 
-          xhr.onload = () => {
-            resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
-          }
+            xhr.onload = () => {
+              resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+            }
 
-          xhr.send(fd)
+            xhr.send(fd)
+          })
         } else {
           resolve(null)
         }
@@ -1319,13 +1342,21 @@ export default {
 
   .edit {
     position: absolute;
-    bottom: 75px;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
     right: 20px;
   }
 
   .cancel {
     position: absolute;
-    bottom: 75px;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
     right: 80px;
   }
 }

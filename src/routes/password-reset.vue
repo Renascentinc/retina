@@ -90,7 +90,9 @@ export default {
       swal({
         type: 'success',
         title: 'SUCCESS',
-        text: 'Successfully Reset Password'
+        text: 'Successfully Reset Password',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
 
@@ -98,7 +100,9 @@ export default {
       swal({
         type: 'error',
         title: 'RESET FAILURE',
-        text: 'There was an error trying to reset your password. Please try again or contact support'
+        text: 'There was an error trying to reset your password. Please try again or contact support',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -106,7 +110,9 @@ export default {
       swal({
         type: 'error',
         title: 'INVALID TOKEN',
-        text: 'Your Reset Token Has Expired. Please Try Resetting Your Password Again'
+        text: 'Your Reset Token Has Expired. Please Try Resetting Your Password Again',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 

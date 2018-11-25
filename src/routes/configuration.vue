@@ -1,5 +1,16 @@
 <template>
   <div class="page configuration-page">
+    <transition name="fade">
+      <div
+        v-if="deleting"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
+      </div>
+    </transition>
+
     <header-card
       :title="title"
       exit-link="/">
@@ -88,6 +99,7 @@ export default {
       replaceBrandWith: null,
       replaceTypeWith: null,
       replaceSupplierWith: null,
+      deleting: false,
       deletedConfig: {},
       ConfigurableItems: ConfigurableItems
     }
@@ -223,7 +235,9 @@ export default {
       swal({
         type: 'warning',
         title: 'INVALID ITEM',
-        text: 'You cannot create a duplicate item'
+        text: 'You cannot create a duplicate item',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -231,7 +245,9 @@ export default {
       swal({
         type: 'warning',
         title: 'BLANK ITEM',
-        text: 'You cannot create a blank item'
+        text: 'You cannot create a blank item',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
 
@@ -239,7 +255,9 @@ export default {
       swal({
         type: 'success',
         title: 'SUCCESS',
-        text: 'Item has been deleted'
+        text: 'Item has been deleted',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
 
@@ -247,7 +265,9 @@ export default {
       swal({
         type: 'error',
         title: 'ERROR',
-        text: 'There was an issue performing the delete. Please try again or contact support.'
+        text: 'There was an issue performing the delete. Please try again or contact support.',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -325,7 +345,11 @@ export default {
             inputValidator: (value) => {
               return !value && `New ${this.title.slice(0, -1)} required`
             }
-          }).then(({ value }) => {
+          }).then(({ value, dismiss }) => {
+            if (dismiss) {
+              return
+            }
+
             if (this.page === ConfigurableItems.BRAND) {
               this.replaceBrandWith = value
             } else if (this.page === ConfigurableItems.PURCHASED_FROM) {
@@ -340,8 +364,9 @@ export default {
     },
 
     finalizeDelete () {
-      this.replacementList.forEach(tool => {
-        this.$apollo
+      this.deleting = true
+      Promise.all(this.replacementList.map(tool => {
+        return this.$apollo
           .mutate({
             mutation: gql`
                 mutation updateTool($tool: UpdatedTool!) {
@@ -368,12 +393,13 @@ export default {
               }
             }
           })
-          .then(result => {
-            this.deleteConfig(this.deletedConfig)
-            this.deletedConfig = {}
-          }).catch(() => {
-            this.showDeleteError()
-          })
+      })).then(result => {
+        this.deleteConfig(this.deletedConfig)
+        this.deletedConfig = {}
+      }).catch(() => {
+        this.showDeleteError()
+      }).finally(() => {
+        this.deleting = false
       })
     },
 

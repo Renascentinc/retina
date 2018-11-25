@@ -357,6 +357,7 @@ import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
 import NfcEncode from '../components/nfc-encode'
 import swal from 'sweetalert2'
+import imageCompression from 'browser-image-compression'
 
 export default {
   name: 'NewTool',
@@ -417,7 +418,7 @@ export default {
       price: null,
       photo: null,
       status: statuses[1],
-      currentState: 2,
+      currentState: 1,
       purchaseDate: null,
       datePickerVisibility: 'hidden',
       getAllConfigurableItem: [],
@@ -470,14 +471,18 @@ export default {
       swal({
         type: 'success',
         title: 'SUCCESS',
-        text: 'Successfully Added Tool'
+        text: 'Successfully Added Tool',
+        timer: 1500,
+        showConfirmButton: false
       })
     },
     showErrorMsg () {
       swal({
         type: 'error',
         title: 'SAVE FAILURE',
-        text: 'There was an issue saving new tool. Please try again or contact support'
+        text: 'There was an issue saving new tool. Please try again or contact support',
+        timer: 2000,
+        showConfirmButton: false
       })
     },
 
@@ -497,30 +502,6 @@ export default {
       this.$refs.file.value = ''
       this.imgSrc = null
       this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
-    },
-
-    uploadPhoto () {
-      let file = this.$refs.file.files[0]
-      let fd = new FormData()
-
-      let key = `tool_preview-${new Date().getTime()}`
-
-      fd.append('key', key)
-      fd.append('acl', 'public-read')
-      fd.append('Content-Type', file.type)
-      // TODO enable auth for photo upload
-      // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-      // fd.append('policy', 'YOUR POLICY')
-      // fd.append('signature', 'YOUR SIGNATURE')
-
-      fd.append('file', file)
-
-      var xhr = new XMLHttpRequest()
-
-      xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
-
-      xhr.send(fd)
-      return `https://s3.us-east-2.amazonaws.com/retina-images/${key}`
     },
 
     getConfigurableItemsForType (type) {
@@ -550,7 +531,7 @@ export default {
     resetData () {
       this.brand = null
       this.type = null
-      this.owner = null
+      this.owner = JSON.parse(window.localStorage.getItem('currentUser'))
       this.modelNumber = null
       this.serialNumber = null
       this.modelYear = null
@@ -558,8 +539,9 @@ export default {
       this.price = null
       this.photo = null
       this.tool = null
-      this.status = null
+      this.status = this.statuses[0]
       this.purchaseDate = null
+      this.imgSrc = null
     },
 
     transitionToToolInfo (toolId) {
@@ -597,29 +579,31 @@ export default {
         let file = this.$refs.file.files[0]
 
         if (file) {
-          let fd = new FormData()
+          imageCompression(file, 1, 1920).then(compressedImage => {
+            let fd = new FormData()
 
-          let key = `tool_preview-${new Date().getTime()}`
+            let key = `tool_preview-${new Date().getTime()}`
 
-          fd.append('key', key)
-          fd.append('acl', 'public-read')
-          fd.append('Content-Type', file.type)
-          // TODO enable auth for photo upload
-          // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-          // fd.append('policy', 'YOUR POLICY')
-          // fd.append('signature', 'YOUR SIGNATURE')
+            fd.append('key', key)
+            fd.append('acl', 'public-read')
+            fd.append('Content-Type', compressedImage.type)
+            // TODO enable auth for photo upload
+            // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+            // fd.append('policy', 'YOUR POLICY')
+            // fd.append('signature', 'YOUR SIGNATURE')
 
-          fd.append('file', file)
+            fd.append('file', compressedImage)
 
-          var xhr = new XMLHttpRequest()
+            var xhr = new XMLHttpRequest()
 
-          xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+            xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
 
-          xhr.onload = () => {
-            resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
-          }
+            xhr.onload = () => {
+              resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+            }
 
-          xhr.send(fd)
+            xhr.send(fd)
+          })
         } else {
           resolve(null)
         }

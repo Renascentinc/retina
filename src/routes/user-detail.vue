@@ -663,9 +663,11 @@ export default {
   }
 }
 
-// MOBILE
-
 .mobile .user-detail-page {
+  .actions {
+    justify-content: space-around;
+  }
+
   .header {
     width: 100%;
     padding-bottom: 12px;
@@ -679,7 +681,6 @@ export default {
   }
 }
 
-// DESKTOP
 .desktop .user-detail-page {
   .info-menu-container {
     display: flex;

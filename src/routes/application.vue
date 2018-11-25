@@ -266,7 +266,9 @@ export default {
             swal({
               type: 'success',
               title: 'SUCCESS',
-              text: 'Successfully Changed Password'
+              text: 'Successfully Changed Password',
+              timer: 1500,
+              showConfirmButton: false
             })
           } else {
             this.changePassword()
@@ -276,7 +278,9 @@ export default {
           swal({
             type: 'error',
             title: 'ERROR',
-            text: 'There was an error changing your password. Please try again or contact support'
+            text: 'There was an error changing your password. Please try again or contact support',
+            timer: 2000,
+            showConfirmButton: false
           })
         })
       })

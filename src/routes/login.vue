@@ -209,7 +209,9 @@ export default {
 
           swal({
             type: 'success',
-            text: 'Instructions for resetting your password will be sent to your email'
+            text: 'Instructions for resetting your password will be sent to your email',
+            timer: 2000,
+            showConfirmButton: false
           })
         }
       })

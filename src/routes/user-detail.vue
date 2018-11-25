@@ -323,7 +323,19 @@ export default {
                 role: this.getUser.role,
                 status: this.getUser.status
               }
-            }
+            },
+            refetchQueries: [{
+              query: gql`
+                query {
+                  getAllUser {
+                    id
+                    first_name
+                    last_name
+                    role
+                  }
+                }
+              `
+            }]
           }).then(() => {
             this.showSuccessfulDeleteMsg()
             this.transitionToUsers()
@@ -390,6 +402,38 @@ export default {
             .then(result => {
               if (result) {
                 this.$apollo.queries.getUser.refetch()
+                let {
+                  id,
+                  first_name,
+                  last_name,
+                  email,
+                  phone_number,
+                  role,
+                  status
+                } = result.data.getUser
+                this.$apollo.provider.clients.defaultClient.writeFragment({
+                  id: `${id}User`,
+                  fragment: gql`
+                   fragment patchUser on User {
+                     first_name
+                     last_name
+                     email
+                     phone_number
+                     role
+                     status
+                     __typename
+                   }
+                  `,
+                  data: {
+                    first_name,
+                    last_name,
+                    email,
+                    phone_number,
+                    role,
+                    status,
+                    __typename: 'User'
+                  }
+                })
                 this.editState = false
               }
             })

@@ -915,9 +915,9 @@ export default {
             return !value && `Decomission Reason is Required`
           }
         }).then(result => {
-          if (result.value) {
-            newStatus = newStatus.replace(/ /g, '_').toUpperCase()
+          newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
+          if (result.value) {
             this.$apollo.mutate({
               mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
               decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
@@ -938,6 +938,7 @@ export default {
           }
         })
       } else {
+        newStatus = newStatus.replace(/ /g, '_').toUpperCase()
         this.saveStatusChange(newStatus)
       }
     },
@@ -975,10 +976,23 @@ export default {
         })
         .then(status => {
           this.getTool.status = status.data.updateTool.status
+          this.$apollo.provider.clients.defaultClient.writeFragment({
+            id: `${this.getTool.id}Tool`,
+            fragment: gql`
+             fragment patchToolStatus on Tool {
+               status
+               __typename
+             }
+            `,
+            data: {
+              status: this.getTool.status,
+              __typename: 'Tool'
+            }
+          })
         })
         .catch(() => {
           this.getTool.status = currentStatus
-          // TODO: pop toast notifying user that request failed.
+          this.showSaveErrorMsg()
         })
     }
   }

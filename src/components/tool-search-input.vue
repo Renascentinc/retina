@@ -225,7 +225,6 @@ export default {
 
   .item-category {
     color: gray;
-    text-transform: capitalize;
     flex: 0 0 95px;
     text-align: right;
     padding-right: 5px;

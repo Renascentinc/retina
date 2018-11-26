@@ -16,6 +16,7 @@
     "clean-start": "rm -rf .cache && yarn start",
     "test": "eslint --ext .js,.vue src",
     "build": "changeFile=false parcel build index.html",
+    "build-production": "ENVIRONMENT=prod changeFile=false parcel build index.html",
     "build-cordova": "parcel build index.html --out-dir=www --public-url=./ --no-minify",
     "android": "yarn build-cordova && cordova prepare && cordova run android",
     "ios": "yarn build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios --buildFlag='-UseModernBuildSystem=0'"

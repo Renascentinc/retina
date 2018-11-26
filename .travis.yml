@@ -13,7 +13,7 @@ install:
   - yarn --pure-lockfile
 
 before_deploy:
-  - yarn build
+  - if [ "$TRAVIS_BRANCH" = master ]; then yarn build-production; else yarn build; fi
 
 deploy:
   - provider: s3

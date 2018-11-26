@@ -23,6 +23,16 @@
     border-radius: 5px;
     max-width: 100% !important;
 
+    .autocomplete {
+      max-height: 150px;
+      overflow: auto;
+
+      li {
+        overflow: hidden;
+        height: 30px;
+      }
+    }
+
     .selected-item {
       background-color: $renascent-red;
 

@@ -62,7 +62,7 @@
         </div>
         <div class="input-group-container">
           <input
-            v-validate="{ required: true, numeric: true, min: 7 }"
+            v-validate="{ required: true, numeric: true, min: 10 }"
             v-model="phoneNumber"
             name="phone number"
             class="light-input"
@@ -91,6 +91,7 @@
             v-validate:role="'required'"
             v-model="role"
             :options="roles"
+            :filterable="false"
             label="name"
             class="dark-input"
             placeholder="Role"
@@ -289,7 +290,19 @@ export default {
             role: this.role.id,
             status: 'ACTIVE'
           }
-        }
+        },
+        refetchQueries: [{
+          query: gql`
+            query {
+              getAllUser {
+                id
+                first_name
+                last_name
+                role
+              }
+            }
+          `
+        }]
       }).then(result => {
         this.getUser = result.data.createUser
       })
@@ -326,7 +339,8 @@ export default {
 
     .new-user-input-card {
       display: flex;
-      flex: 1 1 auto;
+      flex: 1 0 434px;
+      max-height: 465px;
       flex-direction: column;
       box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
       margin: 10px 10px 0 10px;

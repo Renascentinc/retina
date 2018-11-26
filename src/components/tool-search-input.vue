@@ -7,6 +7,7 @@
       v-model="tag"
       :tags="tags"
       :autocomplete-items="filteredItems"
+      :add-on-blur="false"
       placeholder="Search"
       @tags-changed="tagsChanged">
 
@@ -119,7 +120,7 @@ export default {
     },
 
     filteredItems () {
-      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
+      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag.toLowerCase()) > -1)
     },
 
     locations () {
@@ -156,12 +157,22 @@ export default {
       return searchItems
     }
   },
+
+  watch: {
+    tag (fuzzySearch) {
+      if (!fuzzySearch) {
+        this.tagsChanged(this.tags)
+      }
+    }
+  },
   methods: {
     tagsChanged (newTags) {
       let fuzzySearch = null
       if (newTags.some(tag => !tag.name)) {
         fuzzySearch = newTags.pop().text
         this.tag = fuzzySearch
+        document.querySelector('.fa-search').click()
+        document.querySelector('.new-tag-input').blur()
       }
       this.tags = newTags
       this.updateTags(newTags, fuzzySearch)
@@ -214,7 +225,6 @@ export default {
 
   .item-category {
     color: gray;
-    text-transform: capitalize;
     flex: 0 0 95px;
     text-align: right;
     padding-right: 5px;

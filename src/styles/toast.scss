@@ -1,23 +1,30 @@
-.swal-modal {
+.swal2-modal {
   width: calc(100% - 30px);
   max-width: 350px;
 
-  .swal-icon {
-    margin-top: 15px !important;
-    margin: 5px auto;
+  .swal2-icon {
+    margin: 5px auto 20px auto;
+
+    &.swal2-info {
+      border-color: $renascent-dark-gray;
+      color: $renascent-dark-gray;
+    }
   }
 
-  .swal-text {
+  .swal2-input:focus {
+    border: 1px solid transparent !important;
+  }
+
+  .swal2-text {
     text-align: center;
   }
 
-  .swal-footer {
+  .swal2-footer {
     display: flex;
     justify-content: center;
+  }
 
-    .swal-button {
-      background-color: $renascent-dark-gray;
-      outline: none;
-    }
+  button {
+    background-color: $renascent-dark-gray;
   }
 }

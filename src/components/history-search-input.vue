@@ -63,8 +63,7 @@ export default {
         getAllTool {
           id
         }
-      }`,
-      fetchPolicy: 'cache-and-network'
+      }`
     },
 
     getAllLocation: gql`query {
@@ -123,7 +122,7 @@ export default {
     },
 
     filteredItems () {
-      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
+      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag) > -1)
     },
 
     locations () {
@@ -195,7 +194,6 @@ export default {
 
   .item-category {
     color: gray;
-    text-transform: capitalize;
     flex: 0 0 95px;
     text-align: right;
     padding-right: 5px;

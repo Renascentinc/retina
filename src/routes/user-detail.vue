@@ -20,6 +20,14 @@
           :button-text="editState ? 'SAVE CHANGES' : 'EDIT USER'">
         </extended-fab>
 
+        <extended-fab
+          v-if="editState && $mq === 'desktop'"
+          :on-click="cancelEdit"
+          :disabled="changingRole"
+          icon-class="fa-times"
+          button-text="CANCEL">
+        </extended-fab>
+
         <button-dropdown
           v-if="$mq === 'desktop' && isAdmin"
           :on-click="updateRole"
@@ -52,8 +60,7 @@
               v-validate="'required'"
               v-model="newFirstName"
               name="first name"
-              class="name light-input"
-              value="`${getUser.first_name}">
+              class="name light-input">
             <div class="error-container">
               <span
                 v-show="errors.has('first name')"
@@ -65,8 +72,7 @@
               v-validate="'required'"
               v-model="newLastName"
               class="name light-input"
-              name="last name"
-              value="getUser.last_name">
+              name="last name">
             <div class="error-container">
               <span
                 v-show="errors.has('last name')"
@@ -111,32 +117,32 @@
                 <div class="contact-item">
                   <fab
                     id="call-btn"
-                    :on-click="phoneNumber() ? phoneCall : () => 0"
-                    :active="!phoneNumber()"
+                    :on-click="phoneNumber ? phoneCall : () => 0"
+                    :active="!phoneNumber"
                     icon-class="fa-phone">
                   </fab>
 
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="phoneNumber() ? phoneCall() : () => 0">
+                    @click="phoneNumber ? phoneCall() : () => 0">
                     {{ formattedPhone }}
                   </button>
                   <input
-                    v-validate="{required: true, numeric: true, min: 7}"
+                    v-validate="{required: true, numeric: true, min: 10}"
                     v-if="editState"
                     v-model="newPhone"
                     name="phone"
                     class="contact-text light-input"
-                    value="getUser.phone_number"
+
                     type="number">
                 </div>
 
                 <div class="contact-item">
                   <fab
                     id="email-btn"
-                    :on-click="email() ? sendEmail : () => 0"
-                    :active="!email()"
+                    :on-click="email ? sendEmail : () => 0"
+                    :active="!email"
                     icon-class="fa-envelope"
                     type="string">
                   </fab>
@@ -144,7 +150,7 @@
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="email() ? sendEmail() : () => 0">
+                    @click="email ? sendEmail() : () => 0">
                     {{ getUser.email }}
                   </button>
                   <input
@@ -152,8 +158,7 @@
                     v-if="editState"
                     v-model="newEmail"
                     name="email"
-                    class="contact-text light-input"
-                    value="getUser.email">
+                    class="contact-text light-input">
                 </div>
               </div>
             </div>
@@ -165,14 +170,32 @@
               </span>
             </div>
           </div>
+          <div
+            v-if="editState && isAdmin && !isCurrentUser"
+            class="container search-result"
+            @click="deactivateUser">
+            <div class="default-text">
+              <i class="fas fa-times"></i>
+              DELETE USER
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <fab
+      v-if="editState && $mq === 'mobile'"
+      :on-click="cancelEdit"
+      icon-class="fa-times"
+      class="cancel">
+    </fab>
+
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
-      class="edit"></fab>
+      class="edit">
+    </fab>
   </div>
 </template>
 
@@ -183,6 +206,7 @@ import ExtendedFab from '../components/extended-fab'
 import ButtonDropdown from '../components/button-dropdown'
 import Roles from '../utils/roles'
 import PhoneNumberFormatter from 'phone-number-formats'
+import swal from 'sweetalert2'
 
 export default {
   name: 'ToolDetail',
@@ -212,9 +236,7 @@ export default {
         let options = {}
         options.user_id = this.$router.currentRoute.params.userId
         return options
-      },
-
-      fetchPolicy: 'cache-and-network'
+      }
     }
   },
 
@@ -232,19 +254,16 @@ export default {
   },
 
   computed: {
+    isCurrentUser () {
+      return JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
+    },
+
     isAdmin () {
-      return (
-        JSON.parse(window.localStorage.getItem('currentUser')).role ===
-        Roles.ADMIN
-      )
+      return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
     },
 
     canEdit () {
-      return (
-        this.isAdmin ||
-        JSON.parse(window.localStorage.getItem('currentUser')).id ===
-          this.getUser.id
-      )
+      return this.isAdmin || this.isCurrentUser
     },
 
     formattedPhone () {
@@ -253,15 +272,88 @@ export default {
           type: 'domestic'
         }).string
       }
+    },
+
+    phoneNumber () {
+      return this.getUser.phone_number
+    },
+
+    email () {
+      return this.getUser.email
     }
   },
 
   methods: {
+    showSuccessfulDeleteMsg () {
+      swal({
+        type: 'success',
+        title: 'SUCCESS',
+        text: 'Successfully Delete User',
+        timer: 1500,
+        showConfirmButton: false
+      })
+    },
+
+    deactivateUser () {
+      swal({
+        type: 'warning',
+        title: 'CONFIRM DELETE USER',
+        text: `Are You Sure You Want To Delete ${this.getUser.first_name} ${this.getUser.last_name}? This Action Cannot Be Undone`,
+        reverseButtons: true,
+        showCancelButton: true,
+        confirmButtonText: 'DELETE',
+        cancelButtonText: 'CANCEL',
+        confirmButtonColor: '#CE352F'
+      }).then(result => {
+        if (result.value) {
+          this.getUser.status = 'INACTIVE'
+          this.$apollo.mutate({
+            mutation: gql`mutation deleteUser($updatedUser: UpdatedUser!) {
+              updateUser(updatedUser: $updatedUser) {
+                id
+              }
+            }`,
+            variables: {
+              updatedUser: {
+                id: this.getUser.id,
+                first_name: this.newFirstName,
+                last_name: this.newLastName,
+                email: this.newEmail,
+                phone_number: this.newPhone,
+                role: this.getUser.role,
+                status: this.getUser.status
+              }
+            },
+            refetchQueries: [{
+              query: gql`
+                query {
+                  getAllUser {
+                    id
+                    first_name
+                    last_name
+                    role
+                  }
+                }
+              `
+            }]
+          }).then(() => {
+            this.showSuccessfulDeleteMsg()
+            this.transitionToUsers()
+          })
+        }
+      })
+    },
+
     toggleChangingRole () {
       this.changingRole = !this.changingRole
     },
+
     transitionToUsers () {
       this.$router.push({ name: 'users' })
+    },
+
+    cancelEdit () {
+      this.editState = false
     },
 
     toggleEditState () {
@@ -309,7 +401,39 @@ export default {
             })
             .then(result => {
               if (result) {
-                this.$apollo.queries.getUser.refresh()
+                this.$apollo.queries.getUser.refetch()
+                let {
+                  id,
+                  first_name,
+                  last_name,
+                  email,
+                  phone_number,
+                  role,
+                  status
+                } = result.data.getUser
+                this.$apollo.provider.clients.defaultClient.writeFragment({
+                  id: `${id}User`,
+                  fragment: gql`
+                   fragment patchUser on User {
+                     first_name
+                     last_name
+                     email
+                     phone_number
+                     role
+                     status
+                     __typename
+                   }
+                  `,
+                  data: {
+                    first_name,
+                    last_name,
+                    email,
+                    phone_number,
+                    role,
+                    status,
+                    __typename: 'User'
+                  }
+                })
                 this.editState = false
               }
             })
@@ -342,17 +466,9 @@ export default {
         })
         .then(result => {
           if (result) {
-            this.$apollo.queries.getUser.refresh()
+            this.$apollo.queries.getUser.refetch()
           }
         })
-    },
-
-    phoneNumber () {
-      return this.getUser.phone_number || null
-    },
-
-    email () {
-      return this.getUser.email || null
     },
 
     phoneCall () {
@@ -528,14 +644,30 @@ export default {
   }
   .edit {
     position: absolute;
-    bottom: 75px;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
     right: 20px;
+  }
+
+  .cancel {
+    position: absolute;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    right: 80px;
   }
 }
 
-// MOBILE
+.mobile .user-detail-page {
+  .actions {
+    justify-content: space-around;
+  }
 
-.mobile {
   .header {
     width: 100%;
     padding-bottom: 12px;
@@ -549,8 +681,7 @@ export default {
   }
 }
 
-// DESKTOP
-.desktop {
+.desktop .user-detail-page {
   .info-menu-container {
     display: flex;
     flex-direction: row;

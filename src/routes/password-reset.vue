@@ -48,7 +48,7 @@
 
 <script>
 import gql from 'graphql-tag'
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 import ExtendedFab from '../components/extended-fab.vue'
 import ApiStatusCodes from '../utils/api-status-codes'
 
@@ -59,6 +59,25 @@ export default {
     ExtendedFab
   },
 
+  apollo: {
+    isPasswordResetCodeValid: {
+      query: gql`query checkResetCode($password_reset_code: ID!) {
+        isPasswordResetCodeValid(password_reset_code: $password_reset_code)
+      }`,
+      variables () {
+        return {
+          password_reset_code: this.$route.query.code
+        }
+      },
+      result (response) {
+        if (!response.data.isPasswordResetCodeValid) {
+          this.showInvalidTokenError()
+          this.$router.push({ path: '/login' })
+        }
+      }
+    }
+  },
+
   data () {
     return {
       password: '',
@@ -66,25 +85,37 @@ export default {
     }
   },
 
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Successfully Reset Password'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'RESET FAILURE',
-      message: 'There was an error trying to reset your password. Please try again or contact support'
-    },
-    showInvalidTokenError: {
-      type: VueNotifications.types.error,
-      title: 'INVALID TOKEN',
-      message: 'Your Reset Token Has Expired. Please Try Resetting Your Password Again'
-    }
-  },
-
   methods: {
+    showSuccessMsg () {
+      swal({
+        type: 'success',
+        title: 'SUCCESS',
+        text: 'Successfully Reset Password',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
+    showErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'RESET FAILURE',
+        text: 'There was an error trying to reset your password. Please try again or contact support',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
+    showInvalidTokenError () {
+      swal({
+        type: 'error',
+        title: 'INVALID TOKEN',
+        text: 'Your Reset Token Has Expired. Please Try Resetting Your Password Again',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
     attemptPasswordReset () {
       this.$validator.validate().then(result => {
         if (result) {
@@ -104,7 +135,7 @@ export default {
               this.showErrorMsg()
             }
           }).catch(response => {
-            if (response.graphQLErrors[0].extensions.code === ApiStatusCodes.UNAUTHENTICATED) {
+            if (response && response.graphQLErrors.length && response.graphQLErrors[0].extensions.code === ApiStatusCodes.UNAUTHENTICATED) {
               this.showInvalidTokenError()
             } else {
               this.showErrorMsg()
@@ -129,7 +160,6 @@ export default {
   .input-card {
     display: flex;
     flex-direction: column;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
     margin: 10px 10px 0 10px;
     background-color: white;
     align-items: center;

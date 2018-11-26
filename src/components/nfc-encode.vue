@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import VueNotifications from 'vue-notifications'
-import nfc from '../mixins/nfc'
+import swal from 'sweetalert2'
+import nfcMixin from '../mixins/nfc'
 import '../assets/icons/svg/nfc'
 
 export default {
   name: 'NfcEncode',
 
-  mixins: [nfc],
+  mixins: [nfcMixin],
 
   props: {
     toolId: {
@@ -32,25 +32,37 @@ export default {
     }
   },
 
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Successfully encoded tag'
-    },
-    showInfoMsg: {
-      type: VueNotifications.types.info,
-      title: 'LOCKED TAG',
-      message: 'This Tag Has Already Been Encoded and Cannot Be Written Again'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'ERROR',
-      message: 'An Error Occurred Trying to Write Tag. Please Try Again or Contact Support'
-    }
-  },
-
   methods: {
+    showSuccessMsg () {
+      swal({
+        type: 'success',
+        title: 'SUCCESS',
+        text: 'Successfully encoded tag',
+        timer: 1500,
+        showConfirmButton: false
+      })
+    },
+
+    showInfoMsg () {
+      swal({
+        type: 'info',
+        title: 'LOCKED TAG',
+        text: 'This Tag Has Already Been Encoded and Cannot Be Written Again',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
+    showErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'An Error Occurred Trying to Write Tag. Please Try Again or Contact Support',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
     onError (reason) {
       if (reason === 'Tag is read only') {
         this.showInfoMsg()
@@ -59,7 +71,6 @@ export default {
       }
 
       this.pauseNfcListener()
-      this.$modal.hide('ready-to-scan-modal')
     },
 
     _nfcCallback (tag) {
@@ -70,7 +81,6 @@ export default {
       const lock = () => {
         window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
         this.pauseNfcListener()
-        this.$modal.hide('ready-to-scan-modal')
       }
 
       window.nfc.write(record, lock, (reason) => this.onError(reason))
@@ -78,7 +88,7 @@ export default {
 
     onClick () {
       this.startNfcListener()
-      this.$modal.show('ready-to-scan-modal')
+      this.showReadyToScanModal()
     }
   }
 }

@@ -1,5 +1,16 @@
 <template>
   <div class="page tool-detail-page">
+    <transition name="fade">
+      <div
+        v-if="saving"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
+      </div>
+    </transition>
+
     <div class="info-menu-container">
       <div
         class="floating-action-bar">
@@ -21,6 +32,14 @@
         </extended-fab>
 
         <extended-fab
+          v-if="editState && $mq === 'desktop'"
+          :on-click="cancelEdit"
+          :disabled="changingStatus"
+          icon-class="fa-times"
+          button-text="CANCEL">
+        </extended-fab>
+
+        <extended-fab
           v-if="$mq === 'desktop' && isTransferable"
           :disabled="editState || changingStatus"
           :on-click="toggleTransferStatus"
@@ -39,7 +58,6 @@
         </button-dropdown>
       </div>
 
-      <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
       <div class="header-cards-container">
         <div class="header">
           <router-link
@@ -144,7 +162,7 @@
         <div class="cards">
           <div class="card owner-card">
             <div class="card-title">
-              Owner
+              Assigned To
             </div>
             <div class="card-details owner-details">
               <div class="user-symbol">
@@ -192,7 +210,8 @@
             </div>
             <div class="card-details general-details">
               <span class="general-label">Retina ID</span>
-              <span class="general-data"> {{ getTool.id || '-' }} </span>
+              <span class="general-data"> {{ getTool.id }} </span>
+              <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
 
               <span class="general-label">Serial Number</span>
               <span
@@ -306,12 +325,11 @@
                 class="general-data"> ${{ formattedPrice }} </span>
 
               <input
+                v-money="moneyInputConfig"
                 v-if="editState"
                 v-model="newPrice"
                 name="newPrice"
-                class="light-input"
-                placeholder="Price"
-                type="number">
+                class="light-input">
             </div>
           </div>
 
@@ -355,57 +373,42 @@
                 {{ getTool.photo ? 'UPDATE PHOTO' : 'Add Photo' }}
               </label>
 
-              <img
+              <div
                 v-if="newImgSrc"
-                :src="newImgSrc"
-                class="img-preview">
+                class="image-container">
+                <img
+                  v-if="newImgSrc"
+                  :src="newImgSrc"
+                  class="img-preview">
+              </div>
+
+              <extended-fab
+                v-if="newImgSrc"
+                :on-click="deletePhoto"
+                :outline-display="true"
+                class="delete-photo-efab"
+                icon-class="fa-times"
+                button-text="REMOVE PHOTO">
+              </extended-fab>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <fab
+      v-if="editState && $mq === 'mobile'"
+      :on-click="cancelEdit"
+      icon-class="fa-times"
+      class="cancel">
+    </fab>
+
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit">
     </fab>
-
-    <modal
-      :width="350"
-      :height="300"
-      class="confirm-oos-modal"
-      name="confirm-oos-modal">
-      <div class="modal-content">
-        <span class="header-text"> CONFIRM OUT OF SERVICE </span>
-
-        <span class="sub-header-text">This Action is Permanent and Cannot Be Undone</span>
-
-        <textarea
-          v-model="reason"
-          class="light-input reason-text"
-          placeholder="Please Explain Why This Tool Is Being Moved To Out of Service">
-        </textarea>
-
-        <div class="oos-actions">
-          <extended-fab
-            :on-click="() => cancelDecomission()"
-            class="oos-btn cancel-oos-btn"
-            icon-class="fa-times"
-            button-text="CANCEL">
-          </extended-fab>
-
-          <extended-fab
-            :on-click="() => decomissionTool()"
-            :disabled="!reason"
-            :outline-display="true"
-            class="oos-btn decomission-btn"
-            icon-class=""
-            button-text="DECOMISSION">
-          </extended-fab>
-        </div>
-      </div>
-    </modal>
   </div>
 </template>
 
@@ -418,7 +421,10 @@ import vSelect from '../components/select'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
+import nfcMixin from '../mixins/nfc'
+import Platforms from '../utils/platforms'
+import imageCompression from 'browser-image-compression'
 
 export default {
   name: 'ToolDetail',
@@ -432,18 +438,7 @@ export default {
     NfcEncode
   },
 
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'TOOL DECOMISSIONED',
-      message: 'Successfully Decomissioned Tool'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'ERROR',
-      message: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support'
-    }
-  },
+  mixins: [ nfcMixin ],
 
   apollo: {
     getAllConfigurableItem: {
@@ -456,8 +451,7 @@ export default {
             sanctioned
           }
         }
-      `,
-      fetchPolicy: 'cache-and-network'
+      `
     },
 
     getTool: {
@@ -508,7 +502,12 @@ export default {
         options.tool_id = this.$router.currentRoute.params.toolId
         return options
       },
-      fetchPolicy: 'cache-and-network'
+      result (apiResult) {
+        if (!apiResult.data.getTool) {
+          this.showInvalidIDMsg()
+          this.$router.push({ path: '/tools' })
+        }
+      }
     }
   },
 
@@ -528,9 +527,18 @@ export default {
       newPurchaseDate: null,
       newPrice: null,
       oosStatus: null,
+      saving: false,
       datePickerVisibility: 'hidden',
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+      },
+      moneyInputConfig: {
+        decimal: '.',
+        thousands: ',',
+        prefix: '$ ',
+        suffix: '',
+        precision: 2,
+        masked: false
       }
     }
   },
@@ -632,7 +640,54 @@ export default {
     }
   },
 
+  mounted () {
+    if (this.checkIsNfcEnabled() && window.device.platform === Platforms.ANDROID) {
+      // add a noop nfc listener to keep nfc scans on android from bubbling up to the OS
+      window.nfc.addNdefListener(() => 0)
+    }
+  },
+
   methods: {
+    showInvalidIDMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'Invalid Tool ID',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
+    showSuccessMsg () {
+      swal({
+        type: 'success',
+        title: 'TOOL DECOMISSIONED',
+        text: 'Successfully Decomissioned Tool',
+        timer: 1500,
+        showConfirmButton: false
+      })
+    },
+
+    showDecomissionErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
+    showSaveErrorMsg () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'An Error Occurred Trying to Save Tool. Please Try Again or Contact Support',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
     toggleDatepicker () {
       if (this.datePickerVisibility === 'visible') {
         this.datePickerVisibility = 'hidden'
@@ -641,10 +696,10 @@ export default {
       }
     },
 
-    cancelDecomission () {
-      this.$modal.hide('confirm-oos-modal')
-      this.reason = null
-      this.oosStatus = null
+    deletePhoto () {
+      this.$refs.file.value = ''
+      this.newImgSrc = null
+      this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
     },
 
     toggleChangingStatus () {
@@ -664,6 +719,10 @@ export default {
       return this.getAllConfigurableItem.filter(
         item => item.type === type && item.sanctioned
       )
+    },
+
+    cancelEdit () {
+      this.editState = false
     },
 
     toggleEditState () {
@@ -708,32 +767,12 @@ export default {
       })
     },
 
-    decomissionTool () {
-      this.$apollo.mutate({
-        mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
-          decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
-            id
-          }
-        }`,
-        variables: {
-          tool_id: this.getTool.id,
-          decomissioned_status: this.oosStatus,
-          decomission_reason: this.reason
-        }
-      }).then(() => {
-        this.$modal.hide('confirm-oos-modal')
-        this.showSuccessMsg()
-        this.$router.push({ path: '/tools' })
-      }).catch(() => {
-        this.showErrorMsg()
-      })
-    },
-
     updateImageDisplay () {
       this.newImgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
     },
 
     saveTool () {
+      this.saving = true
       let brandRequest =
         this.newBrand && this.newBrand.isNewConfigurableItem
           ? this.createNewConfigurableItem(this.newBrand)
@@ -750,29 +789,31 @@ export default {
         let file = this.$refs.file.files[0]
 
         if (file) {
-          let fd = new FormData()
+          imageCompression(file, 1, 1920).then(compressedImage => {
+            let fd = new FormData()
 
-          let key = `tool_preview-${new Date().getTime()}`
+            let key = `tool_preview-${new Date().getTime()}`
 
-          fd.append('key', key)
-          fd.append('acl', 'public-read')
-          fd.append('Content-Type', file.type)
-          // TODO enable auth for photo upload
-          // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-          // fd.append('policy', 'YOUR POLICY')
-          // fd.append('signature', 'YOUR SIGNATURE')
+            fd.append('key', key)
+            fd.append('acl', 'public-read')
+            fd.append('Content-Type', compressedImage.type)
+            // TODO enable auth for photo upload
+            // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+            // fd.append('policy', 'YOUR POLICY')
+            // fd.append('signature', 'YOUR SIGNATURE')
 
-          fd.append('file', file)
+            fd.append('file', compressedImage)
 
-          var xhr = new XMLHttpRequest()
+            var xhr = new XMLHttpRequest()
 
-          xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+            xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
 
-          xhr.onload = () => {
-            resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
-          }
+            xhr.onload = () => {
+              resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+            }
 
-          xhr.send(fd)
+            xhr.send(fd)
+          })
         } else {
           resolve(null)
         }
@@ -780,7 +821,7 @@ export default {
 
       Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(
         responses => {
-          let [brandResponse, typeResponse, purchaseResponse, photoRequest] = responses
+          let [brandResponse, typeResponse, purchaseResponse, photoResponse] = responses
 
           if (brandResponse) {
             this.newBrand.id = brandResponse.data.createConfigurableItem.id
@@ -791,13 +832,12 @@ export default {
           }
 
           if (purchaseResponse) {
-            this.newPurchasedFrom.id =
-              purchaseResponse.data.createConfigurableItem.id
+            this.newPurchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
           }
 
           let photo = this.getTool.photo
-          if (photoRequest) {
-            photo = photoRequest
+          if (photoResponse) {
+            photo = photoResponse
             this.newImgSrc = null
           }
 
@@ -820,28 +860,32 @@ export default {
                   serial_number: this.newSerial,
                   status: this.getTool.status,
                   owner_id: this.getTool.owner.id,
-                  purchased_from_id:
-                    this.newPurchasedFrom && this.newPurchasedFrom.id,
+                  purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  price: this.newPrice
-                    ? (this.newPrice * 100).toFixed(0)
-                    : null,
+                  price: this.newPrice ? this.newPrice.slice(2) * 100 : null,
                   year: this.newYear ? this.newYear : null,
                   photo
                 }
               }
             })
             .then(result => {
-              this.$apollo.queries.getTool.refresh()
-              this.$apollo.queries.getAllConfigurableItem.refresh()
+              this.$apollo.queries.getTool.refetch()
+              this.$apollo.queries.getAllConfigurableItem.refetch()
               this.editState = false
             })
         }
-      )
+      ).catch(() => {
+        this.showSaveErrorMsg()
+      }).finally(() => {
+        this.saving = false
+      })
     },
 
     toggleTransferStatus () {
       this.$store.commit('toggleToolSelection', this.getTool.id)
+      if (this.$store.state.transferState === 'INITIAL') {
+        this.$store.commit('updateTransferStatus', 'SELECTING')
+      }
       this.$router.push({ path: '/tools' })
     },
 
@@ -854,12 +898,46 @@ export default {
     },
 
     updateStatus (newStatus) {
-      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
+      if (newStatus === 'LOST OR STOLEN' || newStatus === 'BEYOND REPAIR') {
+        swal({
+          type: 'warning',
+          title: 'CONFIRM DECOMISSION',
+          text: `Are you sure you want to mark this tool as ${newStatus}? This action cannot be undone.`,
+          input: 'textarea',
+          inputPlaceholder: `Please Explain Why This Tool is Being Marked as ${newStatus}`,
+          reverseButtons: true,
+          showCancelButton: true,
+          cancelButtonText: 'CANCEL',
+          confirmButtonText: 'SUBMIT',
+          confirmButtonColor: '#404040',
+          inputValidator: (value) => {
+            return !value && `Decomission Reason is Required`
+          }
+        }).then(result => {
+          newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
-      if (newStatus === 'LOST_OR_STOLEN' || newStatus === 'BEYOND_REPAIR') {
-        this.$modal.show('confirm-oos-modal')
-        this.oosStatus = newStatus
+          if (result.value) {
+            this.$apollo.mutate({
+              mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
+              decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
+                id
+              }
+            }`,
+              variables: {
+                tool_id: this.getTool.id,
+                decomissioned_status: newStatus,
+                decomission_reason: result.value
+              }
+            }).then(() => {
+              this.showSuccessMsg()
+              this.$router.push({ path: '/tools' })
+            }).catch(() => {
+              this.showDecomissionErrorMsg()
+            })
+          }
+        })
       } else {
+        newStatus = newStatus.replace(/ /g, '_').toUpperCase()
         this.saveStatusChange(newStatus)
       }
     },
@@ -897,10 +975,23 @@ export default {
         })
         .then(status => {
           this.getTool.status = status.data.updateTool.status
+          this.$apollo.provider.clients.defaultClient.writeFragment({
+            id: `${this.getTool.id}Tool`,
+            fragment: gql`
+             fragment patchToolStatus on Tool {
+               status
+               __typename
+             }
+            `,
+            data: {
+              status: this.getTool.status,
+              __typename: 'Tool'
+            }
+          })
         })
         .catch(() => {
           this.getTool.status = currentStatus
-          // TODO: pop toast notifying user that request failed.
+          this.showSaveErrorMsg()
         })
     }
   }
@@ -914,51 +1005,6 @@ export default {
   background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
-
-  .confirm-oos-modal {
-    .modal-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      height: 100%
-    }
-
-    .header-text {
-      color: $renascent-dark-gray;
-      font-weight: 700;
-      font-size: 25px;
-      margin-top: 30px;
-    }
-
-    .sub-header-text {
-      color: $renascent-dark-gray;
-      font-weight: 900;
-      font-size: 15px;
-    }
-
-    .reason-text {
-      height: 100px;
-      font-size: 15px;
-      width: 90%;
-    }
-
-    .oos-actions {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-
-      .oos-btn {
-        height: 40px;
-
-        &.decomission-btn {
-          .fab-icon-container {
-            display: none;
-          }
-        }
-      }
-    }
-  }
 
   .info-menu-container {
     height: 100%;
@@ -1179,6 +1225,7 @@ export default {
 
     .photo-card {
       padding-bottom: 11px;
+      margin-bottom: 80px;
 
       .photo-box {
         width: calc(100% - 23px);
@@ -1205,10 +1252,11 @@ export default {
 
       .add-photo-container {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 200px;
-        padding: 20px;
+        height: 275px;
+        padding: 0 20px;
 
         .img-preview {
           max-height: 175px;
@@ -1224,6 +1272,20 @@ export default {
           .fa-camera {
             margin-right: 5px;
           }
+        }
+
+        .delete-photo-efab {
+          border-color: transparent;
+          box-shadow: none;
+          font-size: 15px;
+        }
+
+        .image-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 175px;
+          width: 100%;
         }
       }
     }
@@ -1290,25 +1352,35 @@ export default {
       }
     }
   }
+
+  .edit {
+    position: absolute;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    right: 20px;
+  }
+
+  .cancel {
+    position: absolute;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    right: 80px;
+  }
 }
 
-.edit {
-  position: absolute;
-  bottom: 75px;
-  right: 20px;
-}
-
-// MOBILE
-
-.mobile {
+.mobile .tool-detail-page {
   .actions {
     justify-content: space-around;
   }
 }
 
-// DESKTOP
-
-.desktop {
+.desktop .tool-detail-page {
   .info-menu-container {
     display: flex;
     flex-direction: row;
@@ -1365,6 +1437,14 @@ export default {
     .cards {
       .card {
         width: 500px;
+      }
+    }
+
+    .add-photo {
+      font-size: 19px;
+
+      .fa-camera {
+        font-size: 18px !important;
       }
     }
   }

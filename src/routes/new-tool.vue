@@ -181,6 +181,7 @@
           <v-select
             v-model="status"
             :options="statuses"
+            :filterable="false"
             label="name"
             class="dark-input">
           </v-select>
@@ -750,7 +751,8 @@ export default {
 
   .new-tool-input-card {
     display: flex;
-    flex: 1 0 434px;
+    flex: 1 0 420px;
+    max-height: 475px;
     flex-direction: column;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
     margin: 10px 10px 0 10px;

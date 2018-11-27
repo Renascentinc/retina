@@ -65,10 +65,10 @@ export default {
       required: true
     },
 
-    fuzzyFilter: {
-      type: String,
-      required: false,
-      default: ''
+    // TODO: fixed hacked fuzzy search clear implementation
+    clearFuzzyFilter: {
+      type: Boolean,
+      required: true
     }
   },
   apollo: {
@@ -99,7 +99,7 @@ export default {
   },
   data () {
     return {
-      tag: this.$props.fuzzyFilter.toString()
+      tag: ''
     }
   },
 
@@ -181,8 +181,8 @@ export default {
   },
 
   watch: {
-    fuzzyFilter (newValue) {
-      this.tag = newValue
+    clearFuzzyFilter () {
+      this.tag = ''
     },
 
     tag (fuzzySearch) {

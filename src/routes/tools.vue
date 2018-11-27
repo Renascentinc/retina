@@ -2,7 +2,7 @@
   <div class="page tools-page">
     <div class="search-bar">
       <tool-search-input
-        :fuzzy-filter="tag"
+        :clear-fuzzy-filter="clearFuzzyFilter"
         :tags="tags"
         :update-tags="updateFilters"
         :disable-user-search="isNonAdminTransfer">
@@ -387,7 +387,7 @@ export default {
       filters: null,
       paginationLoading: false,
       transferInProgress: false,
-      tag: '',
+      clearFuzzyFilter: false,
       tags: [],
       states
     }
@@ -491,7 +491,7 @@ export default {
     clearSearchFilters () {
       this.filters = null
       this.tags = []
-      this.tag = ''
+      this.clearFuzzyFilter = !this.clearFuzzyFilter
     },
 
     resetInfiniteScroll () {

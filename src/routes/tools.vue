@@ -2,6 +2,7 @@
   <div class="page tools-page">
     <div class="search-bar">
       <tool-search-input
+        :fuzzy-filter="tag"
         :tags="tags"
         :update-tags="updateFilters"
         :disable-user-search="isNonAdminTransfer">
@@ -386,6 +387,7 @@ export default {
       filters: null,
       paginationLoading: false,
       transferInProgress: false,
+      tag: '',
       tags: [],
       states
     }
@@ -489,6 +491,7 @@ export default {
     clearSearchFilters () {
       this.filters = null
       this.tags = []
+      this.tag = ''
     },
 
     resetInfiniteScroll () {
@@ -546,7 +549,7 @@ export default {
       this.$store.commit('resetSelectedTools')
       this.$store.commit('setShowOnlySelectedTools', false)
       this.$store.commit('updateTransferStatus', this.states.INITIAL)
-      this.resetScrollPosition()
+      this.resetInfiniteScroll()
     },
 
     toggleViewSelected () {

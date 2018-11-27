@@ -63,6 +63,12 @@ export default {
     tags: {
       type: Array,
       required: true
+    },
+
+    fuzzyFilter: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   apollo: {
@@ -93,7 +99,7 @@ export default {
   },
   data () {
     return {
-      tag: ''
+      tag: this.$props.fuzzyFilter.toString()
     }
   },
 
@@ -175,12 +181,17 @@ export default {
   },
 
   watch: {
+    fuzzyFilter (newValue) {
+      this.tag = newValue
+    },
+
     tag (fuzzySearch) {
       if (!fuzzySearch) {
         this.tagsChanged(this.tags)
       }
     }
   },
+
   methods: {
     tagsChanged (newTags) {
       let fuzzySearch = null

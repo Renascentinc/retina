@@ -964,38 +964,6 @@ export default {
                       page_number: 0
                     }
                   }
-                },
-                {
-                  query: gql`query selectedTools($tool_ids: [ID!]!) {
-                    getMultipleTool(tool_ids: $tool_ids) {
-                      id
-                      type {
-                        id
-                        name
-                      }
-                      brand {
-                        id
-                        name
-                      }
-                      status
-                      owner {
-                        ... on Location {
-                           id
-                           name
-                           type
-                        }
-                        ... on User {
-                           id
-                           first_name
-                           last_name
-                           type
-                        }
-                      }
-                    }
-                  }`,
-                  variables: {
-                    tool_ids: this.$store.getters.selectedTools
-                  }
                 }
               ]
             }).then(() => {

@@ -53,7 +53,7 @@ export default {
         type: 'info',
         title: 'NFC NOT AVAILABLE',
         text: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device',
-        timer: 2000,
+        timer: 2500,
         showConfirmButton: false
       })
     },

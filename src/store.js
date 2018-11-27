@@ -25,6 +25,10 @@ export default new Vuex.Store({
       Vue.set(state.selectedToolsMap, id, !state.selectedToolsMap[id])
     },
 
+    setToolSelection (state, id, newValue) {
+      Vue.set(state.selectedToolsMap, id, newValue)
+    },
+
     resetSelectedTools (state) {
       state.selectedToolsMap = {}
     },

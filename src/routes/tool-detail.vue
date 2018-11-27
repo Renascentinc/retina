@@ -919,16 +919,87 @@ export default {
           if (result.value) {
             this.$apollo.mutate({
               mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
-              decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
-                id
-              }
-            }`,
+                decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
+                  id
+                }
+              }`,
               variables: {
                 tool_id: this.getTool.id,
                 decomissioned_status: newStatus,
                 decomission_reason: result.value
-              }
+              },
+              refetchQueries: [
+                {
+                  query: gql`query tools($pagingParameters: PagingParameters) {
+                    searchTool(pagingParameters: $pagingParameters) {
+                      id
+                      type {
+                        id
+                        name
+                      }
+                      brand {
+                        id
+                        name
+                      }
+                      status
+                      owner {
+                        ... on Location {
+                           id
+                           name
+                           type
+                        }
+                        ... on User {
+                           id
+                           first_name
+                           last_name
+                           type
+                        }
+                      }
+                    }
+                  }`,
+
+                  variables: {
+                    pagingParameters: {
+                      page_size: 15,
+                      page_number: 0
+                    }
+                  }
+                },
+                {
+                  query: gql`query selectedTools($tool_ids: [ID!]!) {
+                    getMultipleTool(tool_ids: $tool_ids) {
+                      id
+                      type {
+                        id
+                        name
+                      }
+                      brand {
+                        id
+                        name
+                      }
+                      status
+                      owner {
+                        ... on Location {
+                           id
+                           name
+                           type
+                        }
+                        ... on User {
+                           id
+                           first_name
+                           last_name
+                           type
+                        }
+                      }
+                    }
+                  }`,
+                  variables: {
+                    tool_ids: this.$store.getters.selectedTools
+                  }
+                }
+              ]
             }).then(() => {
+              this.$store.commit('setToolSelection', this.getTool.id, false)
               this.showSuccessMsg()
               this.$router.push({ path: '/tools' })
             }).catch(() => {

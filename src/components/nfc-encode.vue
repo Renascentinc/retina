@@ -1,7 +1,6 @@
 <template>
   <button
     :class="{ inactive: !isNfcWriteEnabled }"
-    :disabled="!isNfcWriteEnabled"
     class="nfc-encode"
     @click="onClick">
     <div class="fab-icon-container">
@@ -63,6 +62,16 @@ export default {
       })
     },
 
+    showNfcDisabledMsg () {
+      swal({
+        type: 'info',
+        title: 'NFC NOT AVAILABLE',
+        text: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device',
+        timer: 2500,
+        showConfirmButton: false
+      })
+    },
+
     onError (reason) {
       if (reason === 'Tag is read only') {
         this.showInfoMsg()
@@ -87,8 +96,12 @@ export default {
     },
 
     onClick () {
-      this.startNfcListener()
-      this.showReadyToScanModal()
+      if (this.isNfcWriteEnabled) {
+        this.startNfcListener()
+        this.showReadyToScanModal()
+      } else {
+        this.showNfcDisabledMsg()
+      }
     }
   }
 }

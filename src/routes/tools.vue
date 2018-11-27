@@ -7,9 +7,7 @@
         :update-tags="updateFilters"
         :disable-user-search="isNonAdminTransfer">
       </tool-search-input>
-      <!-- <nfc-scan :on-scan="onScan"></nfc-scan> -->
-      {{ infiniteScrollPageNumber }}
-      {{ tools.length }}
+      <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
 
     <transition name="fade">

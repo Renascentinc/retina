@@ -1,7 +1,11 @@
 <template>
   <div class="page tools-page">
     <div class="search-bar">
-      <tool-search-input :update-tags="updateFilters"></tool-search-input>
+      <tool-search-input
+        :tags="tags"
+        :update-tags="updateFilters"
+        :disable-user-search="isNonAdminTransfer">
+      </tool-search-input>
       <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
 
@@ -345,12 +349,16 @@ export default {
           options.toolFilter = this.filters
         }
 
+        if (this.isNonAdminTransfer) {
+          if (!options.toolFilter) {
+            options.toolFilter = {}
+          }
+          if (!options.toolFilter.owner_ids || !options.toolFilter.owner_ids.length) {
+            options.toolFilter.owner_ids = [...this.locationIds, this.currentUser.id]
+          }
+        }
+
         return options
-      },
-      result (response) {
-        // depending on how many results are cached the response may be different lengths
-        // need to make sure that the infinite scroll loads the correct next page
-        this.infiniteScrollPageNumber = Math.ceil(response.data.searchTool.length / this.pageSize)
       }
     }
   },
@@ -373,17 +381,33 @@ export default {
       transferTarget: { id: null, label: 'select user' },
       searchTool: [],
       pageNumber: 0,
-      infiniteScrollPageNumber: 0,
       pageSize: 15,
       searchString: null,
       filters: null,
       paginationLoading: false,
       transferInProgress: false,
+      tags: [],
       states
     }
   },
 
   computed: {
+    infiniteScrollPageNumber () {
+      return Math.ceil(this.tools.length / this.pageSize)
+    },
+
+    currentUser () {
+      return JSON.parse(window.localStorage.getItem('currentUser'))
+    },
+
+    isAdmin () {
+      return this.currentUser.role === Roles.ADMIN
+    },
+
+    isNonAdminTransfer () {
+      return this.currentState === this.states.SELECTING && !this.isAdmin
+    },
+
     showOnlySelectedTools () {
       return this.$store.state.showOnlySelectedTools
     },
@@ -393,15 +417,16 @@ export default {
     },
 
     tools () {
-      let tools = this.searchTool || []
-
-      if (this.currentState === this.states.SELECTING && JSON.parse(window.localStorage.getItem('currentUser')).role !== Roles.ADMIN) {
-        tools = tools.filter(tool => (tool.owner.type === 'LOCATION' && tool.status === 'AVAILABLE') || tool.owner.id === JSON.parse(window.localStorage.getItem('currentUser')).id)
-      }
-
       if (this.showOnlySelectedTools) {
         return this.getMultipleTool || []
       }
+
+      let tools = this.searchTool || []
+
+      if (this.isNonAdminTransfer) {
+        tools = tools.filter(tool => tool.owner.type !== 'LOCATION' || tool.status === 'AVAILABLE')
+      }
+
       return tools
     },
 
@@ -416,6 +441,10 @@ export default {
         })
       }
       return this.getAllUser || []
+    },
+
+    locationIds () {
+      return this.locations.map(location => location.id)
     },
 
     locations () {
@@ -457,8 +486,12 @@ export default {
       })
     },
 
+    clearSearchFilters () {
+      this.filters = null
+      this.tags = []
+    },
+
     resetInfiniteScroll () {
-      this.infiniteScrollPageNumber = parseInt(this.tools.length / this.pageSize)
       this.hasLoadedLastPage = false
       this.resetScrollPosition()
     },
@@ -483,11 +516,12 @@ export default {
       this.$router.push({ name: 'newTool' })
     },
 
-    updateFilters (filters = [], fuzzySearch) {
+    updateFilters (tags = [], fuzzySearch) {
+      this.tags = tags
       this.searchString = fuzzySearch
 
-      let newFilters = filters.length ? {} : null
-      filters.forEach(filter => {
+      let newFilters = tags.length ? {} : null
+      tags.forEach(filter => {
         let key = this.filterMap[filter.type]
 
         if (!newFilters[key]) {
@@ -503,6 +537,9 @@ export default {
     moveToSelectingState () {
       this.$store.commit('setShowOnlySelectedTools', false)
       this.$store.commit('updateTransferStatus', this.states.SELECTING)
+      if (!this.isAdmin) {
+        this.clearSearchFilters()
+      }
     },
 
     cancelTransfer () {
@@ -527,7 +564,7 @@ export default {
       let options = {
         pagingParameters: {
           page_size: this.pageSize,
-          page_number: this.infiniteScrollPageNumber + 1
+          page_number: this.infiniteScrollPageNumber
         }
       }
 

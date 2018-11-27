@@ -52,6 +52,17 @@ export default {
     updateTags: {
       type: Function,
       required: true
+    },
+
+    disableUserSearch: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    tags: {
+      type: Array,
+      required: true
     }
   },
   apollo: {
@@ -82,8 +93,7 @@ export default {
   },
   data () {
     return {
-      tag: '',
-      tags: []
+      tag: ''
     }
   },
 
@@ -116,7 +126,13 @@ export default {
         }
       ]
 
-      return statuses.concat(this.users).concat(this.searchableConfigItems).concat(this.locations)
+      let items = statuses.concat(this.searchableConfigItems).concat(this.locations)
+
+      if (!this.disableUserSearch) {
+        items = items.concat(this.users)
+      }
+
+      return items
     },
 
     filteredItems () {
@@ -174,7 +190,6 @@ export default {
         document.querySelector('.fa-search').click()
         document.querySelector('.new-tag-input').blur()
       }
-      this.tags = newTags
       this.updateTags(newTags, fuzzySearch)
     },
 

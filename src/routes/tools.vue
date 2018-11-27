@@ -7,7 +7,9 @@
         :update-tags="updateFilters"
         :disable-user-search="isNonAdminTransfer">
       </tool-search-input>
-      <nfc-scan :on-scan="onScan"></nfc-scan>
+      <!-- <nfc-scan :on-scan="onScan"></nfc-scan> -->
+      {{ infiniteScrollPageNumber }}
+      {{ tools.length }}
     </div>
 
     <transition name="fade">
@@ -395,7 +397,8 @@ export default {
 
   computed: {
     infiniteScrollPageNumber () {
-      return Math.ceil(this.tools.length / this.pageSize)
+      let tools = (this.showOnlySelectedTools ? this.getMultipleTool : this.searchTool) || []
+      return Math.ceil(tools.length / this.pageSize)
     },
 
     currentUser () {
@@ -542,6 +545,7 @@ export default {
       this.$store.commit('updateTransferStatus', this.states.SELECTING)
       if (!this.isAdmin) {
         this.clearSearchFilters()
+        this.resetScrollPosition()
       }
     },
 

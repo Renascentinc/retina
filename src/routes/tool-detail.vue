@@ -37,6 +37,14 @@
           :flag="toggleChangingStatus"
           button-text="CHANGE STATUS">
         </button-dropdown>
+
+        <extended-fab
+          v-if="$mq === 'desktop'"
+          icon-class="fa-book-open"
+          button-text="SEE HISTORY"
+          :on-click="transitionToHistory"
+          :outline-display="false">
+        </extended-fab>
       </div>
 
       <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
@@ -312,6 +320,14 @@
                 class="light-input"
                 placeholder="Price"
                 type="number">
+
+              <extended-fab
+                v-if="$mq === 'mobile'"
+                icon-class="fa-book-open"
+                button-text="VIEW HISTORY"
+                :on-click="transitionToHistory"
+                :outline-display="false">
+              </extended-fab>
             </div>
           </div>
 
@@ -633,6 +649,10 @@ export default {
   },
 
   methods: {
+    transitionToHistory () {
+      this.$router.push({name: 'historyDetail', params: { toolId: this.getTool.id }})
+    },
+
     toggleDatepicker () {
       if (this.datePickerVisibility === 'visible') {
         this.datePickerVisibility = 'hidden'
@@ -1140,6 +1160,11 @@ export default {
         display: flex;
         flex-direction: column;
         font-size: 16px;
+
+        .extended-fab {
+          border-radius: 3px;
+          margin-top: 12px;
+        }
 
         .general-label {
           padding-top: 10px;

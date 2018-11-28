@@ -66,7 +66,7 @@
           class="title">
           <span
             class="fas fa-arrow-left back"
-            @click="viewGlobalEntries"></span>
+            @click="goBack"></span>
           #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
         </span>
 
@@ -204,9 +204,9 @@ export default {
   },
 
   methods: {
-    viewGlobalEntries () {
+    goBack () {
       this.currentToolId = null;
-      this.$router.push({path: '/history'})
+      this.$router.go(-1)
     },
 
     selectHistoryEntry (toolId) {
@@ -399,18 +399,18 @@ export default {
     .title {
       text-align: center;
       font-weight: 600;
-      line-height: 25px;
+      line-height: 28px;
       margin-top: 12px;
       padding-left: 12px;
       padding-right: 12px;
 
       .back {
         color: $renascent-red;
-        font-size: 22px;
+        font-size: 28px;
         float: left;
         height: 25px;
         width: 25px;
-        line-height: 25px;
+        line-height: 28px;
       }
     }
   }

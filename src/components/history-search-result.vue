@@ -395,11 +395,12 @@ export default {
     .id {
       display: flex;
       flex: 0 0 40px;
+      font-size: 12px;
       justify-content: center;
       padding: 0;
       display: flex;
       align-items: center;
-      font-weight: 600;
+      font-weight: 900;
       border-right: solid 1px lightgray;
     }
 

@@ -77,9 +77,9 @@
           :key="change.path[0]">
           <span class="label">{{ formatToUpper(change.path[0]) }} </span>
           <span class="value">
-            <span class="lhs"> {{ formatToLower(change.lhs) }} </span>
+            <span class="lhs"> {{ change.lhs || '-' }} </span>
             <i class="fas fa-long-arrow-alt-right"></i>
-            <span class="rhs"> {{ formatToLower(change.rhs) }} </span>
+            <span class="rhs"> {{ change.rhs || '-' }} </span>
           </span>
         </div>
       </div>
@@ -143,7 +143,6 @@ export default {
     },
 
     owner() {
-      console.log(this.ownerDiff)
       return this.ownerDiff || this.ownerName
     },
 
@@ -172,12 +171,12 @@ export default {
   },
 
   methods: {
-    formatToUpper (string) {
-      return string.replace(/_/g, " ").toUpperCase();
+    formatToUpper (tstring) {
+      return tstring.replace(/_/g, " ").toUpperCase();
     },
 
-    formatToLower (string) {
-      return string.replace(/_/g, " ").toLowerCase();
+    formatToLower (tstring) {
+      return tstring.replace(/_/g, " ").toLowerCase();
     },
 
     selectResult() {
@@ -307,10 +306,31 @@ export default {
                 && change.path.indexOf('last_name') < 0
                 && change.path.indexOf('status') < 0
                 && change.path.indexOf('owner') < 0) {
-              finalDiff.push(change)
+
+              if (change.path.indexOf('price') >= 0) {
+                finalDiff.push({
+                  lhs: change.lhs !== null ? `$${(change.lhs / 100).toFixed(2)}` : null,
+                  rhs: change.rhs !== null ? `$${(change.rhs / 100).toFixed(2)}` : null,
+                  path: change.path
+                })
+              }
+              else if (change.path.indexOf('date_purchased') >= 0) {
+                finalDiff.push({
+                  lhs: change.lhs !== null ? new Date(change.lhs).toLocaleDateString('en-US') : null,
+                  rhs: change.rhs !== null ? new Date(change.rhs).toLocaleDateString('en-US') : null,
+                  path: change.path
+                })
+              }
+              else {
+                finalDiff.push(change)
+              }
             }
 
-            if (change.path.indexOf('name') >= 0) {
+            if (change.path.indexOf('owner') >= 0
+                && change.path.indexOf('first_name') < 0
+                && change.path.indexOf('last_name') < 0
+                && change.path.indexOf('__typename') < 0) {
+
               this.ownerDiff = change
             }
 

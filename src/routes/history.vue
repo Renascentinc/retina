@@ -53,22 +53,24 @@
         </fab>
       </div>
       <div class="report">
-        <div id="export-table">
-          <span
-            v-if="!currentToolId"
-            style="text-align: center;
-            font-weight: 600;">
-            LATEST TRANSACTIONS
-          </span>
 
+      <span
+        v-if="!currentToolId"
+        style="text-align: center;
+        font-weight: 600;"
+        class="title">
+        LATEST TRANSACTIONS
+      </span>
+      <span
+          v-if="currentToolId"
+          class="title">
           <span
-            v-if="currentToolId"
-            class="title">
-            <span
-              class="fas fa-arrow-left back"
-              @click="viewGlobalEntries"></span>
-            #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
-          </span>
+            class="fas fa-arrow-left back"
+            @click="viewGlobalEntries"></span>
+          #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
+        </span>
+
+        <div id="export-table">
 
           <transition name="list-loading">
             <div
@@ -379,13 +381,14 @@ export default {
   .report {
     display: none;
     display: flex;
+    flex-direction: column;
     height: 100%;
     flex: 1 1 auto;
 
     #export-table {
-      width: 100%;
+      width: calc(100% - 24px);
+      padding: 12px;
       font-size: 14px;
-      padding: 12px 12px 0px 12px;
       display: flex;
       flex-direction: column;
       -webkit-overflow-scrolling: touch;
@@ -397,6 +400,9 @@ export default {
       text-align: center;
       font-weight: 600;
       line-height: 25px;
+      margin-top: 12px;
+      padding-left: 12px;
+      padding-right: 12px;
 
       .back {
         color: $renascent-red;

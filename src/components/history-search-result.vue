@@ -301,7 +301,6 @@ export default {
         if (diff) {
           diff.forEach((change) => {
             if (change.path.indexOf('id') < 0
-                && change.path.indexOf('type') < 0
                 && change.path.indexOf('first_name') < 0
                 && change.path.indexOf('last_name') < 0
                 && change.path.indexOf('status') < 0
@@ -329,6 +328,7 @@ export default {
             if (change.path.indexOf('owner') >= 0
                 && change.path.indexOf('first_name') < 0
                 && change.path.indexOf('last_name') < 0
+                && change.path.indexOf('type') < 0
                 && change.path.indexOf('__typename') < 0) {
 
               this.ownerDiff = change

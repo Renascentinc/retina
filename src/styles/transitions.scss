@@ -15,7 +15,18 @@
 }
 .list-loading-enter, .list-loading-leave-to {
   opacity: 0;
-  height: 0;
+  height: 0px;
+}
+
+.history-detail-enter-active, .history-detail-leave-active {
+  transition: all .1s ease-in-out;
+  height: 34px;
+  opacity: 1;
+}
+
+.history-detail-enter, .history-detail-leave-to {
+  height: 0px;
+  opacity: 0;
 }
 
 .list-element-move {

@@ -80,6 +80,11 @@ export default new Router({
           name: 'history'
         },
         {
+          path: 'history/:toolId',
+          component: History,
+          name: 'historyDetail'
+        },
+        {
           path: 'new-user',
           component: NewUser,
           name: 'newUser'

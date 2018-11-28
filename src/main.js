@@ -59,12 +59,12 @@ const cache = new InMemoryCache({
       return `${object.id}${object.__typename}${object.owner ? object.owner.id || object.owner.id : ''}${object.status}`
     }
 
-    if (object.__typename === 'ToolHistoryEntryMetadata') {
+    if (object.__typename === 'ToolSnapshotMetadata') {
       return `${object.timestamp}${object.__typename}`
     }
 
-    if (router.currentRoute.path === '/history' && object.__typename === 'Tool') {
-      return `${object.id}${object.brand ? object.brand.name : ''}${object.type ? object.type.name : ''}${object.__typename}`
+    if (router.currentRoute.path.includes('/history') && object.__typename === 'Tool') {
+      return `${JSON.stringify(object)}`
     }
 
     return `${object.id}${object.__typename}`

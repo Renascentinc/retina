@@ -1,5 +1,9 @@
 <template>
   <div class="page history-page">
+    <history-table
+      id="history-table-export"
+      :search-tool-snapshot="searchToolSnapshot">
+    </history-table>
     <div class="search-bar">
       <history-search-input
         :update-tags="updateTagFilters"
@@ -49,63 +53,26 @@
         </fab>
       </div>
       <div class="report">
-        <div
-          id="export-table"
-          style="width: 100%;
-          font-size: 14px;
-          padding: 12px 12px 0px 12px;
-          display: flex;
-          flex-direction: column">
-          <div
-            class="dt-head"
-            style="display: flex;
-            flex: 1 0 auto;
-            border-radius: 3px;
-            background-color: #404040;
-            font-size: 16px;
-            max-height: 40px;
-            height: 40px;
-            align-items: center;
-            color: #fff;
-            text-align: left;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+        <div id="export-table">
+          <span
+            v-if="!currentToolId"
+            style="text-align: center;
             font-weight: 600;">
-            <div
-              class="dt-cell id"
-              style="display: flex;
-                flex: 0 0 40px;
-                justify-content: center;
-                padding: 0;">
-              <span>id</span>
-            </div>
-            <div
-              class="dt-cell tool"
-              style="display: flex;
-                justify-content: center;
-                flex: 0 0 calc(33% - 15px);
-                margin-left: 10px">
-              <span>tool</span>
-            </div>
-            <div
-              class="dt-cell date"
-              style="display: flex;
-                justify-content: center;
-                flex: 0 0 calc(33% - 15px);">
-              <span>date</span>
-            </div>
-            <div
-              class="dt-cell action"
-              style="display: flex;
-                justify-content: center;
-                flex: 0 0 calc(33% - 15px);">
-              <span>action</span>
-            </div>
-          </div>
+            LATEST TRANSACTIONS
+          </span>
 
+          <span
+            v-if="currentToolId"
+            class="title">
+            <span
+              class="fas fa-arrow-left back"
+              @click="viewGlobalEntries"></span>
+            #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
+          </span>
 
           <transition name="list-loading">
             <div
-              v-if="$apollo.queries.searchToolHistoryEntry.loading"
+              v-if="$apollo.queries.searchToolSnapshot.loading"
               class="loading-container">
               <div
                 class="loading">
@@ -113,73 +80,15 @@
             </div>
           </transition>
 
-          <div
-            class="dt-body"
-            style="display: flex;
-              flex-direction: column;
-              overflow: auto;
-              -webkit-overflow-scrolling: touch;
-              padding: 4px;">
+          <div class="dt-body">
             <transition-group name="list-element">
-              <div
-                v-for="entry in searchToolHistoryEntry"
-                :key="entry.id"
-                @click="selectToolHistory(entry.tool_snapshot.id)"
-                class="dt-row"
-                style="display: flex;
-                border-radius: 3px;
-                border-bottom: solid 1px lightgray;
-                background-color: white;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-                cursor: pointer;">
-                <div
-                  class="dt-cell id"
-                  style="display: flex;
-                  flex: 0 0 40px;
-                  justify-content: center;
-                  padding: 0;
-                  display: flex;
-                  align-items: center;
-                  height: 45px;
-                  font-weight: 600; border-right: solid 1px lightgray;">
-                  <span>{{ entry.tool_snapshot.id }}</span>
-                </div>
-                <div
-                  class="dt-cell name"
-                  style="display: flex;
-                  justify-content: flex-start;
-                  margin-left: 10px;
-                  display: flex;
-                  align-items: center;
-                  flex-direction: row;
-                  height: 45px;
-                  font-weight: 600;
-                  flex: 0 0 calc(33% - 15px);">
-                  <span>{{ `${ entry.tool_snapshot.brand.name } ${ entry.tool_snapshot.type.name }` }}</span>
-                </div>
-                <div
-                  class="dt-cell date"
-                  style="display: flex;
-                  justify-content: center;
-                  display: flex;
-                  align-items: center;
-                  height: 45px;
-                  font-weight: 600;
-                  flex: 0 0 calc(33% - 15px);">
-                  <span>{{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' }) }}</span>
-                </div>
-                <div
-                  class="dt-cell action"
-                  style="display: flex;
-                  justify-content: center;
-                  flex: 0 0 calc(33% - 15px);
-                  display: flex;
-                  align-items: center;
-                  height: 45px;
-                  font-weight: 600;">
-                  <span>{{ entry.metadata.tool_action }}</span>
-                </div>
-              </div>
+              <history-search-result
+                v-for="entry in searchToolSnapshot"
+                :entry="entry"
+                :select-tool="selectHistoryEntry"
+                :is-detail-result="!!currentToolId"
+                :key="entry.id">
+              </history-search-result>
             </transition-group>
           </div>
         </div>
@@ -196,38 +105,53 @@ import Avatar from 'vue-avatar'
 import Fab from '../components/fab'
 import html2pdf from 'html2pdf.js'
 import gql from 'graphql-tag'
+import swal from 'sweetalert2'
+import HistoryTable from '../components/history-table'
+import HistorySearchResult from '../components/history-search-result'
 
 export default {
   name: 'History',
+
   components: {
     HistorySearchInput,
     Avatar,
     Fab,
-    ExtendedFab
+    ExtendedFab,
+    HistoryTable,
+    HistorySearchResult
   },
 
   apollo: {
-    searchToolHistoryEntry: {
-      query: gql`query searchToolHistoryEntry{
-        searchToolHistoryEntry {
+    searchToolSnapshot: {
+      query: gql`query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
+        searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
           id,
-          tool_snapshot {
+          tool {
             id,
+            brand {
+              id,
+              name
+            },
             type {
               id,
               name
             },
-            brand {
-              id,
-              name
-            }
-          },
+            status
+          }
           metadata {
             timestamp,
             tool_action
           }
         }
       }`,
+      variables () {
+        return {
+          toolSnapshotFilter: {
+            only_latest_snapshot: this.currentToolId ? false : true,
+            tool_ids: this.currentToolId
+          }
+        }
+      },
       fetchPolicy: 'cache-and-network'
     }
   },
@@ -240,7 +164,8 @@ export default {
         ACTION: 'tool_actions',
         TOOL: 'tool_ids'
       },
-      searchToolHistoryEntry: [],
+      currentToolId: this.$router.currentRoute.params.toolId,
+      searchToolSnapshot: [],
       tags: [],
       tagFilters: null,
       dateRange: null,
@@ -277,8 +202,14 @@ export default {
   },
 
   methods: {
-    selectToolHistory(id) {
-      console.log(id)
+    viewGlobalEntries () {
+      this.currentToolId = null;
+      this.$router.push({path: '/history'})
+    },
+
+    selectHistoryEntry (toolId) {
+      this.$router.push({name: 'historyDetail', params: {toolId}})
+      this.currentToolId = toolId
     },
 
     updateDateFilterTag () {
@@ -306,7 +237,7 @@ export default {
     },
 
     exportTable () {
-      var element = document.getElementById('export-table')
+      var element = document.getElementById('history-table-export')
 
       var opt = {
         filename: 'transactions_export.pdf',
@@ -450,6 +381,32 @@ export default {
     display: flex;
     height: 100%;
     flex: 1 1 auto;
+
+    #export-table {
+      width: 100%;
+      font-size: 14px;
+      padding: 12px 12px 0px 12px;
+      display: flex;
+      flex-direction: column;
+      -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
+
+    }
+
+    .title {
+      text-align: center;
+      font-weight: 600;
+      line-height: 25px;
+
+      .back {
+        color: $renascent-red;
+        font-size: 22px;
+        float: left;
+        height: 25px;
+        width: 25px;
+        line-height: 25px;
+      }
+    }
   }
 
   .export-btn {

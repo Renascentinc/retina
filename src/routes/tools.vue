@@ -58,7 +58,7 @@
         <extended-fab
           v-if="$mq === 'desktop' && currentState === states.SELECTING"
           :on-click="proceedToFinalize"
-          :disabed="numSelectedTools === 0"
+          :disabled="numSelectedTools === 0"
           :class="{ disabled: numSelectedTools === 0 }"
           class="view-fab-btn next-btn"
           icon-class="fa-arrow-right"
@@ -177,7 +177,7 @@
         </div>
         <div class="icon-text-container">
           <button
-            :disabed="numSelectedTools === 0"
+            :disabled="numSelectedTools === 0"
             :class="{ disabled: numSelectedTools === 0 }"
             class="fas fa-arrow-right menu-icon next-btn"
             @click="proceedToFinalize">

@@ -1131,7 +1131,7 @@ export default {
   }
 
   .v-select .option-container {
-    height: 40px;
+    min-height: 40px;
     width: 100%;
     text-align: left;
     font-size: 20px;

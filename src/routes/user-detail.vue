@@ -410,7 +410,7 @@ export default {
                   phone_number,
                   role,
                   status
-                } = result.data.getUser
+                } = result.data.updateUser
                 this.$apollo.provider.clients.defaultClient.writeFragment({
                   id: `${id}User`,
                   fragment: gql`
@@ -736,6 +736,10 @@ export default {
       .card {
         width: 500px;
       }
+    }
+
+    .search-result {
+      margin: 10px auto;
     }
   }
 }

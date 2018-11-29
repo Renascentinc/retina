@@ -6,6 +6,7 @@
     </history-table>
     <div class="search-bar">
       <history-search-input
+        :allow-tool-id-search="!currentToolId"
         :update-tags="updateTagFilters"
         :tags="tags">
       </history-search-input>
@@ -71,13 +72,13 @@
         </span>
 
         <div id="export-table">
-
           <transition name="list-loading">
             <div
               v-if="$apollo.queries.searchToolSnapshot.loading"
               class="loading-container">
-              <div
-                class="loading">
+              <div class="half-circle-spinner">
+                <div class="circle circle-1"></div>
+                <div class="circle circle-2"></div>
               </div>
             </div>
           </transition>
@@ -158,7 +159,8 @@ export default {
         return {
           toolSnapshotFilter: {
             only_latest_snapshot: !this.currentToolId,
-            tool_ids: this.currentToolId
+            tool_ids: this.currentToolId,
+            ...this.filters
           }
         }
       }
@@ -171,7 +173,9 @@ export default {
         USER: 'owner_ids',
         LOCATION: 'owner_ids',
         ACTION: 'tool_actions',
-        TOOL: 'tool_ids'
+        TOOL: 'tool_ids',
+        BRAND: 'brand_ids',
+        TYPE: 'type_ids'
       },
       currentToolId: this.$router.currentRoute.params.toolId,
       searchToolSnapshot: [],
@@ -260,7 +264,14 @@ export default {
 
     selectHistoryEntry (toolId) {
       this.$router.push({name: 'historyDetail', params: {toolId}})
+      this.clearFilters()
       this.currentToolId = toolId
+    },
+
+    clearFilters () {
+      this.dateRange = null
+      this.tagFilters = null
+      this.updateTagFilters()
     },
 
     updateDateFilterTag () {
@@ -356,7 +367,7 @@ export default {
     }
   }
 
-  .floating-action-bar .history-page {
+  .floating-action-bar {
     min-width: 180px;
     display: flex;
     flex-direction: column;

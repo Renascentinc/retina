@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import ConfigurableItems from '../utils/configurable-items'
 import VueTagsInput from '@johmun/vue-tags-input'
 import HistoryActions from '../utils/history-actions'
 import gql from 'graphql-tag'
@@ -55,6 +56,11 @@ export default {
     tags: {
       type: Array,
       required: true
+    },
+    allowToolIdSearch: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   apollo: {
@@ -80,6 +86,14 @@ export default {
         first_name
         last_name
         type
+      }
+    }`,
+
+    getAllConfigurableItem: gql`query {
+      getAllConfigurableItem {
+        id,
+        type,
+        name
       }
     }`
   },
@@ -118,7 +132,13 @@ export default {
         }
       ]
 
-      return actions.concat(this.users).concat(this.locations).concat(this.tools)
+      let items = actions.concat(this.users).concat(this.locations).concat(this.searchableConfigItems)
+
+      if (this.allowToolIdSearch) {
+        items = items.concat(this.tools)
+      }
+
+      return items
     },
 
     filteredItems () {
@@ -153,6 +173,31 @@ export default {
         user.iconClass = 'fa-user'
         return user
       })
+    },
+
+    searchableConfigItems () {
+      let searchItems = []
+      let items = (this.getAllConfigurableItem || [])
+      items.forEach(item => {
+        if (item.type !== ConfigurableItems.PURCHASED_FROM) {
+          item.formattedType = item.type.split('_')[0].toLowerCase()
+          item.text = `${item.formattedType} ${item.name}`
+          item.iconClass = this.getTagIconClass(item.type)
+          searchItems.push(item)
+        }
+      })
+
+      return searchItems
+    }
+  },
+
+  methods: {
+    getTagIconClass (type) {
+      if (type === ConfigurableItems.BRAND) {
+        return 'fa-tag'
+      } else if (type === ConfigurableItems.TYPE) {
+        return 'fa-wrench'
+      }
     }
   }
 }

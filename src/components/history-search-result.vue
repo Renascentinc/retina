@@ -99,8 +99,6 @@
 import gql from 'graphql-tag'
 import DeepDiff from 'deep-diff'
 import ExtendedFab from '../components/extended-fab'
-import Statuses from '../utils/statuses'
-import swal from 'sweetalert2'
 
 export default {
   name: 'HistorySearchResult',
@@ -137,10 +135,6 @@ export default {
   },
 
   computed: {
-    isDecomissioned () {
-      return this.$props.entry.tool.status === Statuses.BEYOND_REPAIR || this.$props.entry.tool.status === Statuses.LOST_OR_STOLEN
-    },
-
     diffMap () {
       var diffMap = {}
 
@@ -206,54 +200,6 @@ export default {
       } else {
         this.details = false
       }
-    },
-
-    recover () {
-      swal({
-        type: 'warning',
-        title: 'CONFIRM RECOVERY',
-        text: `Are you sure you want to recover this tool?`,
-        reverseButtons: true,
-        showCancelButton: true,
-        confirmButtonText: 'RECOVER',
-        cancelButtonText: 'CANCEL',
-        confirmButtonColor: '#CE352F'
-
-      }).then((result) => {
-        if (result.value) {
-          this.$apollo.mutate({
-            mutation: gql`
-              mutation update($tool: UpdatedTool!) {
-                updateTool(updatedTool: $tool) {
-                  status
-                }
-              }
-            `,
-            variables: {
-              tool: {
-                id: this.currentSnapshot.id,
-                type_id: this.currentSnapshot.type.id,
-                brand_id: this.currentSnapshot.brand.id,
-                model_number: this.currentSnapshot.model_number,
-                serial_number: this.currentSnapshot.serial_number,
-                status: 'AVAILABLE',
-                purchased_from_id: this.currentSnapshot.purchased_from && this.currentSnapshot.purchased_from.id,
-                date_purchased: this.currentSnapshot.date_purchased,
-                owner_id: this.currentSnapshot.owner.id,
-                photo: this.currentSnapshot.photo,
-                price: this.currentSnapshot.price,
-                year: this.currentSnapshot.year
-              }
-            }
-          }).then((result) => {
-            swal({
-              type: 'success',
-              title: 'TOOL RECOVERED',
-              timer: 1500
-            })
-          })
-        }
-      })
     },
 
     showDetails () {

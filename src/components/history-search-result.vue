@@ -4,17 +4,17 @@
       class="row"
       @click="selectResult()">
       <div
-        class="dt-cell id"
         :class="isDetailResult ? 'caret-box' : ''"
+        class="dt-cell id"
         @click="toggleDetails">
         <span
           v-if="!isDetailResult">
           {{ entry.tool.id }}
         </span>
         <i
+          v-if="isDetailResult"
           :class="showingDetails ? 'down' : 'right'"
-          class="fas fa-angle-right"
-          v-if="isDetailResult">
+          class="fas fa-angle-right">
         </i>
       </div>
       <div class="dt-cell name">
@@ -29,11 +29,11 @@
     </div>
     <transition name="history-detail">
       <div
-        class="details"
-        v-if="showingDetails">
+        v-if="showingDetails"
+        class="details">
         <div class="detail-row">
           <span class="label"> TIME </span>
-          <span class="value"> {{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US') + ' ' + new Date(entry.metadata.timestamp).toLocaleTimeString('en-US')}} </span>
+          <span class="value"> {{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US') + ' ' + new Date(entry.metadata.timestamp).toLocaleTimeString('en-US') }} </span>
         </div>
         <div class="detail-row">
           <span class="label"> DONE BY </span>
@@ -42,13 +42,13 @@
         <div class="detail-row">
           <span class="label"> STATUS </span>
           <span
-            class="value"
-            v-if="!statusDiff">
+            v-if="!statusDiff"
+            class="value">
             {{ formatToLower(status) }}
           </span>
           <span
-            class="value"
-            v-if="statusDiff">
+            v-if="statusDiff"
+            class="value">
             <span class="lhs"> {{ formatToLower(status.lhs) }} </span>
             <i class="fas fa-long-arrow-alt-right"></i>
             <span class="rhs"> {{ formatToLower(status.rhs) }} </span>
@@ -57,13 +57,13 @@
         <div class="detail-row">
           <span class="label"> OWNER </span>
           <span
-            class="value"
-            v-if="!ownerDiff">
+            v-if="!ownerDiff"
+            class="value">
             {{ formatToLower(owner) }}
           </span>
           <span
-            class="value"
-            v-if="ownerDiff">
+            v-if="ownerDiff"
+            class="value">
             <span class="lhs"> {{ formatToLower(owner.lhs) }} </span>
             <i class="fas fa-long-arrow-alt-right"></i>
             <span class="rhs"> {{ formatToLower(owner.rhs) }} </span>
@@ -71,10 +71,9 @@
         </div>
 
         <div
-          class="detail-row diff-row"
-          v-if="diff !== null"
-          v-for="change in diff"
-          :key="change.path[0]">
+          v-for="change in (diff || []).filter(d => !!d)"
+          :key="change.path[0]"
+          class="detail-row diff-row">
           <span class="label">{{ formatToUpper(change.path[0]) }} </span>
           <span class="value">
             <span class="lhs"> {{ change.lhs || '-' }} </span>
@@ -83,8 +82,8 @@
           </span>
         </div>
         <div
-          class="detail-row diff-row"
-          v-if="metadata.action_note !== null">
+          v-if="metadata.action_note !== null"
+          class="detail-row diff-row">
           <span class="label"> NOTE </span>
           <span class="value">
             {{ metadata.action_note }}
@@ -97,14 +96,14 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import DeepDiff from "deep-diff";
-import ExtendedFab from "../components/extended-fab"
+import gql from 'graphql-tag'
+import DeepDiff from 'deep-diff'
+import ExtendedFab from '../components/extended-fab'
 import Statuses from '../utils/statuses'
 import swal from 'sweetalert2'
 
 export default {
-  name: "HistorySearchResult",
+  name: 'HistorySearchResult',
 
   components: {
     ExtendedFab
@@ -125,17 +124,16 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       details: false,
-      diff: {},
       currentSnapshot: {},
       previousSnapshot: {},
       metadata: {},
       statusDiff: null,
       ownerDiff: null,
       diff: null
-    };
+    }
   },
 
   computed: {
@@ -154,20 +152,20 @@ export default {
     },
 
     loadingDetail () {
-      return this.currentSnapshot === null;
+      return this.currentSnapshot === null
     },
 
-    status() {
+    status () {
       return this.statusDiff || this.$props.entry.tool.status
     },
 
-    owner() {
+    owner () {
       return this.ownerDiff || this.ownerName
     },
 
     actorName () {
       if (this.currentSnapshot) {
-        return '' || `${ this.metadata.actor.first_name } ${ this.metadata.actor.last_name }`
+        return '' || `${this.metadata.actor.first_name} ${this.metadata.actor.last_name}`
       }
 
       return ''
@@ -175,12 +173,12 @@ export default {
 
     ownerName () {
       if (this.currentSnapshot) {
-        if (this.currentSnapshot.owner.type === "LOCATION") {
+        if (this.currentSnapshot.owner.type === 'LOCATION') {
           return this.currentSnapshot.owner.name
         }
 
-        if (this.currentSnapshot.owner.type === "USER") {
-          return `${ this.currentSnapshot.owner.first_name } ${ this.currentSnapshot.owner.last_name }`
+        if (this.currentSnapshot.owner.type === 'USER') {
+          return `${this.currentSnapshot.owner.first_name} ${this.currentSnapshot.owner.last_name}`
         }
       }
 
@@ -191,22 +189,22 @@ export default {
 
   methods: {
     formatToUpper (tstring) {
-      return tstring.replace(/_/g, " ").toUpperCase();
+      return tstring.replace(/_/g, ' ').toUpperCase()
     },
 
     formatToLower (tstring) {
-      return tstring.replace(/_/g, " ").toLowerCase();
+      return tstring.replace(/_/g, ' ').toLowerCase()
     },
 
-    selectResult() {
-      this.$props.selectTool(this.$props.entry.tool.id);
+    selectResult () {
+      this.$props.selectTool(this.$props.entry.tool.id)
     },
 
-    toggleDetails() {
+    toggleDetails () {
       if (!this.showingDetails) {
-        this.showDetails();
+        this.showDetails()
       } else {
-        this.details = false;
+        this.details = false
       }
     },
 
@@ -231,7 +229,7 @@ export default {
                 }
               }
             `,
-              variables: {
+            variables: {
               tool: {
                 id: this.currentSnapshot.id,
                 type_id: this.currentSnapshot.type.id,
@@ -258,7 +256,7 @@ export default {
       })
     },
 
-    showDetails() {
+    showDetails () {
       this.$apollo.query({
         query: gql`
           query getToolSnapshot($id: ID!) {
@@ -352,12 +350,12 @@ export default {
           id: this.$props.entry.id
         }
       }).then((result) => {
-        this.currentSnapshot = result.data.getToolSnapshot.tool;
-        this.metadata = result.data.getToolSnapshot.metadata;
-        this.previousSnapshot = result.data.getToolSnapshot.previous_tool_snapshot && result.data.getToolSnapshot.previous_tool_snapshot.tool;
-        this.diff = this.findDiff (this.previousSnapshot, this.currentSnapshot);
-        this.details = true;
-      });
+        this.currentSnapshot = result.data.getToolSnapshot.tool
+        this.metadata = result.data.getToolSnapshot.metadata
+        this.previousSnapshot = result.data.getToolSnapshot.previous_tool_snapshot && result.data.getToolSnapshot.previous_tool_snapshot.tool
+        this.diff = this.findDiff(this.previousSnapshot, this.currentSnapshot)
+        this.details = true
+      })
     },
 
     findDiff (previous, current) {
@@ -371,38 +369,34 @@ export default {
 
         if (diff) {
           diff.forEach((change) => {
-            if (change.path.indexOf('id') < 0
-                && change.path.indexOf('first_name') < 0
-                && change.path.indexOf('last_name') < 0
-                && change.path.indexOf('status') < 0
-                && change.path.indexOf('owner') < 0
-                && change.path.indexOf('photo') < 0) {
-
+            if (change.path.indexOf('id') < 0 &&
+                change.path.indexOf('first_name') < 0 &&
+                change.path.indexOf('last_name') < 0 &&
+                change.path.indexOf('status') < 0 &&
+                change.path.indexOf('owner') < 0 &&
+                change.path.indexOf('photo') < 0) {
               if (change.path.indexOf('price') >= 0) {
                 finalDiff.push({
                   lhs: change.lhs !== null ? `$${(change.lhs / 100).toFixed(2)}` : null,
                   rhs: change.rhs !== null ? `$${(change.rhs / 100).toFixed(2)}` : null,
                   path: change.path
                 })
-              }
-              else if (change.path.indexOf('date_purchased') >= 0) {
+              } else if (change.path.indexOf('date_purchased') >= 0) {
                 finalDiff.push({
                   lhs: change.lhs !== null ? new Date(change.lhs).toLocaleDateString('en-US') : null,
                   rhs: change.rhs !== null ? new Date(change.rhs).toLocaleDateString('en-US') : null,
                   path: change.path
                 })
-              }
-              else {
+              } else {
                 finalDiff.push(change)
               }
             }
 
-            if (change.path.indexOf('owner') >= 0
-                && change.path.indexOf('first_name') < 0
-                && change.path.indexOf('last_name') < 0
-                && change.path.indexOf('type') < 0
-                && change.path.indexOf('__typename') < 0) {
-
+            if (change.path.indexOf('owner') >= 0 &&
+                change.path.indexOf('first_name') < 0 &&
+                change.path.indexOf('last_name') < 0 &&
+                change.path.indexOf('type') < 0 &&
+                change.path.indexOf('__typename') < 0) {
               this.ownerDiff = change
             }
 
@@ -412,14 +406,13 @@ export default {
           })
         }
 
-        return finalDiff;
-
+        return finalDiff
       } else {
         return null
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

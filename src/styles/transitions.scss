@@ -1,0 +1,66 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 0 0 50px;
+  max-width: 500px;
+}
+
+// Transition Name: "list-loading"
+.list-loading-enter-active {
+  transition: all .25s ease;
+}
+
+.list-loading-leave-active {
+  transition: all .4s ease;
+}
+
+.list-loading-enter, .list-loading-leave-to {
+  opacity: 0;
+  flex-basis: 0;
+}
+
+// Transition Name: "list-element"
+.list-element-move {
+  transition: transform .5s ease;
+}
+
+.list-element-enter-active {
+  transition: all .5s ease;
+}
+.list-element-enter {
+  opacity: 0;
+}
+
+.list-element-leave-active {
+  display: none !important;
+  transition: all .2s ease;
+}
+
+.list-element-leave-to {
+  height: 0;
+}
+
+// Transition Name: "fade"
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .1s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+// Transition Name: "page-change"
+.page-change-enter-active {
+  transition: all .3s;
+}
+
+.page-change-enter {
+  opacity: 0;
+}
+
+.page-change-leave-to,
+.page-change-leave-active {
+  display: none;
+  visibility: hidden;
+}

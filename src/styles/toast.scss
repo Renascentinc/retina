@@ -1,0 +1,30 @@
+.swal2-modal {
+  width: calc(100% - 30px);
+  max-width: 350px;
+
+  .swal2-icon {
+    margin: 5px auto 20px auto;
+
+    &.swal2-info {
+      border-color: $renascent-dark-gray;
+      color: $renascent-dark-gray;
+    }
+  }
+
+  .swal2-input:focus {
+    border: 1px solid transparent !important;
+  }
+
+  .swal2-text {
+    text-align: center;
+  }
+
+  .swal2-footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  button {
+    background-color: $renascent-dark-gray;
+  }
+}

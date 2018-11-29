@@ -1,20 +1,33 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+#OS files
 .DS_Store
-.idea/
-cordova/
 
-# compiled output
-/dist
-/tmp
+# Editor files
+/.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+**.swp
+*.sw*
 
-# dependencies
-/node_modules
-/bower_components
+# Logs
+logs
+*.log
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage/*
-/libpeerconnection.log
-npm-debug.log
-testem.log
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+node_modules/
+dist/
+test/unit/coverage/
+/www/**
+/platforms/**
+/plugins/**
+
+# Parcel cache
+.cache
+
+.vscode/

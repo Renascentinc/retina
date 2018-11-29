@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 import ExtendedFab from '../components/extended-fab'
 import Platforms from '../utils/platforms'
-import nfc from '../mixins/nfc'
+import nfcMixin from '../mixins/nfc'
 import '../assets/icons/svg/nfc'
 
 export default {
@@ -28,7 +28,7 @@ export default {
     ExtendedFab
   },
 
-  mixins: [nfc],
+  mixins: [nfcMixin],
 
   props: {
     onScan: {
@@ -37,29 +37,36 @@ export default {
     }
   },
 
-  notifications: {
-    showBlankTagMsg: {
-      type: VueNotifications.types.info,
-      title: 'BLANK TAG',
-      message: 'This Tag is Blank'
-    },
-    showNfcDisabledMsg: {
-      type: VueNotifications.types.info,
-      title: 'NFC NOT AVAILABLE',
-      message: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Phone'
-    }
-  },
-
   methods: {
+    showBlankTagMsg () {
+      swal({
+        type: 'info',
+        title: 'BLANK TAG',
+        text: 'This Tag is Blank',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
+    showNfcDisabledMsg () {
+      swal({
+        type: 'info',
+        title: 'NFC NOT AVAILABLE',
+        text: 'If You Want To Scan NFC Tags Please Use The Mobile App on an iOS or Android Device',
+        timer: 2500,
+        showConfirmButton: false
+      })
+    },
+
     nfcCallback (value) {
       if (value) {
+        if (window.device.platform === Platforms.ANDROID) {
+          swal.close()
+        }
+
         this.onScan(value)
       } else {
         this.showBlankTagMsg()
-      }
-
-      if (window.device.platform === Platforms.ANDROID) {
-        this.$modal.hide('ready-to-scan-modal')
       }
     },
 
@@ -68,7 +75,7 @@ export default {
         this.startNfcListener()
 
         if (window.device.platform === Platforms.ANDROID) {
-          this.$modal.show('ready-to-scan-modal')
+          this.showReadyToScanModal()
         }
       } else {
         this.showNfcDisabledMsg()

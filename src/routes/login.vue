@@ -2,6 +2,18 @@
   <div
     :class="$mq"
     class="page login-page">
+
+    <transition name="fade">
+      <div
+        v-if="currentState === states.AUTHENTICATING"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
+      </div>
+    </transition>
+
     <div class="top-panel">
       <img
         class="logo"
@@ -39,7 +51,8 @@
             placeholder="username"
             autocorrect="off"
             autocapitalize="off"
-            spellcheck="false">
+            spellcheck="false"
+            @keydown.enter="attemptUserLogin">
         </input-with-icon>
 
         <input-with-icon
@@ -49,7 +62,8 @@
             v-model="password"
             class="password-input"
             placeholder="password"
-            type="password">
+            type="password"
+            @keydown.enter="attemptUserLogin">
         </input-with-icon>
 
         <input-with-icon
@@ -62,16 +76,16 @@
             placeholder="organization name"
             autocorrect="off"
             autocapitalize="off"
-            spellcheck="false">
+            spellcheck="false"
+            @keydown.enter="attemptUserLogin">
         </input-with-icon>
       </div>
 
       <div class="login-action-row">
         <button
           class="reset-password"
-          type="reset"
-          @click="() => $modal.show('password-reset-modal')">
-          RESET PASSWORD
+          @click="requestPasswordReset">
+          FORGOT PASSWORD?
         </button>
 
         <extended-fab
@@ -82,54 +96,6 @@
         </extended-fab>
       </div>
     </div>
-
-    <modal
-      :width="300"
-      :height="220"
-      class="ready-to-scan-modal"
-      name="password-reset-modal">
-      <div
-        v-if="!loading"
-        class="modal-content">
-        <span class="header-text"> RESET PASSWORD </span>
-
-        <div class="input-group-container">
-          <input
-            v-validate="'required|email'"
-            v-model="passwordResetEmail"
-            name="passwordResetEmail"
-            class="light-input password-reset-email-input"
-            placeholder="email address">
-
-          <span
-            class="error">
-            {{ errors.first('passwordResetEmail') }}
-          </span>
-        </div>
-
-        <div class="request-action-container">
-          <extended-fab
-            :on-click="() => $modal.hide('password-reset-modal')"
-            icon-class=""
-            class="request-reset-btn"
-            button-text="CANCEL">
-          </extended-fab>
-
-          <extended-fab
-            :on-click="requestPasswordReset"
-            :disabled="!passwordResetEmail"
-            icon-class=""
-            class="request-reset-btn"
-            button-text="SUBMIT">
-          </extended-fab>
-        </div>
-      </div>
-      <div
-        v-if="loading"
-        class="modal-content">
-        <div class="loading"></div>
-      </div>
-    </modal>
   </div>
 </template>
 
@@ -139,7 +105,7 @@ import gql from 'graphql-tag'
 import ApiStatusCodes from '../utils/api-status-codes'
 import InputWithIcon from '../components/input-with-icon'
 import ExtendedFab from '../components/extended-fab'
-import VueNotifications from 'vue-notifications'
+import swal from 'sweetalert2'
 
 export default {
   name: 'Login',
@@ -185,22 +151,7 @@ export default {
       domain: '@renascentinc.com',
       password: '',
       currentState: states.INITIAL,
-      passwordResetEmail: '',
-      loading: false,
       states
-    }
-  },
-
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Instructions for resetting your password have been sent to your email'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'RESET FAILURE',
-      message: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support'
     }
   },
 
@@ -218,28 +169,49 @@ export default {
   },
 
   methods: {
+    showPasswordResetError () {
+      swal({
+        type: 'error',
+        title: 'RESET FAILURE',
+        text: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
     requestPasswordReset () {
-      this.$validator.validate().then(result => {
-        if (result) {
-          this.loading = true
+      swal({
+        title: 'RESET PASSWORD',
+        text: 'Enter your email address',
+        input: 'email',
+        inputPlaceholder: 'email@example.com',
+        reverseButtons: true,
+        showCancelButton: true,
+        cancelButtonText: 'CANCEL',
+        confirmButtonText: 'SUBMIT',
+        confirmButtonColor: '#404040'
+      }).then(result => {
+        if (result && result.value) {
           this.$apollo.mutate({
             mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
               requestPasswordReset(email: $email)
             }`,
             variables: {
-              email: this.passwordResetEmail
+              email: result.value
             }
           }).then(response => {
-            this.$modal.hide('password-reset-modal')
-            this.loading = false
-            if (response.data.requestPasswordReset) {
-              this.showSuccessMsg()
-            } else {
-              this.showErrorMsg()
+            if (!response.data.requestPasswordReset) {
+              this.showPasswordResetError()
             }
           }).catch(() => {
-            this.loading = false
-            this.showErrorMsg()
+            this.showPasswordResetError()
+          })
+
+          swal({
+            type: 'success',
+            text: 'Instructions for resetting your password will be sent to your email',
+            timer: 2000,
+            showConfirmButton: false
           })
         }
       })
@@ -379,11 +351,12 @@ $login-input-border-radius: 5px;
 
   .login-action-row {
     display: flex;
-    height: 70px;
+    height: 15vh;
     align-items: center;
     justify-content: space-around;
 
     .login-btn {
+      height: 45px;
       width: 130px;
     }
   }
@@ -431,9 +404,7 @@ $login-input-border-radius: 5px;
   }
 }
 
-// MOBILE
-
-.mobile {
+.mobile.login-page {
   .top-panel {
     align-items: flex-end;
 
@@ -451,9 +422,7 @@ $login-input-border-radius: 5px;
   }
 }
 
-// DESKTOP
-
-.desktop {
+.desktop.login-page {
   justify-content: space-between;
   overflow-y: auto;
 

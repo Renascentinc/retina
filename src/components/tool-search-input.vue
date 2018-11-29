@@ -7,6 +7,7 @@
       v-model="tag"
       :tags="tags"
       :autocomplete-items="filteredItems"
+      :add-on-blur="false"
       placeholder="Search"
       @tags-changed="tagsChanged">
 
@@ -51,6 +52,23 @@ export default {
     updateTags: {
       type: Function,
       required: true
+    },
+
+    disableUserSearch: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    tags: {
+      type: Array,
+      required: true
+    },
+
+    // TODO: fixed hacked fuzzy search clear implementation
+    clearFuzzyFilter: {
+      type: Boolean,
+      required: true
     }
   },
   apollo: {
@@ -81,8 +99,7 @@ export default {
   },
   data () {
     return {
-      tag: '',
-      tags: []
+      tag: ''
     }
   },
 
@@ -115,11 +132,17 @@ export default {
         }
       ]
 
-      return statuses.concat(this.users).concat(this.searchableConfigItems).concat(this.locations)
+      let items = statuses.concat(this.searchableConfigItems).concat(this.locations)
+
+      if (!this.disableUserSearch) {
+        items = items.concat(this.users)
+      }
+
+      return items
     },
 
     filteredItems () {
-      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text))
+      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag.toLowerCase()) > -1)
     },
 
     locations () {
@@ -156,14 +179,28 @@ export default {
       return searchItems
     }
   },
+
+  watch: {
+    clearFuzzyFilter () {
+      this.tag = ''
+    },
+
+    tag (fuzzySearch) {
+      if (!fuzzySearch) {
+        this.tagsChanged(this.tags)
+      }
+    }
+  },
+
   methods: {
     tagsChanged (newTags) {
       let fuzzySearch = null
       if (newTags.some(tag => !tag.name)) {
         fuzzySearch = newTags.pop().text
         this.tag = fuzzySearch
+        document.querySelector('.fa-search').click()
+        document.querySelector('.new-tag-input').blur()
       }
-      this.tags = newTags
       this.updateTags(newTags, fuzzySearch)
     },
 
@@ -214,7 +251,6 @@ export default {
 
   .item-category {
     color: gray;
-    text-transform: capitalize;
     flex: 0 0 95px;
     text-align: right;
     padding-right: 5px;

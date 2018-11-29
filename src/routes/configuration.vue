@@ -1,61 +1,18 @@
 <template>
   <div class="page configuration-page">
-
-    <div
-      v-if="showReplacementModal"
-      class="replacement-scrim">
-      <div class="replacement-modal">
-        <span> {{ replacementList.length }} tools are using this item. </span>
-        <span> Replace each use of {{ replacementName }} with: </span>
-        <v-select
-          v-validate:replaceBrandWith="'required'"
-          v-if="page === ConfigurableItems.BRAND"
-          v-model="replaceBrandWith"
-          :options="brandOptions"
-          label="name"
-          class="dark-input"
-          placeholder="Brand"
-          name="replaceBrandWith">
-        </v-select>
-        <v-select
-          v-validate:replaceTypeWith="'required'"
-          v-if="page === ConfigurableItems.TYPE"
-          v-model="replaceTypeWith"
-          :options="typeOptions"
-          label="name"
-          class="dark-input"
-          placeholder="Type"
-          name="replaceTypeWith">
-        </v-select>
-        <v-select
-          v-validate:replaceSupplierWith="'required'"
-          v-if="page === ConfigurableItems.PURCHASED_FROM"
-          v-model="replaceSupplierWith"
-          :options="supplierOptions"
-          label="name"
-          class="dark-input"
-          placeholder="Supplier"
-          name="replaceSupplierWith">
-        </v-select>
-        <div class="modal-actions">
-          <span>
-            <i
-              class="fas fa-times"
-              @click="closeReplacementModal"></i>
-            <span class="modal-text">CANCEL</span>
-          </span>
-          <span>
-            <i
-              class="fas fa-arrow-right"
-              @click="finalizeDelete"></i>
-            <span class="modal-text">FINISH</span>
-          </span>
+    <transition name="fade">
+      <div
+        v-if="deleting"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
         </div>
       </div>
-    </div>
+    </transition>
+
     <header-card
-      :title="title"
-      exit-link="/">
+      :title="title">
     </header-card>
 
     <div class="navigation">
@@ -68,10 +25,10 @@
     </div>
 
     <div class="config-menu-container">
-      <div
+      <!-- <div
         v-if="$mq === 'desktop'"
         class="spacer">
-      </div>
+      </div> -->
       <div class="configs">
         <add-result
           v-if="title === 'Brands'"
@@ -117,8 +74,8 @@ import ConfigItem from '../components/config-item'
 import ConfigurableItems from '../utils/configurable-items'
 import gql from 'graphql-tag'
 import vSelect from '../components/select'
-import VueNotifications from 'vue-notifications'
 import AddResult from '../components/add-result'
+import swal from 'sweetalert2'
 
 export default {
   name: 'Configuration',
@@ -135,33 +92,15 @@ export default {
     return {
       getAllConfigurableItem: null,
       tab: 0,
-      showReplacementModal: false,
       replacementList: [],
       replacementType: '',
       replacementName: '',
       replaceBrandWith: null,
       replaceTypeWith: null,
       replaceSupplierWith: null,
+      deleting: false,
       deletedConfig: {},
       ConfigurableItems: ConfigurableItems
-    }
-  },
-
-  notifications: {
-    showInvalidItemMsg: {
-      type: VueNotifications.types.warn,
-      title: 'INVALID ITEM',
-      message: 'You cannot create a duplicate item'
-    },
-    showBlankItemMsg: {
-      type: VueNotifications.types.warn,
-      title: 'BLANK ITEM',
-      message: 'You cannot create a blank item'
-    },
-    showSuccessDelete: {
-      type: VueNotifications.types.success,
-      title: 'SUCCESS',
-      message: 'Item has been deleted'
     }
   },
 
@@ -291,6 +230,46 @@ export default {
   },
 
   methods: {
+    showInvalidItemMsg () {
+      swal({
+        type: 'warning',
+        title: 'INVALID ITEM',
+        text: 'You cannot create a duplicate item',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
+    showBlankItemMsg () {
+      swal({
+        type: 'warning',
+        title: 'BLANK ITEM',
+        text: 'You cannot create a blank item',
+        timer: 1500,
+        showConfirmButton: false
+      })
+    },
+
+    showSuccessDelete () {
+      swal({
+        type: 'success',
+        title: 'SUCCESS',
+        text: 'Item has been deleted',
+        timer: 1500,
+        showConfirmButton: false
+      })
+    },
+
+    showDeleteError () {
+      swal({
+        type: 'error',
+        title: 'ERROR',
+        text: 'There was an issue performing the delete. Please try again or contact support.',
+        timer: 2000,
+        showConfirmButton: false
+      })
+    },
+
     deleteConfig (config) {
       this.deletedConfig = config
       this.$apollo.mutate({
@@ -336,31 +315,57 @@ export default {
       }).then(response => {
         if (response.data.deleteConfigurableItem.deletedConfigurableItem) {
           this.showSuccessDelete()
-          this.$apollo.queries.getAllConfigurableItem.refresh()
+          this.$apollo.queries.getAllConfigurableItem.refetch()
         } else {
           this.replacementList = response.data.deleteConfigurableItem.toolsWithConfigurableItem
-          this.openReplacementModal(config)
+          let inputOptions = {}
+          let configurableItems
+          if (this.page === ConfigurableItems.BRAND) {
+            configurableItems = this.brandOptions
+          } else if (this.page === ConfigurableItems.PURCHASED_FROM) {
+            configurableItems = this.supplierOptions
+          } else {
+            configurableItems = this.typeOptions
+          }
+          configurableItems.forEach(ci => {
+            inputOptions[ci.id] = ci.name
+          })
+          swal({
+            title: 'DELETE ITEM',
+            text: `${this.replacementList.length} tools are using this item. Replace with :`,
+            showCancelButton: true,
+            reverseButtons: true,
+            cancelButtonText: 'CANCEL',
+            confirmButtonText: 'REPLACE',
+            confirmButtonColor: '#CE352F',
+            input: 'select',
+            inputPlaceholder: `Select new ${this.title.slice(0, -1)}`,
+            inputOptions,
+            inputValidator: (value) => {
+              return !value && `New ${this.title.slice(0, -1)} required`
+            }
+          }).then(({ value, dismiss }) => {
+            if (dismiss) {
+              return
+            }
+
+            if (this.page === ConfigurableItems.BRAND) {
+              this.replaceBrandWith = value
+            } else if (this.page === ConfigurableItems.PURCHASED_FROM) {
+              this.replaceSupplierWith = value
+            } else {
+              this.replaceTypeWith = value
+            }
+            this.finalizeDelete()
+          })
         }
       })
     },
 
-    openReplacementModal (config) {
-      this.replacementType = config.type.toLowerCase()
-      this.replacementName = config.name.toLowerCase()
-      this.showReplacementModal = true
-    },
-
-    closeReplacementModal () {
-      this.replacementType = ''
-      this.replacementName = ''
-      this.replacementList = []
-      this.showReplacementModal = false
-    },
-
     finalizeDelete () {
-      this.replacementList.forEach(tool => {
-        console.log(tool)
-        this.$apollo
+      this.deleting = true
+      Promise.all(this.replacementList.map(tool => {
+        return this.$apollo
           .mutate({
             mutation: gql`
                 mutation updateTool($tool: UpdatedTool!) {
@@ -373,13 +378,13 @@ export default {
             variables: {
               tool: {
                 id: tool.id,
-                type_id: this.page === ConfigurableItems.TYPE ? this.replaceTypeWith.id : tool.type.id,
-                brand_id: this.page === ConfigurableItems.BRAND ? this.replaceBrandWith.id : tool.brand.id,
+                type_id: this.page === ConfigurableItems.TYPE ? this.replaceTypeWith : tool.type.id,
+                brand_id: this.page === ConfigurableItems.BRAND ? this.replaceBrandWith : tool.brand.id,
                 model_number: tool.model_number,
                 serial_number: tool.serial_number,
                 status: tool.status,
                 owner_id: tool.owner.id,
-                purchased_from_id: this.page === ConfigurableItems.PURCHASED_FROM ? this.replaceSupplierWith.id : tool.purchased_from.id,
+                purchased_from_id: this.page === ConfigurableItems.PURCHASED_FROM ? this.replaceSupplierWith : tool.purchased_from && tool.purchased_from.id,
                 date_purchased: tool.date_purchased,
                 photo: tool.photo,
                 price: tool.price,
@@ -387,11 +392,13 @@ export default {
               }
             }
           })
-          .then(result => {
-            this.deleteConfig(this.deletedConfig)
-            this.closeReplacementModal()
-            this.deletedConfig = {}
-          })
+      })).then(result => {
+        this.deleteConfig(this.deletedConfig)
+        this.deletedConfig = {}
+      }).catch(() => {
+        this.showDeleteError()
+      }).finally(() => {
+        this.deleting = false
       })
     },
 
@@ -422,7 +429,7 @@ export default {
             this.showInvalidItemMsg()
           })
           .then(result => {
-            this.$apollo.queries.getAllConfigurableItem.refresh()
+            this.$apollo.queries.getAllConfigurableItem.refetch()
           })
       }
     },
@@ -477,7 +484,7 @@ export default {
             this.showInvalidItemMsg()
           })
           .then(result => {
-            this.$apollo.queries.getAllConfigurableItem.refresh()
+            this.$apollo.queries.getAllConfigurableItem.refetch()
           })
       }
     },
@@ -502,8 +509,7 @@ export default {
             sanctioned
           }
         }
-      `,
-      fetchPolicy: 'cache-and-network'
+      `
     }
   }
 }
@@ -517,72 +523,6 @@ export default {
   flex-direction: column;
   background-color: $background-light-gray;
   overflow-y: hidden;
-
-  .replacement-scrim {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.25);
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .replacement-modal {
-      z-index: 11;
-      background-color: white;
-      border-radius: 5px;
-      width: calc(100% - 60px);
-      max-width: 350px;
-      font-size: 22px;
-      font-weight: 600;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      padding: 15px;
-      line-height: 30px;
-
-      .v-select {
-        margin-top: 15px;
-        margin-bottom: 15px;
-        width: 250px;
-        font-size: 16px;
-        height: 45px;
-        margin-left: auto;
-        margin-right: auto;
-
-        * {
-          font-size: 16px;
-        }
-      }
-
-      .modal-actions {
-        display: flex;
-        justify-content: space-around;
-        padding: 15px;
-        font-size: 30px;
-        color: $renascent-red;
-
-        .modal-text {
-          font-size: 14px;
-          color: $renascent-dark-gray;
-        }
-
-        i {
-          border: solid $renascent-red 2px;
-          border-radius: 50%;
-          color: $renascent-red;
-          width: 50px;
-          height: 50px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-        }
-      }
-    }
-  }
 
   .navigation {
     position: absolute;
@@ -606,26 +546,19 @@ export default {
 
   .config-menu-container {
     display: flex;
+    justify-content: center;
     flex-direction: row;
     width: 100%;
 
-    .spacer {
-      min-width: 158px;
-      flex: 1 1 auto;
-      max-width: 300px;
-    }
-
     .configs {
       overflow-y: auto;
-      z-index: 0;
       flex: 1 1 auto;
+      max-width: 500px;
     }
   }
 }
 
-// MOBILE
-
-.mobile {
+.mobile .configuration-page {
   .navigation {
     width: 100%;
 
@@ -635,9 +568,7 @@ export default {
   }
 }
 
-// DESKTOP
-
-.desktop {
+.desktop .configuration-page {
   .navigation {
     width: calc(100% - 60px);
 

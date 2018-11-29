@@ -54,14 +54,14 @@
       </div>
       <div class="report">
 
-      <span
-        v-if="!currentToolId"
-        style="text-align: center;
+        <span
+          v-if="!currentToolId"
+          style="text-align: center;
         font-weight: 600;"
-        class="title">
-        LATEST TRANSACTIONS
-      </span>
-      <span
+          class="title">
+          LATEST TRANSACTIONS
+        </span>
+        <span
           v-if="currentToolId"
           class="title">
           <span
@@ -96,9 +96,9 @@
         </div>
         <extended-fab
           v-if="$mq === 'mobile' && isDecomissionedTool"
+          :on-click="recover"
           button-text="RECOVER"
           icon-class="fa-undo-alt"
-          :on-click="recover"
           class="restore-efab">
         </extended-fab>
       </div>
@@ -117,7 +117,7 @@ import gql from 'graphql-tag'
 import swal from 'sweetalert2'
 import HistoryTable from '../components/history-table'
 import HistorySearchResult from '../components/history-search-result'
-import statuses from '../utils/statuses';
+import statuses from '../utils/statuses'
 
 export default {
   name: 'History',
@@ -157,12 +157,11 @@ export default {
       variables () {
         return {
           toolSnapshotFilter: {
-            only_latest_snapshot: this.currentToolId ? false : true,
+            only_latest_snapshot: !this.currentToolId,
             tool_ids: this.currentToolId
           }
         }
-      },
-      fetchPolicy: 'cache-and-network'
+      }
     }
   },
 
@@ -218,7 +217,6 @@ export default {
 
   methods: {
     recover () {
-      console.log(this.$router.currentRoute.toolId)
       swal({
         type: 'warning',
         title: 'CONFIRM RECOVERY',
@@ -239,9 +237,9 @@ export default {
                 }
               }
             `,
-              variables: {
-                tool_id: this.$router.currentRoute.params.toolId,
-                status: 'AVAILABLE'
+            variables: {
+              tool_id: this.$router.currentRoute.params.toolId,
+              status: 'AVAILABLE'
             }
           }).then((result) => {
             swal({
@@ -256,7 +254,7 @@ export default {
     },
 
     goBack () {
-      this.currentToolId = null;
+      this.currentToolId = null
       this.$router.go(-1)
     },
 
@@ -358,7 +356,7 @@ export default {
     }
   }
 
-  .floating-action-bar {
+  .floating-action-bar .history-page {
     min-width: 180px;
     display: flex;
     flex-direction: column;
@@ -376,7 +374,7 @@ export default {
   }
 }
 
-.mobile {
+.mobile .history-page {
   .floating-action-bar {
     display: inline-block;
     position: absolute;

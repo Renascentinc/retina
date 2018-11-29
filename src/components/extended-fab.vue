@@ -4,13 +4,17 @@
     :disabled="disabled"
     class="extended-fab"
     @click="onClick">
-    <div class="fab-icon-container">
+    <div
+      class="fab-icon-container">
       <i
         :class="iconClass"
         class="fas">
       </i>
     </div>
-    <span class="efab-text">{{ buttonText }}</span>
+    <span
+      class="efab-text">
+      {{ buttonText }}
+    </span>
   </button>
 </template>
 

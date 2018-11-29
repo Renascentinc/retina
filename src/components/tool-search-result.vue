@@ -23,7 +23,7 @@
         <span class="tool-assignee">{{ assignee }}</span>
       </div>
     </div>
-    <transition>
+    <transition name="fade">
       <div
         v-if="showSelect"
         class="tool-selection-container">

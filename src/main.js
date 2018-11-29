@@ -20,14 +20,9 @@ import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
 import VueMq from 'vue-mq'
 import VueSVGIcon from 'vue-svgicon'
-import VueJsModal from 'vue-js-modal'
-import VueNotifications from 'vue-notifications'
-import swal from 'sweetalert'
-
-function toast ({title, message, type, timeout, cb}) {
-  if (type === VueNotifications.types.warn) type = 'warning'
-  return swal(title, message, type)
-}
+import swal from 'sweetalert2'
+import VueInfiniteScroll from 'vue-infinite-scroll'
+import money from 'v-money'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -73,12 +68,12 @@ const cache = new InMemoryCache({
 
 // TODO: dynamically switch between prod and develop api's
 const httpLink = new HttpLink({
-  uri: 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+  uri: process.env.ENVIRONMENT === 'prod' ? 'http://retina-api.us-east-2.elasticbeanstalk.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {
   const token = localStorage.getItem('token')
-  if (token && operationName !== 'attemptUserLogin') {
+  if (token && operationName !== 'attemptUserLogin' && operationName !== 'attemptPasswordReset') {
     headers.authorization = `Bearer ${token}`
   }
 
@@ -91,7 +86,13 @@ const errorLink = onError(({ graphQLErrors = [] }) => {
   graphQLErrors.map(({ extensions: { code } }) => {
     if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
       window.localStorage.removeItem('token')
-      swal('SESSION EXPIRED', 'Your Session Has Expired. Please Log In Again', VueNotifications.types.error)
+      swal({
+        type: 'error',
+        title: 'SESSION EXPIRED',
+        text: 'Your Session Has Expired. Please Log In Again',
+        timer: 2000,
+        showConfirmButton: false
+      })
       router.push({ path: '/login' })
     }
   })
@@ -109,21 +110,14 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.config.productionTip = false
+Vue.use(VueInfiniteScroll)
 Vue.use(DrawerLayout)
 Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
 Vue.use(VueSVGIcon)
 Vue.use(VueLazyload)
-Vue.use(VueJsModal, {
-  dialog: true
-})
-Vue.use(VueNotifications, {
-  success: toast,
-  error: toast,
-  info: toast,
-  warn: toast
-})
+Vue.use(money, { precision: 2 })
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 500,
@@ -131,7 +125,7 @@ Vue.use(VueMq, {
   }
 })
 
-attachFastClick(document.body, { tapDelay: 200 })
+attachFastClick(document.body, { tapDelay: 50 })
 
 new Vue({
   router,

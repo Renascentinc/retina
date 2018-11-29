@@ -94,6 +94,13 @@
             </transition-group>
           </div>
         </div>
+        <extended-fab
+          v-if="$mq === 'mobile' && isDecomissionedTool"
+          button-text="RECOVER"
+          icon-class="fa-undo-alt"
+          :on-click="recover"
+          class="restore-efab">
+        </extended-fab>
       </div>
     </div>
   </div>
@@ -110,6 +117,7 @@ import gql from 'graphql-tag'
 import swal from 'sweetalert2'
 import HistoryTable from '../components/history-table'
 import HistorySearchResult from '../components/history-search-result'
+import statuses from '../utils/statuses';
 
 export default {
   name: 'History',
@@ -176,9 +184,14 @@ export default {
   },
 
   computed: {
+    isDecomissionedTool () {
+      return this.searchToolSnapshot[0] ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
+    },
+
     datePickerVisibility () {
       return this.isDatepickerShown ? 'visible' : 'hidden'
     },
+
     isNativeApp () {
       return !!window.device && !!window.device.cordova
     },
@@ -204,6 +217,44 @@ export default {
   },
 
   methods: {
+    recover () {
+      console.log(this.$router.currentRoute.toolId)
+      swal({
+        type: 'warning',
+        title: 'CONFIRM RECOVERY',
+        text: `Are you sure you want to recover this tool?`,
+        reverseButtons: true,
+        showCancelButton: true,
+        confirmButtonText: 'RECOVER',
+        cancelButtonText: 'CANCEL',
+        confirmButtonColor: '#CE352F'
+
+      }).then((result) => {
+        if (result.value) {
+          this.$apollo.mutate({
+            mutation: gql`
+              mutation recomissionTool($tool_id: ID!, $status: InServiceToolStatus!) {
+                recomissionTool(tool_id: $tool_id, recomissioned_status: $status) {
+                  status
+                }
+              }
+            `,
+              variables: {
+                tool_id: this.$router.currentRoute.params.toolId,
+                status: 'AVAILABLE'
+            }
+          }).then((result) => {
+            swal({
+              type: 'success',
+              title: 'TOOL RECOVERED',
+              timer: 1500
+            })
+            this.$apollo.queries.searchToolSnapshot.refresh()
+          })
+        }
+      })
+    },
+
     goBack () {
       this.currentToolId = null;
       this.$router.go(-1)
@@ -384,6 +435,14 @@ export default {
     flex-direction: column;
     height: 100%;
     flex: 1 1 auto;
+    align-items: center;
+
+    .restore-efab {
+      position: absolute;
+      margin-top: auto;
+      bottom: 75px;
+      width: 158px;
+    }
 
     #export-table {
       width: calc(100% - 24px);
@@ -403,6 +462,7 @@ export default {
       margin-top: 12px;
       padding-left: 12px;
       padding-right: 12px;
+      width: calc(100% - 24px);
 
       .back {
         color: $renascent-red;

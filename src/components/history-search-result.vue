@@ -82,6 +82,14 @@
             <span class="rhs"> {{ change.rhs || '-' }} </span>
           </span>
         </div>
+        <div
+          class="detail-row diff-row"
+          v-if="metadata.action_note !== null">
+          <span class="label"> NOTE </span>
+          <span class="value">
+            {{ metadata.action_note }}
+          </span>
+        </div>
       </div>
 
     </transition>
@@ -91,9 +99,16 @@
 <script>
 import gql from "graphql-tag";
 import DeepDiff from "deep-diff";
+import ExtendedFab from "../components/extended-fab"
+import Statuses from '../utils/statuses'
+import swal from 'sweetalert2'
 
 export default {
   name: "HistorySearchResult",
+
+  components: {
+    ExtendedFab
+  },
 
   props: {
     entry: {
@@ -124,6 +139,10 @@ export default {
   },
 
   computed: {
+    isDecomissioned () {
+      return this.$props.entry.tool.status === Statuses.BEYOND_REPAIR || this.$props.entry.tool.status === Statuses.LOST_OR_STOLEN
+    },
+
     diffMap () {
       var diffMap = {}
 
@@ -191,15 +210,67 @@ export default {
       }
     },
 
+    recover () {
+      swal({
+        type: 'warning',
+        title: 'CONFIRM RECOVERY',
+        text: `Are you sure you want to recover this tool?`,
+        reverseButtons: true,
+        showCancelButton: true,
+        confirmButtonText: 'RECOVER',
+        cancelButtonText: 'CANCEL',
+        confirmButtonColor: '#CE352F'
+
+      }).then((result) => {
+        if (result.value) {
+          this.$apollo.mutate({
+            mutation: gql`
+              mutation update($tool: UpdatedTool!) {
+                updateTool(updatedTool: $tool) {
+                  status
+                }
+              }
+            `,
+              variables: {
+              tool: {
+                id: this.currentSnapshot.id,
+                type_id: this.currentSnapshot.type.id,
+                brand_id: this.currentSnapshot.brand.id,
+                model_number: this.currentSnapshot.model_number,
+                serial_number: this.currentSnapshot.serial_number,
+                status: 'AVAILABLE',
+                purchased_from_id: this.currentSnapshot.purchased_from && this.currentSnapshot.purchased_from.id,
+                date_purchased: this.currentSnapshot.date_purchased,
+                owner_id: this.currentSnapshot.owner.id,
+                photo: this.currentSnapshot.photo,
+                price: this.currentSnapshot.price,
+                year: this.currentSnapshot.year
+              }
+            }
+          }).then((result) => {
+            swal({
+              type: 'success',
+              title: 'TOOL RECOVERED',
+              timer: 1500
+            })
+          })
+        }
+      })
+    },
+
     showDetails() {
       this.$apollo.query({
         query: gql`
           query getToolSnapshot($id: ID!) {
             getToolSnapshot(tool_snapshot_id: $id) {
               id
+              metadata {
+                action_note
+              }
               tool {
                 id
                 status
+                photo
                 model_number
                 serial_number
                 brand {
@@ -284,7 +355,6 @@ export default {
         this.currentSnapshot = result.data.getToolSnapshot.tool;
         this.metadata = result.data.getToolSnapshot.metadata;
         this.previousSnapshot = result.data.getToolSnapshot.previous_tool_snapshot && result.data.getToolSnapshot.previous_tool_snapshot.tool;
-
         this.diff = this.findDiff (this.previousSnapshot, this.currentSnapshot);
         this.details = true;
       });
@@ -296,6 +366,7 @@ export default {
         current.owner.name = current.owner.name || (current.owner.first_name + ' ' + current.owner.last_name)
 
         let diff = DeepDiff.diff(previous, current)
+
         let finalDiff = []
 
         if (diff) {
@@ -304,7 +375,8 @@ export default {
                 && change.path.indexOf('first_name') < 0
                 && change.path.indexOf('last_name') < 0
                 && change.path.indexOf('status') < 0
-                && change.path.indexOf('owner') < 0) {
+                && change.path.indexOf('owner') < 0
+                && change.path.indexOf('photo') < 0) {
 
               if (change.path.indexOf('price') >= 0) {
                 finalDiff.push({
@@ -443,6 +515,16 @@ export default {
     flex-direction: column;
     padding-top: 10px;
     padding-bottom: 10px;
+
+    .extended-fab {
+      border-radius: 5px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      height: 40px;
+      min-width: 158px;
+      margin-top: 7px;
+      margin-right: 10px;
+    }
 
     .diff-row {
       border-top: solid 1px lightgray;

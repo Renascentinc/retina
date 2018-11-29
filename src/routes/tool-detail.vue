@@ -29,6 +29,15 @@
           class="action-btn transfer-btn">
         </extended-fab>
 
+        <extended-fab
+          v-if="$mq === 'desktop'"
+          :disabled="editState || changingStatus"
+          icon-class="fa-book-open"
+          button-text="VIEW HISTORY"
+          :on-click="transitionToHistory"
+          :outline-display="false">
+        </extended-fab>
+
         <button-dropdown
           v-if="$mq === 'desktop' && isTransferable"
           :on-click="updateStatus"
@@ -37,14 +46,6 @@
           :flag="toggleChangingStatus"
           button-text="CHANGE STATUS">
         </button-dropdown>
-
-        <extended-fab
-          v-if="$mq === 'desktop'"
-          icon-class="fa-book-open"
-          button-text="SEE HISTORY"
-          :on-click="transitionToHistory"
-          :outline-display="false">
-        </extended-fab>
       </div>
 
       <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
@@ -650,7 +651,7 @@ export default {
 
   methods: {
     transitionToHistory () {
-      this.$router.push({name: 'historyDetail', params: { toolId: this.getTool.id }})
+      this.$router.push({ name: 'historyDetail', params: { toolId: this.getTool.id }})
     },
 
     toggleDatepicker () {

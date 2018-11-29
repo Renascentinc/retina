@@ -63,7 +63,7 @@ const cache = new InMemoryCache({
       return `${object.timestamp}${object.__typename}`
     }
 
-    if (router.currentRoute.path.includes('/history') && (object.__typename === 'Tool' || object.__typename === 'ConfigurableItem' || object.__typename === 'User')) {
+    if (router.currentRoute.path.includes('history') && (object.__typename === 'Tool' || object.__typename === 'ConfigurableItem' || object.__typename === 'User')) {
       return `${JSON.stringify(object)}`
     }
 

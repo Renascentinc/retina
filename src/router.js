@@ -80,7 +80,7 @@ export default new Router({
           name: 'history'
         },
         {
-          path: 'history/:toolId',
+          path: 'detail-history/:toolId',
           component: History,
           name: 'historyDetail'
         },

@@ -429,11 +429,11 @@ export default {
       isSavingTool: false,
       statuses,
       validations: {
-        modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+        modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear()},true`
       },
       moneyInputConfig: {
         decimal: '.',
-        thousands: ',',
+        thousands: '',
         prefix: '$ ',
         suffix: '',
         precision: 2,
@@ -659,7 +659,7 @@ export default {
               date_purchased: purchaseDate,
               status: this.status ? this.status.id : Statuses.AVAILABLE,
               owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
-              price: this.price ? this.price.slice(2) * 100 : null,
+              price: this.price ? (this.price.slice(2) * 100).toPrecision(2) : null,
               year: this.modelYear,
               photo: photoResponse
             }

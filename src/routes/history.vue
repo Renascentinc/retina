@@ -191,7 +191,8 @@ export default {
         ACTION: 'tool_actions',
         TOOL: 'tool_ids',
         BRAND: 'brand_ids',
-        TYPE: 'type_ids'
+        TYPE: 'type_ids',
+        STATUS: 'tool_statuses'
       },
       currentToolId: this.$router.currentRoute.params.toolId,
       searchToolSnapshot: [],

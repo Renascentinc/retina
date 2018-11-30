@@ -1,8 +1,8 @@
 <template>
   <div class="page history-page">
     <history-table
-      id="history-table-export"
-      :search-tool-snapshot="searchToolSnapshot">
+      :search-tool-snapshot="searchToolSnapshot"
+      class="history-table-export">
     </history-table>
     <div class="search-bar">
       <history-search-input
@@ -29,6 +29,19 @@
       </v-date-picker>
     </div>
     <div class="history-main-content">
+      <fab
+        v-if="$mq === 'mobile' && isNativeApp"
+        :on-click="printTable"
+        class="print-btn"
+        icon-class="fa-print">
+      </fab>
+
+      <fab
+        v-if="$mq === 'mobile' && !isNativeApp"
+        :on-click="exportTable"
+        class="print-btn"
+        icon-class="fa-file-pdf">
+      </fab>
       <div
         class="floating-action-bar">
 
@@ -45,13 +58,6 @@
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD">
         </extended-fab>
-
-        <fab
-          v-if="$mq === 'mobile' && isNativeApp"
-          :on-click="printTable"
-          class="print-btn"
-          icon-class="fa-print">
-        </fab>
       </div>
       <div class="report">
 
@@ -188,7 +194,7 @@ export default {
 
   computed: {
     isDecomissionedTool () {
-      return this.searchToolSnapshot[0] ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
+      return this.currentToolId ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
     },
 
     datePickerVisibility () {
@@ -299,7 +305,7 @@ export default {
     },
 
     exportTable () {
-      var element = document.getElementById('history-table-export')
+      var element = document.querySelector('.history-table-export')
 
       var opt = {
         filename: 'transactions_export.pdf',
@@ -387,12 +393,7 @@ export default {
 
 .mobile .history-page {
   .floating-action-bar {
-    display: inline-block;
-    position: absolute;
-    bottom: 75px;
-    width: 100%;
-    height: 57px;
-    vertical-align: bottom;
+    display: none;
   }
 }
 
@@ -400,6 +401,10 @@ export default {
   display: flex;
   flex-direction: column;
   max-width: 100vw;
+
+  .history-table-export {
+    display: none !important;
+  }
 
   .loading-container {
     width: calc(100% - 40px);
@@ -493,7 +498,12 @@ export default {
   .print-btn {
     position: absolute;
     right: 30px;
-    pointer-events: auto;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    z-index: 100;
   }
 }
 </style>

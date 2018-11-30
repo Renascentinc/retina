@@ -1,12 +1,11 @@
 <template>
   <div
-    id="export-table"
+    class="history-table-export"
     style="width: 100%;
   font-size: 14px;
   padding: 12px 12px 0px 12px;
   display: flex;
-  flex-direction: column;
-  display: none;">
+  flex-direction: column;">
     <div
       class="dt-head"
       style="display: flex;

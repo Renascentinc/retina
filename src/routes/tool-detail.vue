@@ -990,6 +990,19 @@ export default {
                 }
               ]
             }).then(() => {
+              this.$apollo.provider.clients.defaultClient.writeFragment({
+                id: `${this.getTool.id}Tool`,
+                fragment: gql`
+                 fragment patchToolStatus on Tool {
+                   status
+                   __typename
+                 }
+                `,
+                data: {
+                  status: newStatus,
+                  __typename: 'Tool'
+                }
+              })
               this.$store.commit('setToolSelection', this.getTool.id, false)
               this.showSuccessMsg()
               this.$router.push({ path: '/tools' })

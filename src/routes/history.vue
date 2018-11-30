@@ -1,9 +1,18 @@
 <template>
   <div class="page history-page">
     <history-table
-      :search-tool-snapshot="searchToolSnapshot"
-      class="history-table-export">
+      :search-tool-snapshot="searchToolSnapshot">
     </history-table>
+    <transition name="fade">
+      <div
+        v-if="loading"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
+      </div>
+    </transition>
     <div class="search-bar">
       <history-search-input
         :allow-tool-id-search="!currentToolId"
@@ -169,7 +178,8 @@ export default {
             ...this.filters
           }
         }
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 
@@ -188,7 +198,8 @@ export default {
       tags: [],
       tagFilters: null,
       dateRange: null,
-      isDatepickerShown: false
+      isDatepickerShown: false,
+      loading: false
     }
   },
 
@@ -305,6 +316,7 @@ export default {
     },
 
     exportTable () {
+      this.loading = true
       var element = document.querySelector('.history-table-export')
 
       var opt = {
@@ -318,11 +330,13 @@ export default {
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       }
 
-      html2pdf().from(element).set(opt).save()
+      html2pdf().from(element).set(opt).save().then(() => {
+        this.loading = false
+      })
     },
 
     printTable () {
-      var element = document.getElementById('export-table')
+      var element = document.querySelector('.history-table-export')
       window.cordova.plugins.printer.print(element, { name: 'retina_history.html', landscape: true })
     },
 

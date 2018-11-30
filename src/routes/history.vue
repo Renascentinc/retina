@@ -1,7 +1,21 @@
 <template>
   <div class="page history-page">
+    <history-table
+      :search-tool-snapshot="searchToolSnapshot">
+    </history-table>
+    <transition name="fade">
+      <div
+        v-if="loading"
+        class="overlay">
+        <div class="half-circle-spinner">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+        </div>
+      </div>
+    </transition>
     <div class="search-bar">
       <history-search-input
+        :allow-tool-id-search="!currentToolId"
         :update-tags="updateTagFilters"
         :tags="tags">
       </history-search-input>
@@ -24,6 +38,19 @@
       </v-date-picker>
     </div>
     <div class="history-main-content">
+      <fab
+        v-if="$mq === 'mobile' && isNativeApp"
+        :on-click="printTable"
+        class="print-btn"
+        icon-class="fa-print">
+      </fab>
+
+      <fab
+        v-if="$mq === 'mobile' && !isNativeApp"
+        :on-click="exportTable"
+        class="print-btn"
+        icon-class="fa-file-pdf">
+      </fab>
       <div
         class="floating-action-bar">
 
@@ -37,207 +64,59 @@
         <extended-fab
           v-if="$mq === 'desktop'"
           :on-click="exportTable"
-          icon-class="fa-file-download"
-          button-text="EXPORT PDF">
+          icon-class="fa-file-pdf"
+          button-text="DOWNLOAD">
         </extended-fab>
-
-        <fab
-          v-if="$mq === 'mobile' && isNativeApp"
-          :on-click="printTable"
-          class="print-btn"
-          icon-class="fa-print">
-        </fab>
       </div>
       <div class="report">
-        <div
-          id="export-table"
-          style="width: 980px; min-width: 980px; padding: 20px;">
-          <div
-            class="dt-head"
-            style="display: flex;
-            border-radius: 3px;
-            background-color: #404040;
-            font-size: 20px;
-            height: 40px;
-            align-items: center;
-            color: #fff;
-            text-align: left;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-            font-weight: 900;">
-            <div
-              class="dt-cell id"
-              style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 50px;
-                justify-content: center;
-                padding: 0;">
-              <span>id</span>
-            </div>
-            <div
-              class="dt-cell date"
-              style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 200px;">
-              <span>date</span>
-            </div>
-            <div
-              class="dt-cell action"
-              style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 120px;">
-              <span>action</span>
-            </div>
-            <div
-              class="dt-cell status"
-              style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 240px;">
-              <span>status</span>
-            </div>
-            <div
-              class="dt-cell owner"
-              style="display: flex;
-                justify-content: flex-end;
-                flex: 0 0 260px;">
-              <span>owner</span>
-            </div>
-          </div>
 
+        <span
+          v-if="!currentToolId"
+          style="text-align: center;
+        font-weight: 600;"
+          class="title">
+          LATEST TRANSACTIONS
+        </span>
+        <span
+          v-if="currentToolId"
+          class="title">
+          <span
+            class="fas fa-arrow-left back"
+            @click="goBack"></span>
+          #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
+        </span>
+
+        <div id="export-table">
           <transition name="list-loading">
             <div
-              v-if="$apollo.queries.searchToolHistory.loading"
+              v-if="$apollo.queries.searchToolSnapshot.loading"
               class="loading-container">
-              <div
-                class="loading">
+              <div class="half-circle-spinner">
+                <div class="circle circle-1"></div>
+                <div class="circle circle-2"></div>
               </div>
             </div>
           </transition>
 
-          <div
-            class="dt-body"
-            style="display: flex;
-              flex-direction: column;">
+          <div class="dt-body">
             <transition-group name="list-element">
-              <div
-                v-for="entry in searchToolHistory"
-                :key="entry.id"
-                class="dt-row"
-                style="display: flex;
-                border-radius: 3px;
-                border-bottom: solid 1px lightgray;
-                background-color: white;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);">
-                <div
-                  class="dt-cell id"
-                  style="display: flex;
-                  justify-content: flex-end;
-                  flex: 0 0 50px;
-                  justify-content: center;
-                  padding: 0;
-                  display: flex;
-                  align-items: center;
-                  height: 85px;
-                  font-weight: 900; border-right: solid 1px lightgray;">
-                  <span>{{ entry.tool_snapshot.id }}</span>
-                </div>
-                <div
-                  class="dt-cell date"
-                  style="display: flex;
-                  justify-content: flex-end;
-                  display: flex;
-                  align-items: center;
-                  height: 85px;
-                  font-weight: 900; flex: 0 0 200px;">
-                  <span>{{ `${new Date(entry.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' })} ${new Date(entry.timestamp).toLocaleTimeString('en-US')}` }}</span>
-                </div>
-                <div
-                  class="dt-cell action"
-                  style="display: flex;
-                  justify-content: flex-end;
-                  flex: 0 0 120px;
-                  display: flex;
-                  align-items: center;
-                  height: 85px;
-                  font-weight: 900;">
-                  <span>{{ entry.tool_action }}</span>
-                </div>
-                <div
-                  class="dt-cell status"
-                  style="display: flex;
-                  justify-content: flex-end; flex: 0 0 270px;
-                  display: flex;
-                  align-items: center;
-                  height: 85px;
-                  font-weight: 900;">
-                  <span
-                    v-if="entry.previous_tool_snapshot_diff.status"
-                    class="previous-snapshot"
-                    style="color: gray;">{{ entry.previous_tool_snapshot_diff.status }}</span>
-                  <i
-                    v-if="entry.previous_tool_snapshot_diff.status"
-                    class="fas fa-long-arrow-alt-right"
-                    style="margin: 0 10px; content: '\f30b'"></i>
-
-                  <span>{{ entry.tool_snapshot.status }}</span>
-
-                </div>
-                <div
-                  class="dt-cell owner"
-                  style="display: flex;
-                  justify-content: flex-end;
-                  flex: 0 0 260px;
-                  display: flex;
-                  align-items: center;
-                  height: 85px;
-                  font-weight: 900;">
-                  <div v-if="entry.previous_tool_snapshot_diff.owner">
-                    <div
-                      v-if="entry.previous_tool_snapshot_diff.owner.type === 'USER'"
-                      class="owner-entry previous-snapshot"
-                      style="color: gray;
-                      text-align: center;
-                      max-width: 125px;
-                      word-break: break-all;">
-                      {{ `${entry.previous_tool_snapshot_diff.owner.first_name} ${entry.previous_tool_snapshot_diff.owner.last_name}` }}
-                    </div>
-                    <div
-                      v-if="entry.previous_tool_snapshot_diff.owner.type === 'LOCATION'"
-                      class="owner-entry previous-snapshot"
-                      style="color: gray;
-                      text-align: center;
-                      max-width: 125px;
-                      word-break: break-all;">
-                      <i class="fas fa-map-marker-alt"></i>
-                      {{ entry.previous_tool_snapshot_diff.owner.name }}
-                    </div>
-                  </div>
-
-                  <i
-                    v-if="entry.previous_tool_snapshot_diff.owner"
-                    class="fas fa-long-arrow-alt-right"
-                    style="margin: 0 10px; content: '\f30b'"></i>
-
-                  <div
-                    v-if="entry.tool_snapshot.owner.type === 'USER'"
-                    class="owner-entry"
-                    style="text-align: center;
-                    max-width: 125px;
-                    word-break: break-all;">
-                    {{ `${entry.tool_snapshot.owner.first_name} ${entry.tool_snapshot.owner.last_name}` }}
-                  </div>
-                  <div
-                    v-if="entry.tool_snapshot.owner.type === 'LOCATION'"
-                    class="owner-entry"
-                    style="text-align: center;
-                    max-width: 125px;
-                    word-break: break-all;">
-                    {{ entry.tool_snapshot.owner.name }}
-                  </div>
-                </div>
-              </div>
+              <history-search-result
+                v-for="entry in searchToolSnapshot"
+                :entry="entry"
+                :select-tool="selectHistoryEntry"
+                :is-detail-result="!!currentToolId"
+                :key="entry.id">
+              </history-search-result>
             </transition-group>
           </div>
         </div>
+        <extended-fab
+          v-if="$mq === 'mobile' && isDecomissionedTool"
+          :on-click="recover"
+          button-text="RECOVER"
+          icon-class="fa-undo-alt"
+          class="restore-efab">
+        </extended-fab>
       </div>
     </div>
   </div>
@@ -251,84 +130,56 @@ import Avatar from 'vue-avatar'
 import Fab from '../components/fab'
 import html2pdf from 'html2pdf.js'
 import gql from 'graphql-tag'
+import swal from 'sweetalert2'
+import HistoryTable from '../components/history-table'
+import HistorySearchResult from '../components/history-search-result'
+import statuses from '../utils/statuses'
 
 export default {
   name: 'History',
+
   components: {
     HistorySearchInput,
     Avatar,
     Fab,
-    ExtendedFab
+    ExtendedFab,
+    HistoryTable,
+    HistorySearchResult
   },
 
   apollo: {
-    searchToolHistory: {
-      query: gql`query search($toolHistoryFilter: ToolHistoryFilter) {
-        searchToolHistory(toolHistoryFilter: $toolHistoryFilter) {
-          id
-          tool_snapshot {
-            id
-            type {
-              id
-              name
-            }
+    searchToolSnapshot: {
+      query: gql`query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
+        searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
+          id,
+          tool {
+            id,
             brand {
-              id
+              id,
               name
-            }
-            status
-            owner {
-              ... on Location {
-                 id
-                 name
-                 type
-              }
-              ... on User {
-                 id
-                 first_name
-                 last_name
-                 type
-              }
-            }
-          }
-          timestamp
-          previous_tool_snapshot_diff {
-            id
+            },
             type {
-              id
+              id,
               name
-            }
-            brand {
-              id
-              name
-            }
+            },
             status
-            owner {
-              ... on Location {
-                 id
-                 name
-                 type
-              }
-              ... on User {
-                 id
-                 first_name
-                 last_name
-                 type
-              }
-            }
           }
-          tool_action
+          metadata {
+            timestamp,
+            tool_action
+          }
         }
       }`,
       variables () {
-        let options = {}
-
-        if (this.filters) {
-          options.toolHistoryFilter = this.filters
+        return {
+          toolSnapshotFilter: {
+            only_latest_snapshot: !this.currentToolId,
+            tool_ids: this.currentToolId,
+            ...this.filters
+          }
         }
-
-        return options
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 
@@ -338,20 +189,29 @@ export default {
         USER: 'owner_ids',
         LOCATION: 'owner_ids',
         ACTION: 'tool_actions',
-        TOOL: 'tool_ids'
+        TOOL: 'tool_ids',
+        BRAND: 'brand_ids',
+        TYPE: 'type_ids'
       },
-      searchToolHistory: [],
+      currentToolId: this.$router.currentRoute.params.toolId,
+      searchToolSnapshot: [],
       tags: [],
       tagFilters: null,
       dateRange: null,
-      isDatepickerShown: false
+      isDatepickerShown: false,
+      loading: false
     }
   },
 
   computed: {
+    isDecomissionedTool () {
+      return this.currentToolId ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
+    },
+
     datePickerVisibility () {
       return this.isDatepickerShown ? 'visible' : 'hidden'
     },
+
     isNativeApp () {
       return !!window.device && !!window.device.cordova
     },
@@ -377,6 +237,60 @@ export default {
   },
 
   methods: {
+    recover () {
+      swal({
+        type: 'warning',
+        title: 'CONFIRM RECOVERY',
+        text: `Are you sure you want to recover this tool?`,
+        reverseButtons: true,
+        showCancelButton: true,
+        confirmButtonText: 'RECOVER',
+        cancelButtonText: 'CANCEL',
+        confirmButtonColor: '#CE352F'
+
+      }).then((result) => {
+        if (result.value) {
+          this.$apollo.mutate({
+            mutation: gql`
+              mutation recomissionTool($tool_id: ID!, $status: InServiceToolStatus!) {
+                recomissionTool(tool_id: $tool_id, recomissioned_status: $status) {
+                  status
+                }
+              }
+            `,
+            variables: {
+              tool_id: this.$router.currentRoute.params.toolId,
+              status: 'AVAILABLE'
+            }
+          }).then((result) => {
+            swal({
+              type: 'success',
+              title: 'TOOL RECOVERED',
+              timer: 1500
+            })
+            this.$apollo.queries.searchToolSnapshot.refresh()
+          })
+        }
+      })
+    },
+
+    goBack () {
+      this.currentToolId = null
+      this.$router.go(-1)
+    },
+
+    selectHistoryEntry (toolId) {
+      this.$router.push({name: 'historyDetail', params: {toolId}})
+      this.clearFilters()
+      this.currentToolId = toolId
+    },
+
+    clearFilters () {
+      this.dateRange = null
+      this.tagFilters = null
+      this.updateTagFilters()
+    },
+
     updateDateFilterTag () {
       if (this.dateRange) {
         let idx = this.tags.findIndex(tag => tag.isDatespanFilter)
@@ -402,20 +316,27 @@ export default {
     },
 
     exportTable () {
-      var element = document.getElementById('export-table')
+      this.loading = true
+      var element = document.querySelector('.history-table-export')
 
       var opt = {
         filename: 'transactions_export.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+        margin: 0.5,
+        pagebreak: {
+          mode: 'avoid-all'
+        },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       }
 
-      html2pdf().from(element).set(opt).save()
+      html2pdf().from(element).set(opt).save().then(() => {
+        this.loading = false
+      })
     },
 
     printTable () {
-      var element = document.getElementById('export-table')
+      var element = document.querySelector('.history-table-export')
       window.cordova.plugins.printer.print(element, { name: 'retina_history.html', landscape: true })
     },
 
@@ -466,7 +387,7 @@ export default {
     }
   }
 
-  .floating-action-bar .history-page {
+  .floating-action-bar {
     min-width: 180px;
     display: flex;
     flex-direction: column;
@@ -474,7 +395,7 @@ export default {
     align-items: center;
     max-width: 300px;
     flex: 1 1 auto;
-    padding-top: 80px;
+    padding-top: 15px;
     overflow-y: auto;
 
     .extended-fab {
@@ -486,12 +407,7 @@ export default {
 
 .mobile .history-page {
   .floating-action-bar {
-    display: inline-block;
-    position: absolute;
-    bottom: 75px;
-    width: 100%;
-    height: 57px;
-    vertical-align: bottom;
+    display: none;
   }
 }
 
@@ -499,6 +415,10 @@ export default {
   display: flex;
   flex-direction: column;
   max-width: 100vw;
+
+  .history-table-export {
+    display: none !important;
+  }
 
   .loading-container {
     width: calc(100% - 40px);
@@ -540,8 +460,47 @@ export default {
   .report {
     display: none;
     display: flex;
+    flex-direction: column;
     height: 100%;
-    overflow: auto;
+    flex: 1 1 auto;
+    align-items: center;
+
+    .restore-efab {
+      position: absolute;
+      margin-top: auto;
+      bottom: 75px;
+      width: 158px;
+    }
+
+    #export-table {
+      width: calc(100% - 24px);
+      padding: 12px;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
+
+    }
+
+    .title {
+      text-align: center;
+      font-weight: 600;
+      line-height: 28px;
+      margin-top: 12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      width: calc(100% - 24px);
+
+      .back {
+        color: $renascent-red;
+        font-size: 28px;
+        float: left;
+        height: 25px;
+        width: 25px;
+        line-height: 28px;
+      }
+    }
   }
 
   .export-btn {
@@ -553,7 +512,12 @@ export default {
   .print-btn {
     position: absolute;
     right: 30px;
-    pointer-events: auto;
+    bottom: 70px;
+    // TODO: upgrade parcel version (when it become available) so we can uncomment this
+    // handle iPhone X style screens
+    bottom: calc(70px + constant(safe-area-inset-bottom));
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    z-index: 100;
   }
 }
 </style>

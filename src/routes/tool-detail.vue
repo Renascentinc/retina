@@ -48,6 +48,15 @@
           class="action-btn transfer-btn">
         </extended-fab>
 
+        <extended-fab
+          v-if="$mq === 'desktop'"
+          :disabled="editState || changingStatus"
+          :on-click="transitionToHistory"
+          :outline-display="false"
+          icon-class="fa-book-open"
+          button-text="VIEW HISTORY">
+        </extended-fab>
+
         <button-dropdown
           v-if="$mq === 'desktop' && isTransferable"
           :on-click="updateStatus"
@@ -329,7 +338,17 @@
                 v-if="editState"
                 v-model="newPrice"
                 name="newPrice"
-                class="light-input">
+                class="light-input"
+                placeholder="Price"
+                type="number">
+
+              <extended-fab
+                v-if="$mq === 'mobile'"
+                :on-click="transitionToHistory"
+                :outline-display="false"
+                icon-class="fa-book-open"
+                button-text="VIEW HISTORY">
+              </extended-fab>
             </div>
           </div>
 
@@ -706,6 +725,10 @@ export default {
       this.changingStatus = !this.changingStatus
     },
 
+    transitionToHistory () {
+      this.$router.push({ name: 'historyDetail', params: { toolId: this.getTool.id } })
+    },
+
     transitionToTools () {
       this.$router.push({ name: 'tools' })
     },
@@ -967,6 +990,19 @@ export default {
                 }
               ]
             }).then(() => {
+              this.$apollo.provider.clients.defaultClient.writeFragment({
+                id: `${this.getTool.id}Tool`,
+                fragment: gql`
+                 fragment patchToolStatus on Tool {
+                   status
+                   __typename
+                 }
+                `,
+                data: {
+                  status: newStatus,
+                  __typename: 'Tool'
+                }
+              })
               this.$store.commit('setToolSelection', this.getTool.id, false)
               this.showSuccessMsg()
               this.$router.push({ path: '/tools' })
@@ -1225,6 +1261,11 @@ export default {
         display: flex;
         flex-direction: column;
         font-size: 16px;
+
+        .extended-fab {
+          border-radius: 3px;
+          margin-top: 12px;
+        }
 
         .general-label {
           padding-top: 10px;

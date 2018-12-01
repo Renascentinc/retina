@@ -48,12 +48,19 @@
           class="action-btn transfer-btn">
         </extended-fab>
 
+        <extended-fab
+          v-if="$mq === 'desktop'"
+          :disabled="editState || changingStatus"
+          :on-click="transitionToHistory"
+          :outline-display="false"
+          icon-class="fa-book-open"
+          button-text="VIEW HISTORY">
+        </extended-fab>
+
         <button-dropdown
           v-if="$mq === 'desktop' && isTransferable"
           :on-click="updateStatus"
-          :disabled="editState"
           :options="statusOptions"
-          :flag="toggleChangingStatus"
           button-text="CHANGE STATUS">
         </button-dropdown>
       </div>
@@ -329,7 +336,16 @@
                 v-if="editState"
                 v-model="newPrice"
                 name="newPrice"
-                class="light-input">
+                class="light-input"
+                placeholder="Price">
+
+              <extended-fab
+                v-if="$mq === 'mobile'"
+                :on-click="transitionToHistory"
+                :outline-display="false"
+                icon-class="fa-book-open"
+                button-text="VIEW HISTORY">
+              </extended-fab>
             </div>
           </div>
 
@@ -534,7 +550,7 @@ export default {
       },
       moneyInputConfig: {
         decimal: '.',
-        thousands: ',',
+        thousands: '',
         prefix: '$ ',
         suffix: '',
         precision: 2,
@@ -706,6 +722,10 @@ export default {
       this.changingStatus = !this.changingStatus
     },
 
+    transitionToHistory () {
+      this.$router.push({ name: 'historyDetail', params: { toolId: this.getTool.id } })
+    },
+
     transitionToTools () {
       this.$router.push({ name: 'tools' })
     },
@@ -740,7 +760,7 @@ export default {
         this.newYear = this.getTool.year
         this.newPurchasedFrom = this.getTool.purchased_from
         this.newPurchaseDate = this.getTool.date_purchased && new Date(this.getTool.date_purchased)
-        this.newPrice = this.getTool.price ? this.getTool.price / 100 : null
+        this.newPrice = this.getTool.price ? this.getTool.price : null
         this.editState = true
         this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
       }
@@ -862,7 +882,7 @@ export default {
                   owner_id: this.getTool.owner.id,
                   purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  price: this.newPrice ? this.newPrice.slice(2) * 100 : null,
+                  price: this.newPrice ? (this.newPrice.slice(2) * 100).toPrecision(2) : null,
                   year: this.newYear ? this.newYear : null,
                   photo
                 }
@@ -967,6 +987,19 @@ export default {
                 }
               ]
             }).then(() => {
+              this.$apollo.provider.clients.defaultClient.writeFragment({
+                id: `${this.getTool.id}Tool`,
+                fragment: gql`
+                 fragment patchToolStatus on Tool {
+                   status
+                   __typename
+                 }
+                `,
+                data: {
+                  status: newStatus,
+                  __typename: 'Tool'
+                }
+              })
               this.$store.commit('setToolSelection', this.getTool.id, false)
               this.showSuccessMsg()
               this.$router.push({ path: '/tools' })
@@ -1226,6 +1259,11 @@ export default {
         flex-direction: column;
         font-size: 16px;
 
+        .extended-fab {
+          border-radius: 3px;
+          margin-top: 12px;
+        }
+
         .general-label {
           padding-top: 10px;
           color: $dark-avatar;
@@ -1344,10 +1382,17 @@ export default {
           font-weight: 800;
           color: $renascent-dark-gray;
           margin-left: 11px;
+          max-width: calc(100% - 165px);
 
           .owner-user {
             display: flex;
             flex-direction: column;
+
+            span {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
         }
 

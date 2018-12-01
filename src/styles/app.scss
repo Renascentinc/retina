@@ -52,6 +52,7 @@ img[lazy=loading] {
   height: 100%;
   overflow: auto;
   flex: 1 1 auto;
+  width: 100vw;
 }
 
 .main-application {
@@ -69,8 +70,8 @@ img[lazy=loading] {
 
       // TODO: upgrade parcel version (when it become available) so we can uncomment this
       // padding for iPhone X style screens
-      padding-top: calc(constant(safe-area-inset-top) - 10px);
-      padding-top: calc(env(safe-area-inset-top) - 10px);
+      padding-top: constant(safe-area-inset-top);
+      padding-top: env(safe-area-inset-top);
     }
   }
 }

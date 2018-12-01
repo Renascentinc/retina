@@ -36,8 +36,9 @@ export default {
     display: flex;
     height: 40px;
     min-height: 40px;
+    max-height: 40px;
     margin-bottom: 5px;
-    max-width: 500px;
+    max-width: 400px;
 
     input {
       -webkit-appearance: none;

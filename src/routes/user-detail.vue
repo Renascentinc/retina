@@ -436,6 +436,14 @@ export default {
                 })
                 this.editState = false
               }
+            }).catch(() => {
+              swal({
+                type: 'error',
+                title: 'ERROR',
+                text: 'There was an error saving changes. Please try again.',
+                timer: 2000,
+                showConfirmButton: false
+              })
             })
         }
       })

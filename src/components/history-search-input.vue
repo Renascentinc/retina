@@ -38,8 +38,10 @@
 </template>
 
 <script>
+import ConfigurableItems from '../utils/configurable-items'
 import VueTagsInput from '@johmun/vue-tags-input'
 import HistoryActions from '../utils/history-actions'
+import Statuses from '../utils/statuses'
 import gql from 'graphql-tag'
 
 export default {
@@ -55,6 +57,11 @@ export default {
     tags: {
       type: Array,
       required: true
+    },
+    allowToolIdSearch: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   apollo: {
@@ -81,6 +88,14 @@ export default {
         last_name
         type
       }
+    }`,
+
+    getAllConfigurableItem: gql`query {
+      getAllConfigurableItem {
+        id,
+        type,
+        name
+      }
     }`
   },
   data () {
@@ -91,6 +106,49 @@ export default {
 
   computed: {
     autocompleteItems () {
+      let statuses = [
+        {
+          name: 'Available',
+          text: 'Available',
+          id: Statuses.AVAILABLE,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'In Use',
+          text: 'In Use',
+          id: Statuses.IN_USE,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'Maintenance',
+          text: 'Maintenance',
+          id: Statuses.MAINTENANCE,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'Lost or Stolen',
+          text: 'Lost or Stolen',
+          id: Statuses.LOST_OR_STOLEN,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'Beyond Repair',
+          text: 'Beyond Repair',
+          id: Statuses.BEYOND_REPAIR,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        }
+      ]
+
       let actions = [
         {
           name: 'Create',
@@ -118,11 +176,17 @@ export default {
         }
       ]
 
-      return actions.concat(this.users).concat(this.locations).concat(this.tools)
+      let items = actions.concat(statuses).concat(this.users).concat(this.locations).concat(this.searchableConfigItems)
+
+      if (this.allowToolIdSearch) {
+        items = items.concat(this.tools)
+      }
+
+      return items
     },
 
     filteredItems () {
-      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag) > -1)
+      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag.toLowerCase()) > -1)
     },
 
     locations () {
@@ -153,6 +217,31 @@ export default {
         user.iconClass = 'fa-user'
         return user
       })
+    },
+
+    searchableConfigItems () {
+      let searchItems = []
+      let items = (this.getAllConfigurableItem || [])
+      items.forEach(item => {
+        if (item.type !== ConfigurableItems.PURCHASED_FROM) {
+          item.formattedType = item.type.split('_')[0].toLowerCase()
+          item.text = `${item.formattedType} ${item.name}`
+          item.iconClass = this.getTagIconClass(item.type)
+          searchItems.push(item)
+        }
+      })
+
+      return searchItems
+    }
+  },
+
+  methods: {
+    getTagIconClass (type) {
+      if (type === ConfigurableItems.BRAND) {
+        return 'fa-tag'
+      } else if (type === ConfigurableItems.TYPE) {
+        return 'fa-wrench'
+      }
     }
   }
 }

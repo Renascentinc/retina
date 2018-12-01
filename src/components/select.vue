@@ -975,9 +975,9 @@ export default {
   }
   .v-select .vs__selected-options {
     display: flex;
-    flex-basis: 100%;
-    flex-grow: 1;
-    flex-wrap: wrap;
+    flex: 1 1 auto;
+    max-width: calc(100% - 50px);
+    align-items: center;
     padding: 0 2px;
     position: relative;
   }
@@ -1038,7 +1038,10 @@ export default {
   }
   /* Selected Tags */
   .v-select .selected-tag {
-    display: flex;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     align-items: center;
     background-color: #f0f0f0;
     border: 1px solid #ccc;

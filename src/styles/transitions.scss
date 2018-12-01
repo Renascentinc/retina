@@ -21,6 +21,18 @@
   flex-basis: 0;
 }
 
+// Transition name: "history-detail"
+.history-detail-enter-active, .history-detail-leave-active {
+  transition: all .1s ease;
+  height: 34px;
+  opacity: 1;
+}
+
+.history-detail-enter, .history-detail-leave-to {
+  height: 0px;
+  opacity: 0;
+}
+
 // Transition Name: "list-element"
 .list-element-move {
   transition: transform .5s ease;
@@ -46,6 +58,7 @@
 .fade-enter-active, .fade-leave-active {
   transition: opacity .1s;
 }
+
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }

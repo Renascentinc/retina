@@ -41,6 +41,7 @@
 import ConfigurableItems from '../utils/configurable-items'
 import VueTagsInput from '@johmun/vue-tags-input'
 import HistoryActions from '../utils/history-actions'
+import Statuses from '../utils/statuses'
 import gql from 'graphql-tag'
 
 export default {
@@ -105,6 +106,49 @@ export default {
 
   computed: {
     autocompleteItems () {
+      let statuses = [
+        {
+          name: 'Available',
+          text: 'Available',
+          id: Statuses.AVAILABLE,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'In Use',
+          text: 'In Use',
+          id: Statuses.IN_USE,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'Maintenance',
+          text: 'Maintenance',
+          id: Statuses.MAINTENANCE,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'Lost or Stolen',
+          text: 'Lost or Stolen',
+          id: Statuses.LOST_OR_STOLEN,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        },
+        {
+          name: 'Beyond Repair',
+          text: 'Beyond Repair',
+          id: Statuses.BEYOND_REPAIR,
+          iconClass: 'fa-info-circle',
+          type: 'STATUS',
+          formattedType: 'Status'
+        }
+      ]
+
       let actions = [
         {
           name: 'Create',
@@ -132,7 +176,7 @@ export default {
         }
       ]
 
-      let items = actions.concat(this.users).concat(this.locations).concat(this.searchableConfigItems)
+      let items = actions.concat(statuses).concat(this.users).concat(this.locations).concat(this.searchableConfigItems)
 
       if (this.allowToolIdSearch) {
         items = items.concat(this.tools)
@@ -142,7 +186,7 @@ export default {
     },
 
     filteredItems () {
-      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag) > -1)
+      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag.toLowerCase()) > -1)
     },
 
     locations () {

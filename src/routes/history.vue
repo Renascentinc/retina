@@ -62,7 +62,7 @@
         </extended-fab>
 
         <extended-fab
-          v-if="$mq === 'desktop'"
+          v-if="$mq === 'desktop' && !isNativeApp"
           :on-click="exportTable"
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD">
@@ -151,18 +151,31 @@ export default {
     searchToolSnapshot: {
       query: gql`query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
         searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
-          id,
+          id
           tool {
-            id,
+            id
             brand {
-              id,
+              id
               name
-            },
+            }
             type {
               id,
               name
-            },
+            }
             status
+            owner {
+              ... on Location {
+                 id
+                 name
+                 type
+              }
+              ... on User {
+                 id
+                 first_name
+                 last_name
+                 type
+              }
+            }
           }
           metadata {
             timestamp,
@@ -191,7 +204,8 @@ export default {
         ACTION: 'tool_actions',
         TOOL: 'tool_ids',
         BRAND: 'brand_ids',
-        TYPE: 'type_ids'
+        TYPE: 'type_ids',
+        STATUS: 'tool_statuses'
       },
       currentToolId: this.$router.currentRoute.params.toolId,
       searchToolSnapshot: [],
@@ -205,7 +219,7 @@ export default {
 
   computed: {
     isDecomissionedTool () {
-      return this.currentToolId ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
+      return (this.searchToolSnapshot[0] && this.currentToolId) ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
     },
 
     datePickerVisibility () {
@@ -418,10 +432,6 @@ export default {
 
   .history-table-export {
     display: none !important;
-  }
-
-  .loading-container {
-    width: calc(100% - 40px);
   }
 
   .history-main-content {

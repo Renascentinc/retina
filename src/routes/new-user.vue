@@ -204,6 +204,7 @@ import ExtendedFab from '../components/extended-fab.vue'
 import Fab from '../components/fab'
 import vSelect from '../components/select'
 import Roles from '../utils/roles'
+import swal from 'sweetalert2'
 import gql from 'graphql-tag'
 
 export default {
@@ -251,7 +252,6 @@ export default {
       this.$validator.validate().then(result => {
         if (result) {
           if (this.currentState === 2) {
-            ++this.currentState
             this.saveUser()
           } else {
             ++this.currentState
@@ -304,8 +304,29 @@ export default {
           `
         }]
       }).then(result => {
+        ++this.currentState
         this.getUser = result.data.createUser
+      }).catch(() => {
+        this.resetData()
+        this.currentState = 1
+        swal({
+          type: 'error',
+          title: 'ERROR',
+          text: 'There was an error creating the user. Please try again.',
+          timer: 2000,
+          showConfirmButton: false
+        })
       })
+    },
+
+    resetData () {
+      this.firstName = null
+      this.lastName = null
+      this.email = null
+      this.phoneNumber = null
+      this.role = null
+      this.firstPassword = null
+      this.secondPassword = null
     }
   }
 }

@@ -398,7 +398,9 @@ $login-input-border-radius: 5px;
 }
 
 .mobile.login-page {
-  max-height: 810px;
+  .bottom-panel {
+    padding-bottom: 350px;
+  }
 }
 
 .desktop.login-page,

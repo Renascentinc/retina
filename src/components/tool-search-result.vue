@@ -122,6 +122,7 @@ export default {
 
 .tool-assignee {
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .tool-selection-container {

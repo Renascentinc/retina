@@ -206,7 +206,7 @@ export default {
 
   computed: {
     isDecomissionedTool () {
-      return this.currentToolId ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
+      return (this.searchToolSnapshot[0] && this.currentToolId) ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
     },
 
     datePickerVisibility () {
@@ -419,10 +419,6 @@ export default {
 
   .history-table-export {
     display: none !important;
-  }
-
-  .loading-container {
-    width: calc(100% - 40px);
   }
 
   .history-main-content {

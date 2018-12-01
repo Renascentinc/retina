@@ -238,6 +238,7 @@ import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
 import Platforms from '../utils/platforms'
+import nfcMixin from '../mixins/nfc'
 
 export default {
   name: 'Tools',
@@ -250,6 +251,8 @@ export default {
     NfcScan,
     AddButton
   },
+
+  mixins: [ nfcMixin ],
 
   apollo: {
     getAllLocation: gql`query {
@@ -648,7 +651,6 @@ export default {
         this.$store.commit('updateTransferStatus', this.states.INITIAL)
         this.showTransferSuccessMsg()
         this.$apollo.provider.clients.defaultClient.resetStore()
-        this.$apollo.queries.searchTool.refetch()
       }).catch(() => {
         this.showTrasnferErrorMsg()
       }).finally(() => {

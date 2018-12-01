@@ -286,7 +286,7 @@ $login-input-border-radius: 5px;
   .top-panel {
     display: flex;
     justify-content: center;
-    flex: 0 0 40%;
+    flex: 0 0 60%;
 
     .name-container {
       display: flex;
@@ -314,7 +314,7 @@ $login-input-border-radius: 5px;
     align-items: center;
     flex-direction: column;
     overflow: hidden;
-    flex: 0 0 60%;
+    flex: 0 0 40%;
 
     .status-message {
       height: 40px;

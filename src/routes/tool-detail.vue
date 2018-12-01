@@ -1382,10 +1382,17 @@ export default {
           font-weight: 800;
           color: $renascent-dark-gray;
           margin-left: 11px;
+          max-width: calc(100% - 165px);
 
           .owner-user {
             display: flex;
             flex-direction: column;
+
+            span {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
         }
 

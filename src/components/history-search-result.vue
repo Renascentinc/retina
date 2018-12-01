@@ -36,7 +36,7 @@
           <span class="value"> {{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US') + ' ' + new Date(entry.metadata.timestamp).toLocaleTimeString('en-US') }} </span>
         </div>
         <div class="detail-row">
-          <span class="label"> CHANGE MADE BY </span>
+          <span class="label"> CHANGED BY </span>
           <span class="value"> {{ actorName }} </span>
         </div>
         <div class="detail-row">

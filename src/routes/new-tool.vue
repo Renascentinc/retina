@@ -762,6 +762,10 @@ export default {
     padding: 0 20px;
     border-radius: 3px;
 
+    &.step-4 {
+      box-shadow: none;
+    }
+
     &.photo-input-card {
       justify-content: center;
 

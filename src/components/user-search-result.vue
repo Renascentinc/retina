@@ -57,8 +57,10 @@ $tool-search-result-border-radius: 3px;
   align-items: center;
   padding-left: 10px;
   flex: 1 1 auto;
+  max-width: 100%;
 
   .vue-avatar--wrapper {
+    min-width: 50px;
     background-color: $background-light-gray !important;
     color: $renascent-red !important;
     font-weight: 700 !important;

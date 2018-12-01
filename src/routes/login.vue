@@ -281,11 +281,12 @@ $login-input-border-radius: 5px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  max-height: 1200px;
 
   .top-panel {
     display: flex;
     justify-content: center;
-    flex: 0 0 60%;
+    flex: 0 0 40%;
 
     .name-container {
       display: flex;
@@ -313,7 +314,7 @@ $login-input-border-radius: 5px;
     align-items: center;
     flex-direction: column;
     overflow: hidden;
-    flex: 0 0 40%;
+    flex: 0 0 60%;
 
     .status-message {
       height: 40px;
@@ -382,15 +383,6 @@ $login-input-border-radius: 5px;
     height: 40px;
   }
 
-  .loading {
-    height: 80px;
-    width: 80px;
-
-    &::after {
-      background-color: white;
-    }
-  }
-
   .request-action-container {
     display: flex;
     width: 90%;
@@ -398,6 +390,7 @@ $login-input-border-radius: 5px;
   }
 
   .reset-password {
+    padding: 0;
     margin-right: 20px;
     font-size: 16px;
     color: $renascent-red;
@@ -405,36 +398,22 @@ $login-input-border-radius: 5px;
 }
 
 .mobile.login-page {
-  .top-panel {
-    align-items: flex-end;
-
-    .logo {
-      position: absolute;
-      left: -210px;
-      top: -20px;
-      height: 60vh;
-      width: 60vh;
-    }
-
-    .name-container {
-      padding-left: 100px;
-    }
-  }
+  max-height: 810px;
 }
 
-.desktop.login-page {
+.desktop.login-page,
+.mobile.login-page {
   justify-content: space-between;
   overflow-y: auto;
 
   .top-panel {
-    flex: 1 0 auto;
     align-items: center;
     flex-direction: column;
 
     .logo {
       position: relative;
-      height: 150px;
-      width: 150px;
+      height: 200px;
+      width: 200px;
       padding-top: 10px;
     }
 

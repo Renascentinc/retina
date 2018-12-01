@@ -2,7 +2,7 @@
   <div
     class="history-table-export"
     style="width: 100%;
-  font-size: 14px;
+  font-size: 12px;
   padding: 12px 12px 0px 12px;
   display: flex;
   flex-direction: column;">
@@ -12,7 +12,7 @@
     flex: 1 0 auto;
     border-radius: 3px;
     background-color: #404040;
-    font-size: 16px;
+    font-size: 12px;
     max-height: 40px;
     height: 40px;
     align-items: center;
@@ -23,7 +23,7 @@
       <div
         class="dt-cell id"
         style="display: flex;
-        flex: 0 0 40px;
+        flex: 0 0 45px;
         justify-content: center;
         padding: 0;">
         <span>id</span>

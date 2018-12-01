@@ -62,7 +62,7 @@
         </extended-fab>
 
         <extended-fab
-          v-if="$mq === 'desktop'"
+          v-if="$mq === 'desktop' && !isNativeApp"
           :on-click="exportTable"
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD">

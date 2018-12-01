@@ -181,7 +181,7 @@
           <v-select
             v-model="status"
             :options="statuses"
-            :filterable="false"
+            :searchable="false"
             label="name"
             class="dark-input">
           </v-select>
@@ -943,7 +943,7 @@ export default {
     width: 400px;
     margin-left: auto;
     margin-right: auto;
-    max-height: 400px;
+    max-height: 500px;
     margin-top: auto;
     margin-bottom: auto;
     background-color: white;

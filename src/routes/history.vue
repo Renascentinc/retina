@@ -151,18 +151,31 @@ export default {
     searchToolSnapshot: {
       query: gql`query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
         searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
-          id,
+          id
           tool {
-            id,
+            id
             brand {
-              id,
+              id
               name
-            },
+            }
             type {
               id,
               name
-            },
+            }
             status
+            owner {
+              ... on Location {
+                 id
+                 name
+                 type
+              }
+              ... on User {
+                 id
+                 first_name
+                 last_name
+                 type
+              }
+            }
           }
           metadata {
             timestamp,

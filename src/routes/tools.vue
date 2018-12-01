@@ -237,6 +237,7 @@ import AddButton from '../components/add-button'
 import vSelect from '../components/select'
 import gql from 'graphql-tag'
 import Roles from '../utils/roles'
+import Platforms from '../utils/platforms'
 
 export default {
   name: 'Tools',
@@ -468,6 +469,13 @@ export default {
     }
   },
 
+  mounted () {
+    if (this.checkIsNfcEnabled() && window.device.platform === Platforms.ANDROID) {
+      // add a noop nfc listener to keep nfc scans on android from bubbling up to the OS
+      window.nfc.addNdefListener(() => 0)
+    }
+  },
+
   methods: {
     showTransferSuccessMsg () {
       swal({
@@ -639,6 +647,7 @@ export default {
         this.$store.commit('setShowOnlySelectedTools', false)
         this.$store.commit('updateTransferStatus', this.states.INITIAL)
         this.showTransferSuccessMsg()
+        this.$apollo.provider.clients.defaultClient.resetStore()
         this.$apollo.queries.searchTool.refetch()
       }).catch(() => {
         this.showTrasnferErrorMsg()

@@ -882,7 +882,7 @@ export default {
                   owner_id: this.getTool.owner.id,
                   purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  price: this.newPrice ? (this.newPrice.slice(2) * 100).toPrecision(2) : null,
+                  price: this.newPrice ? (this.newPrice.slice(2) * 100).toFixed(2) : null,
                   year: this.newYear ? this.newYear : null,
                   photo
                 }
@@ -1440,8 +1440,6 @@ export default {
   .edit {
     position: absolute;
     bottom: 70px;
-    // TODO: upgrade parcel version (when it become available) so we can uncomment this
-    // handle iPhone X style screens
     bottom: calc(70px + constant(safe-area-inset-bottom));
     bottom: calc(70px + env(safe-area-inset-bottom));
     right: 20px;
@@ -1450,8 +1448,6 @@ export default {
   .cancel {
     position: absolute;
     bottom: 70px;
-    // TODO: upgrade parcel version (when it become available) so we can uncomment this
-    // handle iPhone X style screens
     bottom: calc(70px + constant(safe-area-inset-bottom));
     bottom: calc(70px + env(safe-area-inset-bottom));
     right: 80px;

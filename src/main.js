@@ -66,7 +66,6 @@ const cache = new InMemoryCache({
   }
 })
 
-// TODO: dynamically switch between prod and develop api's
 const httpLink = new HttpLink({
   uri: process.env.ENVIRONMENT === 'prod' ? 'http://retina-api.us-east-2.elasticbeanstalk.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })

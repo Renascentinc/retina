@@ -67,6 +67,13 @@
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD">
         </extended-fab>
+
+        <extended-fab
+          v-if="$mq === 'desktop' && isDecomissionedTool"
+          :on-click="recover"
+          icon-class="fa-undo-alt"
+          button-text="RECOVER">
+        </extended-fab>
       </div>
       <div class="report">
 
@@ -523,8 +530,6 @@ export default {
     position: absolute;
     right: 30px;
     bottom: 70px;
-    // TODO: upgrade parcel version (when it become available) so we can uncomment this
-    // handle iPhone X style screens
     bottom: calc(70px + constant(safe-area-inset-bottom));
     bottom: calc(70px + env(safe-area-inset-bottom));
     z-index: 100;

@@ -67,7 +67,7 @@ const cache = new InMemoryCache({
 })
 
 const httpLink = new HttpLink({
-  uri: process.env.ENVIRONMENT === 'prod' ? 'http://retina-api.us-east-2.elasticbeanstalk.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+  uri: process.env.ENVIRONMENT === 'prod' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {

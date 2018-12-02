@@ -659,7 +659,7 @@ export default {
               date_purchased: purchaseDate,
               status: this.status ? this.status.id : Statuses.AVAILABLE,
               owner_id: this.owner ? this.owner.id : JSON.parse(window.localStorage.getItem('currentUser')).id,
-              price: this.price ? (this.price.slice(2) * 100).toPrecision(2) : null,
+              price: this.price ? (this.price.slice(2) * 100).toFixed(2) : null,
               year: this.modelYear,
               photo: photoResponse
             }

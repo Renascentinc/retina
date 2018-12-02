@@ -653,8 +653,6 @@ export default {
   .edit {
     position: absolute;
     bottom: 70px;
-    // TODO: upgrade parcel version (when it become available) so we can uncomment this
-    // handle iPhone X style screens
     bottom: calc(70px + constant(safe-area-inset-bottom));
     bottom: calc(70px + env(safe-area-inset-bottom));
     right: 20px;
@@ -663,8 +661,6 @@ export default {
   .cancel {
     position: absolute;
     bottom: 70px;
-    // TODO: upgrade parcel version (when it become available) so we can uncomment this
-    // handle iPhone X style screens
     bottom: calc(70px + constant(safe-area-inset-bottom));
     bottom: calc(70px + env(safe-area-inset-bottom));
     right: 80px;

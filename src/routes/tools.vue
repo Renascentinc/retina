@@ -813,8 +813,6 @@ export default {
     position: absolute;
     left: calc(50% - 79px);
     bottom: 70px;
-    // TODO: upgrade parcel version (when it become available) so we can uncomment this
-    // handle iPhone X style screens
     bottom: calc(70px + constant(safe-area-inset-bottom));
     bottom: calc(70px + env(safe-area-inset-bottom));
     width: 158px;

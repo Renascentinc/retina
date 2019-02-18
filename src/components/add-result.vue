@@ -3,22 +3,27 @@
     <div
       v-if="!creating"
       class="default-text"
-      @click="startCreating">
+      @click="startCreating"
+    >
       <i class="fas fa-plus"></i>
       NEW {{ text }}
     </div>
     <div
       v-if="creating"
-      class="input-group">
+      class="input-group"
+    >
       <i
         class="fas fa-save"
-        @click="save"></i>
+        @click="save"
+      ></i>
       <input
+        v-model="newBrand"
         :placeholder="`Enter new ${text.toLowerCase()}`"
-        v-model="newBrand"/>
+      />
       <i
         class="fas fa-times"
-        @click="cancelCreating"></i>
+        @click="cancelCreating"
+      ></i>
     </div>
   </div>
 </template>

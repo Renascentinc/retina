@@ -2,14 +2,16 @@
   <div class="page user-detail-page">
     <div class="info-menu-container">
       <div
-        class="floating-action-bar">
+        class="floating-action-bar"
+      >
         <extended-fab
           v-if="$mq === 'desktop'"
           :on-click="transitionToUsers"
           :outline-display="true"
           icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
-          button-text="BACK">
+          button-text="BACK"
+        >
         </extended-fab>
 
         <extended-fab
@@ -17,7 +19,8 @@
           :on-click="toggleEditState"
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :disabled="changingRole"
-          :button-text="editState ? 'SAVE CHANGES' : 'EDIT USER'">
+          :button-text="editState ? 'SAVE CHANGES' : 'EDIT USER'"
+        >
         </extended-fab>
 
         <extended-fab
@@ -25,7 +28,8 @@
           :on-click="cancelEdit"
           :disabled="changingRole"
           icon-class="fa-times"
-          button-text="CANCEL">
+          button-text="CANCEL"
+        >
         </extended-fab>
 
         <button-dropdown
@@ -34,7 +38,8 @@
           :options="roles"
           :flag="toggleChangingRole"
           :disabled="editState"
-          button-text="CHANGE ROLE">
+          button-text="CHANGE ROLE"
+        >
         </button-dropdown>
       </div>
       <div class="header-cards-container">
@@ -43,28 +48,36 @@
             v-if="$mq === 'mobile'"
             id="backarrow"
             class="fas fa-arrow-left"
-            to="/users/"> </router-link>
+            to="/users/"
+          >
+          </router-link>
 
-          <span id="userid"> #{{ getUser.id }} </span>
+          <span id="userid">
+            #{{ getUser.id }}
+          </span>
 
           <div
             v-if="!editState"
-            class="name">
+            class="name"
+          >
             {{ getUser.first_name }} {{ getUser.last_name }}
           </div>
 
           <div
             v-if="editState"
-            class="name-inputs">
+            class="name-inputs"
+          >
             <input
               v-validate="'required'"
               v-model="newFirstName"
               name="first name"
-              class="name light-input">
+              class="name light-input"
+            >
             <div class="error-container">
               <span
                 v-show="errors.has('first name')"
-                class="error">
+                class="error"
+              >
                 {{ errors.first('first name') }}
               </span>
             </div>
@@ -72,43 +85,50 @@
               v-validate="'required'"
               v-model="newLastName"
               class="name light-input"
-              name="last name">
+              name="last name"
+            >
             <div class="error-container">
               <span
                 v-show="errors.has('last name')"
-                class="error">
+                class="error"
+              >
                 {{ errors.first('last name') }}
               </span>
             </div>
           </div>
 
           <span
-            class="user-role">
+            class="user-role"
+          >
             {{ getUser.role }}
           </span>
 
           <div
             v-if="isAdmin"
-            class="actions">
+            class="actions"
+          >
             <button-dropdown
               v-if="$mq === 'mobile' && isAdmin"
               :on-click="updateRole"
               :options="roles"
-              button-text="CHANGE ROLE">
+              button-text="CHANGE ROLE"
+            >
             </button-dropdown>
           </div>
         </div>
         <div class="cards">
           <div
             id="contact-card"
-            class="card">
+            class="card"
+          >
             <div class="card-title">
               Contact
             </div>
             <div class="error-container">
               <span
                 v-show="errors.has('phone')"
-                class="error">
+                class="error"
+              >
                 {{ errors.first('phone') }}
               </span>
             </div>
@@ -119,13 +139,15 @@
                     id="call-btn"
                     :on-click="phoneNumber ? phoneCall : () => 0"
                     :active="!phoneNumber"
-                    icon-class="fa-phone">
+                    icon-class="fa-phone"
+                  >
                   </fab>
 
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="phoneNumber ? phoneCall() : () => 0">
+                    @click="phoneNumber ? phoneCall() : () => 0"
+                  >
                     {{ formattedPhone }}
                   </button>
                   <input
@@ -135,7 +157,8 @@
                     name="phone"
                     class="contact-text light-input"
 
-                    type="number">
+                    type="number"
+                  >
                 </div>
 
                 <div class="contact-item">
@@ -144,13 +167,15 @@
                     :on-click="email ? sendEmail : () => 0"
                     :active="!email"
                     icon-class="fa-envelope"
-                    type="string">
+                    type="string"
+                  >
                   </fab>
 
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="email ? sendEmail() : () => 0">
+                    @click="email ? sendEmail() : () => 0"
+                  >
                     {{ getUser.email }}
                   </button>
                   <input
@@ -158,14 +183,16 @@
                     v-if="editState"
                     v-model="newEmail"
                     name="email"
-                    class="contact-text light-input">
+                    class="contact-text light-input"
+                  >
                 </div>
               </div>
             </div>
             <div class="error-container">
               <span
                 v-show="errors.has('email')"
-                class="error">
+                class="error"
+              >
                 {{ errors.first('email') }}
               </span>
             </div>
@@ -173,7 +200,8 @@
           <div
             v-if="editState && isAdmin && !isCurrentUser"
             class="container search-result"
-            @click="deactivateUser">
+            @click="deactivateUser"
+          >
             <div class="default-text">
               <i class="fas fa-times"></i>
               DELETE USER
@@ -187,14 +215,16 @@
       v-if="editState && $mq === 'mobile'"
       :on-click="cancelEdit"
       icon-class="fa-times"
-      class="cancel">
+      class="cancel"
+    >
     </fab>
 
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
-      class="edit">
+      class="edit"
+    >
     </fab>
   </div>
 </template>
@@ -236,7 +266,8 @@ export default {
         let options = {}
         options.user_id = this.$router.currentRoute.params.userId
         return options
-      }
+      },
+      fetchPolicy: 'network-only'
     }
   },
 
@@ -272,6 +303,7 @@ export default {
           type: 'domestic'
         }).string
       }
+      return ''
     },
 
     phoneNumber () {

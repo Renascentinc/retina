@@ -1,12 +1,13 @@
 <template>
   <div
     :class="$mq"
-    class="page login-page">
-
+    class="page login-page"
+  >
     <transition name="fade">
       <div
         v-if="currentState === states.AUTHENTICATING"
-        class="overlay">
+        class="overlay"
+      >
         <div class="half-circle-spinner">
           <div class="circle circle-1"></div>
           <div class="circle circle-2"></div>
@@ -17,15 +18,18 @@
     <div class="top-panel">
       <img
         class="logo"
-        src="../assets/icons/web/red_transparent_512x512.png">
+        src="../assets/icons/web/red_transparent_512x512.png"
+      >
 
       <div class="name-container">
         <span
-          class="retina-name">
+          class="retina-name"
+        >
           RETINA
         </span>
         <span
-          class="renascent-name">
+          class="renascent-name"
+        >
           Renascent, Inc.
         </span>
       </div>
@@ -35,7 +39,8 @@
         <transition name="fade">
           <span
             v-if="currentState.show"
-            :class="currentState.class">
+            :class="currentState.class"
+          >
             {{ currentState.text }}
           </span>
         </transition>
@@ -44,7 +49,8 @@
       <div class="login-inputs-container">
         <input-with-icon
           class="email-container"
-          icon-class="fa-user">
+          icon-class="fa-user"
+        >
           <input
             v-model="username"
             class="username-input"
@@ -52,24 +58,28 @@
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false"
-            @keydown.enter="attemptUserLogin">
+            @keydown.enter="attemptUserLogin"
+          >
         </input-with-icon>
 
         <input-with-icon
           class="password-container"
-          icon-class="fa-key">
+          icon-class="fa-key"
+        >
           <input
             v-model="password"
             class="password-input"
             placeholder="password"
             type="password"
-            @keydown.enter="attemptUserLogin">
+            @keydown.enter="attemptUserLogin"
+          >
         </input-with-icon>
 
         <input-with-icon
           :class="{ show: currentState === states.NEED_ORG_NAME }"
           class="organization-container"
-          icon-class="fa-building">
+          icon-class="fa-building"
+        >
           <input
             v-model="organizationName"
             class="org-name-input"
@@ -77,14 +87,16 @@
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false"
-            @keydown.enter="attemptUserLogin">
+            @keydown.enter="attemptUserLogin"
+          >
         </input-with-icon>
       </div>
 
       <div class="login-action-row">
         <button
           class="reset-password"
-          @click="requestPasswordReset">
+          @click="requestPasswordReset"
+        >
           FORGOT PASSWORD?
         </button>
 
@@ -92,7 +104,8 @@
           :on-click="attemptUserLogin"
           class="login-btn"
           icon-class="fa-arrow-right"
-          button-text="SIGN IN">
+          button-text="SIGN IN"
+        >
         </extended-fab>
       </div>
     </div>

@@ -5,7 +5,8 @@
   font-size: 12px;
   padding: 12px 12px 0px 12px;
   display: flex;
-  flex-direction: column;">
+  flex-direction: column;"
+  >
     <div
       class="dt-head"
       style="display: flex;
@@ -19,13 +20,15 @@
     color: #fff;
     text-align: left;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    font-weight: 600;">
+    font-weight: 600;"
+    >
       <div
         class="dt-cell id"
         style="display: flex;
         flex: 0 0 45px;
         justify-content: center;
-        padding: 0;">
+        padding: 0;"
+      >
         <span>id</span>
       </div>
       <div
@@ -33,7 +36,8 @@
         style="display: flex;
         justify-content: center;
         flex: 0 0 calc(20% - 15px);
-        margin-left: 10px">
+        margin-left: 10px"
+      >
         <span>tool</span>
       </div>
       <div
@@ -41,7 +45,8 @@
         style="display: flex;
         justify-content: center;
         flex: 0 0 calc(20% - 15px);
-        margin-left: 10px">
+        margin-left: 10px"
+      >
         <span>assigned to</span>
       </div>
       <div
@@ -49,21 +54,24 @@
         style="display: flex;
         justify-content: center;
         flex: 0 0 calc(20% - 15px);
-        margin-left: 10px">
+        margin-left: 10px"
+      >
         <span>status</span>
       </div>
       <div
         class="dt-cell date"
         style="display: flex;
         justify-content: center;
-        flex: 0 0 calc(20% - 15px);">
+        flex: 0 0 calc(20% - 15px);"
+      >
         <span>date</span>
       </div>
       <div
         class="dt-cell action"
         style="display: flex;
         justify-content: center;
-        flex: 0 0 calc(20% - 15px);">
+        flex: 0 0 calc(20% - 15px);"
+      >
         <span>action</span>
       </div>
     </div>
@@ -74,7 +82,8 @@
       flex-direction: column;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 3px 4px 9px 4px;">
+      padding: 3px 4px 9px 4px;"
+    >
       <transition-group name="list-element">
         <div
           v-for="entry in searchToolSnapshot"
@@ -85,7 +94,8 @@
         border-bottom: solid 1px lightgray;
         background-color: white;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-        cursor: pointer;">
+        cursor: pointer;"
+        >
           <div
             class="dt-cell id"
             style="display: flex;
@@ -95,7 +105,8 @@
           display: flex;
           align-items: center;
           height: 45px;
-          font-weight: 600; border-right: solid 1px lightgray;">
+          font-weight: 600; border-right: solid 1px lightgray;"
+          >
             <span>{{ entry.tool.id }}</span>
           </div>
           <div
@@ -108,7 +119,8 @@
           flex-direction: row;
           height: 45px;
           font-weight: 600;
-          flex: 0 0 calc(20% - 15px);">
+          flex: 0 0 calc(20% - 15px);"
+          >
             <span>{{ `${ entry.tool.brand.name } ${ entry.tool.type.name }` }}</span>
           </div>
           <div
@@ -121,7 +133,8 @@
           flex-direction: row;
           height: 45px;
           font-weight: 600;
-          flex: 0 0 calc(20% - 15px);">
+          flex: 0 0 calc(20% - 15px);"
+          >
             <span>{{ entry.tool.owner.type === 'USER' ? `${ entry.tool.owner.first_name } ${ entry.tool.owner.last_name }` : entry.tool.owner.name }}</span>
           </div>
           <div
@@ -134,7 +147,8 @@
           flex-direction: row;
           height: 45px;
           font-weight: 600;
-          flex: 0 0 calc(20% - 15px);">
+          flex: 0 0 calc(20% - 15px);"
+          >
             <span>{{ entry.tool.status }}</span>
           </div>
           <div
@@ -145,7 +159,8 @@
           align-items: center;
           height: 45px;
           font-weight: 600;
-          flex: 0 0 calc(20% - 15px);">
+          flex: 0 0 calc(20% - 15px);"
+          >
             <span>{{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US') }}</span>
           </div>
           <div
@@ -156,7 +171,8 @@
           display: flex;
           align-items: center;
           height: 45px;
-          font-weight: 600;">
+          font-weight: 600;"
+          >
             <span>{{ entry.metadata.tool_action }}</span>
           </div>
         </div>

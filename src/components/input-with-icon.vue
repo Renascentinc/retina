@@ -3,10 +3,11 @@
     <div class="icon-container">
       <i
         :class="iconClass"
-        class="fas">
+        class="fas"
+      >
       </i>
     </div>
-    <slot/>
+    <slot />
   </div>
 </template>
 

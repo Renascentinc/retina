@@ -2,15 +2,19 @@
   <button
     :class="{ inactive: !isNfcWriteEnabled }"
     class="nfc-encode"
-    @click="onClick">
+    @click="onClick"
+  >
     <div class="fab-icon-container">
       <svgicon
         icon="nfc"
         width="22"
-        height="22">
+        height="22"
+      >
       </svgicon>
     </div>
-    <span class="efab-text">ENCODE TAG</span>
+    <span class="efab-text">
+      ENCODE TAG
+    </span>
   </button>
 </template>
 

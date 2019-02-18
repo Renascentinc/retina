@@ -2,15 +2,21 @@
   <div class="search-result">
     <div
       class="element-container"
-      @click="onClick">
+      @click="onClick"
+    >
       <avatar :username="`${ user.first_name } ${ user.last_name }`"></avatar>
       <div
-        class="main-container">
+        class="main-container"
+      >
         <div class="row">
-          <span class="title">{{ user.first_name }} {{ user.last_name }}</span>
+          <span class="title">
+            {{ user.first_name }} {{ user.last_name }}
+          </span>
         </div>
         <div class="row">
-          <span class="subtitle">{{ user.role }}</span>
+          <span class="subtitle">
+            {{ user.role }}
+          </span>
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
 <template>
   <div
     class="container search-result"
-    @click="onClick">
+    @click="onClick"
+  >
     <div class="default-text">
       <i class="fas fa-plus"></i>
       NEW {{ text }}

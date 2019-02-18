@@ -5,7 +5,8 @@
         :clear-fuzzy-filter="clearFuzzyFilter"
         :tags="tags"
         :update-tags="updateFilters"
-        :disable-user-search="isNonAdminTransfer">
+        :disable-user-search="isNonAdminTransfer"
+      >
       </tool-search-input>
       <nfc-scan :on-scan="onScan"></nfc-scan>
     </div>
@@ -13,7 +14,8 @@
     <transition name="fade">
       <div
         v-if="transferInProgress"
-        class="overlay">
+        class="overlay"
+      >
         <div class="half-circle-spinner">
           <div class="circle circle-1"></div>
           <div class="circle circle-2"></div>
@@ -26,17 +28,20 @@
       :on-click="moveToSelectingState"
       class="transfer-btn"
       icon-class="fa-exchange-alt"
-      button-text="TRANSFER">
+      button-text="TRANSFER"
+    >
     </extended-fab>
     <div class="tools-menu-container">
       <div
-        class="floating-action-bar">
+        class="floating-action-bar"
+      >
         <extended-fab
           v-if="$mq === 'desktop' && currentState === states.INITIAL"
           :on-click="moveToSelectingState"
           class="transfer-btn"
           icon-class="fa-exchange-alt"
-          button-text="TRANSFER">
+          button-text="TRANSFER"
+        >
         </extended-fab>
 
         <extended-fab
@@ -44,7 +49,8 @@
           :on-click="cancelTransfer"
           class="cancel-fab-btn"
           icon-class="fa-times"
-          button-text="CANCEL">
+          button-text="CANCEL"
+        >
         </extended-fab>
 
         <extended-fab
@@ -52,7 +58,8 @@
           :on-click="toggleViewSelected"
           :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
           :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
-          class="view-fab-btn">
+          class="view-fab-btn"
+        >
         </extended-fab>
 
         <extended-fab
@@ -62,7 +69,8 @@
           :class="{ disabled: numSelectedTools === 0 }"
           class="view-fab-btn next-btn"
           icon-class="fa-arrow-right"
-          button-text="NEXT">
+          button-text="NEXT"
+        >
         </extended-fab>
 
         <extended-fab
@@ -70,7 +78,8 @@
           :on-click="transitionToAdd"
           class="add-btn"
           icon-class="fa-plus"
-          button-text="ADD TOOL">
+          button-text="ADD TOOL"
+        >
         </extended-fab>
 
         <extended-fab
@@ -78,15 +87,17 @@
           :on-click="moveToSelectingState"
           class="back-efab"
           icon-class="fa-arrow-left"
-          button-text="BACK">
+          button-text="BACK"
+        >
         </extended-fab>
 
         <v-select
           v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+          v-model="transferTarget"
           :options="transferTargets"
           :filterable="false"
-          v-model="transferTarget"
-          class="dark-input">
+          class="dark-input"
+        >
         </v-select>
 
         <extended-fab
@@ -95,27 +106,31 @@
           :disabled="!transferTarget.id || numSelectedTools === 0"
           class="finish-transfer"
           icon-class="fa-arrow-right"
-          button-text="FINISH">
+          button-text="FINISH"
+        >
         </extended-fab>
       </div>
 
       <div
-        v-infinite-scroll="loadMore"
         ref="scrollElement"
+        v-infinite-scroll="loadMore"
         :class="{ finalizing: currentState === states.FINALIZING }"
         infinite-scroll-throttle-delay="200"
-        class="tool-scroll-container">
+        class="tool-scroll-container"
+      >
         <add-button
           v-if="$mq === 'mobile' && currentState === states.INITIAL"
           :key="0"
           :on-click="transitionToAdd"
-          text="TOOL">
+          text="TOOL"
+        >
         </add-button>
 
         <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchTool.loading"
-            class="loading-container">
+            class="loading-container"
+          >
             <div class="half-circle-spinner">
               <div class="circle circle-1"></div>
               <div class="circle circle-2"></div>
@@ -126,27 +141,33 @@
         <transition name="fade">
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
-            class="no-tools-container">
-            <span class="no-tools-text">No Tools To Display</span>
+            class="no-tools-container"
+          >
+            <span class="no-tools-text">
+              No Tools To Display
+            </span>
           </div>
         </transition>
 
         <transition-group
           name="list-element"
-          tag="span">
+          tag="span"
+        >
           <tool-search-result
             v-for="tool in tools"
-            :tool="tool"
             :key="tool.id"
+            :tool="tool"
             :on-select="transitionToToolInfo"
-            :show-select="currentState !== states.INITIAL">
+            :show-select="currentState !== states.INITIAL"
+          >
           </tool-search-result>
         </transition-group>
 
         <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchTool.loading && paginationLoading"
-            class="loading-container">
+            class="loading-container"
+          >
             <div class="half-circle-spinner">
               <div class="circle circle-1"></div>
               <div class="circle circle-2"></div>
@@ -159,20 +180,27 @@
     <transition name="fade">
       <div
         v-if="$mq === 'mobile' && currentState === states.SELECTING"
-        class="nav-bar selection-action-bar">
+        class="nav-bar selection-action-bar"
+      >
         <div class="icon-text-container">
           <button
             class="fas fa-times menu-icon"
-            @click="cancelTransfer">
-            <span class="icon-subtext">CANCEL</span>
+            @click="cancelTransfer"
+          >
+            <span class="icon-subtext">
+              CANCEL
+            </span>
           </button>
         </div>
         <div class="icon-text-container">
           <button
             :class="{ 'fa-check-square': !showOnlySelectedTools, 'fa-list': showOnlySelectedTools }"
             class="fas menu-icon"
-            @click="toggleViewSelected">
-            <span class="icon-subtext">{{ showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED' }}</span>
+            @click="toggleViewSelected"
+          >
+            <span class="icon-subtext">
+              {{ showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED' }}
+            </span>
           </button>
         </div>
         <div class="icon-text-container">
@@ -180,8 +208,11 @@
             :disabled="numSelectedTools === 0"
             :class="{ disabled: numSelectedTools === 0 }"
             class="fas fa-arrow-right menu-icon next-btn"
-            @click="proceedToFinalize">
-            <span class="icon-subtext">NEXT</span>
+            @click="proceedToFinalize"
+          >
+            <span class="icon-subtext">
+              NEXT
+            </span>
           </button>
         </div>
       </div>
@@ -190,18 +221,22 @@
     <transition name="fade">
       <div
         v-if="$mq === 'mobile' && currentState === states.FINALIZING"
-        class="finalizing-action-bar">
+        class="finalizing-action-bar"
+      >
         <div class="finalize-row finalize-header">
           <span> Transfer {{ formattedNumSelectedTools }} </span>
         </div>
 
         <div class="finalize-row finalize-middle">
-          <span class="finalize-to-text"> To </span>
+          <span class="finalize-to-text">
+            To
+          </span>
           <v-select
+            v-model="transferTarget"
             :options="transferTargets"
             :searchable="false"
-            v-model="transferTarget"
-            class="dark-input">
+            class="dark-input"
+          >
           </v-select>
         </div>
 
@@ -211,7 +246,8 @@
             :outline-display="true"
             class="back-efab"
             icon-class="fa-arrow-left"
-            button-text="BACK">
+            button-text="BACK"
+          >
           </extended-fab>
 
           <extended-fab
@@ -219,7 +255,8 @@
             :disabled="!transferTarget.id || numSelectedTools === 0"
             class="finish-transfer"
             icon-class="fa-arrow-right"
-            button-text="FINISH">
+            button-text="FINISH"
+          >
           </extended-fab>
         </div>
       </div>
@@ -255,24 +292,30 @@ export default {
   mixins: [ nfcMixin ],
 
   apollo: {
-    getAllLocation: gql`query {
-      getAllLocation {
-        id
-        name
-        type
-      }
-    }`,
+    getAllLocation: {
+      query: gql`query {
+        getAllLocation {
+          id
+          name
+          type
+        }
+      }`,
+      fetchPolicy: 'network-only'
+    },
 
-    getAllUser: gql`query {
-      getAllUser {
-        id
-        first_name
-        last_name
-        role
-        type
-        status
-      }
-    }`,
+    getAllUser: {
+      query: gql`query {
+        getAllUser {
+          id
+          first_name
+          last_name
+          role
+          type
+          status
+        }
+      }`,
+      fetchPolicy: 'network-only'
+    },
 
     getMultipleTool: {
       query: gql`query selectedTools($tool_ids: [ID!]!) {
@@ -306,7 +349,8 @@ export default {
         return {
           tool_ids: this.$store.getters.selectedTools
         }
-      }
+      },
+      fetchPolicy: 'network-only'
     },
 
     searchTool: {
@@ -364,7 +408,8 @@ export default {
         }
 
         return options
-      }
+      },
+      fetchPolicy: 'network-only'
     }
   },
 

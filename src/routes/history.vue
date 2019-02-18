@@ -1,12 +1,14 @@
 <template>
   <div class="page history-page">
     <history-table
-      :search-tool-snapshot="searchToolSnapshot">
+      :search-tool-snapshot="searchToolSnapshot"
+    >
     </history-table>
     <transition name="fade">
       <div
         v-if="loading"
-        class="overlay">
+        class="overlay"
+      >
         <div class="half-circle-spinner">
           <div class="circle circle-1"></div>
           <div class="circle circle-2"></div>
@@ -17,7 +19,8 @@
       <history-search-input
         :allow-tool-id-search="!currentToolId"
         :update-tags="updateTagFilters"
-        :tags="tags">
+        :tags="tags"
+      >
       </history-search-input>
       <v-date-picker
         v-model="dateRange"
@@ -28,12 +31,13 @@
         popover-direction="bottom"
         popover-align="right"
         mode="range"
-        @input="toggleDatepicker">
+        @input="toggleDatepicker"
+      >
         <button
-          slot-scope="scope"
           :class="{ active: !!dateRange }"
           class="fas fa-calendar-alt open-datepicker"
-          @click="toggleDatepicker">
+          @click="toggleDatepicker"
+        >
         </button>
       </v-date-picker>
     </div>
@@ -42,54 +46,61 @@
         v-if="$mq === 'mobile' && isNativeApp"
         :on-click="printTable"
         class="print-btn"
-        icon-class="fa-print">
+        icon-class="fa-print"
+      >
       </fab>
 
       <fab
         v-if="$mq === 'mobile' && !isNativeApp"
         :on-click="exportTable"
         class="print-btn"
-        icon-class="fa-file-pdf">
+        icon-class="fa-file-pdf"
+      >
       </fab>
       <div
-        class="floating-action-bar">
-
+        class="floating-action-bar"
+      >
         <extended-fab
           v-if="$mq === 'desktop' && isNativeApp"
           :on-click="printTable"
           icon-class="fa-print"
-          button-text="PRINT">
+          button-text="PRINT"
+        >
         </extended-fab>
 
         <extended-fab
           v-if="$mq === 'desktop' && !isNativeApp"
           :on-click="exportTable"
           icon-class="fa-file-pdf"
-          button-text="DOWNLOAD">
+          button-text="DOWNLOAD"
+        >
         </extended-fab>
 
         <extended-fab
           v-if="$mq === 'desktop' && isDecomissionedTool"
           :on-click="recover"
           icon-class="fa-undo-alt"
-          button-text="RECOVER">
+          button-text="RECOVER"
+        >
         </extended-fab>
       </div>
       <div class="report">
-
         <span
           v-if="!currentToolId"
           style="text-align: center;
         font-weight: 600;"
-          class="title">
+          class="title"
+        >
           LATEST TRANSACTIONS
         </span>
         <span
           v-if="currentToolId"
-          class="title">
+          class="title"
+        >
           <span
             class="fas fa-arrow-left back"
-            @click="goBack"></span>
+            @click="goBack"
+          ></span>
           #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
         </span>
 
@@ -97,7 +108,8 @@
           <transition name="list-loading">
             <div
               v-if="$apollo.queries.searchToolSnapshot.loading"
-              class="loading-container">
+              class="loading-container"
+            >
               <div class="half-circle-spinner">
                 <div class="circle circle-1"></div>
                 <div class="circle circle-2"></div>
@@ -109,10 +121,11 @@
             <transition-group name="list-element">
               <history-search-result
                 v-for="entry in searchToolSnapshot"
+                :key="entry.id"
                 :entry="entry"
                 :select-tool="selectHistoryEntry"
                 :is-detail-result="!!currentToolId"
-                :key="entry.id">
+              >
               </history-search-result>
             </transition-group>
           </div>
@@ -122,7 +135,8 @@
           :on-click="recover"
           button-text="RECOVER"
           icon-class="fa-undo-alt"
-          class="restore-efab">
+          class="restore-efab"
+        >
         </extended-fab>
       </div>
     </div>
@@ -133,7 +147,6 @@
 import Vue from 'vue'
 import HistorySearchInput from '../components/history-search-input'
 import ExtendedFab from '../components/extended-fab.vue'
-import Avatar from 'vue-avatar'
 import Fab from '../components/fab'
 import html2pdf from 'html2pdf.js'
 import gql from 'graphql-tag'
@@ -147,7 +160,6 @@ export default {
 
   components: {
     HistorySearchInput,
-    Avatar,
     Fab,
     ExtendedFab,
     HistoryTable,
@@ -199,7 +211,7 @@ export default {
           }
         }
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'network-only'
     }
   },
 
@@ -301,7 +313,7 @@ export default {
     },
 
     selectHistoryEntry (toolId) {
-      this.$router.push({name: 'historyDetail', params: {toolId}})
+      this.$router.push({ name: 'historyDetail', params: { toolId } })
       this.clearFilters()
       this.currentToolId = toolId
     },

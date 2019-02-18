@@ -2,45 +2,51 @@
   <div class="page password-reset-page">
     <img
       class="logo"
-      src="../assets/icons/web/red_transparent_512x512.png">
+      src="../assets/icons/web/red_transparent_512x512.png"
+    >
 
     <span
-      class="header-text">
+      class="header-text"
+    >
       RESET YOUR PASSWORD
     </span>
 
     <div class="input-card">
       <div class="input-group-container">
         <input
-          v-validate="'required'"
           ref="password"
           v-model="password"
+          v-validate="'required'"
           :class="{'is-danger': errors.has('password')}"
           class="light-input"
           name="password"
           type="password"
-          placeholder="Password">
+          placeholder="Password"
+        >
         <span
-          class="is-danger error-msg">
+          class="is-danger error-msg"
+        >
           {{ errors.first('password') }}
         </span>
       </div>
 
       <input
-        v-validate="'required|confirmed:password'"
         v-model="confirmPassword"
+        v-validate="'required|confirmed:password'"
         :class="{'is-danger': errors.has('password_confirmation')}"
         class="light-input"
         name="password_confirmation"
         type="password"
         placeholder="Confirm Password"
-        data-vv-as="password">
+        data-vv-as="password"
+      >
 
       <extended-fab
         :on-click="attemptPasswordReset"
         :disabled="!password || !confirmPassword"
         icon-class=""
-        button-text="RESET">
+        button-text="RESET"
+      >
       </extended-fab>
     </div>
   </div>

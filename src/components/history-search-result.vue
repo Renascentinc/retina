@@ -2,19 +2,23 @@
   <div class="row-container">
     <div
       class="row"
-      @click="selectResult()">
+      @click="selectResult()"
+    >
       <div
         :class="isDetailResult ? 'caret-box' : ''"
         class="dt-cell id"
-        @click="toggleDetails">
+        @click="toggleDetails"
+      >
         <span
-          v-if="!isDetailResult">
+          v-if="!isDetailResult"
+        >
           {{ entry.tool.id }}
         </span>
         <i
           v-if="isDetailResult"
           :class="showingDetails ? 'down' : 'right'"
-          class="fas fa-angle-right">
+          class="fas fa-angle-right"
+        >
         </i>
       </div>
       <div class="dt-cell name">
@@ -30,67 +34,101 @@
     <transition name="history-detail">
       <div
         v-if="showingDetails"
-        class="details">
+        class="details"
+      >
         <div class="detail-row">
-          <span class="label"> TIME </span>
-          <span class="value"> {{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US') + ' ' + new Date(entry.metadata.timestamp).toLocaleTimeString('en-US') }} </span>
+          <span class="label">
+            TIME
+          </span>
+          <span class="value">
+            {{ new Date(entry.metadata.timestamp).toLocaleDateString('en-US') + ' ' + new Date(entry.metadata.timestamp).toLocaleTimeString('en-US') }}
+          </span>
         </div>
         <div class="detail-row">
-          <span class="label"> DONE BY </span>
-          <span class="value"> {{ actorName }} </span>
+          <span class="label">
+            DONE BY
+          </span>
+          <span class="value">
+            {{ actorName }}
+          </span>
         </div>
         <div class="detail-row">
-          <span class="label"> STATUS </span>
+          <span class="label">
+            STATUS
+          </span>
           <span
             v-if="!statusDiff"
-            class="value">
+            class="value"
+          >
             {{ formatToLower(status) }}
           </span>
           <span
             v-if="statusDiff"
-            class="value">
-            <span class="lhs"> {{ formatToLower(status.lhs) }} </span>
+            class="value"
+          >
+            <span class="lhs">
+              {{ formatToLower(status.lhs) }}
+            </span>
             <i class="fas fa-long-arrow-alt-right"></i>
-            <span class="rhs"> {{ formatToLower(status.rhs) }} </span>
+            <span class="rhs">
+              {{ formatToLower(status.rhs) }}
+            </span>
           </span>
         </div>
         <div class="detail-row">
-          <span class="label"> OWNER </span>
+          <span class="label">
+            OWNER
+          </span>
           <span
             v-if="!ownerDiff"
-            class="value">
+            class="value"
+          >
             {{ formatToLower(owner) }}
           </span>
           <span
             v-if="ownerDiff"
-            class="value">
-            <span class="lhs"> {{ formatToLower(owner.lhs) }} </span>
+            class="value"
+          >
+            <span class="lhs">
+              {{ formatToLower(owner.lhs) }}
+            </span>
             <i class="fas fa-long-arrow-alt-right"></i>
-            <span class="rhs"> {{ formatToLower(owner.rhs) }} </span>
+            <span class="rhs">
+              {{ formatToLower(owner.rhs) }}
+            </span>
           </span>
         </div>
 
         <div
           v-for="change in (diff || []).filter(d => !!d)"
           :key="change.path[0]"
-          class="detail-row diff-row">
-          <span class="label">{{ formatToUpper(change.path[0]) }} </span>
+          class="detail-row diff-row"
+        >
+          <span class="label">
+            {{ formatToUpper(change.path[0]) }}
+          </span>
           <span class="value">
-            <span class="lhs"> {{ change.lhs || '-' }} </span>
+            <span class="lhs">
+              {{ change.lhs || '-' }}
+            </span>
             <i class="fas fa-long-arrow-alt-right"></i>
-            <span class="rhs"> {{ change.rhs || '-' }} </span>
+            <span class="rhs">
+              {{ change.rhs || '-' }}
+            </span>
           </span>
         </div>
         <div
           v-if="metadata.action_note !== null"
-          class="detail-row diff-row">
-          <span class="label"> NOTE </span>
+          class="detail-row diff-row"
+        >
+          <span class="label">
+            NOTE
+          </span>
           <span class="value">
             {{ metadata.action_note }}
           </span>
         </div>
       </div>
-
     </transition>
   </div>
 </template>
@@ -98,14 +136,9 @@
 <script>
 import gql from 'graphql-tag'
 import DeepDiff from 'deep-diff'
-import ExtendedFab from '../components/extended-fab'
 
 export default {
   name: 'HistorySearchResult',
-
-  components: {
-    ExtendedFab
-  },
 
   props: {
     entry: {

@@ -5,13 +5,15 @@
     </div>
     <div class="users-menu-container">
       <div
-        class="floating-action-bar">
+        class="floating-action-bar"
+      >
         <extended-fab
           v-if="isAdmin && $mq === 'desktop'"
           :on-click="transitionToAddUser"
           class="add-user-fab"
           icon-class="fa-plus"
-          button-text="ADD USER">
+          button-text="ADD USER"
+        >
         </extended-fab>
       </div>
       <div class="user-scroll-container">
@@ -19,13 +21,15 @@
           v-if="$mq === 'mobile' && isAdmin"
           :key="0"
           :on-click="transitionToAddUser"
-          text="USER">
+          text="USER"
+        >
         </add-button>
 
         <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchUser.loading"
-            class="loading-container">
+            class="loading-container"
+          >
             <div class="half-circle-spinner">
               <div class="circle circle-1"></div>
               <div class="circle circle-2"></div>
@@ -36,20 +40,25 @@
         <transition name="fade">
           <div
             v-if="!$apollo.queries.searchUser.loading && !users.length"
-            class="no-users-container">
-            <span class="no-users-text">No Users To Display</span>
+            class="no-users-container"
+          >
+            <span class="no-users-text">
+              No Users To Display
+            </span>
           </div>
         </transition>
 
         <transition-group
           name="list-element"
           class="users"
-          tag="div">
+          tag="div"
+        >
           <user-search-result
             v-for="user in users"
-            :user="user"
             :key="user.id"
-            :on-select="transitionToUserInfo"/>
+            :user="user"
+            :on-select="transitionToUserInfo"
+          />
         </transition-group>
       </div>
     </div>
@@ -85,7 +94,8 @@ export default {
             role
           }
         }
-      `
+      `,
+      fetchPolicy: 'network-only'
     },
 
     searchUser: {
@@ -109,7 +119,8 @@ export default {
         }
 
         return options
-      }
+      },
+      fetchPolicy: 'network-only'
     }
   },
 

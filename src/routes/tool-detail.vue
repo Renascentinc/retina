@@ -3,7 +3,8 @@
     <transition name="fade">
       <div
         v-if="saving"
-        class="overlay">
+        class="overlay"
+      >
         <div class="half-circle-spinner">
           <div class="circle circle-1"></div>
           <div class="circle circle-2"></div>
@@ -13,14 +14,16 @@
 
     <div class="info-menu-container">
       <div
-        class="floating-action-bar">
+        class="floating-action-bar"
+      >
         <extended-fab
           v-if="$mq === 'desktop'"
           :on-click="transitionToTools"
           :outline-display="true"
           icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
-          button-text="BACK">
+          button-text="BACK"
+        >
         </extended-fab>
 
         <extended-fab
@@ -28,7 +31,8 @@
           :on-click="toggleEditState"
           :disabled="changingStatus"
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
-          :button-text="editState ? 'SAVE CHANGES' : 'EDIT TOOL'">
+          :button-text="editState ? 'SAVE CHANGES' : 'EDIT TOOL'"
+        >
         </extended-fab>
 
         <extended-fab
@@ -36,7 +40,8 @@
           :on-click="cancelEdit"
           :disabled="changingStatus"
           icon-class="fa-times"
-          button-text="CANCEL">
+          button-text="CANCEL"
+        >
         </extended-fab>
 
         <extended-fab
@@ -45,7 +50,8 @@
           :on-click="toggleTransferStatus"
           :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
           icon-class="fa-exchange-alt"
-          class="action-btn transfer-btn">
+          class="action-btn transfer-btn"
+        >
         </extended-fab>
 
         <extended-fab
@@ -54,14 +60,16 @@
           :on-click="transitionToHistory"
           :outline-display="false"
           icon-class="fa-book-open"
-          button-text="VIEW HISTORY">
+          button-text="VIEW HISTORY"
+        >
         </extended-fab>
 
         <button-dropdown
           v-if="$mq === 'desktop' && isTransferable"
           :on-click="updateStatus"
           :options="statusOptions"
-          button-text="CHANGE STATUS">
+          button-text="CHANGE STATUS"
+        >
         </button-dropdown>
       </div>
 
@@ -70,34 +78,42 @@
           <router-link
             v-if="$mq === 'mobile'"
             class="fas fa-arrow-left backarrow"
-            to="/tools">
+            to="/tools"
+          >
           </router-link>
 
-          <span class="toolid">#{{ getTool.id }} </span>
+          <span class="toolid">
+            #{{ getTool.id }}
+          </span>
 
           <div
             v-if="!editState"
-            class="name">
+            class="name"
+          >
             {{ brand }} {{ type }}
           </div>
 
           <div
             v-if="editState"
-            class="input-group-container">
+            class="input-group-container"
+          >
             <v-select
+              v-model="newBrand"
               v-validate="'required'"
               :options="brandOptions"
-              v-model="newBrand"
               name="brand"
               label="name"
               class="dark-input"
-              placeholder="Brand">
+              placeholder="Brand"
+            >
               <template
                 slot="no-options"
-                slot-scope="props">
+                slot-scope="props"
+              >
                 <button
                   class="no-options-btn"
-                  @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }">
+                  @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }"
+                >
                   Set Brand To "{{ props.value }}"
                 </button>
               </template>
@@ -105,7 +121,8 @@
             <div class="error-container">
               <span
                 v-show="errors.has('brand')"
-                class="error">
+                class="error"
+              >
                 {{ errors.first('brand') }}
               </span>
             </div>
@@ -113,21 +130,25 @@
 
           <div
             v-if="editState"
-            class="input-group-container">
+            class="input-group-container"
+          >
             <v-select
-              v-validate="'required'"
               v-model="newType"
+              v-validate="'required'"
               :options="typeOptions"
               name="type"
               label="name"
               class="dark-input"
-              placeholder="Type">
+              placeholder="Type"
+            >
               <template
                 slot="no-options"
-                slot-scope="props">
+                slot-scope="props"
+              >
                 <button
                   class="no-options-btn"
-                  @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }">
+                  @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }"
+                >
                   Set Type To "{{ props.value }}"
                 </button>
               </template>
@@ -135,7 +156,8 @@
             <div class="error-container">
               <span
                 v-show="errors.has('type')"
-                class="error">
+                class="error"
+              >
                 {{ errors.first('type') }}
               </span>
             </div>
@@ -143,26 +165,32 @@
 
           <span
             :class="statusClass"
-            class="tool-status">
+            class="tool-status"
+          >
             {{ formattedStatus }}
           </span>
 
           <div
             v-if="isTransferable"
-            class="actions">
+            class="actions"
+          >
             <button-dropdown
               v-if="$mq === 'mobile'"
               :on-click="updateStatus"
               :options="statusOptions"
-              button-text="CHANGE STATUS">
+              button-text="CHANGE STATUS"
+            >
             </button-dropdown>
 
             <button
               v-if="$mq === 'mobile'"
               class="action-btn transfer-btn"
-              @click="toggleTransferStatus">
+              @click="toggleTransferStatus"
+            >
               <i class="fas fa-exchange-alt action-icon"></i>
-              <span class="action-title">{{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}</span>
+              <span class="action-title">
+                {{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}
+              </span>
             </button>
           </div>
         </div>
@@ -175,18 +203,21 @@
               <div class="user-symbol">
                 <i
                   :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
-                  class="fas fa-user">
+                  class="fas fa-user"
+                >
                 </i>
               </div>
               <div class="owner-name">
                 <div
                   v-if="owner.type === 'LOCATION'"
-                  class="owner-location">
+                  class="owner-location"
+                >
                   {{ owner.name }}
                 </div>
                 <div
                   v-if="owner.type === 'USER'"
-                  class="owner-user">
+                  class="owner-user"
+                >
                   <span> {{ owner.first_name }} </span>
                   <span> {{ owner.last_name }} </span>
                 </div>
@@ -196,7 +227,8 @@
                   :on-click="phoneCall"
                   :disabled="!phoneNumber"
                   class="call-btn"
-                  icon-class="fa-phone">
+                  icon-class="fa-phone"
+                >
                 </fab>
 
                 <div class="spacer"></div>
@@ -205,83 +237,116 @@
                   :on-click="sendEmail"
                   :disabled="!email"
                   class="email-btn"
-                  icon-class="fa-envelope">
+                  icon-class="fa-envelope"
+                >
                 </fab>
               </div>
             </div>
           </div>
           <div
-            class="card general-card">
+            class="card general-card"
+          >
             <div class="card-title">
               General
             </div>
             <div class="card-details general-details">
-              <span class="general-label">Retina ID</span>
-              <span class="general-data"> {{ getTool.id }} </span>
-              <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''"> </nfc-encode>
+              <span class="general-label">
+                Retina ID
+              </span>
+              <span class="general-data">
+                {{ getTool.id }}
+              </span>
+              <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''">
+              </nfc-encode>
 
-              <span class="general-label">Serial Number</span>
+              <span class="general-label">
+                Serial Number
+              </span>
               <span
                 v-if="!editState"
-                class="general-data"> {{ getTool.serial_number || '-' }} </span>
+                class="general-data"
+              >
+                {{ getTool.serial_number || '-' }}
+              </span>
 
               <input
-                v-validate="'required'"
                 v-if="editState"
                 v-model="newSerial"
+                v-validate="'required'"
                 name="serial"
-                class="general-data light-input">
+                class="general-data light-input"
+              >
               <div class="error-container">
                 <span
                   v-show="errors.has('serial')"
-                  class="error">
+                  class="error"
+                >
                   {{ errors.first('serial') }}
                 </span>
               </div>
 
-              <span class="general-label">Model Number</span>
+              <span class="general-label">
+                Model Number
+              </span>
               <span
                 v-if="!editState"
-                class="general-data"> {{ getTool.model_number || '-' }} </span>
+                class="general-data"
+              >
+                {{ getTool.model_number || '-' }}
+              </span>
 
               <input
-                v-validate="'required'"
                 v-if="editState"
                 v-model="newModel"
+                v-validate="'required'"
                 name="model"
-                class="general-data light-input">
+                class="general-data light-input"
+              >
               <div class="error-container">
                 <span
                   v-show="errors.has('model')"
-                  class="error">
+                  class="error"
+                >
                   {{ errors.first('model') }}
                 </span>
               </div>
 
-              <span class="general-label">Model Year</span>
+              <span class="general-label">
+                Model Year
+              </span>
               <span
                 v-if="!editState"
-                class="general-data"> {{ getTool.year || '-' }} </span>
+                class="general-data"
+              >
+                {{ getTool.year || '-' }}
+              </span>
 
               <input
-                v-validate="validations.modelYear"
                 v-if="editState"
                 v-model="newYear"
+                v-validate="validations.modelYear"
                 name="year"
                 type="number"
-                class="general-data light-input">
+                class="general-data light-input"
+              >
               <div class="error-container">
                 <span
                   v-show="errors.has('year')"
-                  class="error">
+                  class="error"
+                >
                   {{ errors.first('year') }}
                 </span>
               </div>
 
-              <span class="general-label">Purchased From</span>
+              <span class="general-label">
+                Purchased From
+              </span>
               <span
                 v-if="!editState"
-                class="general-data"> {{ purchasedFrom }} </span>
+                class="general-data"
+              >
+                {{ purchasedFrom }}
+              </span>
 
               <v-select
                 v-if="editState"
@@ -289,22 +354,30 @@
                 :options="purchasedFromOptions"
                 label="name"
                 class="general-data dark-input"
-                placeholder="Purchased From">
+                placeholder="Purchased From"
+              >
                 <template
                   slot="no-options"
-                  slot-scope="props">
+                  slot-scope="props"
+                >
                   <button
                     class="no-options-btn"
-                    @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }">
+                    @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }"
+                  >
                     Set Type To "{{ props.value }}"
                   </button>
                 </template>
               </v-select>
 
-              <span class="general-label">Purchase Date</span>
+              <span class="general-label">
+                Purchase Date
+              </span>
               <span
                 v-if="!editState"
-                class="general-data"> {{ formattedDate(getTool.date_purchased) }} </span>
+                class="general-data"
+              >
+                {{ formattedDate(getTool.date_purchased) }}
+              </span>
 
               <v-date-picker
                 v-if="editState"
@@ -316,60 +389,74 @@
                 popover-direction="top"
                 class="general-data"
                 mode="single"
-                @input="toggleDatepicker">
+                @input="toggleDatepicker"
+              >
                 <button
-                  slot-scope="{ inputValue, updateValue }"
+                  slot-scope="{ inputValue }"
                   :class="{ placeholder: !inputValue }"
                   class="dark-input purchase-date-input"
-                  @click="toggleDatepicker">
+                  @click="toggleDatepicker"
+                >
                   {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
                 </button>
               </v-date-picker>
 
-              <span class="general-label">Purchase Price</span>
+              <span class="general-label">
+                Purchase Price
+              </span>
               <span
                 v-if="!editState"
-                class="general-data"> ${{ formattedPrice }} </span>
+                class="general-data"
+              >
+                ${{ formattedPrice }}
+              </span>
 
               <input
-                v-money="moneyInputConfig"
                 v-if="editState"
                 v-model="newPrice"
+                v-money="moneyInputConfig"
                 name="newPrice"
                 class="light-input"
-                placeholder="Price">
+                placeholder="Price"
+              >
 
               <extended-fab
                 v-if="$mq === 'mobile'"
                 :on-click="transitionToHistory"
                 :outline-display="false"
                 icon-class="fa-book-open"
-                button-text="VIEW HISTORY">
+                button-text="VIEW HISTORY"
+              >
               </extended-fab>
             </div>
           </div>
 
           <div
-            class="card photo-card">
+            class="card photo-card"
+          >
             <div class="card-title">
               Photo
             </div>
             <div
               v-if="!editState"
-              class="photo-box">
+              class="photo-box"
+            >
               <img
-                v-lazy="`${getTool.photo}`"
                 v-if="getTool.photo"
-                class="image">
+                v-lazy="`${getTool.photo}`"
+                class="image"
+              >
               <i
                 v-if="!getTool.photo"
-                class="fas fa-image no-image">
+                class="fas fa-image no-image"
+              >
               </i>
             </div>
 
             <div
               v-if="editState"
-              class="add-photo-container">
+              class="add-photo-container"
+            >
               <input
                 id="file"
                 ref="file"
@@ -377,25 +464,30 @@
                 style="display: none;"
                 type="file"
                 accept="image/*"
-                capture="camera">
+                capture="camera"
+              >
 
               <label
                 v-if="!newImgSrc"
                 for="file"
-                class="dark-input add-photo">
+                class="dark-input add-photo"
+              >
                 <label
                   for="file"
-                  class="fas fa-camera"></label>
+                  class="fas fa-camera"
+                ></label>
                 {{ getTool.photo ? 'UPDATE PHOTO' : 'Add Photo' }}
               </label>
 
               <div
                 v-if="newImgSrc"
-                class="image-container">
+                class="image-container"
+              >
                 <img
                   v-if="newImgSrc"
                   :src="newImgSrc"
-                  class="img-preview">
+                  class="img-preview"
+                >
               </div>
 
               <extended-fab
@@ -404,7 +496,8 @@
                 :outline-display="true"
                 class="delete-photo-efab"
                 icon-class="fa-times"
-                button-text="REMOVE PHOTO">
+                button-text="REMOVE PHOTO"
+              >
               </extended-fab>
             </div>
           </div>
@@ -416,21 +509,22 @@
       v-if="editState && $mq === 'mobile'"
       :on-click="cancelEdit"
       icon-class="fa-times"
-      class="cancel">
+      class="cancel"
+    >
     </fab>
 
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
-      class="edit">
+      class="edit"
+    >
     </fab>
   </div>
 </template>
 
 <script>
 import gql from 'graphql-tag'
-import Avatar from 'vue-avatar'
 import Fab from '../components/fab.vue'
 import ExtendedFab from '../components/extended-fab.vue'
 import vSelect from '../components/select'
@@ -446,7 +540,6 @@ export default {
   name: 'ToolDetail',
 
   components: {
-    Avatar,
     Fab,
     ExtendedFab,
     ButtonDropdown,
@@ -467,7 +560,8 @@ export default {
             sanctioned
           }
         }
-      `
+      `,
+      fetchPolicy: 'network-only'
     },
 
     getTool: {
@@ -523,7 +617,8 @@ export default {
           this.showInvalidIDMsg()
           this.$router.push({ path: '/tools' })
         }
-      }
+      },
+      fetchPolicy: 'network-only'
     }
   },
 
@@ -645,6 +740,7 @@ export default {
       } else if (this.owner.type === 'LOCATION') {
         return this.owner.phone_number
       }
+      return ''
     },
 
     email () {
@@ -653,6 +749,7 @@ export default {
       } else if (this.owner.type === 'LOCATION') {
         return this.owner.email
       }
+      return ''
     }
   },
 

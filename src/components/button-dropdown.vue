@@ -1,54 +1,57 @@
 <template>
   <div
     :class="{ disabled: disabled }"
-    class="container">
-
+    class="container"
+  >
     <transition name="fade">
       <div
         v-if="activated"
         class="scrim"
-        @click="toggle">
+        @click="toggle"
+      >
       </div>
     </transition>
 
     <button
       class="button"
-      @click="toggle">
+      @click="toggle"
+    >
       <div class="fab-icon-container">
         <i
           v-if="!activated"
           :class="iconClass"
-          class="fas">
+          class="fas"
+        >
         </i>
       </div>
       <span
         v-if="!activated"
-        class="text">
+        class="text"
+      >
         {{ buttonText }}
       </span>
       <i
         v-if="activated"
-        class="close fas fa-times">
+        class="close fas fa-times"
+      >
       </i>
-
     </button>
 
     <transition name="fade">
       <div
         v-if="activated"
-        class="options">
-
+        class="options"
+      >
         <button
           v-for="option in options"
           :key="option"
           class="option button slide-item"
-          @click="clickOption(option)">
+          @click="clickOption(option)"
+        >
           {{ option }}
         </button>
-
       </div>
     </transition>
-
   </div>
 </template>
 

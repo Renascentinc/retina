@@ -1,52 +1,68 @@
 <template>
   <div
     :class="configItem.sanctioned ? 'sanctioned' : 'unsanctioned'"
-    class="search-result">
+    class="search-result"
+  >
     <div
-      class="element-container">
+      class="element-container"
+    >
       <i
         v-if="!editing"
         class="fas fa-pen edit-icon"
-        @click="startEditing">
+        @click="startEditing"
+      >
       </i>
       <i
         v-if="editing"
         class="fas fa-save save-icon"
-        @click="save">
+        @click="save"
+      >
       </i>
       <input
         v-if="editing"
-        v-model="changedName"/>
+        v-model="changedName"
+      />
       <i
         v-if="editing"
         class="fas fa-times cancel-icon"
-        @click="cancelEdit">
+        @click="cancelEdit"
+      >
       </i>
       <div
         v-if="!editing"
         class="main-container"
-        @click="startEditing">
+        @click="startEditing"
+      >
         <div
           v-if="!editing"
-          class="row">
-          <span class="title">{{ configItem.name }}</span>
+          class="row"
+        >
+          <span class="title">
+            {{ configItem.name }}
+          </span>
         </div>
         <div
           v-if="!editing"
-          class="row">
-          <span class="subtitle">{{ configItem.sanctioned ? 'CONFIRMED' : 'NOT CONFIRMED' }}</span>
+          class="row"
+        >
+          <span class="subtitle">
+            {{ configItem.sanctioned ? 'CONFIRMED' : 'NOT CONFIRMED' }}
+          </span>
         </div>
       </div>
       <div
         v-if="!editing"
-        class="actions">
+        class="actions"
+      >
         <div
           v-if="configItem.sanctioned"
           class="action-group"
-          @click="toggleSanctioned">
+          @click="toggleSanctioned"
+        >
           <fab
             :on-click="toggleSanctioned"
-            icon-class="fa-thumbs-down">
+            icon-class="fa-thumbs-down"
+          >
           </fab>
           REJECT
         </div>
@@ -54,10 +70,12 @@
         <div
           v-if="!configItem.sanctioned"
           class="action-group"
-          @click="toggleSanctioned">
+          @click="toggleSanctioned"
+        >
           <fab
             :on-click="toggleSanctioned"
-            icon-class="fa-thumbs-up">
+            icon-class="fa-thumbs-up"
+          >
           </fab>
           CONFIRM
         </div>
@@ -65,7 +83,8 @@
         <div class="action-group">
           <fab
             :on-click="deleteConfig"
-            icon-class="fa-times">
+            icon-class="fa-times"
+          >
           </fab>
           DELETE
         </div>

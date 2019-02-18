@@ -2,79 +2,89 @@
   <div class="page new-user-page">
     <header-card
       title="New User"
-      exit-link="/users"></header-card>
+      exit-link="/users"
+    ></header-card>
 
     <transition name="card-change">
       <div
         v-if="currentState === 1"
-        class="new-user-input-card">
+        class="new-user-input-card"
+      >
         <div class="input-group-container">
           <input
-            v-validate="'required'"
             v-model="firstName"
+            v-validate="'required'"
             name="first name"
             class="light-input"
             placeholder="First Name"
-            type="string">
+            type="string"
+          >
 
           <div class="error-container">
             <span
               v-show="errors.has('first name')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('first name') }}
             </span>
           </div>
         </div>
         <div class="input-group-container">
           <input
-            v-validate="'required'"
             v-model="lastName"
+            v-validate="'required'"
             name="last name"
             class="light-input"
             placeholder="Last Name"
-            type="string">
+            type="string"
+          >
 
           <div class="error-container">
             <span
               v-show="errors.has('last name')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('last name') }}
             </span>
           </div>
         </div>
         <div class="input-group-container">
           <input
-            v-validate="'email|required'"
             v-model="email"
+            v-validate="'email|required'"
             data-vv-as="email"
             name="email"
             class="light-input"
             placeholder="Email"
-            type="string">
+            type="string"
+          >
 
           <div class="error-container">
             <span
               v-show="errors.has('email')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('email') }}
             </span>
           </div>
         </div>
         <div class="input-group-container">
           <input
-            v-validate="{ required: true, numeric: true, min: 10 }"
             v-model="phoneNumber"
+            v-validate="{ required: true, numeric: true, min: 10 }"
             name="phone number"
             class="light-input"
             placeholder="Phone #"
             type="number"
             inputmode="numeric"
-            pattern="[0-9]*">
+            pattern="[0-9]*"
+          >
 
           <div class="error-container">
             <span
               v-show="errors.has('phone number')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('phone number') }}
             </span>
           </div>
@@ -85,23 +95,26 @@
     <transition name="card-change">
       <div
         v-if="currentState === 2"
-        class="new-user-input-card">
+        class="new-user-input-card"
+      >
         <div class="input-group-container">
           <v-select
-            v-validate:role="'required'"
             v-model="role"
+            v-validate:role="'required'"
             :options="roles"
             :filterable="false"
             label="name"
             class="dark-input"
             placeholder="Role"
-            name="role">
+            name="role"
+          >
           </v-select>
 
           <div class="error-container">
             <span
               v-show="errors.has('role')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('role') }}
             </span>
           </div>
@@ -109,17 +122,19 @@
 
         <div class="input-group-container">
           <input
-            v-validate="'required'"
             v-model="firstPassword"
+            v-validate="'required'"
             name="first password"
             class="light-input"
             placeholder="Password"
-            type="password">
+            type="password"
+          >
 
           <div class="error-container">
             <span
               v-show="errors.has('first password')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('first password') }}
             </span>
           </div>
@@ -127,17 +142,19 @@
 
         <div class="input-group-container">
           <input
-            v-validate="{ required: true, is: firstPassword }"
             v-model="secondPassword"
+            v-validate="{ required: true, is: firstPassword }"
             name="second password"
             class="light-input"
             placeholder="Re-Enter Password"
-            type="password">
+            type="password"
+          >
 
           <div class="error-container">
             <span
               v-show="errors.has('second password')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('second password') }}
             </span>
           </div>
@@ -147,32 +164,39 @@
         v-if="currentState === 3"
         :user="getUser"
         :on-select="transitionToUserInfo"
-        class="user-preview"> </user-search-result>
+        class="user-preview"
+      >
+      </user-search-result>
     </transition>
 
     <transition name="card-change">
       <div
         v-if="currentState !== 3"
-        class="pager-container">
+        class="pager-container"
+      >
         <fab
           :disabled="currentState === 1"
           :on-click="() => --currentState"
           class="page-back"
-          icon-class="fa-arrow-left">
+          icon-class="fa-arrow-left"
+        >
         </fab>
 
         <div class="pager">
           <div
             :class="{ selected: currentState === 1 }"
-            class="pager-page">
+            class="pager-page"
+          >
           </div>
           <div
             :class="{ selected: currentState === 2 }"
-            class="pager-page">
+            class="pager-page"
+          >
           </div>
           <div
             :class="{ selected: currentState === 3 }"
-            class="pager-page">
+            class="pager-page"
+          >
           </div>
         </div>
 
@@ -180,21 +204,23 @@
           :disabled="!!errors.items.length"
           :on-click="advanceStep"
           class="page-forward"
-          icon-class="fa-arrow-right">
+          icon-class="fa-arrow-right"
+        >
         </fab>
       </div>
 
       <div
         v-if="currentState === 3"
-        class="actions">
+        class="actions"
+      >
         <extended-fab
           :on-click="transitionToUsers"
           icon-class="fa-arrow-right"
-          button-text="DONE"></extended-fab>
+          button-text="DONE"
+        ></extended-fab>
       </div>
     </transition>
   </div>
-
 </template>
 
 <script>

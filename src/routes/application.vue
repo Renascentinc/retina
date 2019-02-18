@@ -1,7 +1,8 @@
 <template>
   <div
     :class="$mq"
-    class="main-application">
+    class="main-application"
+  >
     <vue-drawer-layout
       ref="drawer"
       :drawer-width="270"
@@ -9,19 +10,24 @@
       :animatable="true"
       :backdrop="true"
       :content-drawable="$mq === 'desktop' ? true : false"
-      @mask-click="closeDrawer">
-
+      @mask-click="closeDrawer"
+    >
       <div
         slot="drawer"
-        class="drawer-content">
+        class="drawer-content"
+      >
         <div class="account-info">
           <avatar :username="`${ firstname } ${ lastname }`"></avatar>
           <span class="username">
             <span> {{ firstname }} </span>
             <span> {{ lastname }} </span>
           </span>
-          <span class="role">{{ role }}</span>
-          <span class="email">{{ email }}</span>
+          <span class="role">
+            {{ role }}
+          </span>
+          <span class="email">
+            {{ email }}
+          </span>
           <hr class="line">
         </div>
 
@@ -29,19 +35,22 @@
           <button
             v-if="isAdmin"
             class="config menu-btn"
-            @click="transitionToConfig">
+            @click="transitionToConfig"
+          >
             <i class="fas menu-btn-icon fa-cog"></i>
             CONFIGURATION
           </button>
           <button
             class="help menu-btn"
-            @click="sendSupportEmail">
+            @click="sendSupportEmail"
+          >
             <i class="fas menu-btn-icon fa-question-circle"></i>
             CONTACT SUPPORT
           </button>
           <button
             class="change-password menu-btn"
-            @click="changePassword">
+            @click="changePassword"
+          >
             <span>
               <i class="fas menu-btn-icon fa-key"></i>
               CHANGE PASSWORD
@@ -49,7 +58,8 @@
           </button>
           <button
             class="sign-out menu-btn"
-            @click="signout">
+            @click="signout"
+          >
             <i class="fas menu-btn-icon fa-sign-out-alt"></i>
             SIGN OUT
           </button>
@@ -58,42 +68,56 @@
 
       <div
         slot="content"
-        class="main-content">
+        class="main-content"
+      >
         <transition name="page-change">
           <router-view></router-view>
         </transition>
 
         <div
-          class="nav-bar">
+          class="nav-bar"
+        >
           <div class="icon-text-container">
             <button
               class="fas fa-bars menu-icon"
-              @click="openDrawer">
-              <span class="icon-subtext">MENU</span>
+              @click="openDrawer"
+            >
+              <span class="icon-subtext">
+                MENU
+              </span>
             </button>
           </div>
 
           <div class="icon-text-container">
             <router-link
               class="fas fa-toolbox menu-icon"
-              to="/tools">
-              <span class="icon-subtext">TOOLS</span>
+              to="/tools"
+            >
+              <span class="icon-subtext">
+                TOOLS
+              </span>
             </router-link>
           </div>
 
           <div class="icon-text-container">
             <router-link
               class="fas fa-book-open menu-icon"
-              to="/history">
-              <span class="icon-subtext">HISTORY</span>
+              to="/history"
+            >
+              <span class="icon-subtext">
+                HISTORY
+              </span>
             </router-link>
           </div>
 
           <div class="icon-text-container">
             <router-link
               class="fas fa-users menu-icon"
-              to="/users">
-              <span class="icon-subtext">USERS</span>
+              to="/users"
+            >
+              <span class="icon-subtext">
+                USERS
+              </span>
             </router-link>
           </div>
         </div>

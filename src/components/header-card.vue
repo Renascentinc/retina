@@ -1,18 +1,23 @@
 <template>
   <div
     :class="{ 'no-link': !exitLink }"
-    class="header-card">
+    class="header-card"
+  >
     <router-link
       v-if="exitLink"
-      :to= "exitLink"
-      class="fas fa-times exit">
+      :to="exitLink"
+      class="fas fa-times exit"
+    >
     </router-link>
 
-    <span class="main-text"> {{ title }} </span>
+    <span class="main-text">
+      {{ title }}
+    </span>
 
     <div
       v-if="exitLink"
-      class="spacer">
+      class="spacer"
+    >
     </div>
   </div>
 </template>

@@ -2,28 +2,33 @@
   <div
     :dir="dir"
     :class="dropdownClasses"
-    class="dropdown v-select">
+    class="dropdown v-select"
+  >
     <div
       ref="toggle"
       class="dropdown-toggle"
-      @click="toggleDropdown">
-
+      @click="toggleDropdown"
+    >
       <div
         ref="selectedOptions"
-        class="vs__selected-options">
+        class="vs__selected-options"
+      >
         <slot
           v-for="option in valueAsArray"
           :option="(typeof option === 'object')?option:{[label]: option}"
           :deselect="deselect"
           :multiple="multiple"
           :disabled="disabled"
-          name="selected-option-container">
+          name="selected-option-container"
+        >
           <span
             :key="option.index"
-            class="selected-tag">
+            class="selected-tag"
+          >
             <slot
               v-bind="(typeof option === 'object')?option:{[label]: option}"
-              name="selected-option">
+              name="selected-option"
+            >
               {{ getOptionLabel(option) }}
             </slot>
             <button
@@ -32,20 +37,23 @@
               type="button"
               class="close"
               aria-label="Remove option"
-              @click="deselect(option)">
-              <span aria-hidden="true">&times;</span>
+              @click="deselect(option)"
+            >
+              <span aria-hidden="true">
+                &times;
+              </span>
             </button>
           </span>
         </slot>
 
         <input
+          :id="inputId"
           ref="search"
           v-model="search"
           :disabled="disabled"
           :placeholder="searchPlaceholder"
           :tabindex="tabindex"
           :readonly="!searchable"
-          :id="inputId"
           :aria-expanded="dropdownOpen"
           type="search"
           class="form-control"
@@ -58,7 +66,6 @@
           @blur="onSearchBlur"
           @focus="onSearchFocus"
         >
-
       </div>
       <div class="vs__actions">
         <button
@@ -69,19 +76,25 @@
           title="Clear selection"
           @click="clearSelection"
         >
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">
+            &times;
+          </span>
         </button>
 
         <i
           v-if="!noDrop"
           ref="openIndicator"
           role="presentation"
-          class="open-indicator"></i>
+          class="open-indicator"
+        ></i>
 
         <slot name="spinner">
           <div
             v-show="mutableLoading"
-            class="spinner">Loading...</div>
+            class="spinner"
+          >
+            Loading...
+          </div>
         </slot>
       </div>
     </div>
@@ -93,18 +106,22 @@
         :style="{ 'max-height': maxHeight }"
         class="dropdown-menu"
         role="listbox"
-        @mousedown="onMousedown">
+        @mousedown="onMousedown"
+      >
         <li
-          v-for="(option, index) in filteredOptions"
-          :key="index"
+          v-for="(option, idx) in filteredOptions"
+          :key="idx"
           :class="{ active: isOptionSelected(option) }"
-          role="option">
+          role="option"
+        >
           <button
             class="option-container"
-            @click="select(option)">
+            @click="select(option)"
+          >
             <slot
               v-bind="(typeof option === 'object') ? option : { [label] : option }"
-              name="option">
+              name="option"
+            >
               {{ getOptionLabel(option) }}
             </slot>
           </button>
@@ -112,10 +129,14 @@
         <li
           v-if="!filteredOptions.length"
           class="no-options"
-          role="option">
+          role="option"
+        >
           <slot
             v-bind="{ value: search, select }"
-            name="no-options">Sorry, no matching options.</slot>
+            name="no-options"
+          >
+            Sorry, no matching options.
+          </slot>
         </li>
       </ul>
     </transition>
@@ -402,7 +423,7 @@ export default {
       type: Function,
       default (newOption) {
         if (typeof this.mutableOptions[0] === 'object') {
-          newOption = {[this.label]: newOption}
+          newOption = { [this.label]: newOption }
         }
         this.$emit('option:created', newOption)
         return newOption
@@ -520,6 +541,7 @@ export default {
       if (this.isValueEmpty && this.placeholder) {
         return this.placeholder
       }
+      return ''
     },
 
     /**

@@ -12,8 +12,8 @@
       >
         <div class="input-group-container">
           <input
-            v-model="firstName"
             v-validate="'required'"
+            v-model="firstName"
             name="first name"
             class="light-input"
             placeholder="First Name"
@@ -31,8 +31,8 @@
         </div>
         <div class="input-group-container">
           <input
-            v-model="lastName"
             v-validate="'required'"
+            v-model="lastName"
             name="last name"
             class="light-input"
             placeholder="Last Name"
@@ -50,8 +50,8 @@
         </div>
         <div class="input-group-container">
           <input
-            v-model="email"
             v-validate="'email|required'"
+            v-model="email"
             data-vv-as="email"
             name="email"
             class="light-input"
@@ -70,8 +70,8 @@
         </div>
         <div class="input-group-container">
           <input
-            v-model="phoneNumber"
             v-validate="{ required: true, numeric: true, min: 10 }"
+            v-model="phoneNumber"
             name="phone number"
             class="light-input"
             placeholder="Phone #"
@@ -99,8 +99,8 @@
       >
         <div class="input-group-container">
           <v-select
-            v-model="role"
             v-validate:role="'required'"
+            v-model="role"
             :options="roles"
             :filterable="false"
             label="name"
@@ -122,8 +122,8 @@
 
         <div class="input-group-container">
           <input
-            v-model="firstPassword"
             v-validate="'required'"
+            v-model="firstPassword"
             name="first password"
             class="light-input"
             placeholder="Password"
@@ -142,8 +142,8 @@
 
         <div class="input-group-container">
           <input
-            v-model="secondPassword"
             v-validate="{ required: true, is: firstPassword }"
+            v-model="secondPassword"
             name="second password"
             class="light-input"
             placeholder="Re-Enter Password"

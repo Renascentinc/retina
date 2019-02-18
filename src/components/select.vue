@@ -47,8 +47,8 @@
         </slot>
 
         <input
-          :id="inputId"
           ref="search"
+          :id="inputId"
           v-model="search"
           :disabled="disabled"
           :placeholder="searchPlaceholder"

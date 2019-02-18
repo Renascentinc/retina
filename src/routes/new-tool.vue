@@ -28,8 +28,8 @@
             BRAND
           </span>
           <v-select
-            v-model="brand"
             v-validate:brand="'required|max:40'"
+            v-model="brand"
             :options="brandOptions"
             name="brand"
             label="name"
@@ -63,8 +63,8 @@
             TYPE
           </span>
           <v-select
-            v-model="type"
             v-validate:type="'required|max:40'"
+            v-model="type"
             :options="typeOptions"
             name="type"
             label="name"
@@ -98,8 +98,8 @@
             MODEL NUMBER
           </span>
           <input
-            v-model="modelNumber"
             v-validate="'required|max:40'"
+            v-model="modelNumber"
             name="modelNumber"
             class="light-input"
             placeholder="eg. 18392049437"
@@ -122,8 +122,8 @@
             SERIAL NUMBER
           </span>
           <input
-            v-model="serialNumber"
             v-validate="'required|max:40'"
+            v-model="serialNumber"
             name="serialNumber"
             class="light-input"
             placeholder="eg. 0348529873023"
@@ -146,8 +146,8 @@
             MODEL YEAR
           </span>
           <input
-            v-model="modelYear"
             v-validate="validations.modelYear"
+            v-model="modelYear"
             name="modelYear"
             class="light-input"
             placeholder="eg. 2018"
@@ -254,8 +254,8 @@
             PRICE
           </span>
           <input
-            v-model="price"
             v-money="moneyInputConfig"
+            v-model="price"
             name="price"
             class="light-input"
           >

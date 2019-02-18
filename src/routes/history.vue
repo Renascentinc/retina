@@ -33,7 +33,10 @@
         mode="range"
         @input="toggleDatepicker"
       >
+        <!-- slot-scope property required here -->
+        <!-- eslint-disable vue/no-unused-vars -->
         <button
+          slot-scope="scope"
           :class="{ active: !!dateRange }"
           class="fas fa-calendar-alt open-datepicker"
           @click="toggleDatepicker"

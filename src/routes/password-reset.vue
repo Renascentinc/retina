@@ -14,9 +14,9 @@
     <div class="input-card">
       <div class="input-group-container">
         <input
+          v-validate="'required'"
           ref="password"
           v-model="password"
-          v-validate="'required'"
           :class="{'is-danger': errors.has('password')}"
           class="light-input"
           name="password"
@@ -31,8 +31,8 @@
       </div>
 
       <input
-        v-model="confirmPassword"
         v-validate="'required|confirmed:password'"
+        v-model="confirmPassword"
         :class="{'is-danger': errors.has('password_confirmation')}"
         class="light-input"
         name="password_confirmation"

@@ -98,8 +98,8 @@
             class="input-group-container"
           >
             <v-select
-              v-model="newBrand"
               v-validate="'required'"
+              v-model="newBrand"
               :options="brandOptions"
               name="brand"
               label="name"
@@ -133,8 +133,8 @@
             class="input-group-container"
           >
             <v-select
-              v-model="newType"
               v-validate="'required'"
+              v-model="newType"
               :options="typeOptions"
               name="type"
               label="name"
@@ -270,9 +270,9 @@
               </span>
 
               <input
+                v-validate="'required'"
                 v-if="editState"
                 v-model="newSerial"
-                v-validate="'required'"
                 name="serial"
                 class="general-data light-input"
               >
@@ -296,9 +296,9 @@
               </span>
 
               <input
+                v-validate="'required'"
                 v-if="editState"
                 v-model="newModel"
-                v-validate="'required'"
                 name="model"
                 class="general-data light-input"
               >
@@ -322,9 +322,9 @@
               </span>
 
               <input
+                v-validate="validations.modelYear"
                 v-if="editState"
                 v-model="newYear"
-                v-validate="validations.modelYear"
                 name="year"
                 type="number"
                 class="general-data light-input"
@@ -412,9 +412,9 @@
               </span>
 
               <input
+                v-money="moneyInputConfig"
                 v-if="editState"
                 v-model="newPrice"
-                v-money="moneyInputConfig"
                 name="newPrice"
                 class="light-input"
                 placeholder="Price"
@@ -442,8 +442,8 @@
               class="photo-box"
             >
               <img
-                v-if="getTool.photo"
                 v-lazy="`${getTool.photo}`"
+                v-if="getTool.photo"
                 class="image"
               >
               <i

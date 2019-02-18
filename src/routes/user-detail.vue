@@ -68,8 +68,8 @@
             class="name-inputs"
           >
             <input
-              v-model="newFirstName"
               v-validate="'required'"
+              v-model="newFirstName"
               name="first name"
               class="name light-input"
             >
@@ -82,8 +82,8 @@
               </span>
             </div>
             <input
-              v-model="newLastName"
               v-validate="'required'"
+              v-model="newLastName"
               class="name light-input"
               name="last name"
             >
@@ -151,9 +151,9 @@
                     {{ formattedPhone }}
                   </button>
                   <input
+                    v-validate="{required: true, numeric: true, min: 10}"
                     v-if="editState"
                     v-model="newPhone"
-                    v-validate="{required: true, numeric: true, min: 10}"
                     name="phone"
                     class="contact-text light-input"
 
@@ -179,9 +179,9 @@
                     {{ getUser.email }}
                   </button>
                   <input
+                    v-validate="'required|email'"
                     v-if="editState"
                     v-model="newEmail"
-                    v-validate="'required|email'"
                     name="email"
                     class="contact-text light-input"
                   >

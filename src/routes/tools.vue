@@ -112,8 +112,8 @@
       </div>
 
       <div
-        ref="scrollElement"
         v-infinite-scroll="loadMore"
+        ref="scrollElement"
         :class="{ finalizing: currentState === states.FINALIZING }"
         infinite-scroll-throttle-delay="200"
         class="tool-scroll-container"

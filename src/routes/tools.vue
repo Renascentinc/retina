@@ -695,9 +695,8 @@ export default {
         this.$store.commit('setShowOnlySelectedTools', false)
         this.$store.commit('updateTransferStatus', this.states.INITIAL)
         this.showTransferSuccessMsg()
-        this.$apollo.provider.clients.defaultClient.resetStore()
       }).catch(() => {
-        this.showTrasnferErrorMsg()
+        this.showTransferErrorMsg()
       }).finally(() => {
         this.transferInProgress = false
       })

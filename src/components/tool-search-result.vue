@@ -2,35 +2,46 @@
   <div class="search-result">
     <div
       class="main-container"
-      @click="onClick">
+      @click="onClick"
+    >
       <div class="row">
-        <span class="title">{{ name }}</span>
+        <span class="title">
+          {{ name }}
+        </span>
       </div>
       <div class="row">
-        <span class="subtitle">{{ id }}</span>
+        <span class="subtitle">
+          {{ id }}
+        </span>
         <span
           :class="statusClass"
-          class="tool-status">
+          class="tool-status"
+        >
           {{ status }}
         </span>
       </div>
       <div class="row">
         <i
           :class="assigneeIcon"
-          class="fas user-icon">
+          class="fas user-icon"
+        >
         </i>
 
-        <span class="tool-assignee">{{ assignee }}</span>
+        <span class="tool-assignee">
+          {{ assignee }}
+        </span>
       </div>
     </div>
     <transition name="fade">
       <div
         v-if="showSelect"
-        class="tool-selection-container">
+        class="tool-selection-container"
+      >
         <button
           :class="{ 'fa-check': selected }"
           class="fas checkbox"
-          @click="toggleSelect">
+          @click="toggleSelect"
+        >
         </button>
       </div>
     </transition>

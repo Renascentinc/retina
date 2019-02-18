@@ -3,16 +3,20 @@
     :class="{ outlined: outlineDisplay, inactive: disabled }"
     :disabled="disabled"
     class="extended-fab"
-    @click="onClick">
+    @click="onClick"
+  >
     <div
-      class="fab-icon-container">
+      class="fab-icon-container"
+    >
       <i
         :class="iconClass"
-        class="fas">
+        class="fas"
+      >
       </i>
     </div>
     <span
-      class="efab-text">
+      class="efab-text"
+    >
       {{ buttonText }}
     </span>
   </button>

@@ -3,7 +3,8 @@
     <transition name="fade">
       <div
         v-if="deleting"
-        class="overlay">
+        class="overlay"
+      >
         <div class="half-circle-spinner">
           <div class="circle circle-1"></div>
           <div class="circle circle-2"></div>
@@ -12,38 +13,40 @@
     </transition>
 
     <header-card
-      :title="title">
+      :title="title"
+    >
     </header-card>
 
     <div class="navigation">
       <i
         class="fas fa-arrow-left"
-        @click="decrementTab"></i>
+        @click="decrementTab"
+      ></i>
       <i
         class="fas fa-arrow-right"
-        @click="incrementTab"></i>
+        @click="incrementTab"
+      ></i>
     </div>
 
     <div class="config-menu-container">
-      <!-- <div
-        v-if="$mq === 'desktop'"
-        class="spacer">
-      </div> -->
       <div class="configs">
         <add-result
           v-if="title === 'Brands'"
           :on-save="addConfig"
-          text="BRAND">
+          text="BRAND"
+        >
         </add-result>
         <add-result
           v-if="title === 'Types'"
           :on-save="addConfig"
-          text="TYPE">
+          text="TYPE"
+        >
         </add-result>
         <add-result
           v-if="title === 'Suppliers'"
           :on-save="addConfig"
-          text="SUPPLIER">
+          text="SUPPLIER"
+        >
         </add-result>
 
         <config-item
@@ -52,7 +55,8 @@
           :config-item="config"
           :on-delete="deleteConfig"
           :on-sanction-toggle="toggleSanction"
-          :on-save="saveChanges">
+          :on-save="saveChanges"
+        >
         </config-item>
 
         <config-item
@@ -61,7 +65,8 @@
           :config-item="config"
           :on-delete="deleteConfig"
           :on-sanction-toggle="toggleSanction"
-          :on-save="saveChanges">
+          :on-save="saveChanges"
+        >
         </config-item>
       </div>
     </div>
@@ -73,7 +78,6 @@ import HeaderCard from '../components/header-card'
 import ConfigItem from '../components/config-item'
 import ConfigurableItems from '../utils/configurable-items'
 import gql from 'graphql-tag'
-import vSelect from '../components/select'
 import AddResult from '../components/add-result'
 import swal from 'sweetalert2'
 
@@ -83,9 +87,7 @@ export default {
   components: {
     HeaderCard,
     ConfigItem,
-    ConfigurableItems,
-    AddResult,
-    vSelect
+    AddResult
   },
 
   data () {
@@ -151,6 +153,7 @@ export default {
       } else if (this.page === 'PURCHASED_FROM') {
         return this.suppliers
       }
+      return []
     },
 
     brands () {
@@ -509,7 +512,8 @@ export default {
             sanctioned
           }
         }
-      `
+      `,
+      fetchPolicy: 'network-only'
     }
   }
 }

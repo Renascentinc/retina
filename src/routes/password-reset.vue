@@ -2,10 +2,12 @@
   <div class="page password-reset-page">
     <img
       class="logo"
-      src="../assets/icons/web/red_transparent_512x512.png">
+      src="../assets/icons/web/red_transparent_512x512.png"
+    >
 
     <span
-      class="header-text">
+      class="header-text"
+    >
       RESET YOUR PASSWORD
     </span>
 
@@ -19,9 +21,11 @@
           class="light-input"
           name="password"
           type="password"
-          placeholder="Password">
+          placeholder="Password"
+        >
         <span
-          class="is-danger error-msg">
+          class="is-danger error-msg"
+        >
           {{ errors.first('password') }}
         </span>
       </div>
@@ -34,13 +38,15 @@
         name="password_confirmation"
         type="password"
         placeholder="Confirm Password"
-        data-vv-as="password">
+        data-vv-as="password"
+      >
 
       <extended-fab
         :on-click="attemptPasswordReset"
         :disabled="!password || !confirmPassword"
         icon-class=""
-        button-text="RESET">
+        button-text="RESET"
+      >
       </extended-fab>
     </div>
   </div>

@@ -3,11 +3,13 @@
     <button
       :class="{ inactive: !checkIsNfcEnabled() }"
       class="nfc-scan"
-      @click="onClick">
+      @click="onClick"
+    >
       <svgicon
         icon="nfc"
         width="22"
-        height="22">
+        height="22"
+      >
       </svgicon>
       <span>SCAN</span>
     </button>
@@ -16,17 +18,12 @@
 
 <script>
 import swal from 'sweetalert2'
-import ExtendedFab from '../components/extended-fab'
 import Platforms from '../utils/platforms'
 import nfcMixin from '../mixins/nfc'
 import '../assets/icons/svg/nfc'
 
 export default {
   name: 'NfcScan',
-
-  components: {
-    ExtendedFab
-  },
 
   mixins: [nfcMixin],
 

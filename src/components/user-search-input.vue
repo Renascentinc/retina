@@ -1,26 +1,24 @@
 <template>
   <div class="search-input">
     <div class="search-icon-container">
-      <i class="fas fa-search"/>
+      <i class="fas fa-search" />
     </div>
     <input
       ref="searchInput"
       v-model="search"
       placeholder="Search"
       class="user-search-input"
-      @keydown.enter="searchAndBlur">
+      @keydown.enter="searchAndBlur"
+    >
   </div>
 </template>
 
 <script>
-import VueTagsInput from '@johmun/vue-tags-input'
 import debounce from 'debounce'
 
 export default {
   name: 'UserSearchInput',
-  components: {
-    VueTagsInput
-  },
+
   props: {
     updateTags: {
       type: Function,

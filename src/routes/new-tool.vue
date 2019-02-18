@@ -2,13 +2,15 @@
   <div class="page new-tool-page">
     <header-card
       title="New Tool"
-      exit-link="/tools">
+      exit-link="/tools"
+    >
     </header-card>
 
     <transition name="fade">
       <div
         v-if="isSavingTool"
-        class="overlay">
+        class="overlay"
+      >
         <div class="half-circle-spinner">
           <div class="circle circle-1"></div>
           <div class="circle circle-2"></div>
@@ -19,24 +21,29 @@
     <transition name="card-change">
       <div
         v-if="currentState === 1"
-        class="new-tool-input-card">
-
+        class="new-tool-input-card"
+      >
         <div class="input-group-container">
-          <span class="form-label">BRAND</span>
+          <span class="form-label">
+            BRAND
+          </span>
           <v-select
             v-validate:brand="'required|max:40'"
-            :options="brandOptions"
             v-model="brand"
+            :options="brandOptions"
             name="brand"
             label="name"
             class="dark-input"
-            placeholder="eg. DeWalt">
+            placeholder="eg. DeWalt"
+          >
             <template
               slot="no-options"
-              slot-scope="props">
+              slot-scope="props"
+            >
               <button
                 class="option-container"
-                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })">
+                @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })"
+              >
                 Set Brand To "{{ props.value }}"
               </button>
             </template>
@@ -44,14 +51,17 @@
           <div class="error-container">
             <span
               v-show="errors.has('brand')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('brand') }}
             </span>
           </div>
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">TYPE</span>
+          <span class="form-label">
+            TYPE
+          </span>
           <v-select
             v-validate:type="'required|max:40'"
             v-model="type"
@@ -59,13 +69,16 @@
             name="type"
             label="name"
             class="dark-input"
-            placeholder="eg. Saw">
+            placeholder="eg. Saw"
+          >
             <template
               slot="no-options"
-              slot-scope="props">
+              slot-scope="props"
+            >
               <button
                 class="no-options-btn"
-                @click="() => props.select({ name: props.value, type: 'TYPE', isNewConfigurableItem: true })">
+                @click="() => props.select({ name: props.value, type: 'TYPE', isNewConfigurableItem: true })"
+              >
                 Set Type To "{{ props.value }}"
               </button>
             </template>
@@ -73,14 +86,17 @@
           <div class="error-container">
             <span
               v-show="errors.has('type')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('type') }}
             </span>
           </div>
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">MODEL NUMBER</span>
+          <span class="form-label">
+            MODEL NUMBER
+          </span>
           <input
             v-validate="'required|max:40'"
             v-model="modelNumber"
@@ -89,18 +105,22 @@
             placeholder="eg. 18392049437"
             autocorrect="off"
             autocapitalize="off"
-            spellcheck="false">
+            spellcheck="false"
+          >
           <div class="error-container">
             <span
               v-show="errors.has('modelNumber')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('modelNumber') }}
             </span>
           </div>
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">SERIAL NUMBER</span>
+          <span class="form-label">
+            SERIAL NUMBER
+          </span>
           <input
             v-validate="'required|max:40'"
             v-model="serialNumber"
@@ -109,18 +129,22 @@
             placeholder="eg. 0348529873023"
             autocorrect="off"
             autocapitalize="off"
-            spellcheck="false">
+            spellcheck="false"
+          >
           <div class="error-container">
             <span
               v-show="errors.has('serialNumber')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('serialNumber') }}
             </span>
           </div>
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">MODEL YEAR</span>
+          <span class="form-label">
+            MODEL YEAR
+          </span>
           <input
             v-validate="validations.modelYear"
             v-model="modelYear"
@@ -129,11 +153,13 @@
             placeholder="eg. 2018"
             type="number"
             inputmode="numeric"
-            pattern="[0-9]*">
+            pattern="[0-9]*"
+          >
           <div class="error-container">
             <span
               v-show="errors.has('modelYear')"
-              class="error">
+              class="error"
+            >
               {{ errors.first('modelYear') }}
             </span>
           </div>
@@ -144,32 +170,40 @@
     <transition name="card-change">
       <div
         v-if="currentState === 2"
-        class="new-tool-input-card">
-
+        class="new-tool-input-card"
+      >
         <div class="input-group-container">
-          <span class="form-label">ASSIGN TO USER</span>
+          <span class="form-label">
+            ASSIGN TO USER
+          </span>
           <v-select
             v-model="owner"
             :options="userOptions"
             label="full_name"
-            class="dark-input">
+            class="dark-input"
+          >
           </v-select>
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">PURCHASED FROM</span>
+          <span class="form-label">
+            PURCHASED FROM
+          </span>
           <v-select
             v-model="purchasedFrom"
             :options="purchasedFromOptions"
             label="name"
             class="dark-input"
-            placeholder="eg. Lowes">
+            placeholder="eg. Lowes"
+          >
             <template
               slot="no-options"
-              slot-scope="props">
+              slot-scope="props"
+            >
               <button
                 class="no-options-btn"
-                @click="() => props.select({ name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true })">
+                @click="() => props.select({ name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true })"
+              >
                 Set Purchased From To "{{ props.value }}"
               </button>
             </template>
@@ -177,18 +211,23 @@
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">STATUS</span>
+          <span class="form-label">
+            STATUS
+          </span>
           <v-select
             v-model="status"
             :options="statuses"
             :searchable="false"
             label="name"
-            class="dark-input">
+            class="dark-input"
+          >
           </v-select>
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">PURCHASE DATE</span>
+          <span class="form-label">
+            PURCHASE DATE
+          </span>
           <v-date-picker
             v-model="purchaseDate"
             :input-props="{ readonly: true }"
@@ -197,24 +236,29 @@
             :popover-visibility="datePickerVisibility"
             popover-direction="top"
             mode="single"
-            @input="toggleDatepicker">
+            @input="toggleDatepicker"
+          >
             <button
-              slot-scope="{ inputValue, updateValue }"
+              slot-scope="{ inputValue }"
               :class="{ placeholder: !inputValue }"
               class="dark-input purchase-date-input"
-              @click="toggleDatepicker">
+              @click="toggleDatepicker"
+            >
               {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
             </button>
           </v-date-picker>
         </div>
 
         <div class="input-group-container">
-          <span class="form-label">PRICE</span>
+          <span class="form-label">
+            PRICE
+          </span>
           <input
             v-money="moneyInputConfig"
             v-model="price"
             name="price"
-            class="light-input">
+            class="light-input"
+          >
         </div>
       </div>
     </transition>
@@ -222,8 +266,8 @@
     <transition name="card-change">
       <div
         v-if="currentState === 3"
-        class="new-tool-input-card photo-input-card">
-
+        class="new-tool-input-card photo-input-card"
+      >
         <input
           id="file"
           ref="file"
@@ -231,24 +275,29 @@
           style="display: none;"
           type="file"
           accept="image/*"
-          capture="camera">
+          capture="camera"
+        >
 
         <label
           v-if="!imgSrc"
           for="file"
-          class="dark-input add-photo">
+          class="dark-input add-photo"
+        >
           <label
             for="file"
-            class="fas fa-camera"></label>
+            class="fas fa-camera"
+          ></label>
           Add Photo
         </label>
 
         <div
           v-if="imgSrc"
-          class="image-container">
+          class="image-container"
+        >
           <img
             :src="imgSrc"
-            class="img-preview">
+            class="img-preview"
+          >
         </div>
 
         <extended-fab
@@ -257,7 +306,8 @@
           :outline-display="true"
           class="delete-photo-efab"
           icon-class="fa-times"
-          button-text="REMOVE PHOTO">
+          button-text="REMOVE PHOTO"
+        >
         </extended-fab>
       </div>
     </transition>
@@ -265,13 +315,15 @@
     <transition name="card-change">
       <div
         v-if="currentState === 4"
-        class="new-tool-input-card step-4">
-
-        <nfc-encode :tool-id="tool ? tool.id : ''"> </nfc-encode>
+        class="new-tool-input-card step-4"
+      >
+        <nfc-encode :tool-id="tool ? tool.id : ''">
+        </nfc-encode>
 
         <tool-search-result
           :tool="tool"
-          :on-select="transitionToToolInfo">
+          :on-select="transitionToToolInfo"
+        >
         </tool-search-result>
 
         <div class="done-action-container">
@@ -280,14 +332,16 @@
             :outline-display="true"
             class="add-another-efab"
             icon-class="fa-undo"
-            button-text="ADD ANOTHER">
+            button-text="ADD ANOTHER"
+          >
           </extended-fab>
 
           <extended-fab
             :on-click="transitionToTools"
             class="done-efab"
             icon-class="fa-arrow-right"
-            button-text="DONE">
+            button-text="DONE"
+          >
           </extended-fab>
         </div>
       </div>
@@ -296,32 +350,38 @@
     <transition name="card-change">
       <div
         v-if="currentState !== 4"
-        class="pager-container">
+        class="pager-container"
+      >
         <div class="pager-btn-container">
           <fab
             :disabled="currentState === 1"
             :on-click="() => --currentState"
             class="page-back"
-            icon-class="fa-arrow-left">
+            icon-class="fa-arrow-left"
+          >
           </fab>
         </div>
 
         <div class="pager">
           <div
             :class="{ selected: currentState === 1 }"
-            class="pager-page">
+            class="pager-page"
+          >
           </div>
           <div
             :class="{ selected: currentState === 2 }"
-            class="pager-page">
+            class="pager-page"
+          >
           </div>
           <div
             :class="{ selected: currentState === 3 }"
-            class="pager-page">
+            class="pager-page"
+          >
           </div>
           <div
             :class="{ selected: currentState === 4 }"
-            class="pager-page">
+            class="pager-page"
+          >
           </div>
         </div>
 
@@ -331,7 +391,8 @@
             :disabled="!!errors.items.length"
             :on-click="advanceStep"
             class="page-forward"
-            icon-class="fa-arrow-right">
+            icon-class="fa-arrow-right"
+          >
           </fab>
 
           <extended-fab
@@ -339,7 +400,8 @@
             :on-click="advanceStep"
             class="page-forward"
             icon-class=""
-            button-text="FINISH">
+            button-text="FINISH"
+          >
           </extended-fab>
         </div>
       </div>
@@ -373,23 +435,29 @@ export default {
   },
 
   apollo: {
-    getAllUser: gql`query {
-      getAllUser {
-        id
-        first_name
-        last_name
-        role
-      }
-    }`,
+    getAllUser: {
+      query: gql`query {
+        getAllUser {
+          id
+          first_name
+          last_name
+          role
+        }
+      }`,
+      fetchPolicy: 'network-only'
+    },
 
-    getAllConfigurableItem: gql`query {
-      getAllConfigurableItem {
-        id
-        type
-        name
-        sanctioned
-      }
-    }`
+    getAllConfigurableItem: {
+      query: gql`query {
+        getAllConfigurableItem {
+          id
+          type
+          name
+          sanctioned
+        }
+      }`,
+      fetchPolicy: 'network-only'
+    }
   },
 
   data () {

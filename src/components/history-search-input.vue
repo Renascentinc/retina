@@ -9,13 +9,14 @@
       :autocomplete-items="filteredItems"
       :add-only-from-autocomplete="true"
       placeholder="Search"
-      @tags-changed="updateTags">
-
+      @tags-changed="updateTags"
+    >
       <button
         slot="autocompleteItem"
         slot-scope="props"
         class="autocomplete-item"
-        @click="() => props.performAdd(props.item)">
+        @click="() => props.performAdd(props.item)"
+      >
         <div class="item-name">
           {{ props.item.name }}
         </div>
@@ -26,10 +27,12 @@
 
       <div
         slot="tagCenter"
-        slot-scope="props">
+        slot-scope="props"
+      >
         <i
           :class="props.tag.iconClass"
-          class="fas tag-icon">
+          class="fas tag-icon"
+        >
         </i>
         {{ props.tag.name }}
       </div>

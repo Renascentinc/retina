@@ -256,7 +256,9 @@
               <span class="general-data">
                 {{ getTool.id }}
               </span>
-              <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''">
+              <nfc-encode
+                :tool-id="getTool && getTool.id ? getTool.id : ''"
+                :on-encode="onEncode">
               </nfc-encode>
 
               <span class="general-label">
@@ -420,8 +422,21 @@
                 placeholder="Price"
               >
 
+              <span class="general-label">
+                NFC Tag
+              </span>
+
+              <div class="nfc-toggle-container">
+                <toggle-button
+                  v-model="getTool.tagged"
+                  :sync="true"
+                  :labels="{ checked: 'Tagged', unchecked: 'Not Tagged' }"
+                  :disabled="!editState"
+                  :width="100"/>
+              </div>
+
               <extended-fab
-                v-if="$mq === 'mobile'"
+                v-if="$mq === 'mobile' && !editState"
                 :on-click="transitionToHistory"
                 :outline-display="false"
                 icon-class="fa-book-open"
@@ -588,7 +603,7 @@ export default {
             date_purchased
             price
             photo
-
+            tagged
             owner {
               ... on Location {
                 id
@@ -766,7 +781,7 @@ export default {
         type: 'error',
         title: 'ERROR',
         text: 'Invalid Tool ID',
-        timer: 2000,
+        timer: 5000,
         showConfirmButton: false
       })
     },
@@ -799,6 +814,41 @@ export default {
         timer: 2000,
         showConfirmButton: false
       })
+    },
+
+    onEncode () {
+      if (!this.getTool.tagged) {
+        this.getTool.tagged = true
+
+        this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation ($tool: UpdatedTool!) {
+                updateTool(updatedTool: $tool) {
+                  id
+                }
+              }
+            `,
+
+            variables: {
+              tool: {
+                id: this.getTool.id,
+                type_id: this.getTool.type.id,
+                brand_id: this.getTool.brand.id,
+                model_number: this.getTool.model_number,
+                serial_number: this.getTool.serial_number,
+                status: this.getTool.status,
+                owner_id: this.getTool.owner.id,
+                purchased_from_id: this.getTool.purchased_from && this.getTool.purchased_from.id,
+                date_purchased: this.getTool.date_purchased,
+                price: this.getTool.price,
+                year: this.getTool.year,
+                tagged: this.getTool.tagged,
+                photo: this.getTool.photo
+              }
+            }
+          })
+      }
     },
 
     toggleDatepicker () {
@@ -981,6 +1031,7 @@ export default {
                   date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
                   price: this.newPrice ? (this.newPrice.slice(2) * 100).toFixed(2) : null,
                   year: this.newYear ? this.newYear : null,
+                  tagged: this.getTool.tagged,
                   photo
                 }
               }
@@ -1349,6 +1400,10 @@ export default {
         &.placeholder {
           color: $form-placeholder-color;
         }
+      }
+
+      .nfc-toggle-container {
+        margin-top: 3px;
       }
 
       .general-details {

@@ -32,6 +32,12 @@ export default {
     toolId: {
       type: String,
       required: true
+    },
+
+    onEncode: {
+      type: Function,
+      required: false,
+      default: () => {}
     }
   },
 
@@ -92,7 +98,10 @@ export default {
       ]
 
       const lock = () => {
-        window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
+        window.nfc.makeReadOnly(() => {
+          this.onEncode()
+          this.showSuccessMsg()
+        }, (reason) => this.onError(reason))
         this.pauseNfcListener()
       }
 

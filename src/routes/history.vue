@@ -185,6 +185,7 @@ export default {
               name
             }
             status
+            tagged
             owner {
               ... on Location {
                  id

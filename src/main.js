@@ -8,7 +8,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-import attachFastClick from 'fastclick'
+// import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -23,6 +23,7 @@ import VueSVGIcon from 'vue-svgicon'
 import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
+import ToggleButton from 'vue-js-toggle-button'
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -66,9 +67,16 @@ const cache = new InMemoryCache({
   }
 })
 
-const httpLink = new HttpLink({
-  uri: process.env.ENVIRONMENT === 'prod' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
-})
+let uri = ''
+if (process.env.ENVIRONMENT === 'prod') {
+  uri = 'https://retina-api.renascentinc.com/graphql'
+} else if (process.env.ENVIRONMENT === 'localhost') {
+  uri = 'http://localhost:4000/graphql'
+} else {
+  uri = 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+}
+
+const httpLink = new HttpLink({ uri })
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {
   const token = localStorage.getItem('token')
@@ -109,6 +117,7 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.config.productionTip = false
+Vue.use(ToggleButton)
 Vue.use(VueInfiniteScroll)
 Vue.use(DrawerLayout)
 Vue.use(VueApollo)
@@ -124,7 +133,7 @@ Vue.use(VueMq, {
   }
 })
 
-attachFastClick(document.body, { tapDelay: 50 })
+// attachFastClick(document.body, { tapDelay: 50 })
 
 new Vue({
   router,

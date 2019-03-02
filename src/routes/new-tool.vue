@@ -317,7 +317,9 @@
         v-if="currentState === 4"
         class="new-tool-input-card step-4"
       >
-        <nfc-encode :tool-id="tool ? tool.id : ''">
+        <nfc-encode
+          :tool-id="tool ? tool.id : ''"
+          :on-encode="onEncode">
         </nfc-encode>
 
         <tool-search-result
@@ -638,6 +640,37 @@ export default {
       })
     },
 
+    onEncode () {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+              mutation ($tool: UpdatedTool!) {
+                updateTool(updatedTool: $tool) {
+                  id
+                }
+              }
+            `,
+
+          variables: {
+            tool: {
+              id: this.tool.id,
+              type_id: this.tool.type.id,
+              brand_id: this.tool.brand.id,
+              model_number: this.tool.model_number,
+              serial_number: this.tool.serial_number,
+              status: this.tool.status,
+              owner_id: this.tool.owner.id,
+              purchased_from_id: this.tool.purchased_from && this.tool.purchased_from.id,
+              date_purchased: this.tool.date_purchased,
+              price: this.tool.price,
+              year: this.tool.year,
+              tagged: true,
+              photo: this.tool.photo
+            }
+          }
+        })
+    },
+
     saveTool () {
       this.isSavingTool = true
       let brandRequest = this.brand && this.brand.isNewConfigurableItem ? this.createNewConfigurableItem(this.brand) : null
@@ -697,22 +730,39 @@ export default {
           mutation: gql`mutation newTool($newTool: NewTool!) {
             createTool(newTool: $newTool) {
               id
-              type {
-                name
-              }
               brand {
+                id
                 name
               }
+              type {
+                id
+                name
+              }
+              year
               status
+              model_number
+              serial_number
+              purchased_from {
+                id
+                name
+              }
+              date_purchased
+              price
+              photo
+              tagged
               owner {
                 ... on Location {
-                   name
-                   type
+                  id
+                  name
+                  type
                 }
                 ... on User {
-                   first_name
-                   last_name
-                   type
+                  id
+                  first_name
+                  last_name
+                  email
+                  phone_number
+                  type
                 }
               }
             }

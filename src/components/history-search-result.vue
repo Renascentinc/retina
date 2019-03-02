@@ -98,6 +98,29 @@
             </span>
           </span>
         </div>
+        <div class="detail-row">
+          <span class="label">
+            TAGGED
+          </span>
+          <span
+            v-if="!taggedDiff"
+            class="value"
+          >
+            {{ tagged }}
+          </span>
+          <span
+            v-if="taggedDiff"
+            class="value"
+          >
+            <span class="lhs">
+              {{ taggedDiff.lhs }}
+            </span>
+            <i class="fas fa-long-arrow-alt-right"></i>
+            <span class="rhs">
+              {{ taggedDiff.rhs }}
+            </span>
+          </span>
+        </div>
 
         <div
           v-for="change in (diff || []).filter(d => !!d)"
@@ -163,6 +186,7 @@ export default {
       metadata: {},
       statusDiff: null,
       ownerDiff: null,
+      taggedDiff: null,
       diff: null
     }
   },
@@ -188,6 +212,10 @@ export default {
 
     owner () {
       return this.ownerDiff || this.ownerName
+    },
+
+    tagged () {
+      return this.currentSnapshot.tagged
     },
 
     actorName () {
@@ -250,6 +278,7 @@ export default {
                 photo
                 model_number
                 serial_number
+                tagged
                 brand {
                   id
                   name
@@ -292,6 +321,7 @@ export default {
                   status
                   model_number
                   serial_number
+                  tagged
                   brand {
                     id
                     name
@@ -345,7 +375,6 @@ export default {
         let diff = DeepDiff.diff(previous, current)
 
         let finalDiff = []
-
         if (diff) {
           diff.forEach((change) => {
             if (change.path.indexOf('id') < 0 &&
@@ -353,7 +382,8 @@ export default {
                 change.path.indexOf('last_name') < 0 &&
                 change.path.indexOf('status') < 0 &&
                 change.path.indexOf('owner') < 0 &&
-                change.path.indexOf('photo') < 0) {
+                change.path.indexOf('photo') < 0 &&
+                change.path.indexOf('tagged') < 0) {
               if (change.path.indexOf('price') >= 0) {
                 finalDiff.push({
                   lhs: change.lhs !== null ? `$${(change.lhs / 100).toFixed(2)}` : null,
@@ -381,6 +411,10 @@ export default {
 
             if (change.path.indexOf('status') >= 0) {
               this.statusDiff = change
+            }
+
+            if (change.path.indexOf('tagged') >= 0) {
+              this.taggedDiff = change
             }
           })
         }

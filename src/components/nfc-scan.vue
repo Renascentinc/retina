@@ -40,7 +40,7 @@ export default {
         type: 'info',
         title: 'BLANK TAG',
         text: 'This Tag is Blank',
-        timer: 2000,
+        timer: 5000,
         showConfirmButton: false
       })
     },

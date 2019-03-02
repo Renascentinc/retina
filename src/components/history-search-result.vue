@@ -106,18 +106,18 @@
             v-if="!taggedDiff"
             class="value"
           >
-            {{ tagged }}
+            {{ tagged ? 'Yes' : 'No' }}
           </span>
           <span
             v-if="taggedDiff"
             class="value"
           >
             <span class="lhs">
-              {{ taggedDiff.lhs }}
+              {{ taggedDiff.lhs ? 'Yes' : 'No' }}
             </span>
             <i class="fas fa-long-arrow-alt-right"></i>
             <span class="rhs">
-              {{ taggedDiff.rhs }}
+              {{ taggedDiff.rhs ? 'Yes' : 'No' }}
             </span>
           </span>
         </div>

@@ -68,7 +68,7 @@ export default {
       required: true
     },
 
-    // TODO: fixed hacked fuzzy search clear implementation
+    // TODO: fix hacked fuzzy search clear implementation
     clearFuzzyFilter: {
       type: Boolean,
       required: true
@@ -135,7 +135,26 @@ export default {
         }
       ]
 
-      let items = statuses.concat(this.searchableConfigItems).concat(this.locations)
+      let nfcTagStatus = [
+        {
+          name: 'Has NFC Tag',
+          text: 'Has NFC Tag',
+          value: true,
+          iconClass: 'fa-info-circle',
+          type: 'NFC',
+          formattedType: 'NFC Tag'
+        },
+        {
+          name: 'Missing NFC Tag',
+          text: 'Missing NFC Tag',
+          value: false,
+          iconClass: 'fa-info-circle',
+          type: 'NFC',
+          formattedType: 'NFC Tag'
+        }
+      ]
+
+      let items = statuses.concat(this.searchableConfigItems).concat(this.locations).concat(nfcTagStatus)
 
       if (!this.disableUserSearch) {
         items = items.concat(this.users)
@@ -204,6 +223,20 @@ export default {
         document.querySelector('.fa-search').click()
         document.querySelector('.new-tag-input').blur()
       }
+
+      // only allow 1 nfc filter to be applied
+      let nfcFilterCount = 0
+      newTags = newTags.reverse().filter(tag => {
+        if (tag.type === 'NFC') {
+          if (nfcFilterCount === 1) {
+            return false
+          }
+          nfcFilterCount++
+        }
+
+        return true
+      })
+
       this.updateTags(newTags, fuzzySearch)
     },
 

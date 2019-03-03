@@ -426,7 +426,8 @@ export default {
         USER: 'owner_ids',
         LOCATION: 'owner_ids',
         TYPE: 'type_ids',
-        STATUS: 'tool_statuses'
+        STATUS: 'tool_statuses',
+        NFC: 'tagged'
       },
       transferTarget: { id: null, label: 'select user' },
       searchTool: [],
@@ -584,10 +585,14 @@ export default {
       tags.forEach(filter => {
         let key = this.filterMap[filter.type]
 
-        if (!newFilters[key]) {
-          newFilters[key] = [filter.id]
+        if (filter.type === 'NFC') {
+          newFilters[key] = filter.value
         } else {
-          newFilters[key].push(filter.id)
+          if (!newFilters[key]) {
+            newFilters[key] = [filter.id]
+          } else {
+            newFilters[key].push(filter.id)
+          }
         }
       })
       this.filters = newFilters

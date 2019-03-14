@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.retina.renascentinc" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="LocalStorage">
+        <param name="ios-package" value="CDVLocalStorage" />
+    </feature>
+    <feature name="Console">
+        <param name="ios-package" value="CDVLogger" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="HandleOpenUrl">
+        <param name="ios-package" value="CDVHandleOpenURL" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="IntentAndNavigationFilter">
+        <param name="ios-package" value="CDVIntentAndNavigationFilter" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="GestureHandler">
+        <param name="ios-package" value="CDVGestureHandler" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="NfcPlugin">
+        <param name="ios-package" value="NfcPlugin" />
+    </feature>
+    <feature name="Device">
+        <param name="ios-package" value="CDVDevice" />
+    </feature>
+    <feature name="Printer">
+        <param name="ios-package" value="APPPrinter" />
+    </feature>
+    <name>RETINA</name>
+    <description>
+        Renascent inc. Asset Tracking Application
+    </description>
+    <author email="dev@renascentinc.com" href="http://renascentinc.com">
+        Renascent inc.
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="blob:*" />
+    <allow-intent href="about:*" />
+    <allow-intent href="itms:*" />
+    <allow-intent href="itms-apps:*" />
+    <icon height="20" src="src/assets/icons/ios/white_20x20.png" width="20" />
+    <icon height="29" src="src/assets/icons/ios/white_29x29.png" width="29" />
+    <icon height="40" src="src/assets/icons/ios/white_40x40.png" width="40" />
+    <icon height="58" src="src/assets/icons/ios/white_58x58.png" width="58" />
+    <icon height="60" src="src/assets/icons/ios/white_60x60.png" width="60" />
+    <icon height="72" src="src/assets/icons/ios/white_72x72.png" width="72" />
+    <icon height="76" src="src/assets/icons/ios/white_76x76.png" width="76" />
+    <icon height="80" src="src/assets/icons/ios/white_80x80.png" width="80" />
+    <icon height="87" src="src/assets/icons/ios/white_87x87.png" width="87" />
+    <icon height="144" src="src/assets/icons/ios/white_144x144.png" width="144" />
+    <icon height="167" src="src/assets/icons/ios/white_167x167.png" width="167" />
+    <icon height="180" src="src/assets/icons/ios/white_180x180.png" width="180" />
+    <icon src="src/assets/icons/ios/white_512x512.png" />
+    <preference name="AllowInlineMediaPlayback" value="false" />
+    <preference name="BackupWebStorage" value="cloud" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
+    <preference name="SuppressesIncrementalRendering" value="false" />
+    <preference name="SuppressesLongPressGesture" value="false" />
+    <preference name="Suppresses3DTouchGesture" value="false" />
+    <preference name="GapBetweenPages" value="0" />
+    <preference name="PageLength" value="0" />
+    <preference name="PaginationBreakingMode" value="page" />
+    <preference name="PaginationMode" value="unpaginated" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="SplashShowOnlyFirstTime" value="true" />
+</widget>

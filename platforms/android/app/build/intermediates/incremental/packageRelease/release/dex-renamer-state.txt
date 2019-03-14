@@ -1,0 +1,4 @@
+#Mon Feb 18 20:51:52 EST 2019
+base.0=/Users/josiahcampbell/projects/retina/retina-v3/platforms/android/app/build/intermediates/transforms/dex/release/0
+path.0=classes.dex
+renamed.0=classes.dex

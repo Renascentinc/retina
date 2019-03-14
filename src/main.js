@@ -8,7 +8,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-import attachFastClick from 'fastclick'
+// import attachFastClick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -23,6 +23,13 @@ import VueSVGIcon from 'vue-svgicon'
 import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
+
+if (process.env.CORDOVA === 'true') {
+  var cordovaScript = document.createElement('script')
+  cordovaScript.setAttribute('type', 'text/javascript')
+  cordovaScript.setAttribute('src', 'cordova.js')
+  document.body.appendChild(cordovaScript)
+}
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -124,7 +131,7 @@ Vue.use(VueMq, {
   }
 })
 
-attachFastClick(document.body, { tapDelay: 50 })
+// attachFastClick(document.body, { tapDelay: 50 })
 
 new Vue({
   router,

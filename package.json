@@ -9,9 +9,9 @@
     "start": "vue-cli-service serve --port=4200 --open",
     "test": "vue-cli-service lint",
     "build": "vue-cli-service build --mode=development",
-    "build-prod": "ENVIRONMENT=prod vue-cli-service build",
-    "build-cordova": "CORDOVA=true vue-cli-service build --mode=development",
-    "build-cordova-prod": "ENVIRONMENT=prod CORDOVA=true vue-cli-service build",
+    "build-prod": "vue-cli-service build",
+    "build-cordova": "VUE_APP_PLATFORM=cordova vue-cli-service build --mode=development",
+    "build-cordova-prod": "VUE_APP_PLATFORM=cordova vue-cli-service build",
     "android": "yarn build-cordova && cordova prepare && cordova run android",
     "ios": "yarn build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios"
   },

@@ -8,7 +8,7 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
-// import attachFastClick from 'fastclick'
+import fastclick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -24,7 +24,7 @@ import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
 
-if (process.env.CORDOVA === 'true') {
+if (process.env.VUE_APP_PLATFORM === 'cordova') {
   var cordovaScript = document.createElement('script')
   cordovaScript.setAttribute('type', 'text/javascript')
   cordovaScript.setAttribute('src', 'cordova.js')
@@ -74,7 +74,7 @@ const cache = new InMemoryCache({
 })
 
 const httpLink = new HttpLink({
-  uri: process.env.ENVIRONMENT === 'prod' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+  uri: process.env.NODE_ENV === 'production' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {
@@ -131,7 +131,7 @@ Vue.use(VueMq, {
   }
 })
 
-// attachFastClick(document.body, { tapDelay: 50 })
+fastclick.attach(document.body)
 
 new Vue({
   router,

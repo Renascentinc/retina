@@ -51,7 +51,7 @@
               "plugin": "phonegap-nfc",
               "oldAttrib": {
                 "android:minSdkVersion": "19",
-                "android:targetSdkVersion": "27"
+                "android:targetSdkVersion": "28"
               }
             }
           ],
@@ -60,9 +60,7 @@
               "xml": "<activity android:exported=\"false\" android:label=\"Printer\" android:name=\"de.appplant.cordova.plugin.printer.ui.SelectPrinterActivity\"></activity>",
               "count": 1
             }
-          ],
-          "/*": [],
-          "application": []
+          ]
         }
       }
     }
@@ -75,6 +73,7 @@
       "PACKAGE_NAME": "com.retina.renascentinc"
     },
     "cordova-plugin-splashscreen": {
+      "NFC_USAGE_DESCRIPTION": "Read NFC Tags",
       "PACKAGE_NAME": "com.retina.renascentinc"
     },
     "cordova-plugin-device": {

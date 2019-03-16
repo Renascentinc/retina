@@ -1,4 +1,0 @@
-#Mon Feb 18 20:54:58 EST 2019
-base.0=/Users/josiahcampbell/projects/retina/retina-v3/platforms/android/app/build/intermediates/transforms/dexMerger/debug/3
-path.0=classes.dex
-renamed.0=classes.dex

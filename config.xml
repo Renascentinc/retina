@@ -4,7 +4,7 @@
     <description>
         Renascent inc. Asset Tracking Application
     </description>
-    <author email="dev@renascentinc.com" href="http://renascentinc.com">
+    <author email="retinasupport@renascentinc.com" href="http://renascentinc.com">
         Renascent inc.
     </author>
     <content src="index.html" />
@@ -66,6 +66,6 @@
     <preference name="BackupWebStorage" value="none" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-printer" spec="^0.7.3" />
-    <engine name="ios" spec="^4.5.5" />
-    <engine name="android" spec="^7.0.0" />
+    <engine name="ios" spec="^5.0.0" />
+    <engine name="android" spec="^8.0.0" />
 </widget>

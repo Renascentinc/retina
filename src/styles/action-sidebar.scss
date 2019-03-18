@@ -1,0 +1,28 @@
+.action-sidebar {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding-top: 15px;
+  align-items: center;
+  flex: 1 1 auto;
+  max-width: 300px;
+
+  .extended-fab,
+  .container {
+	margin-left: 10px;
+	margin-top: 20px;
+  }
+
+  .dark-input {
+	width: 158px;
+	margin-left: 10px;
+	margin-top: 20px;
+	font-size: 14px;
+	height: 40px;
+	font-weight: 500;
+
+	.dropdown-menu {
+	  font-size: 14px;
+	}
+  }
+}

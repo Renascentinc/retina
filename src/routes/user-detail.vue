@@ -2,10 +2,10 @@
   <div class="page user-detail-page">
     <div class="info-menu-container">
       <div
-        class="floating-action-bar"
+        class="action-sidebar"
+        v-if="$mq === 'desktop'"
       >
         <extended-fab
-          v-if="$mq === 'desktop'"
           :on-click="transitionToUsers"
           :outline-display="true"
           icon-class="fa-arrow-left"
@@ -15,7 +15,7 @@
         </extended-fab>
 
         <extended-fab
-          v-if="canEdit && $mq === 'desktop'"
+          v-if="canEdit"
           :on-click="toggleEditState"
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :disabled="changingRole"
@@ -24,7 +24,7 @@
         </extended-fab>
 
         <extended-fab
-          v-if="editState && $mq === 'desktop'"
+          v-if="editState"
           :on-click="cancelEdit"
           :disabled="changingRole"
           icon-class="fa-times"
@@ -33,7 +33,7 @@
         </extended-fab>
 
         <button-dropdown
-          v-if="$mq === 'desktop' && isAdmin"
+          v-if="isAdmin"
           :on-click="updateRole"
           :options="roles"
           :flag="toggleChangingRole"
@@ -355,19 +355,7 @@ export default {
                 role: this.getUser.role,
                 status: this.getUser.status
               }
-            },
-            refetchQueries: [{
-              query: gql`
-                query {
-                  getAllUser {
-                    id
-                    first_name
-                    last_name
-                    role
-                  }
-                }
-              `
-            }]
+            }
           }).then(() => {
             this.showSuccessfulDeleteMsg()
             this.transitionToUsers()
@@ -434,38 +422,6 @@ export default {
             .then(result => {
               if (result) {
                 this.$apollo.queries.getUser.refetch()
-                let {
-                  id,
-                  first_name,
-                  last_name,
-                  email,
-                  phone_number,
-                  role,
-                  status
-                } = result.data.updateUser
-                this.$apollo.provider.clients.defaultClient.writeFragment({
-                  id: `${id}User`,
-                  fragment: gql`
-                   fragment patchUser on User {
-                     first_name
-                     last_name
-                     email
-                     phone_number
-                     role
-                     status
-                     __typename
-                   }
-                  `,
-                  data: {
-                    first_name,
-                    last_name,
-                    email,
-                    phone_number,
-                    role,
-                    status,
-                    __typename: 'User'
-                  }
-                })
                 this.editState = false
               }
             }).catch(() => {
@@ -526,7 +482,6 @@ export default {
 @import "../styles/variables";
 
 .user-detail-page {
-  background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
 
@@ -722,23 +677,6 @@ export default {
     display: flex;
     flex-direction: row;
     overflow: hidden;
-
-    .floating-action-bar {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      max-width: 300px;
-      flex: 1 1;
-      padding-top: 80px;
-      overflow-y: auto;
-
-      .container,
-      .extended-fab {
-        margin-left: 10px;
-        margin-top: 20px;
-      }
-    }
 
     .header {
       width: 500px;

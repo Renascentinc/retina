@@ -731,43 +731,7 @@ export default {
               year: this.modelYear,
               photo: photoResponse
             }
-          },
-          refetchQueries: [{
-            query: gql`query tools($pagingParameters: PagingParameters) {
-              searchTool(pagingParameters: $pagingParameters) {
-                id
-                type {
-                  id
-                  name
-                }
-                brand {
-                  id
-                  name
-                }
-                status
-                owner {
-                  ... on Location {
-                     id
-                     name
-                     type
-                  }
-                  ... on User {
-                     id
-                     first_name
-                     last_name
-                     type
-                  }
-                }
-              }
-            }`,
-
-            variables: {
-              pagingParameters: {
-                page_size: 15,
-                page_number: 0
-              }
-            }
-          }]
+          }
         }).then(response => {
           this.tool = response.data.createTool
           ++this.currentState

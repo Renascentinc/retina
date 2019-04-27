@@ -1,38 +1,48 @@
+import User from './user'
+import Location from './location'
+
 export default class Tool {
   id = ''
 
   brand = {
-    id: '',
-    name: ''
+    // name: ''
   }
 
   type = {
-    id: '',
-    name: ''
+    // name: ''
   }
 
-  year = '-'
+  year
 
-  status = ''
+  status
 
-  modelNumber = ''
+  model_number
 
-  serialNumber = ''
+  serial_number
 
-  purchasedFrom = {
-    id: '',
-    name: '-'
+  purchased_from = {
+    // name: ''
   }
 
-  datePurchased = '-'
+  date_purchased
 
-  price = ''
+  price
 
-  photo = ''
+  photo
 
   owner = {
-    id: '',
-    type: ''
+    // id: '',
+    // type: '',
+    // isUser: false,
+    // isLocation: false
+  }
+
+  get formattedYear () {
+    return this.year || '-'
+  }
+
+  get formattedPurchasedFrom () {
+    return this.purchased_from ? this.purchased_from.name : '-'
   }
 
   get formattedDate () {
@@ -40,6 +50,10 @@ export default class Tool {
   }
 
   get formattedStatus () {
+    if (!this.status) {
+      return ''
+    }
+
     return this.status.replace(/_/g, ' ').toUpperCase()
   }
 
@@ -56,25 +70,62 @@ export default class Tool {
   }
 
   get statusClass () {
+    if (!this.status) {
+      return ''
+    }
+
     return this.status
       .split('_')
       .join('-')
       .toLowerCase()
   }
 
-  updateInfo (tool) {
+  get nonISODate () {
+    return this.date_purchased
+  }
+
+  set nonISODate (newPurchaseDate) {
+    this.date_purchased = new Date(newPurchaseDate).toISOString()
+  }
+
+  set formattedPrice (newPrice) {
+    this.price = (newPrice.slice(2) * 100).toFixed(2)
+  }
+
+  getState () {
+    return {
+      id: this.id,
+      type_id: this.type.id,
+      brand_id: this.brand.id,
+      model_number: this.model_number,
+      serial_number: this.serial_number,
+      status: this.status,
+      owner_id: this.owner.id,
+      purchased_from_id: this.purchased_from.id,
+      date_purchased: this.date_purchased,
+      price: this.price,
+      year: this.year,
+      photo: this.photo
+    }
+  }
+
+  update (tool) {
     this.id = tool.id
     this.brand = tool.brand
     this.type = tool.type
     this.status = tool.status
-    this.owner = tool.owner
-    this.modelNumber = tool.model_number
-    this.serialNumber = tool.serial_number
+    this.owner = tool.owner.type === 'USER' ? new User(tool.owner) : new Location(tool.owner)
+    this.model_number = tool.model_number
+    this.serial_number = tool.serial_number
 
     if (tool.year) this.year = tool.year
-    if (tool.purchased_from) this.purchasedFrom = tool.purchased_from
-    if (tool.date_purchased) this.datePurchased = tool.date_purchased
+    if (tool.purchased_from) this.purchased_from = tool.purchased_from
+    if (tool.date_purchased) this.date_purchased = tool.date_purchased
     if (tool.price) this.price = tool.price
     if (tool.photo) this.photo = tool.photo
+  }
+
+  constructor (tool) {
+    if (tool) this.update(tool)
   }
 }

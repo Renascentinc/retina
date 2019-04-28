@@ -1,0 +1,64 @@
+$tool-search-result-border-radius: 3px;
+
+.search-result {
+  cursor: pointer;
+  display: flex;
+  margin: 10px 12px;
+  border-radius: $tool-search-result-border-radius;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.11);
+
+  .main-container {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    margin: 5px;
+    padding: 5px;
+
+    .row {
+      display: flex;
+      align-items: center;
+      flex: 1 1 auto;
+
+      .title {
+        white-space: nowrap;
+        word-break: break-word;
+        font-weight: 900;
+        margin-bottom: 5px;
+      }
+
+      .subtitle {
+        margin-right: 8px;
+        font-weight: 900;
+      }
+    }
+  }
+}
+
+.mobile .search-result {
+  .title {
+    font-size: 22px;
+  }
+
+  .row {
+    .subtitle {
+      font-size: 15px;
+    }
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  .search-result {
+    max-width: 500px;
+
+    .title {
+      font-size: 18px;
+    }
+
+    .row {
+      font-size: 14px;
+    }
+  }
+}

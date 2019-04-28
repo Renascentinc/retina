@@ -1,0 +1,188 @@
+@import 'variables';
+@import 'fonts';
+@import 'loading-spinner';
+@import 'drawer';
+@import 'navbar';
+@import 'form-inputs';
+@import 'toast';
+@import 'transitions';
+@import 'search-bar';
+@import 'standard-list-view-page';
+@import 'action-sidebar';
+
+* {
+  font-family: $font-family;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+* {
+  font-family: $font-family;
+}
+
+html, body, #app {
+  font-family: $font-family;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+  height: 100vh !important;
+}
+
+button {
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+a {
+  color: #C4C4C4;
+  text-decoration: none;
+
+  &.router-link-active {
+    color: white !important;
+  }
+}
+
+img[lazy=loading] {
+  height: 200px;
+  max-height: 200px;
+}
+
+.page {
+  height: 100%;
+  overflow: auto;
+  flex: 1 1 auto;
+  width: 100vw;
+}
+
+.main-application {
+  display: flex;
+  height: 100%;
+  width: 100vw;
+
+  .content-wrap {
+    display: flex;
+
+    .main-content {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      width: 100%;
+      padding-top: constant(safe-area-inset-top);
+      padding-top: env(safe-area-inset-top);
+    }
+  }
+}
+
+// nfc icon
+.svg-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.svg-fill {
+    fill: transparent;
+    stroke: transparent;
+
+    path[pid="1"] {
+      stroke: transparent;
+      fill: $renascent-red;
+    }
+}
+
+.tool-status {
+  &.available {
+    color: black;
+    font-weight: bold;
+  }
+
+  &.in-use {
+    color: $renascent-red;
+  }
+
+  &.maintenance {
+    color: #fff;
+    background-color: #000;
+    border-radius: 3px;
+    padding: 0 3px 1px 3px;
+  }
+
+  &.out-of-service {
+    color: #828282;
+  }
+}
+
+.ready-to-scan-modal,
+.nfc-not-supported-modal {
+  .header-text {
+    font-size: 25px;
+    font-weight: 900;
+    color: #4c4c4c;
+  }
+
+  .body-text {
+    font-size: 12px;
+  }
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+
+    .cancel-btn {
+      font-size: 15px;
+      font-weight: 900;
+      color: $renascent-dark-gray;
+      border: solid 1px $renascent-dark-gray;
+      border-radius: 10px;
+      padding: 0px 10px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.overlay {
+  background-color: black;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  opacity: .5;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .half-circle-spinner {
+    height: 35vw;
+    max-height: 120px;
+    width: 35vw;
+    max-width: 120px;
+
+    .circle {
+      border-width: 7px;
+    }
+  }
+}
+
+// DESKTOP
+
+.desktop {
+  .main-content {
+    flex-direction: row-reverse !important;
+  }
+
+  .nav-bar {
+    padding-top: 20px;
+
+    .icon-text-container {
+      margin-bottom: 15px;
+    }
+  }
+}

@@ -8,7 +8,11 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import store from './store'
+<<<<<<< HEAD
 // import attachFastClick from 'fastclick'
+=======
+import fastclick from 'fastclick'
+>>>>>>> develop
 import DrawerLayout from 'vue-drawer-layout'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -24,6 +28,13 @@ import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
 import ToggleButton from 'vue-js-toggle-button'
+
+if (process.env.VUE_APP_PLATFORM === 'cordova') {
+  var cordovaScript = document.createElement('script')
+  cordovaScript.setAttribute('type', 'text/javascript')
+  cordovaScript.setAttribute('src', 'cordova.js')
+  document.body.appendChild(cordovaScript)
+}
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -67,16 +78,9 @@ const cache = new InMemoryCache({
   }
 })
 
-let uri = ''
-if (process.env.ENVIRONMENT === 'prod') {
-  uri = 'https://retina-api.renascentinc.com/graphql'
-} else if (process.env.ENVIRONMENT === 'localhost') {
-  uri = 'http://localhost:4000/graphql'
-} else {
-  uri = 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
-}
-
-const httpLink = new HttpLink({ uri })
+const httpLink = new HttpLink({
+  uri: process.env.NODE_ENV === 'production' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+})
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {
   const token = localStorage.getItem('token')
@@ -133,7 +137,11 @@ Vue.use(VueMq, {
   }
 })
 
+<<<<<<< HEAD
 // attachFastClick(document.body, { tapDelay: 50 })
+=======
+fastclick.attach(document.body)
+>>>>>>> develop
 
 new Vue({
   router,

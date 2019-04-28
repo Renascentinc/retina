@@ -1,33 +1,56 @@
-#OS files
 .DS_Store
+node_modules
+/dist
 
-# Editor files
-/.idea
+/www/*
+/plugins/*
+/platforms/ios/www/*
+/platforms/android/www/*
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-**.swp
 *.sw*
 
-# Logs
-logs
-*.log
+## xcode files
+build/
+DerivedData
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
 
-node_modules/
-dist/
-test/unit/coverage/
-/www/**
-/platforms/**
-/plugins/**
+## Other
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
 
-# Parcel cache
-.cache
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+*.dSYM.zip
 
-.vscode/
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace

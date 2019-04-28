@@ -24,6 +24,13 @@ import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
 
+if (process.env.VUE_APP_PLATFORM === 'cordova') {
+  var cordovaScript = document.createElement('script')
+  cordovaScript.setAttribute('type', 'text/javascript')
+  cordovaScript.setAttribute('src', 'cordova.js')
+  document.body.appendChild(cordovaScript)
+}
+
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
     '__schema': {
@@ -67,7 +74,7 @@ const cache = new InMemoryCache({
 })
 
 const httpLink = new HttpLink({
-  uri: process.env.ENVIRONMENT === 'prod' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+  uri: process.env.NODE_ENV === 'production' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {

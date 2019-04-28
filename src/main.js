@@ -24,13 +24,6 @@ import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
 
-if (process.env.VUE_APP_PLATFORM === 'cordova') {
-  var cordovaScript = document.createElement('script')
-  cordovaScript.setAttribute('type', 'text/javascript')
-  cordovaScript.setAttribute('src', 'cordova.js')
-  document.body.appendChild(cordovaScript)
-}
-
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
     '__schema': {
@@ -52,10 +45,29 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   }
 })
 
-const cache = new InMemoryCache({ fragmentMatcher })
+const cache = new InMemoryCache({
+  fragmentMatcher,
+  dataIdFromObject: object => {
+    // fixing issue on history page where objects were getting scrambled with each other (same ids but different data at different snapshots in time).
+    // using a combination of fields to create a unique identifier for the entries
+    if (object.__typename === 'PreviousToolSnapshotDiff') {
+      return `${object.id}${object.__typename}${object.owner ? object.owner.id || object.owner.id : ''}${object.status}`
+    }
+
+    if (object.__typename === 'ToolSnapshotMetadata') {
+      return `${object.timestamp}${object.__typename}`
+    }
+
+    if (router.currentRoute.path.includes('history') && (object.__typename === 'Tool' || object.__typename === 'ConfigurableItem' || object.__typename === 'User')) {
+      return `${JSON.stringify(object)}`
+    }
+
+    return `${object.id}${object.__typename}`
+  }
+})
 
 const httpLink = new HttpLink({
-  uri: process.env.NODE_ENV === 'production' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
+  uri: process.env.ENVIRONMENT === 'prod' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'
 })
 
 const authLink = setContext(({ operationName }, { headers = {} }) => {
@@ -77,7 +89,7 @@ const errorLink = onError(({ graphQLErrors = [] }) => {
         type: 'error',
         title: 'SESSION EXPIRED',
         text: 'Your Session Has Expired. Please Log In Again',
-        timer: 3000,
+        timer: 2000,
         showConfirmButton: false
       })
       router.push({ path: '/login' })
@@ -122,7 +134,7 @@ new Vue({
   render: h => h(App)
 })
 
-Validator.localize({
+const dictionary = {
   en: {
     attributes: {
       brand: 'brand',
@@ -136,4 +148,6 @@ Validator.localize({
       passwordResetEmail: 'email'
     }
   }
-})
+}
+
+Validator.localize(dictionary)

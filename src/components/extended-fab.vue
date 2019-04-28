@@ -2,7 +2,6 @@
   <button
     :class="{ outlined: outlineDisplay, inactive: disabled }"
     :disabled="disabled"
-    :type="buttonType"
     class="extended-fab"
     @click="onClick"
   >
@@ -38,16 +37,9 @@ export default {
       required: true
     },
 
-    buttonType: {
-      type: String,
-      required: false,
-      default: 'button'
-    },
-
     onClick: {
       type: Function,
-      required: false,
-      default: () => {}
+      required: true
     },
 
     outlineDisplay: {

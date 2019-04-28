@@ -44,7 +44,7 @@
         </button>
       </v-date-picker>
     </div>
-    <div class="menu-container">
+    <div class="history-main-content">
       <fab
         v-if="$mq === 'mobile' && isNativeApp"
         :on-click="printTable"
@@ -61,11 +61,10 @@
       >
       </fab>
       <div
-        class="action-sidebar"
-        v-if="$mq === 'desktop'"
+        class="floating-action-bar"
       >
         <extended-fab
-          v-if="isNativeApp"
+          v-if="$mq === 'desktop' && isNativeApp"
           :on-click="printTable"
           icon-class="fa-print"
           button-text="PRINT"
@@ -73,7 +72,7 @@
         </extended-fab>
 
         <extended-fab
-          v-if="!isNativeApp"
+          v-if="$mq === 'desktop' && !isNativeApp"
           :on-click="exportTable"
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD"
@@ -81,7 +80,7 @@
         </extended-fab>
 
         <extended-fab
-          v-if="isDecomissionedTool"
+          v-if="$mq === 'desktop' && isDecomissionedTool"
           :on-click="recover"
           icon-class="fa-undo-alt"
           button-text="RECOVER"
@@ -91,7 +90,8 @@
       <div class="report">
         <span
           v-if="!currentToolId"
-          style="text-align: center; font-weight: 600;"
+          style="text-align: center;
+        font-weight: 600;"
           class="title"
         >
           LATEST TRANSACTIONS
@@ -107,7 +107,7 @@
           #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
         </span>
 
-        <div id="export-table" class="scroll-container">
+        <div id="export-table">
           <transition name="list-loading">
             <div
               v-if="$apollo.queries.searchToolSnapshot.loading"
@@ -407,6 +407,46 @@ export default {
 <style lang="scss">
 @import '../styles/variables';
 
+.desktop {
+  .history-page {
+    .loading-container {
+      max-width: 100%;
+    }
+
+    .search-bar {
+      background-color: #fff;
+      width: calc(100vw - 80px);
+    }
+
+    .search-input {
+      margin-right: 0;
+    }
+  }
+
+  .floating-action-bar {
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 300px;
+    flex: 1 1 auto;
+    padding-top: 15px;
+    overflow-y: auto;
+
+    .extended-fab {
+      margin-left: 10px;
+      margin-top: 20px;
+    }
+  }
+}
+
+.mobile .history-page {
+  .floating-action-bar {
+    display: none;
+  }
+}
+
 .history-page {
   display: flex;
   flex-direction: column;
@@ -414,6 +454,13 @@ export default {
 
   .history-table-export {
     display: none !important;
+  }
+
+  .history-main-content {
+    display: flex;
+    background-color: $background-light-gray;
+    height: 100%;
+    overflow: hidden;
   }
 
   .active {
@@ -433,6 +480,15 @@ export default {
     }
   }
 
+  .search-bar {
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+    display: flex;
+    min-height: fit-content;
+  }
+
   .report {
     display: none;
     display: flex;
@@ -448,8 +504,15 @@ export default {
       width: 158px;
     }
 
-    .scroll-container {
+    #export-table {
       width: calc(100% - 24px);
+      padding: 12px;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
+
     }
 
     .title {
@@ -485,12 +548,6 @@ export default {
     bottom: calc(70px + constant(safe-area-inset-bottom));
     bottom: calc(70px + env(safe-area-inset-bottom));
     z-index: 100;
-  }
-}
-
-.desktop .history-page {
-  .loading-container {
-    max-width: 100%;
   }
 }
 </style>

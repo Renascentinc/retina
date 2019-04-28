@@ -3,13 +3,12 @@
     <div class="search-bar">
       <user-search-input :update-tags="updateFilters"></user-search-input>
     </div>
-    <div class="menu-container">
+    <div class="users-menu-container">
       <div
-        class="action-sidebar"
-        v-if="$mq === 'desktop'"
+        class="floating-action-bar"
       >
         <extended-fab
-          v-if="isAdmin"
+          v-if="isAdmin && $mq === 'desktop'"
           :on-click="transitionToAddUser"
           class="add-user-fab"
           icon-class="fa-plus"
@@ -17,7 +16,7 @@
         >
         </extended-fab>
       </div>
-      <div class="scroll-container">
+      <div class="user-scroll-container">
         <add-button
           v-if="$mq === 'mobile' && isAdmin"
           :key="0"
@@ -41,7 +40,7 @@
         <transition name="fade">
           <div
             v-if="!$apollo.queries.searchUser.loading && !users.length"
-            class="no-results-container"
+            class="no-users-container"
           >
             <span class="no-users-text">
               No Users To Display
@@ -171,6 +170,43 @@ export default {
 .users-page {
   display: flex;
   flex-direction: column;
+
+  .search-bar {
+    background-color: #fff;
+    padding: 10px;
+    min-height: 45px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+    display: flex;
+    min-height: fit-content;
+  }
+
+  .users-menu-container {
+    height: 100%;
+    background-color: $background-light-gray;
+  }
+
+  .user-scroll-container {
+    background-color: $background-light-gray;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 5px;
+    flex: 1 1 auto;
+    height: 100%;
+  }
+
+  .add-user-btn {
+    position: absolute;
+    right: 20px;
+  }
+
+  .no-users-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+  }
 }
 
 .dark-dropdown {
@@ -184,5 +220,51 @@ export default {
   padding-left: 7px;
   padding-bottom: 5px;
   font-size: 28px;
+}
+
+.mobile .users-page {
+  .users-menu-container {
+    overflow-y: hidden;
+
+    .user-scroll-container {
+      height: 100%;
+      overflow-y: auto;
+
+      .users {
+        padding-bottom: 60px;
+      }
+    }
+  }
+}
+
+.desktop .users-page {
+  .users-menu-container {
+    display: flex;
+    flex-direction: row;
+
+    .user-scroll-container {
+      padding-bottom: 5px;
+      align-content: center;
+    }
+
+    .floating-action-bar {
+      position: inherit;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
+      height: auto;
+      padding-top: 15px;
+      align-items: center;
+      flex: 1 1;
+      max-width: 300px;
+
+      .extended-fab {
+        position: inherit;
+        margin-left: 10px;
+        margin-top: 20px;
+      }
+    }
+  }
 }
 </style>

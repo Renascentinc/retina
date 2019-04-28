@@ -34,7 +34,7 @@
         </span>
       </div>
     </div>
-    <form class="bottom-panel" v-on:submit.prevent="attemptUserLogin">
+    <div class="bottom-panel">
       <div class="status-message">
         <transition name="fade">
           <span
@@ -58,7 +58,7 @@
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false"
-            autocomplete
+            @keydown.enter="attemptUserLogin"
           >
         </input-with-icon>
 
@@ -71,7 +71,7 @@
             class="password-input"
             placeholder="password"
             type="password"
-            autocomplete
+            @keydown.enter="attemptUserLogin"
           >
         </input-with-icon>
 
@@ -87,7 +87,7 @@
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false"
-            autocomplete
+            @keydown.enter="attemptUserLogin"
           >
         </input-with-icon>
       </div>
@@ -95,21 +95,20 @@
       <div class="login-action-row">
         <button
           class="reset-password"
-          type="button"
           @click="requestPasswordReset"
         >
           FORGOT PASSWORD?
         </button>
 
         <extended-fab
+          :on-click="attemptUserLogin"
           class="login-btn"
           icon-class="fa-arrow-right"
           button-text="SIGN IN"
-          type="submit"
         >
         </extended-fab>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -207,7 +206,7 @@ export default {
       }).then(result => {
         if (result && result.value) {
           this.$apollo.mutate({
-            mutation: gql`mutation ($email: String!) {
+            mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
               requestPasswordReset(email: $email)
             }`,
             variables: {
@@ -235,7 +234,7 @@ export default {
       this.currentState = this.states.AUTHENTICATING
 
       this.$apollo.mutate({
-        mutation: gql`mutation ($organization_name: String!, $email: String!, $password: String!) {
+        mutation: gql`mutation attemptUserLogin($organization_name: String!, $email: String!, $password: String!) {
            login(organization_name: $organization_name, email: $email, password: $password) {
             token,
             user {

@@ -316,7 +316,19 @@ export default {
             role: this.role.id,
             status: 'ACTIVE'
           }
-        }
+        },
+        refetchQueries: [{
+          query: gql`
+            query {
+              getAllUser {
+                id
+                first_name
+                last_name
+                role
+              }
+            }
+          `
+        }]
       }).then(result => {
         ++this.currentState
         this.getUser = result.data.createUser

@@ -3,39 +3,17 @@ import Location from './location'
 
 export default class Tool {
   id = ''
-
-  brand = {
-    // name: ''
-  }
-
-  type = {
-    // name: ''
-  }
-
   year
-
   status
-
   model_number
-
   serial_number
-
-  purchased_from = {
-    // name: ''
-  }
-
   date_purchased
-
   price
-
   photo
-
-  owner = {
-    // id: '',
-    // type: '',
-    // isUser: false,
-    // isLocation: false
-  }
+  brand = {}
+  type = {}
+  purchased_from = {}
+  owner = {}
 
   get formattedYear () {
     return this.year || '-'
@@ -46,7 +24,7 @@ export default class Tool {
   }
 
   get formattedDate () {
-    return this.datePurchased ? new Date(this.datePurchased).toLocaleDateString('en-US') : '-'
+    return this.date_purchased ? new Date(this.date_purchased).toLocaleDateString('en-US') : '-'
   }
 
   get formattedStatus () {
@@ -80,11 +58,11 @@ export default class Tool {
       .toLowerCase()
   }
 
-  get nonISODate () {
-    return this.date_purchased
+  get jsDate () {
+    return this.date_purchased ? new Date(this.date_purchased) : null
   }
 
-  set nonISODate (newPurchaseDate) {
+  set jsDate (newPurchaseDate) {
     this.date_purchased = new Date(newPurchaseDate).toISOString()
   }
 
@@ -114,7 +92,7 @@ export default class Tool {
     this.brand = tool.brand
     this.type = tool.type
     this.status = tool.status
-    this.owner = tool.owner.type === 'USER' ? new User(tool.owner) : new Location(tool.owner)
+    this.owner = tool.owner.isUser || tool.owner.type === 'USER' ? new User(tool.owner) : new Location(tool.owner)
     this.model_number = tool.model_number
     this.serial_number = tool.serial_number
 

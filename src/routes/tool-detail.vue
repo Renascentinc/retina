@@ -376,27 +376,12 @@
                 {{ tool.formattedDate }}
               </span>
 
-              <!-- <v-date-picker
+              <date-picker
                 v-if="editState"
-                v-model="editedTool.nonISODate"
-                :input-props="{ readonly: true }"
-                :attributes="[{ popover: { visibility: 'hidden' } }]"
-                :max-date="new Date()"
-                :popover-visibility="datePickerVisibility"
-                popover-direction="top"
-                class="general-data"
-                mode="single"
-                @input="toggleDatepicker"
+                :date="editedTool.jsDate"
+                :on-date-change="onDateChange"
               >
-                <button
-                  slot-scope="{ inputValue }"
-                  :class="{ placeholder: !inputValue }"
-                  class="dark-input purchase-date-input"
-                  @click="toggleDatepicker"
-                >
-                  {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
-                </button>
-              </v-date-picker> -->
+              </date-picker>
 
               <span class="general-label">
                 Purchase Price
@@ -434,68 +419,12 @@
             <div class="card-title">
               Photo
             </div>
-            <div
-              v-if="!editState"
-              class="photo-box"
+
+            <add-photo
+              :on-image-change="onImageChange"
+              :edit-state="editState"
             >
-              <img
-                v-lazy="`${tool.photo}`"
-                v-if="tool.photo"
-                class="image"
-              >
-              <i
-                v-if="!tool.photo"
-                class="fas fa-image no-image"
-              >
-              </i>
-            </div>
-
-            <div
-              v-if="editState"
-              class="add-photo-container"
-            >
-              <input
-                ref="file"
-                name="file"
-                style="display: none;"
-                type="file"
-                accept="image/*"
-                capture="camera"
-              >
-
-              <label
-                v-if="!newImgSrc"
-                for="file"
-                class="dark-input add-photo"
-              >
-                <label
-                  for="file"
-                  class="fas fa-camera"
-                ></label>
-                {{ tool.photo ? 'UPDATE PHOTO' : 'Add Photo' }}
-              </label>
-
-              <div
-                v-if="newImgSrc"
-                class="image-container"
-              >
-                <img
-                  v-if="newImgSrc"
-                  :src="newImgSrc"
-                  class="img-preview"
-                >
-              </div>
-
-              <extended-fab
-                v-if="newImgSrc"
-                :on-click="deletePhoto"
-                :outline-display="true"
-                class="delete-photo-efab"
-                icon-class="fa-times"
-                button-text="REMOVE PHOTO"
-              >
-              </extended-fab>
-            </div>
+            </add-photo>
           </div>
         </div>
       </div>
@@ -523,11 +452,13 @@
 import gql from 'graphql-tag'
 import { configurableItemQuery, toolQuery } from '../utils/gql'
 import Fab from '../components/fab.vue'
-import ExtendedFab from '../components/extended-fab.vue'
+import ExtendedFab from '../components/extended-fab'
+import DatePicker from '../components/date-picker'
 import vSelect from '../components/select'
 import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
+import AddPhoto from '../components/add-photo'
 import swal from 'sweetalert2'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
@@ -543,10 +474,14 @@ export default {
     ExtendedFab,
     ButtonDropdown,
     vSelect,
-    NfcEncode
+    NfcEncode,
+    AddPhoto,
+    DatePicker
   },
 
-  mixins: [ nfcMixin ],
+  mixins: [
+    nfcMixin
+  ],
 
   apollo: {
     getAllConfigurableItem: {
@@ -580,9 +515,8 @@ export default {
       editedTool: null,
       reason: null,
       editState: false,
-      newImgSrc: null,
+      image: null,
       saving: false,
-      datePickerVisibility: 'hidden',
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear()}`
       },
@@ -647,20 +581,6 @@ export default {
   },
 
   methods: {
-    toggleDatepicker () {
-      if (this.datePickerVisibility === 'visible') {
-        this.datePickerVisibility = 'hidden'
-      } else {
-        this.datePickerVisibility = 'visible'
-      }
-    },
-
-    deletePhoto () {
-      this.$refs.file.value = ''
-      this.newImgSrc = null
-      this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
-    },
-
     transitionToHistory () {
       this.$router.push({ name: 'historyDetail', params: { toolId: this.tool.id } })
     },
@@ -687,7 +607,6 @@ export default {
       } else {
         this.editedTool = new Tool(this.tool)
         this.editState = true
-        this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
       }
     },
 
@@ -710,8 +629,12 @@ export default {
       })
     },
 
-    updateImageDisplay () {
-      this.newImgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
+    onImageChange (newImage) {
+      this.image = newImage
+    },
+
+    onDateChange (newDate) {
+      this.editedTool.jsDate = newDate
     },
 
     saveTool () {
@@ -729,10 +652,8 @@ export default {
           ? this.createNewConfigurableItem(this.editedTool.purchased_from)
           : null
       let photoRequest = new Promise((resolve) => {
-        let file = this.$refs.file.files[0]
-
-        if (file) {
-          imageCompression(file, 1, 1920).then(compressedImage => {
+        if (this.image) {
+          imageCompression(this.image, 1, 1920).then(compressedImage => {
             let fd = new FormData()
 
             let key = `tool_preview-${new Date().getTime()}`
@@ -780,14 +701,15 @@ export default {
 
           if (photoResponse) {
             this.editedTool.photo = photoResponse
-            this.newImgSrc = null
           }
 
           this.$apollo
             .mutate({
               mutation: gql`
                 mutation updateTool($tool: UpdatedTool!) {
-                  updateTool(updatedTool: $tool)
+                  updateTool(updatedTool: $tool) {
+                    id
+                  }
                 }
               `,
 
@@ -829,9 +751,7 @@ export default {
           cancelButtonText: 'CANCEL',
           confirmButtonText: 'SUBMIT',
           confirmButtonColor: '#404040',
-          inputValidator: (value) => {
-            return !value && `Decomission Reason is Required`
-          }
+          inputValidator: (value) => !value && 'Decomission Reason is Required'
         }).then(result => {
           newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
@@ -1064,15 +984,6 @@ export default {
     .general-card {
       padding-bottom: 10px;
 
-      .purchase-date-input {
-        padding-left: 10px;
-        text-align: left;
-
-        &.placeholder {
-          color: $form-placeholder-color;
-        }
-      }
-
       .general-details {
         display: flex;
         flex-direction: column;
@@ -1122,68 +1033,6 @@ export default {
     .photo-card {
       padding-bottom: 11px;
       margin-bottom: 80px;
-
-      .photo-box {
-        width: calc(100% - 23px);
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 10px;
-        overflow: hidden;
-
-        .image {
-          height: 100%;
-          width: 100%;
-          border-radius: 2px;
-        }
-
-        .no-image {
-          color: $background-dark-gray;
-          font-size: 60px;
-          width: 100%;
-          text-align: center;
-          margin-top: 20px;
-          margin-bottom: 20px;
-        }
-      }
-
-      .add-photo-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 275px;
-        padding: 0 20px;
-
-        .img-preview {
-          max-height: 175px;
-          max-width: 100%;
-        }
-
-        .add-photo {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100px;
-
-          .fa-camera {
-            margin-right: 5px;
-          }
-        }
-
-        .delete-photo-efab {
-          border-color: transparent;
-          box-shadow: none;
-          font-size: 15px;
-        }
-
-        .image-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 175px;
-          width: 100%;
-        }
-      }
     }
 
     .owner-card {

@@ -1,16 +1,6 @@
 <template>
   <div class="page tool-detail-page">
-    <transition name="fade">
-      <div
-        v-if="saving"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
+    <loading-overlay :active="saving"/>
 
     <div class="info-menu-container">
       <div
@@ -23,24 +13,21 @@
           icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
           button-text="BACK"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="canEdit"
           :on-click="toggleEditState"
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :button-text="editState ? 'SAVE CHANGES' : 'EDIT TOOL'"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="editState"
           :on-click="cancelEdit"
           icon-class="fa-times"
           button-text="CANCEL"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="isTransferable"
@@ -49,8 +36,7 @@
           :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
           icon-class="fa-exchange-alt"
           class="action-btn transfer-btn"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           :disabled="editState"
@@ -58,16 +44,14 @@
           :outline-display="false"
           icon-class="fa-book-open"
           button-text="VIEW HISTORY"
-        >
-        </extended-fab>
+        />
 
         <button-dropdown
           v-if="isTransferable"
           :on-click="updateStatus"
           :options="statusOptions"
           button-text="CHANGE STATUS"
-        >
-        </button-dropdown>
+        />
       </div>
 
       <div class="header-cards-container">
@@ -76,8 +60,7 @@
             v-if="$mq === 'mobile'"
             class="fas fa-arrow-left backarrow"
             to="/tools"
-          >
-          </router-link>
+          />
 
           <span class="toolid">
             {{ tool.formattedId }}
@@ -175,8 +158,7 @@
               :on-click="updateStatus"
               :options="statusOptions"
               button-text="CHANGE STATUS"
-            >
-            </button-dropdown>
+            />
 
             <button
               class="action-btn transfer-btn"
@@ -199,8 +181,7 @@
                 <i
                   :class="{ 'fa-user': tool.owner.isUser, 'fa-map-marker-alt': tool.owner.isLocation }"
                   class="fas fa-user"
-                >
-                </i>
+                />
               </div>
               <div class="owner-name">
                 <div
@@ -224,8 +205,7 @@
                   :disabled="!tool.owner.phone_number"
                   class="call-btn"
                   icon-class="fa-phone"
-                >
-                </fab>
+                />
 
                 <div class="spacer"></div>
 
@@ -235,8 +215,7 @@
                   :disabled="!tool.owner.email"
                   class="email-btn"
                   icon-class="fa-envelope"
-                >
-                </fab>
+                />
               </div>
             </div>
           </div>
@@ -253,8 +232,7 @@
               <span class="general-data">
                 {{ tool.id }}
               </span>
-              <nfc-encode :tool-id="tool.id">
-              </nfc-encode>
+              <nfc-encode :tool-id="tool.id"/>
 
               <span class="general-label">
                 Serial Number
@@ -380,8 +358,7 @@
                 v-if="editState"
                 :date="editedTool.jsDate"
                 :on-date-change="onDateChange"
-              >
-              </date-picker>
+              />
 
               <span class="general-label">
                 Purchase Price
@@ -408,8 +385,7 @@
                 :outline-display="false"
                 icon-class="fa-book-open"
                 button-text="VIEW HISTORY"
-              >
-              </extended-fab>
+              />
             </div>
           </div>
 
@@ -423,8 +399,7 @@
             <add-photo
               :on-image-change="onImageChange"
               :edit-state="editState"
-            >
-            </add-photo>
+            />
           </div>
         </div>
       </div>
@@ -435,16 +410,14 @@
       :on-click="cancelEdit"
       icon-class="fa-times"
       class="cancel"
-    >
-    </fab>
+    />
 
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit"
-    >
-    </fab>
+    />
   </div>
 </template>
 
@@ -459,6 +432,7 @@ import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
 import AddPhoto from '../components/add-photo'
+import LoadingOverlay from '../components/loading-overlay'
 import swal from 'sweetalert2'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
@@ -476,7 +450,8 @@ export default {
     vSelect,
     NfcEncode,
     AddPhoto,
-    DatePicker
+    DatePicker,
+    LoadingOverlay
   },
 
   mixins: [

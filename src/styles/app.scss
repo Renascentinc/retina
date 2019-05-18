@@ -1,6 +1,5 @@
 @import 'variables';
 @import 'fonts';
-@import 'loading-spinner';
 @import 'drawer';
 @import 'navbar';
 @import 'form-inputs';
@@ -14,10 +13,6 @@
   font-family: $font-family;
   -webkit-tap-highlight-color: transparent;
   outline: none;
-}
-
-* {
-  font-family: $font-family;
 }
 
 html, body, #app {

@@ -1,3 +1,18 @@
+<template>
+  <div class="loading-spinner half-circle-spinner">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'LoadingSpinner'
+}
+</script>
+
+<style lang="scss">
+@import '../styles/variables';
 $spinner-size: 30px;
 $tenth-spinner-size: $spinner-size / 10;
 
@@ -40,3 +55,4 @@ $tenth-spinner-size: $spinner-size / 10;
     transform: rotate(360deg);
   }
 }
+</style>

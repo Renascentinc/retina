@@ -180,7 +180,7 @@
               <div class="user-symbol">
                 <i
                   :class="{ 'fa-user': tool.owner.isUser, 'fa-map-marker-alt': tool.owner.isLocation }"
-                  class="fas fa-user"
+                  class="fas"
                 />
               </div>
               <div class="owner-name">

@@ -52,3 +52,20 @@ export const toolQuery = gql`
     }
   }
 `
+
+export const updateToolMutation = gql`
+  mutation updateTool($tool: UpdatedTool!) {
+    updateTool(updatedTool: $tool) {
+      id
+      status
+    }
+  }
+`
+
+export const createConfigurableItemMutation = gql`
+  mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
+    createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
+      id
+    }
+  }
+`

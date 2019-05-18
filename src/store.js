@@ -1,8 +1,10 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+import { defaultClient as apollo } from './apollo'
 
 import imageCompression from 'browser-image-compression'
-import gql from 'graphql-tag'
+import { updateToolMutation, createConfigurableItemMutation } from './utils/gql'
+import { showErrorMsg } from './utils/swal'
 
 Vue.use(Vuex)
 
@@ -52,14 +54,8 @@ export default new Vuex.Store({
   actions: {
     createNewConfigurableItemIfNecessary (store, configurableItem) {
       if (configurableItem.isNewConfigurableItem) {
-        return this.$apollo.mutate({
-          mutation: gql`
-            mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
-              createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
-                id
-              }
-            }
-          `,
+        return apollo.mutate({
+          mutation: createConfigurableItemMutation,
           variables: {
             newConfigurableItem: {
               type: configurableItem.type,
@@ -107,33 +103,52 @@ export default new Vuex.Store({
       })
     },
 
-    async createNewTool ({ dispatch }, tool) {
-      let brandRequest = dispatch('createNewConfigurableItemIfNecessary', tool.brand)
-      let typeRequest = dispatch('createNewConfigurableItemIfNecessary', tool.type)
-      let purchaseRequest = dispatch('createNewConfigurableItemIfNecessary', tool.purchased_from)
-      let photoRequest = dispatch('savePhotoIfNecessary', tool.image)
+    async updateTool ({ dispatch }, tool) {
+      try {
+        let brandRequest = dispatch('createNewConfigurableItemIfNecessary', tool.brand)
+        let typeRequest = dispatch('createNewConfigurableItemIfNecessary', tool.type)
+        let purchaseRequest = dispatch('createNewConfigurableItemIfNecessary', tool.purchased_from)
+        let photoRequest = dispatch('savePhotoIfNecessary', tool.image)
 
-      let [brandResponse, typeResponse, purchaseResponse, photoResponse] = await Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest])
+        let [brandResponse, typeResponse, purchaseResponse, photoResponse] = await Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest])
 
-      if (brandResponse) tool.brand.id = brandResponse.data.createConfigurableItem.id
-      if (typeResponse) tool.type.id = typeResponse.data.createConfigurableItem.id
-      if (purchaseResponse) tool.purchased_from.id = purchaseResponse.data.createConfigurableItem.id
-      if (photoResponse) tool.photo = photoResponse
+        if (brandResponse) tool.brand.id = brandResponse.data.createConfigurableItem.id
+        if (typeResponse) tool.type.id = typeResponse.data.createConfigurableItem.id
+        if (purchaseResponse) tool.purchased_from.id = purchaseResponse.data.createConfigurableItem.id
+        if (photoResponse) tool.photo = photoResponse
 
-      await this.$apollo
-        .mutate({
-          mutation: gql`
-                mutation updateTool($tool: UpdatedTool!) {
-                  updateTool(updatedTool: $tool) {
-                    id
-                  }
-                }
-              `,
-
+        await apollo.mutate({
+          mutation: updateToolMutation,
           variables: {
-            tool: this.editedTool.getState()
+            tool: tool.getState()
           }
         })
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+        showErrorMsg()
+      }
+    },
+
+    async saveStatusChange (store, { tool, newStatus }) {
+      // save current status in case request fails but set the tool status assuming it will succeed
+      let currentStatus = tool.status
+
+      try {
+        tool.status = newStatus
+
+        await apollo.mutate({
+          mutation: updateToolMutation,
+          variables: {
+            tool: tool.getState()
+          }
+        })
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+        tool.status = currentStatus
+        showErrorMsg()
+      }
     }
   }
 })

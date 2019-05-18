@@ -2,7 +2,7 @@ import User from './user'
 import Location from './location'
 
 export default class Tool {
-  id = ''
+  id
   year
   status
   model_number
@@ -10,6 +10,7 @@ export default class Tool {
   date_purchased
   price
   photo
+  image
   brand = {}
   type = {}
   purchased_from = {}

@@ -462,7 +462,7 @@ import AddPhoto from '../components/add-photo'
 import swal from 'sweetalert2'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
-import imageCompression from 'browser-image-compression'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import Tool from '../models/tool'
 import { showInvalidIDMsg, showSuccessMsg, showErrorMsg } from '../utils/swal'
 
@@ -515,7 +515,6 @@ export default {
       editedTool: null,
       reason: null,
       editState: false,
-      image: null,
       saving: false,
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear()}`
@@ -532,6 +531,9 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'transferState'
+    ]),
     statusOptions () {
       let statusOptions = ['AVAILABLE', 'IN USE', 'MAINTENANCE']
 
@@ -581,6 +583,15 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'createNewTool'
+    ]),
+
+    ...mapMutations([
+      'toggleToolSelection',
+      'updateTransferStatus'
+    ]),
+
     transitionToHistory () {
       this.$router.push({ name: 'historyDetail', params: { toolId: this.tool.id } })
     },
@@ -597,143 +608,146 @@ export default {
       this.editState = false
     },
 
-    toggleEditState () {
+    async toggleEditState () {
       if (this.editState) {
-        this.$validator.validate().then(result => {
-          if (result) {
-            this.saveTool()
-          }
-        })
+        let result = await this.$validator.validate()
+        if (result) {
+          this.saving = true
+          await this.createNewTool(this.editedTool)
+          this.tool.update(this.editedTool)
+          this.$apollo.queries.getAllConfigurableItem.refetch()
+          this.editState = false
+          this.saving = false
+        }
       } else {
         this.editedTool = new Tool(this.tool)
         this.editState = true
       }
     },
 
-    createNewConfigurableItem (configurableItem) {
-      return this.$apollo.mutate({
-        mutation: gql`
-          mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
-            createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
-              id
-            }
-          }
-        `,
-        variables: {
-          newConfigurableItem: {
-            type: configurableItem.type,
-            name: configurableItem.name,
-            sanctioned: true
-          }
-        }
-      })
-    },
+    // createNewConfigurableItem (configurableItem) {
+    //   return this.$apollo.mutate({
+    //     mutation: gql`
+    //       mutation newConfigurableItem($newConfigurableItem: NewConfigurableItem!) {
+    //         createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
+    //           id
+    //         }
+    //       }
+    //     `,
+    //     variables: {
+    //       newConfigurableItem: {
+    //         type: configurableItem.type,
+    //         name: configurableItem.name,
+    //         sanctioned: true
+    //       }
+    //     }
+    //   })
+    // },
 
     onImageChange (newImage) {
-      this.image = newImage
+      this.editedTool.image = newImage
     },
 
     onDateChange (newDate) {
       this.editedTool.jsDate = newDate
     },
 
-    saveTool () {
-      this.saving = true
-      let brandRequest =
-        this.editedTool.brand.isNewConfigurableItem
-          ? this.createNewConfigurableItem(this.editedTool.brand)
-          : null
-      let typeRequest =
-        this.editedTool.type.isNewConfigurableItem
-          ? this.createNewConfigurableItem(this.editedTool.type)
-          : null
-      let purchaseRequest =
-        this.editedTool.purchased_from.isNewConfigurableItem
-          ? this.createNewConfigurableItem(this.editedTool.purchased_from)
-          : null
-      let photoRequest = new Promise((resolve) => {
-        if (this.image) {
-          imageCompression(this.image, 1, 1920).then(compressedImage => {
-            let fd = new FormData()
-
-            let key = `tool_preview-${new Date().getTime()}`
-
-            fd.append('key', key)
-            fd.append('acl', 'public-read')
-            fd.append('Content-Type', compressedImage.type)
-            // TODO enable auth for photo upload
-            // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-            // fd.append('policy', 'YOUR POLICY')
-            // fd.append('signature', 'YOUR SIGNATURE')
-
-            fd.append('file', compressedImage)
-
-            var xhr = new XMLHttpRequest()
-
-            xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
-
-            xhr.onload = () => {
-              resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
-            }
-
-            xhr.send(fd)
-          })
-        } else {
-          resolve(null)
-        }
-      })
-
-      Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(
-        responses => {
-          let [brandResponse, typeResponse, purchaseResponse, photoResponse] = responses
-
-          if (brandResponse) {
-            this.editedTool.brand.id = brandResponse.data.createConfigurableItem.id
-          }
-
-          if (typeResponse) {
-            this.editedTool.type.id = typeResponse.data.createConfigurableItem.id
-          }
-
-          if (purchaseResponse) {
-            this.editedTool.purchased_from.id = purchaseResponse.data.createConfigurableItem.id
-          }
-
-          if (photoResponse) {
-            this.editedTool.photo = photoResponse
-          }
-
-          this.$apollo
-            .mutate({
-              mutation: gql`
-                mutation updateTool($tool: UpdatedTool!) {
-                  updateTool(updatedTool: $tool) {
-                    id
-                  }
-                }
-              `,
-
-              variables: {
-                tool: this.editedTool.getState()
-              }
-            })
-            .then(() => {
-              this.tool.update(this.editedTool)
-              this.$apollo.queries.getAllConfigurableItem.refetch()
-              this.editState = false
-            })
-        }
-      ).catch(() => {
-        showErrorMsg()
-      }).finally(() => {
-        this.saving = false
-      })
-    },
+    // saveTool () {
+    // let brandRequest =
+    //   this.editedTool.brand.isNewConfigurableItem
+    //     ? this.createNewConfigurableItem(this.editedTool.brand)
+    //     : null
+    // let typeRequest =
+    //   this.editedTool.type.isNewConfigurableItem
+    //     ? this.createNewConfigurableItem(this.editedTool.type)
+    //     : null
+    // let purchaseRequest =
+    //   this.editedTool.purchased_from.isNewConfigurableItem
+    //     ? this.createNewConfigurableItem(this.editedTool.purchased_from)
+    //     : null
+    // let photoRequest = new Promise((resolve) => {
+    //   if (this.image) {
+    //     imageCompression(this.image, 1, 1920).then(compressedImage => {
+    //       let fd = new FormData()
+    //
+    //       let key = `tool_preview-${new Date().getTime()}`
+    //
+    //       fd.append('key', key)
+    //       fd.append('acl', 'public-read')
+    //       fd.append('Content-Type', compressedImage.type)
+    //       // TODO enable auth for photo upload
+    //       // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+    //       // fd.append('policy', 'YOUR POLICY')
+    //       // fd.append('signature', 'YOUR SIGNATURE')
+    //
+    //       fd.append('file', compressedImage)
+    //
+    //       var xhr = new XMLHttpRequest()
+    //
+    //       xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+    //
+    //       xhr.onload = () => {
+    //         resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+    //       }
+    //
+    //       xhr.send(fd)
+    //     })
+    //   } else {
+    //     resolve(null)
+    //   }
+    // })
+    //
+    // Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(
+    //   responses => {
+    //     let [brandResponse, typeResponse, purchaseResponse, photoResponse] = responses
+    //
+    //     if (brandResponse) {
+    //       this.editedTool.brand.id = brandResponse.data.createConfigurableItem.id
+    //     }
+    //
+    //     if (typeResponse) {
+    //       this.editedTool.type.id = typeResponse.data.createConfigurableItem.id
+    //     }
+    //
+    //     if (purchaseResponse) {
+    //       this.editedTool.purchased_from.id = purchaseResponse.data.createConfigurableItem.id
+    //     }
+    //
+    //     if (photoResponse) {
+    //       this.editedTool.photo = photoResponse
+    //     }
+    //
+    //     this.$apollo
+    //       .mutate({
+    //         mutation: gql`
+    //           mutation updateTool($tool: UpdatedTool!) {
+    //             updateTool(updatedTool: $tool) {
+    //               id
+    //             }
+    //           }
+    //         `,
+    //
+    //         variables: {
+    //           tool: this.editedTool.getState()
+    //         }
+    //       })
+    //       .then(() => {
+    //         this.tool.update(this.editedTool)
+    //         this.$apollo.queries.getAllConfigurableItem.refetch()
+    //         this.editState = false
+    //       })
+    //   }
+    // ).catch(() => {
+    //   showErrorMsg()
+    // }).finally(() => {
+    //   this.saving = false
+    // })
+    // },
 
     toggleTransferStatus () {
-      this.$store.commit('toggleToolSelection', this.tool.id)
-      if (this.$store.state.transferState === 'INITIAL') {
-        this.$store.commit('updateTransferStatus', 'SELECTING')
+      this.toggleToolSelection(this.tool.id)
+      if (this.transferState === 'INITIAL') {
+        this.updateTransferStatus('SELECTING')
       }
       this.$router.push({ path: '/tools' })
     },

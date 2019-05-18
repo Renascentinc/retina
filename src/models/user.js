@@ -1,11 +1,11 @@
 export default class User {
-  id = ''
-  first_name = 'test'
-  last_name = 'user'
-  email = ''
-  phone_number = ''
-  role = ''
-  status = ''
+  id
+  first_name
+  last_name
+  email
+  phone_number
+  role
+  status
 
   get isUser () {
     return true

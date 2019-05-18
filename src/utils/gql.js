@@ -69,3 +69,9 @@ export const createConfigurableItemMutation = gql`
     }
   }
 `
+
+export const decomissionToolMutation = gql`mutation ($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
+  decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
+    id
+  }
+}`

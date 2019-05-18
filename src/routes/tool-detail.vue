@@ -422,23 +422,21 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-import { configurableItemQuery, toolQuery } from '../utils/gql'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import Fab from '../components/fab.vue'
 import ExtendedFab from '../components/extended-fab'
 import DatePicker from '../components/date-picker'
 import vSelect from '../components/select'
-import ConfigurableItems from '../utils/configurable-items.js'
 import ButtonDropdown from '../components/button-dropdown.vue'
 import NfcEncode from '../components/nfc-encode'
 import AddPhoto from '../components/add-photo'
 import LoadingOverlay from '../components/loading-overlay'
-import swal from 'sweetalert2'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
-import { mapActions, mapMutations, mapState } from 'vuex'
+import ConfigurableItems from '../utils/configurable-items.js'
+import { configurableItemQuery, toolQuery } from '../utils/gql'
+import { showInvalidIDMsg, showSuccessMsg } from '../utils/swal'
 import Tool from '../models/tool'
-import { showInvalidIDMsg, showSuccessMsg, showErrorMsg } from '../utils/swal'
 
 export default {
   name: 'ToolDetail',
@@ -560,7 +558,8 @@ export default {
   methods: {
     ...mapActions([
       'updateTool',
-      'saveStatusChange'
+      'saveStatusChange',
+      'decomissionTool'
     ]),
 
     ...mapMutations([
@@ -617,46 +616,14 @@ export default {
       this.transitionToTools()
     },
 
-    updateStatus (newStatus) {
-      if (newStatus === 'LOST OR STOLEN' || newStatus === 'BEYOND REPAIR') {
-        swal({
-          type: 'warning',
-          title: 'CONFIRM DECOMISSION',
-          text: `Are you sure you want to mark this tool as ${newStatus}? This action cannot be undone.`,
-          input: 'textarea',
-          inputPlaceholder: `Please Explain Why This Tool is Being Marked as ${newStatus}`,
-          reverseButtons: true,
-          showCancelButton: true,
-          cancelButtonText: 'CANCEL',
-          confirmButtonText: 'SUBMIT',
-          confirmButtonColor: '#404040',
-          inputValidator: (value) => !value && 'Decomission Reason is Required'
-        }).then(result => {
-          newStatus = newStatus.replace(/ /g, '_').toUpperCase()
+    async updateStatus (newStatus) {
+      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
-          if (result.value) {
-            this.$apollo.mutate({
-              mutation: gql`mutation ($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
-                decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
-                  id
-                }
-              }`,
-              variables: {
-                tool_id: this.tool.id,
-                decomissioned_status: newStatus,
-                decomission_reason: result.value
-              }
-            }).then(() => {
-              this.$store.commit('setToolSelection', this.tool.id, false)
-              showSuccessMsg()
-              this.$router.push({ path: '/tools' })
-            }).catch(() => {
-              showErrorMsg()
-            })
-          }
-        })
+      if (newStatus === 'LOST_OR_STOLEN' || newStatus === 'BEYOND_REPAIR') {
+        await this.decomissionTool({ tool: this.tool, newStatus })
+        showSuccessMsg()
+        this.transitionToTools()
       } else {
-        newStatus = newStatus.replace(/ /g, '_').toUpperCase()
         this.saveStatusChange({ tool: this.tool, newStatus })
       }
     }

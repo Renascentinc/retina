@@ -1,10 +1,10 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import { defaultClient as apollo } from './apollo'
-
 import imageCompression from 'browser-image-compression'
-import { updateToolMutation, createConfigurableItemMutation } from './utils/gql'
+import { updateToolMutation, createConfigurableItemMutation, decomissionToolMutation } from './utils/gql'
 import { showErrorMsg } from './utils/swal'
+import swal from 'sweetalert2'
 
 Vue.use(Vuex)
 
@@ -147,6 +147,42 @@ export default new Vuex.Store({
         // eslint-disable-next-line no-console
         console.error(error)
         tool.status = currentStatus
+        showErrorMsg()
+      }
+    },
+
+    async decomissionTool ({ commit }, { tool, newStatus }) {
+      let result = await swal({
+        type: 'warning',
+        title: 'CONFIRM DECOMISSION',
+        text: `Are you sure you want to mark this tool as ${newStatus}? This action cannot be undone.`,
+        input: 'textarea',
+        inputPlaceholder: `Please Explain Why This Tool is Being Marked as ${newStatus}`,
+        reverseButtons: true,
+        showCancelButton: true,
+        cancelButtonText: 'CANCEL',
+        confirmButtonText: 'SUBMIT',
+        confirmButtonColor: '#404040',
+        inputValidator: (value) => !value && 'Decomission Reason is Required'
+      })
+
+      if (!result.value) {
+        return
+      }
+
+      try {
+        await apollo.mutate({
+          mutation: decomissionToolMutation,
+          variables: {
+            tool_id: tool.id,
+            decomissioned_status: newStatus,
+            decomission_reason: result.value
+          }
+        })
+        commit('setToolSelection', tool.id, false)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
         showErrorMsg()
       }
     }

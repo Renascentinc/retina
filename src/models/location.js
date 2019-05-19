@@ -1,12 +1,12 @@
 export default class Location {
-  id = ''
-  type = ''
-  city = ''
-  state = ''
-  zip = ''
-  address_line_one = ''
-  address_line_two = ''
-  name = ''
+  id
+  type
+  city
+  state
+  zip
+  address_line_one
+  address_line_two
+  name
 
   get isLocation () {
     return true

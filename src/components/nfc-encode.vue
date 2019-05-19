@@ -31,7 +31,8 @@ export default {
   props: {
     toolId: {
       type: String,
-      required: true
+      required: false,
+      default: ''
     }
   },
 
@@ -87,6 +88,10 @@ export default {
     },
 
     _nfcCallback (tag) {
+      if (!this.toolId) {
+        return
+      }
+
       const record = [
         window.ndef.textRecord(`${this.toolId} - Property of Renascent, Inc. (http://renascentinc.com)`)
       ]

@@ -435,7 +435,7 @@ import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
 import ConfigurableItems from '../utils/configurable-items.js'
 import { configurableItemQuery, toolQuery } from '../utils/gql'
-import { showInvalidIDMsg, showSuccessMsg } from '../utils/swal'
+import { showInvalidIDMsg, showSuccessMsg } from '../utils/alerts'
 import Tool from '../models/tool'
 
 export default {

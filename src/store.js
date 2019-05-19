@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { defaultClient as apollo } from './apollo'
 import imageCompression from 'browser-image-compression'
 import { updateToolMutation, createConfigurableItemMutation, decomissionToolMutation } from './utils/gql'
-import { showErrorMsg } from './utils/swal'
+import { showErrorMsg } from './utils/alerts'
 import swal from 'sweetalert2'
 
 Vue.use(Vuex)
@@ -14,6 +14,7 @@ export default new Vuex.Store({
     transferState: 'INITIAL',
     showOnlySelectedTools: false
   },
+
   getters: {
     selectedTools (state) {
       let selectedTools = []
@@ -25,6 +26,7 @@ export default new Vuex.Store({
       return selectedTools
     }
   },
+
   mutations: {
     toggleToolSelection (state, id) {
       Vue.set(state.selectedToolsMap, id, !state.selectedToolsMap[id])

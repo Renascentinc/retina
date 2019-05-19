@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'ToolSearchResult',
 
@@ -70,6 +72,10 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'selectedToolsMap'
+    ]),
+
     id () {
       return `#${this.tool.id}`
     },
@@ -93,15 +99,15 @@ export default {
     },
 
     assignee () {
-      return this.tool.owner.type === 'USER' ? `${this.tool.owner.first_name} ${this.tool.owner.last_name}` : this.tool.owner.name
+      return this.tool.owner.isUser || this.tool.owner.type === 'USER' ? `${this.tool.owner.first_name} ${this.tool.owner.last_name}` : this.tool.owner.name
     },
 
     assigneeIcon () {
-      return this.tool.owner.type === 'USER' ? 'fa-user' : 'fa-map-marker-alt'
+      return this.tool.owner.isUser || this.tool.owner.type === 'USER' ? 'fa-user' : 'fa-map-marker-alt'
     },
 
     selected () {
-      return this.$store.state.selectedToolsMap[this.tool.id]
+      return this.selectedToolsMap[this.tool.id]
     }
   },
 

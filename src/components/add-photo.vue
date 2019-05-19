@@ -12,8 +12,7 @@
       <i
         v-if="!localImageUrl"
         class="fas fa-image no-image"
-      >
-      </i>
+      />
     </div>
 
     <div
@@ -61,8 +60,7 @@
         class="delete-photo-efab"
         icon-class="fa-times"
         button-text="REMOVE PHOTO"
-      >
-      </extended-fab>
+      />
     </div>
   </div>
 </template>
@@ -120,6 +118,10 @@ export default {
         this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImage(this.$refs.file.files[0])))
       }
     }
+  },
+
+  mounted () {
+    this.listenForPhotoCapture()
   },
 
   watch: {

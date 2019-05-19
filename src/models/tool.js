@@ -1,5 +1,21 @@
 import User from './user'
 import Location from './location'
+import Statuses from '../utils/statuses'
+
+const statusObjects = {
+  [Statuses.AVAILABLE]: {
+    name: 'Available',
+    id: Statuses.AVAILABLE
+  },
+  [Statuses.IN_USE]: {
+    name: 'In Use',
+    id: Statuses.IN_USE
+  },
+  [Statuses.MAINTENANCE]: {
+    name: 'Maintenance',
+    id: Statuses.MAINTENANCE
+  }
+}
 
 export default class Tool {
   id
@@ -11,10 +27,10 @@ export default class Tool {
   price
   photo
   image
-  brand = {}
-  type = {}
-  purchased_from = {}
-  owner = {}
+  brand
+  type
+  purchased_from
+  owner
 
   get formattedYear () {
     return this.year || '-'
@@ -67,6 +83,14 @@ export default class Tool {
     this.date_purchased = new Date(newPurchaseDate).toISOString()
   }
 
+  get statusObject () {
+    return statusObjects[this.status]
+  }
+
+  set statusObject (newStatusObject) {
+    this.status = newStatusObject.id
+  }
+
   set formattedPrice (newPrice) {
     this.price = (newPrice.slice(2) * 100).toFixed(2)
   }
@@ -80,7 +104,7 @@ export default class Tool {
       serial_number: this.serial_number,
       status: this.status,
       owner_id: this.owner.id,
-      purchased_from_id: this.purchased_from.id,
+      purchased_from_id: this.purchased_from && this.purchased_from.id,
       date_purchased: this.date_purchased,
       price: this.price,
       year: this.year,

@@ -29,7 +29,8 @@ export default {
   props: {
     date: {
       type: Date,
-      required: true
+      required: false,
+      default: null
     },
     onDateChange: {
       type: Function,

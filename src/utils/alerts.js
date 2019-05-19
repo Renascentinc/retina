@@ -10,11 +10,11 @@ export function showInvalidIDMsg () {
   })
 }
 
-export function showSuccessMsg () {
+export function showSuccessMsg (text = 'Operation Succeeded', title = 'Success') {
   swal({
     type: 'success',
-    title: 'Success',
-    text: 'Operation Succeeded',
+    title,
+    text,
     timer: 3000,
     showConfirmButton: false
   })

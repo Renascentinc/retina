@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import { defaultClient as apollo } from './apollo'
 import imageCompression from 'browser-image-compression'
-import { updateToolMutation, createConfigurableItemMutation, decomissionToolMutation } from './utils/gql'
+import { updateToolMutation, createConfigurableItemMutation, decomissionToolMutation, createNewToolMutation } from './utils/gql'
 import { showErrorMsg } from './utils/alerts'
 import swal from 'sweetalert2'
 
@@ -54,70 +54,72 @@ export default new Vuex.Store({
   },
 
   actions: {
-    createNewConfigurableItemIfNecessary (store, configurableItem) {
-      if (configurableItem.isNewConfigurableItem) {
-        return apollo.mutate({
-          mutation: createConfigurableItemMutation,
-          variables: {
-            newConfigurableItem: {
-              type: configurableItem.type,
-              name: configurableItem.name,
-              sanctioned: true
-            }
-          }
-        })
-      }
+    async saveSpecialToolMetadata ({ dispatch }, tool) {
+      let brandResponse = await dispatch('createNewConfigurableItem', tool.brand)
+      let typeResponse = await dispatch('createNewConfigurableItem', tool.type)
+      let purchaseResponse = await dispatch('createNewConfigurableItem', tool.purchased_from)
+      let photoResponse = await dispatch('savePhoto', tool.image)
 
-      return null
+      if (brandResponse) tool.brand.id = brandResponse.data.createConfigurableItem.id
+      if (typeResponse) tool.type.id = typeResponse.data.createConfigurableItem.id
+      if (purchaseResponse) tool.purchased_from.id = purchaseResponse.data.createConfigurableItem.id
+      if (photoResponse) tool.photo = photoResponse
     },
 
-    savePhotoIfNecessary (store, image) {
-      return new Promise((resolve) => {
-        if (image) {
-          imageCompression(image, 1, 1920).then(compressedImage => {
-            let fd = new FormData()
+    async createNewConfigurableItem (store, configurableItem) {
+      if (!configurableItem || !configurableItem.isNewConfigurableItem) {
+        return
+      }
 
-            let key = `tool_preview-${new Date().getTime()}`
-
-            fd.append('key', key)
-            fd.append('acl', 'public-read')
-            fd.append('Content-Type', compressedImage.type)
-            // TODO enable auth for photo upload
-            // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-            // fd.append('policy', 'YOUR POLICY')
-            // fd.append('signature', 'YOUR SIGNATURE')
-
-            fd.append('file', compressedImage)
-
-            var xhr = new XMLHttpRequest()
-
-            xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
-
-            xhr.onload = () => {
-              resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
-            }
-
-            xhr.send(fd)
-          })
-        } else {
-          resolve(null)
+      await apollo.mutate({
+        mutation: createConfigurableItemMutation,
+        variables: {
+          newConfigurableItem: {
+            type: configurableItem.type,
+            name: configurableItem.name,
+            sanctioned: true
+          }
         }
+      })
+    },
+
+    savePhoto (store, image) {
+      if (!image) {
+        return
+      }
+
+      return new Promise((resolve) => {
+        imageCompression(image, 1, 1920).then(compressedImage => {
+          let fd = new FormData()
+
+          let key = `tool_preview-${new Date().getTime()}`
+
+          fd.append('key', key)
+          fd.append('acl', 'public-read')
+          fd.append('Content-Type', compressedImage.type)
+          // TODO enable auth for photo upload
+          // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
+          // fd.append('policy', 'YOUR POLICY')
+          // fd.append('signature', 'YOUR SIGNATURE')
+
+          fd.append('file', compressedImage)
+
+          var xhr = new XMLHttpRequest()
+
+          xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
+
+          xhr.onload = () => {
+            resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
+          }
+
+          xhr.send(fd)
+        })
       })
     },
 
     async updateTool ({ dispatch }, tool) {
       try {
-        let brandRequest = dispatch('createNewConfigurableItemIfNecessary', tool.brand)
-        let typeRequest = dispatch('createNewConfigurableItemIfNecessary', tool.type)
-        let purchaseRequest = dispatch('createNewConfigurableItemIfNecessary', tool.purchased_from)
-        let photoRequest = dispatch('savePhotoIfNecessary', tool.image)
-
-        let [brandResponse, typeResponse, purchaseResponse, photoResponse] = await Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest])
-
-        if (brandResponse) tool.brand.id = brandResponse.data.createConfigurableItem.id
-        if (typeResponse) tool.type.id = typeResponse.data.createConfigurableItem.id
-        if (purchaseResponse) tool.purchased_from.id = purchaseResponse.data.createConfigurableItem.id
-        if (photoResponse) tool.photo = photoResponse
+        await dispatch('saveSpecialToolMetadata', tool)
 
         await apollo.mutate({
           mutation: updateToolMutation,
@@ -125,6 +127,25 @@ export default new Vuex.Store({
             tool: tool.getState()
           }
         })
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+        showErrorMsg()
+      }
+    },
+
+    async createNewTool ({ dispatch }, tool) {
+      try {
+        await dispatch('saveSpecialToolMetadata', tool)
+
+        let response = await apollo.mutate({
+          mutation: createNewToolMutation,
+          variables: {
+            newTool: tool.getState()
+          }
+        })
+
+        return response
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error)

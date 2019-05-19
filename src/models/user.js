@@ -11,6 +11,10 @@ export default class User {
     return true
   }
 
+  get full_name () {
+    return `${this.first_name} ${this.last_name}`
+  }
+
   startPhoneCall () {
     window.location.href = `tel:${this.phone_number}`
   }

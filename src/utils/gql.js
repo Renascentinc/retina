@@ -75,3 +75,53 @@ export const decomissionToolMutation = gql`mutation ($tool_id: ID!, $decomission
     id
   }
 }`
+
+export const userQuery = gql`query {
+  getAllUser {
+    id
+    first_name
+    last_name
+    role
+  }
+}`
+
+export const createNewToolMutation = gql`mutation newTool($newTool: NewTool!) {
+  createTool(newTool: $newTool) {
+    id
+    brand {
+      id
+      name
+    }
+    type {
+      id
+      name
+    }
+    year
+    status
+    model_number
+    serial_number
+    purchased_from {
+      id
+      name
+    }
+    date_purchased
+    price
+    photo
+
+    owner {
+      ... on Location {
+        id
+        name
+        type
+      }
+      ... on User {
+        id
+        first_name
+        last_name
+        email
+        phone_number
+        type
+      }
+    }
+  }
+}`

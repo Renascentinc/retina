@@ -26,7 +26,7 @@
             class="selected-tag"
           >
             <slot
-              v-bind="(typeof option === 'object')?option:{[label]: option}"
+              v-bind="(typeof option === 'object') ? option:{ [label]: option }"
               name="selected-option"
             >
               {{ getOptionLabel(option) }}
@@ -296,13 +296,9 @@ export default {
         }
 
         if (typeof option === 'object') {
-          if (!option.hasOwnProperty(this.label)) {
-            return window.console.warn(
-              `[vue-select warn]: Label key "option.${this.label}" does not` +
-                ` exist in options object ${JSON.stringify(option)}.\n` +
-                'http://sagalbot.github.io/vue-select/#ex-labels'
-            )
-          }
+          // if (!option.hasOwnProperty(this.label)) {
+          //   return
+          // }
           return option[this.label]
         }
         return option

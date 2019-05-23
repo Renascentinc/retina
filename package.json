@@ -5,15 +5,17 @@
   "description": "The Renascent inc. Asset Tracking Application",
   "author": "Renascent inc.",
   "scripts": {
-    "generate-icons": "vsvg -s ./svg-icons -t ./src/assets/icons/svg",
-    "start": "vue-cli-service serve --port=4200 --open",
-    "test": "vue-cli-service lint",
     "build": "vue-cli-service build --mode=development",
-    "build-prod": "vue-cli-service build",
+    "test": "yarn lint && yarn test:unit",
+    "android": "yarn build-cordova && cordova prepare && cordova run android",
     "build-cordova": "VUE_APP_PLATFORM=cordova vue-cli-service build --mode=development",
     "build-cordova-prod": "VUE_APP_PLATFORM=cordova vue-cli-service build",
-    "android": "yarn build-cordova && cordova prepare && cordova run android",
-    "ios": "yarn build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios"
+    "build-prod": "vue-cli-service build",
+    "generate-icons": "vsvg -s ./svg-icons -t ./src/assets/icons/svg",
+    "ios": "yarn build-cordova && cordova prepare && ./scripts/setup-ios-splash.sh && cordova run ios",
+    "start": "vue-cli-service serve --port=4200 --open",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@johmun/vue-tags-input": "^1.5.5",
@@ -57,14 +59,19 @@
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
     "@vue/cli-plugin-pwa": "^3.5.0",
+    "@vue/cli-plugin-unit-jest": "^3.7.0",
     "@vue/cli-service": "^3.5.0",
     "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "fibers": "^3.1.1",
     "sass": "^1.17.2",
     "sass-loader": "^7.1.0",
+    "sinon": "^7.3.2",
     "vue-template-compiler": "^2.6.9"
   },
   "postcss": {

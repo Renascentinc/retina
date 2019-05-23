@@ -11,8 +11,7 @@
           icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
           button-text="BACK"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="canEdit"
@@ -20,8 +19,7 @@
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :disabled="changingRole"
           :button-text="editState ? 'SAVE CHANGES' : 'EDIT USER'"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="editState"
@@ -29,8 +27,7 @@
           :disabled="changingRole"
           icon-class="fa-times"
           button-text="CANCEL"
-        >
-        </extended-fab>
+        />
 
         <button-dropdown
           v-if="isAdmin"
@@ -39,8 +36,7 @@
           :flag="toggleChangingRole"
           :disabled="editState"
           button-text="CHANGE ROLE"
-        >
-        </button-dropdown>
+        />
       </div>
       <div class="header-cards-container">
         <div class="header">
@@ -49,8 +45,7 @@
             id="backarrow"
             class="fas fa-arrow-left"
             to="/users/"
-          >
-          </router-link>
+          />
 
           <span id="userid">
             #{{ getUser.id }}
@@ -112,8 +107,7 @@
               :on-click="updateRole"
               :options="roles"
               button-text="CHANGE ROLE"
-            >
-            </button-dropdown>
+            />
           </div>
         </div>
         <div class="cards">
@@ -140,8 +134,7 @@
                     :on-click="phoneNumber ? phoneCall : () => 0"
                     :active="!phoneNumber"
                     icon-class="fa-phone"
-                  >
-                  </fab>
+                  />
 
                   <button
                     v-if="!editState"
@@ -168,8 +161,7 @@
                     :active="!email"
                     icon-class="fa-envelope"
                     type="string"
-                  >
-                  </fab>
+                  />
 
                   <button
                     v-if="!editState"
@@ -216,16 +208,14 @@
       :on-click="cancelEdit"
       icon-class="fa-times"
       class="cancel"
-    >
-    </fab>
+    />
 
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit"
-    >
-    </fab>
+    />
   </div>
 </template>
 

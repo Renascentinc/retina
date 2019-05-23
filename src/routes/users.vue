@@ -14,8 +14,7 @@
           class="add-user-fab"
           icon-class="fa-plus"
           button-text="ADD USER"
-        >
-        </extended-fab>
+        />
       </div>
       <div class="scroll-container">
         <add-button
@@ -23,18 +22,14 @@
           :key="0"
           :on-click="transitionToAddUser"
           text="USER"
-        >
-        </add-button>
+        />
 
         <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchUser.loading"
             class="loading-container"
           >
-            <div class="half-circle-spinner">
-              <div class="circle circle-1"></div>
-              <div class="circle circle-2"></div>
-            </div>
+            <loading-spinner/>
           </div>
         </transition>
 
@@ -73,11 +68,13 @@ import gql from 'graphql-tag'
 import Roles from '../utils/roles'
 import ExtendedFab from '../components/extended-fab'
 import AddButton from '../components/add-button'
+import LoadingSpinner from '../components/loading-spinner'
 
 export default {
   name: 'Users',
 
   components: {
+    LoadingSpinner,
     UserSearchInput,
     UserSearchResult,
     ExtendedFab,

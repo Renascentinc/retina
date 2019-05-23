@@ -1,27 +1,16 @@
 <template>
   <div class="page tools-page">
+    <loading-overlay :active="transferInProgress"/>
+
     <div class="search-bar">
       <tool-search-input
         :clear-fuzzy-filter="clearFuzzyFilter"
         :tags="tags"
         :update-tags="updateFilters"
         :disable-user-search="isNonAdminTransfer"
-      >
-      </tool-search-input>
-      <nfc-scan :on-scan="onScan"></nfc-scan>
+      />
+      <nfc-scan :on-scan="onScan"/>
     </div>
-
-    <transition name="fade">
-      <div
-        v-if="transferInProgress"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
 
     <extended-fab
       v-if="$mq === 'mobile' && currentState === states.INITIAL"
@@ -29,8 +18,8 @@
       class="transfer-btn"
       icon-class="fa-exchange-alt"
       button-text="TRANSFER"
-    >
-    </extended-fab>
+    />
+
     <div class="menu-container">
       <div
         class="action-sidebar"
@@ -42,8 +31,7 @@
           class="transfer-btn"
           icon-class="fa-exchange-alt"
           button-text="TRANSFER"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="currentState === states.SELECTING"
@@ -51,8 +39,7 @@
           class="cancel-fab-btn"
           icon-class="fa-times"
           button-text="CANCEL"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="currentState === states.SELECTING"
@@ -60,8 +47,7 @@
           :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
           :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
           class="view-fab-btn"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="currentState === states.SELECTING"
@@ -71,8 +57,7 @@
           class="view-fab-btn next-btn"
           icon-class="fa-arrow-right"
           button-text="NEXT"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="currentState === states.INITIAL"
@@ -80,8 +65,7 @@
           class="add-btn"
           icon-class="fa-plus"
           button-text="ADD TOOL"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="currentState === states.FINALIZING"
@@ -89,8 +73,7 @@
           class="back-efab"
           icon-class="fa-arrow-left"
           button-text="BACK"
-        >
-        </extended-fab>
+        />
 
         <v-select
           v-if="currentState === states.FINALIZING"
@@ -98,8 +81,7 @@
           :options="transferTargets"
           :filterable="false"
           class="dark-input"
-        >
-        </v-select>
+        />
 
         <extended-fab
           v-if="currentState === states.FINALIZING"
@@ -108,8 +90,7 @@
           class="finish-transfer"
           icon-class="fa-arrow-right"
           button-text="FINISH"
-        >
-        </extended-fab>
+        />
       </div>
 
       <div
@@ -124,18 +105,14 @@
           :key="0"
           :on-click="transitionToAdd"
           text="TOOL"
-        >
-        </add-button>
+        />
 
         <transition name="list-loading">
           <div
             v-if="$apollo.queries.searchTool.loading"
             class="loading-container"
           >
-            <div class="half-circle-spinner">
-              <div class="circle circle-1"></div>
-              <div class="circle circle-2"></div>
-            </div>
+            <loading-spinner/>
           </div>
         </transition>
 
@@ -160,8 +137,7 @@
             :tool="tool"
             :on-select="transitionToToolInfo"
             :show-select="currentState !== states.INITIAL"
-          >
-          </tool-search-result>
+          />
         </transition-group>
 
         <transition name="list-loading">
@@ -169,10 +145,7 @@
             v-if="$apollo.queries.searchTool.loading && paginationLoading"
             class="loading-container"
           >
-            <div class="half-circle-spinner">
-              <div class="circle circle-1"></div>
-              <div class="circle circle-2"></div>
-            </div>
+            <loading-spinner/>
           </div>
         </transition>
       </div>
@@ -237,8 +210,7 @@
             :options="transferTargets"
             :searchable="false"
             class="dark-input"
-          >
-          </v-select>
+          />
         </div>
 
         <div class="finalize-row finalize-footer">
@@ -248,8 +220,7 @@
             class="back-efab"
             icon-class="fa-arrow-left"
             button-text="BACK"
-          >
-          </extended-fab>
+          />
 
           <extended-fab
             :on-click="finalizeTransfer"
@@ -257,8 +228,7 @@
             class="finish-transfer"
             icon-class="fa-arrow-right"
             button-text="FINISH"
-          >
-          </extended-fab>
+          />
         </div>
       </div>
     </transition>
@@ -277,11 +247,15 @@ import gql from 'graphql-tag'
 import Roles from '../utils/roles'
 import Platforms from '../utils/platforms'
 import nfcMixin from '../mixins/nfc'
+import LoadingOverlay from '../components/loading-overlay'
+import LoadingSpinner from '../components/loading-spinner'
 
 export default {
   name: 'Tools',
 
   components: {
+    LoadingOverlay,
+    LoadingSpinner,
     ToolSearchInput,
     ToolSearchResult,
     ExtendedFab,

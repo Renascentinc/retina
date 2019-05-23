@@ -46,8 +46,7 @@
         :disabled="!password || !confirmPassword"
         icon-class=""
         button-text="RESET"
-      >
-      </extended-fab>
+      />
     </div>
   </div>
 </template>

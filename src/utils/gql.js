@@ -70,6 +70,17 @@ export const createConfigurableItemMutation = gql`
   }
 `
 
+export const updateConfigurableItemMutation = gql`
+  mutation updateConfigurableItem($item: UpdatedConfigurableItem!) {
+    updateConfigurableItem(updatedConfigurableItem: $item) {
+      id
+      type
+      name
+      sanctioned
+    }
+  }
+`
+
 export const decomissionToolMutation = gql`mutation ($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
   decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
     id
@@ -125,3 +136,40 @@ export const createNewToolMutation = gql`mutation newTool($newTool: NewTool!) {
     }
   }
 }`
+
+export const deleteConfigurableItemMutation = gql`
+  mutation deleteConfigurableItem($id: ID!) {
+    deleteConfigurableItem(configurable_item_id: $id) {
+      toolsWithConfigurableItem {
+        id,
+        type {
+          id
+        },
+        brand {
+          id
+        },
+        model_number,
+        serial_number,
+        status,
+        owner {
+          ... on Location {
+            id
+          }
+          ... on User {
+            id
+          }
+        },
+        purchased_from {
+          id
+        },
+        date_purchased,
+        photo,
+        price,
+        year
+      }
+      deletedConfigurableItem {
+        id
+      }
+    }
+  }
+`

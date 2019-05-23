@@ -6,28 +6,27 @@
     <div
       class="element-container"
     >
-      <i
+      <button
         v-if="!editing"
         class="fas fa-pen edit-icon"
         @click="startEditing"
-      >
-      </i>
-      <i
+      />
+      <button
         v-if="editing"
+        :disabled="!changedName"
+        :class="{ 'disabled': !changedName }"
         class="fas fa-save save-icon"
         @click="save"
-      >
-      </i>
+      />
       <input
         v-if="editing"
         v-model="changedName"
       />
-      <i
+      <button
         v-if="editing"
         class="fas fa-times cancel-icon"
         @click="cancelEdit"
-      >
-      </i>
+      />
       <div
         v-if="!editing"
         class="main-container"
@@ -177,6 +176,10 @@ export default {
       .save-icon, .cancel-icon {
         color: $renascent-red;
         font-size: 30px;
+
+        &.disabled {
+          color: $disabled-gray;
+        }
       }
     }
 

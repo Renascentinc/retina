@@ -20,11 +20,21 @@ export function showSuccessMsg (text = 'Operation Succeeded', title = 'Success')
   })
 }
 
-export function showErrorMsg () {
+export function showErrorMsg (text = 'Operation Failed. Please Try Again or Contact Support', title = 'ERROR') {
   swal({
     type: 'error',
-    title: 'ERROR',
-    text: 'Operation Failed. Please Try Again or Contact Support',
+    title,
+    text,
+    timer: 3000,
+    showConfirmButton: false
+  })
+}
+
+export function showWarningMessage (text = 'Operation threw a warning', title = 'WARNING') {
+  swal({
+    type: 'warning',
+    title,
+    text,
     timer: 3000,
     showConfirmButton: false
   })

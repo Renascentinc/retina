@@ -12,18 +12,19 @@
       v-if="creating"
       class="input-group"
     >
-      <i
+      <button
         class="fas fa-save"
+        :disabled="!newItem"
         @click="save"
-      ></i>
+      />
       <input
-        v-model="newBrand"
+        v-model="newItem"
         :placeholder="`Enter new ${text.toLowerCase()}`"
       />
-      <i
+      <button
         class="fas fa-times"
         @click="cancelCreating"
-      ></i>
+      />
     </div>
   </div>
 </template>
@@ -46,15 +47,15 @@ export default {
   data () {
     return {
       creating: false,
-      newBrand: ''
+      newItem: ''
     }
   },
 
   methods: {
     save () {
       this.creating = false
-      this.$props.onSave(this.newBrand)
-      this.newBrand = ''
+      this.$props.onSave(this.newItem)
+      this.newItem = ''
     },
 
     startCreating () {
@@ -62,7 +63,7 @@ export default {
     },
 
     cancelCreating () {
-      this.newBrand = ''
+      this.newItem = ''
       this.creating = false
     }
   }

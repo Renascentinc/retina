@@ -6,7 +6,7 @@ import { setContext } from 'apollo-link-context'
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
 import { onError } from 'apollo-link-error'
 import ApiStatusCodes from './utils/api-status-codes'
-import swal from 'sweetalert2'
+import { showErrorMsg } from './utils/alerts'
 import router from './router'
 
 Vue.use(VueApollo)
@@ -53,13 +53,7 @@ const errorLink = onError(({ graphQLErrors = [] }) => {
   graphQLErrors.map(({ extensions: { code } }) => {
     if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
       window.localStorage.removeItem('token')
-      swal({
-        type: 'error',
-        title: 'SESSION EXPIRED',
-        text: 'Your Session Has Expired. Please Log In Again',
-        timer: 3000,
-        showConfirmButton: false
-      })
+      showErrorMsg('Your Session Has Expired. Please Log In Again', 'SESSION EXPIRED')
       router.push({ path: '/login' })
     }
   })

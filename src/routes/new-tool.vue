@@ -350,7 +350,7 @@ import ConfigurableItems from '../utils/configurable-items'
 import Statuses from '../utils/statuses'
 import NfcEncode from '../components/nfc-encode'
 import AddPhoto from '../components/add-photo'
-import { configurableItemQuery, userQuery } from '../utils/gql'
+import { configurableItemQuery, usersQuery } from '../utils/gql'
 import Tool from '../models/tool'
 import User from '../models/user'
 import LoadingOverlay from '../components/loading-overlay'
@@ -374,7 +374,7 @@ export default {
 
   apollo: {
     getAllUser: {
-      query: userQuery,
+      query: usersQuery,
       fetchPolicy: 'network-only'
     },
 

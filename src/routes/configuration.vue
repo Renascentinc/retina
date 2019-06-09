@@ -41,7 +41,7 @@ import swal from 'sweetalert2'
 import {
   showErrorMsg,
   showSuccessMsg,
-  showWarningMessage
+  showWarningMsg
 } from '../utils/alerts'
 import {
   configurableItemQuery,
@@ -92,7 +92,7 @@ export default {
 
   methods: {
     showInvalidItemMsg () {
-      showWarningMessage('You cannot create a duplicate item', 'INVALID ITEM')
+      showWarningMsg('You cannot create a duplicate item', 'INVALID ITEM')
     },
 
     incrementTab () {

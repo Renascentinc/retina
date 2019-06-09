@@ -57,11 +57,7 @@ export default class Tool {
   }
 
   get formattedId () {
-    if (this.id) {
-      return `#${this.id}`
-    }
-
-    return ''
+    return this.id ? `#${this.id}` : ''
   }
 
   get statusClass () {

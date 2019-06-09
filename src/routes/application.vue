@@ -129,7 +129,6 @@
 <script>
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
-import authenticatedRouteMixin from '../mixins/authenticatedRoute'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
 import swal from 'sweetalert2'
@@ -141,7 +140,7 @@ export default {
     Avatar
   },
 
-  mixins: [ authenticatedRouteMixin, nfcMixin ],
+  mixins: [ nfcMixin ],
 
   data () {
     return {
@@ -309,6 +308,10 @@ export default {
         })
       })
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    window.localStorage.getItem('token') ? next() : next('/login')
   }
 }
 </script>

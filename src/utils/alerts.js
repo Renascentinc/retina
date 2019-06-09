@@ -30,7 +30,7 @@ export function showErrorMsg (text = 'Operation Failed. Please Try Again or Cont
   })
 }
 
-export function showWarningMessage (text = 'Operation threw a warning', title = 'WARNING') {
+export function showWarningMsg (text = 'Operation threw a warning', title = 'WARNING') {
   swal({
     type: 'warning',
     title,

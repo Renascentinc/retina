@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "8"
+  - "10"
 
 sudo: false
 
@@ -13,7 +13,7 @@ install:
   - yarn --pure-lockfile
 
 before_deploy:
-  - if [ "$TRAVIS_BRANCH" = master ]; then yarn build-production; else yarn build; fi
+  - if [ "$TRAVIS_BRANCH" = master ]; then yarn build-prod; else yarn build; fi
 
 deploy:
   - provider: s3

@@ -243,12 +243,20 @@ import ExtendedFab from '../components/extended-fab'
 import NfcScan from '../components/nfc-scan'
 import AddButton from '../components/add-button'
 import vSelect from '../components/select'
-import gql from 'graphql-tag'
 import Roles from '../utils/roles'
 import Platforms from '../utils/platforms'
 import nfcMixin from '../mixins/nfc'
 import LoadingOverlay from '../components/loading-overlay'
 import LoadingSpinner from '../components/loading-spinner'
+import {
+  locationsQuery,
+  usersQuery,
+  multiToolQuery,
+  searchToolsQuery,
+  toolTransferMutation
+} from '../utils/gql'
+
+import { showSuccessMsg, showErrorMsg } from '../utils/alerts'
 
 export default {
   name: 'Tools',
@@ -268,58 +276,17 @@ export default {
 
   apollo: {
     getAllLocation: {
-      query: gql`query {
-        getAllLocation {
-          id
-          name
-          type
-        }
-      }`,
+      query: locationsQuery,
       fetchPolicy: 'network-only'
     },
 
     getAllUser: {
-      query: gql`query {
-        getAllUser {
-          id
-          first_name
-          last_name
-          role
-          type
-          status
-        }
-      }`,
+      query: usersQuery,
       fetchPolicy: 'network-only'
     },
 
     getMultipleTool: {
-      query: gql`query selectedTools($tool_ids: [ID!]!) {
-        getMultipleTool(tool_ids: $tool_ids) {
-          id
-          type {
-            id
-            name
-          }
-          brand {
-            id
-            name
-          }
-          status
-          owner {
-            ... on Location {
-               id
-               name
-               type
-            }
-            ... on User {
-               id
-               first_name
-               last_name
-               type
-            }
-          }
-        }
-      }`,
+      query: multiToolQuery,
       variables () {
         return {
           tool_ids: this.$store.getters.selectedTools
@@ -329,33 +296,7 @@ export default {
     },
 
     searchTool: {
-      query: gql`query tools($query: String, $toolFilter: ToolFilter, $pagingParameters: PagingParameters) {
-        searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
-          id
-          type {
-            id
-            name
-          }
-          brand {
-            id
-            name
-          }
-          status
-          owner {
-            ... on Location {
-               id
-               name
-               type
-            }
-            ... on User {
-               id
-               first_name
-               last_name
-               type
-            }
-          }
-        }
-      }`,
+      query: searchToolsQuery,
 
       variables () {
         let options = {
@@ -365,13 +306,8 @@ export default {
           }
         }
 
-        if (this.searchString) {
-          options.query = this.searchString
-        }
-
-        if (this.filters) {
-          options.toolFilter = this.filters
-        }
+        if (this.searchString) options.query = this.searchString
+        if (this.filters) options.toolFilter = this.filters
 
         if (this.isNonAdminTransfer) {
           if (!options.toolFilter) {
@@ -500,26 +436,6 @@ export default {
   },
 
   methods: {
-    showTransferSuccessMsg () {
-      swal({
-        type: 'success',
-        title: 'TRANSFER SUCCESS',
-        text: 'Successfully Transferred Tools',
-        timer: 1500,
-        showConfirmButton: false
-      })
-    },
-
-    showTransferErrorMsg () {
-      swal({
-        type: 'error',
-        title: 'TRANSFER ERROR',
-        text: 'Error Transferring Tools. Please Try Again or Contact Support',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
-
     clearSearchFilters () {
       this.filters = null
       this.tags = []
@@ -590,7 +506,7 @@ export default {
       this.resetScrollPosition()
     },
 
-    loadMore () {
+    async loadMore () {
       if (this.hasLoadedLastPage || !this.tools.length || this.$apollo.queries.searchTool.loading || this.showOnlySelectedTools) {
         return
       }
@@ -604,15 +520,10 @@ export default {
         }
       }
 
-      if (this.searchString) {
-        options.query = this.searchString
-      }
+      if (this.searchString) options.query = this.searchString
+      if (this.filters) options.toolFilter = this.filters
 
-      if (this.filters) {
-        options.toolFilter = this.filters
-      }
-
-      this.$apollo.queries.searchTool.fetchMore({
+      await this.$apollo.queries.searchTool.fetchMore({
         variables: options,
 
         updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -621,60 +532,36 @@ export default {
             searchTool: [...previousResult.searchTool, ...fetchMoreResult.searchTool]
           }
         }
-      }).then(() => {
-        this.paginationLoading = false
       })
+
+      this.paginationLoading = false
     },
 
-    finalizeTransfer () {
+    async finalizeTransfer () {
       this.transferInProgress = true
-      this.$apollo.mutate({
-        mutation: gql`mutation transferTools($tool_id_list: [ID!]!, $to_owner_id: ID!) {
-          transferMultipleTool (tool_id_list: $tool_id_list, to_owner_id: $to_owner_id) {
-            id
-            type {
-              id
-              name
-            }
-            brand {
-              id
-              name
-            }
-            status
-            owner {
-              ... on Location {
-                 id
-                 name
-                 type
-              }
-              ... on User {
-                 id
-                 first_name
-                 last_name
-                 type
-              }
-            }
+      try {
+        let { data: { transferMultipleTool } } = await this.$apollo.mutate({
+          mutation: toolTransferMutation,
+          variables: {
+            tool_id_list: this.$store.getters.selectedTools,
+            to_owner_id: this.transferTarget.id
           }
-        }`,
-        variables: {
-          tool_id_list: this.$store.getters.selectedTools,
-          to_owner_id: this.transferTarget.id
-        }
-      }).then(response => {
+        })
+
         this.resetScrollPosition()
-        response.data.transferMultipleTool.forEach(tool => {
+        transferMultipleTool.forEach(tool => {
           let idx = this.searchTool.findIndex(entry => entry.id === tool.id)
           this.searchTool[idx] = tool
         })
         this.$store.commit('resetSelectedTools')
         this.$store.commit('setShowOnlySelectedTools', false)
         this.$store.commit('updateTransferStatus', this.states.INITIAL)
-        this.showTransferSuccessMsg()
-      }).catch(() => {
-        this.showTransferErrorMsg()
-      }).finally(() => {
-        this.transferInProgress = false
-      })
+        showSuccessMsg('Transfer Successful')
+      } catch {
+        showErrorMsg('Error Transferring Tools. Please Try Again or Contact Support')
+      }
+
+      this.transferInProgress = false
     },
 
     proceedToFinalize () {

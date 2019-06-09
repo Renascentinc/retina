@@ -1,15 +1,7 @@
 <template>
   <div class="page landing-page">
-    <img
-      class="logo"
-      src="../assets/icons/web/red_transparent_512x512.png"
-    >
-
-    <span
-      class="retina-name"
-    >
-      RETINA
-    </span>
+    <img class="logo" src="../assets/icons/web/red_transparent_512x512.png">
+    <span class="retina-name"> RETINA </span>
   </div>
 </template>
 

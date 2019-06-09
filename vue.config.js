@@ -1,4 +1,4 @@
 module.exports = {
-  publicPath: process.env.CORDOVA === 'true' ? './' : '/',
-  outputDir: process.env.CORDOVA === 'true' ? 'www' : 'dist'
+  publicPath: process.env.VUE_APP_PLATFORM === 'cordova' ? './' : '/',
+  outputDir: process.env.VUE_APP_PLATFORM === 'cordova' ? 'www' : 'dist'
 }

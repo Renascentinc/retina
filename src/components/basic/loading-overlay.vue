@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import LoadingSpinner from '../components/loading-spinner'
+import LoadingSpinner from '@/components/basic/loading-spinner'
 
 export default {
   name: 'LoadingOverlay',
@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+
 
 .loading-overlay {
   background-color: black;

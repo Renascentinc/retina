@@ -24,14 +24,12 @@
           text="USER"
         />
 
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchUser.loading"
-            class="loading-container"
-          >
-            <loading-spinner/>
-          </div>
-        </transition>
+        <div
+          class="list-loading-container loading-container"
+          :class="{ 'active': $apollo.queries.searchUser.loading }"
+        >
+          <loading-spinner/>
+        </div>
 
         <transition name="fade">
           <div
@@ -62,13 +60,13 @@
 </template>
 
 <script>
-import UserSearchInput from '../components/user-search-input'
-import UserSearchResult from '../components/user-search-result'
+import UserSearchInput from '@/components/user-search-input'
+import UserSearchResult from '@/components/user-search-result'
 import gql from 'graphql-tag'
-import Roles from '../utils/roles'
-import ExtendedFab from '../components/extended-fab'
-import AddButton from '../components/add-button'
-import LoadingSpinner from '../components/loading-spinner'
+import Roles from '@/utils/roles'
+import ExtendedFab from '@/components/basic/extended-fab'
+import AddButton from '@/components/add-button'
+import LoadingSpinner from '@/components/basic/loading-spinner'
 
 export default {
   name: 'Users',
@@ -163,8 +161,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .users-page {
   display: flex;
   flex-direction: column;

@@ -6,10 +6,7 @@
     <vue-drawer-layout
       ref="drawer"
       :drawer-width="270"
-      :enable="false"
-      :animatable="true"
-      :backdrop="true"
-      :content-drawable="$mq === 'desktop' ? true : false"
+      :content-drawable="false"
       @mask-click="closeDrawer"
     >
       <div
@@ -129,8 +126,8 @@
 <script>
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
-import nfcMixin from '../mixins/nfc'
-import Platforms from '../utils/platforms'
+import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
 
 export default {

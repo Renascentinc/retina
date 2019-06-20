@@ -29,7 +29,7 @@
           button-text="CANCEL"
         />
 
-        <button-dropdown
+        <dropdown
           v-if="isAdmin"
           :on-click="updateRole"
           :options="roles"
@@ -102,7 +102,7 @@
             v-if="isAdmin"
             class="actions"
           >
-            <button-dropdown
+            <dropdown
               v-if="$mq === 'mobile' && isAdmin"
               :on-click="updateRole"
               :options="roles"
@@ -221,10 +221,10 @@
 
 <script>
 import gql from 'graphql-tag'
-import Fab from '../components/fab'
-import ExtendedFab from '../components/extended-fab'
-import ButtonDropdown from '../components/button-dropdown'
-import Roles from '../utils/roles'
+import Fab from '@/components/basic/fab'
+import ExtendedFab from '@/components/basic/extended-fab'
+import Dropdown from '@/components/basic/dropdown'
+import Roles from '@/utils/roles'
 import PhoneNumberFormatter from 'phone-number-formats'
 import swal from 'sweetalert2'
 
@@ -234,7 +234,7 @@ export default {
   components: {
     Fab,
     ExtendedFab,
-    ButtonDropdown
+    Dropdown
   },
 
   apollo: {
@@ -469,8 +469,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .user-detail-page {
   display: flex;
   flex-direction: column;

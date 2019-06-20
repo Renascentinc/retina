@@ -71,6 +71,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
-@import '../styles/add-button';
+
 </style>

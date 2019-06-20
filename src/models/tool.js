@@ -1,6 +1,6 @@
 import User from './user'
 import Location from './location'
-import Statuses from '../utils/statuses'
+import Statuses from '@/utils/statuses'
 
 const statusObjects = {
   [Statuses.AVAILABLE]: {

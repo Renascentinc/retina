@@ -31,25 +31,25 @@
 </template>
 
 <script>
-import Tool from '../models/tool'
-import LoadingOverlay from '../components/loading-overlay'
-import HeaderCard from '../components/header-card'
-import ConfigItem from '../components/config-item'
-import ConfigurableItems from '../utils/configurable-items'
-import AddResult from '../components/add-result'
+import Tool from '@/models/tool'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import HeaderCard from '@/components/header-card'
+import ConfigItem from '@/components/config-item'
+import ConfigurableItems from '@/utils/configurable-items'
+import AddResult from '@/components/add-result'
 import swal from 'sweetalert2'
 import {
   showErrorMsg,
   showSuccessMsg,
   showWarningMsg
-} from '../utils/alerts'
+} from '@/utils/alerts'
 import {
   configurableItemQuery,
   deleteConfigurableItemMutation,
   updateToolMutation,
   createConfigurableItemMutation,
   updateConfigurableItemMutation
-} from '../utils/gql'
+} from '@/utils/gql'
 
 export default {
   name: 'Configuration',
@@ -228,7 +228,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
+
 
 .configuration-page {
   display: flex;

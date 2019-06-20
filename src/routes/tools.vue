@@ -107,14 +107,12 @@
           text="TOOL"
         />
 
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchTool.loading"
-            class="loading-container"
-          >
-            <loading-spinner/>
-          </div>
-        </transition>
+        <div
+          class="list-loading-container loading-container"
+          :class="{ 'active': $apollo.queries.searchTool.loading }"
+        >
+          <loading-spinner/>
+        </div>
 
         <transition name="fade">
           <div
@@ -140,14 +138,12 @@
           />
         </transition-group>
 
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchTool.loading && paginationLoading"
-            class="loading-container"
-          >
-            <loading-spinner/>
-          </div>
-        </transition>
+        <div
+          class="list-loading-container loading-container"
+          :class="{ 'active': $apollo.queries.searchTool.loading && paginationLoading }"
+        >
+          <loading-spinner/>
+        </div>
       </div>
     </div>
 
@@ -236,27 +232,28 @@
 </template>
 
 <script>
-import swal from 'sweetalert2'
-import ToolSearchInput from '../components/tool-search-input'
-import ToolSearchResult from '../components/tool-search-result'
-import ExtendedFab from '../components/extended-fab'
-import NfcScan from '../components/nfc-scan'
-import AddButton from '../components/add-button'
-import vSelect from '../components/select'
-import Roles from '../utils/roles'
-import Platforms from '../utils/platforms'
-import nfcMixin from '../mixins/nfc'
-import LoadingOverlay from '../components/loading-overlay'
-import LoadingSpinner from '../components/loading-spinner'
+import ToolSearchInput from '@/components/tool-search-input'
+import ToolSearchResult from '@/components/tool-search-result'
+import ExtendedFab from '@/components/basic/extended-fab'
+import NfcScan from '@/components/nfc-scan'
+import AddButton from '@/components/add-button'
+import vSelect from '@/components/basic/select'
+import Roles from '@/utils/roles'
+import Platforms from '@/utils/platforms'
+import nfcMixin from '@/mixins/nfc'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import LoadingSpinner from '@/components/basic/loading-spinner'
 import {
   locationsQuery,
   usersQuery,
   multiToolQuery,
   searchToolsQuery,
   toolTransferMutation
-} from '../utils/gql'
-
-import { showSuccessMsg, showErrorMsg } from '../utils/alerts'
+} from '@/utils/gql'
+import {
+  showSuccessMsg,
+  showErrorMsg
+} from '@/utils/alerts'
 
 export default {
   name: 'Tools',
@@ -574,7 +571,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .tools-page {
   display: flex;

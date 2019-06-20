@@ -395,7 +395,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
+
 
 .row-container {
   display: flex;

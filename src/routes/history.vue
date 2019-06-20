@@ -108,17 +108,12 @@
         </span>
 
         <div id="export-table" class="scroll-container">
-          <transition name="list-loading">
-            <div
-              v-if="$apollo.queries.searchToolSnapshot.loading"
-              class="loading-container"
-            >
-              <div class="half-circle-spinner">
-                <div class="circle circle-1"></div>
-                <div class="circle circle-2"></div>
-              </div>
-            </div>
-          </transition>
+          <div
+            class="list-loading-container loading-container"
+            :class="{ 'active': $apollo.queries.searchToolSnapshot.loading }"
+          >
+            <loading-spinner/>
+          </div>
 
           <div class="dt-body">
             <transition-group name="list-element">
@@ -148,15 +143,16 @@
 
 <script>
 import Vue from 'vue'
-import HistorySearchInput from '../components/history-search-input'
-import ExtendedFab from '../components/extended-fab.vue'
-import Fab from '../components/fab'
+import HistorySearchInput from '@/components/history-search-input'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import Fab from '@/components/basic/fab'
 import html2pdf from 'html2pdf.js'
 import gql from 'graphql-tag'
 import swal from 'sweetalert2'
-import HistoryTable from '../components/history-table'
-import HistorySearchResult from '../components/history-search-result'
-import statuses from '../utils/statuses'
+import HistoryTable from '@/components/history-table'
+import HistorySearchResult from '@/components/history-search-result'
+import LoadingSpinner from '@/components/basic/loading-spinner'
+import statuses from '@/utils/statuses'
 
 export default {
   name: 'History',
@@ -166,7 +162,8 @@ export default {
     Fab,
     ExtendedFab,
     HistoryTable,
-    HistorySearchResult
+    HistorySearchResult,
+    LoadingSpinner
   },
 
   apollo: {
@@ -405,7 +402,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .history-page {
   display: flex;

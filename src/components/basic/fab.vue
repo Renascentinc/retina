@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../styles/variables';
+  
 
   .fab {
       background-color: $renascent-red;

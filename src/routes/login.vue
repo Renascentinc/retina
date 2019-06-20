@@ -6,7 +6,7 @@
     <loading-overlay :active="currentState === states.AUTHENTICATING"/>
 
     <div class="top-panel">
-      <img class="logo" src="../assets/icons/web/red_transparent_512x512.png">
+      <img class="logo" src="@/assets/icons/red_transparent_512x512.svg">
 
       <div class="name-container">
         <span class="retina-name"> RETINA </span>
@@ -92,12 +92,12 @@
 </template>
 
 <script>
-import { requestPasswordResetMutation, loginMutation } from '../utils/gql'
-import { showSuccessMsg, showErrorMsg } from '../utils/alerts'
-import ApiStatusCodes from '../utils/api-status-codes'
-import InputWithIcon from '../components/input-with-icon'
-import ExtendedFab from '../components/extended-fab'
-import LoadingOverlay from '../components/loading-overlay'
+import { requestPasswordResetMutation, loginMutation } from '@/utils/gql'
+import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import ApiStatusCodes from '@/utils/api-status-codes'
+import InputWithIcon from '@/components/input-with-icon'
+import ExtendedFab from '@/components/basic/extended-fab'
+import LoadingOverlay from '@/components/basic/loading-overlay'
 import swal from 'sweetalert2'
 
 export default {
@@ -238,7 +238,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+
 $login-input-border-radius: 5px;
 
 .login-page {

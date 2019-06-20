@@ -1,4 +1,5 @@
 <template>
+  <!-- CSS inlined due to print/eport libraries -->
   <div
     class="history-table-export"
     style="width: 100%;

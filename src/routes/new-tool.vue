@@ -340,22 +340,22 @@
 </template>
 
 <script>
-import HeaderCard from '../components/header-card'
-import ToolSearchResult from '../components/tool-search-result.vue'
-import DatePicker from '../components/date-picker'
-import ExtendedFab from '../components/extended-fab.vue'
-import Fab from '../components/fab'
-import vSelect from '../components/select'
-import ConfigurableItems from '../utils/configurable-items'
-import Statuses from '../utils/statuses'
-import NfcEncode from '../components/nfc-encode'
-import AddPhoto from '../components/add-photo'
-import { configurableItemQuery, usersQuery } from '../utils/gql'
-import Tool from '../models/tool'
-import User from '../models/user'
-import LoadingOverlay from '../components/loading-overlay'
+import HeaderCard from '@/components/header-card'
+import ToolSearchResult from '@/components/tool-search-result.vue'
+import DatePicker from '@/components/basic/date-picker'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import Fab from '@/components/basic/fab'
+import vSelect from '@/components/basic/select'
+import ConfigurableItems from '@/utils/configurable-items'
+import Statuses from '@/utils/statuses'
+import NfcEncode from '@/components/nfc-encode'
+import AddPhoto from '@/components/add-photo'
+import { configurableItemQuery, usersQuery } from '@/utils/gql'
+import Tool from '@/models/tool'
+import User from '@/models/user'
+import LoadingOverlay from '@/components/basic/loading-overlay'
 import { mapActions } from 'vuex'
-import { showSuccessMsg, showErrorMsg } from '../utils/alerts'
+import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 
 export default {
   name: 'NewTool',
@@ -512,7 +512,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+
 
 .card-change-enter-active {
   transition: opacity .25s;

@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import Fab from '../components/fab'
+import Fab from '@/components/basic/fab'
 
 export default {
   name: 'ConfigItem',
@@ -168,9 +168,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../styles/variables';
-  @import '../styles/search-result';
-
   .search-result {
     &.sanctioned {
       .save-icon, .cancel-icon {

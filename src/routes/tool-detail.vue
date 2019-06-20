@@ -46,7 +46,7 @@
           button-text="VIEW HISTORY"
         />
 
-        <button-dropdown
+        <dropdown
           v-if="isTransferable"
           :on-click="updateStatus"
           :options="statusOptions"
@@ -154,7 +154,7 @@
             v-if="isTransferable && $mq === 'mobile'"
             class="actions"
           >
-            <button-dropdown
+            <dropdown
               :on-click="updateStatus"
               :options="statusOptions"
               button-text="CHANGE STATUS"
@@ -423,20 +423,20 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
-import Fab from '../components/fab.vue'
-import ExtendedFab from '../components/extended-fab'
-import DatePicker from '../components/date-picker'
-import vSelect from '../components/select'
-import ButtonDropdown from '../components/button-dropdown.vue'
-import NfcEncode from '../components/nfc-encode'
-import AddPhoto from '../components/add-photo'
-import LoadingOverlay from '../components/loading-overlay'
-import nfcMixin from '../mixins/nfc'
-import Platforms from '../utils/platforms'
-import ConfigurableItems from '../utils/configurable-items.js'
-import { configurableItemQuery, toolQuery } from '../utils/gql'
-import { showInvalidIDMsg, showSuccessMsg } from '../utils/alerts'
-import Tool from '../models/tool'
+import Fab from '@/components/basic/fab.vue'
+import ExtendedFab from '@/components/basic/extended-fab'
+import DatePicker from '@/components/basic/date-picker'
+import vSelect from '@/components/basic/select'
+import Dropdown from '@/components/basic/dropdown'
+import NfcEncode from '@/components/nfc-encode'
+import AddPhoto from '@/components/add-photo'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
+import ConfigurableItems from '@/utils/configurable-items.js'
+import { configurableItemQuery, toolQuery } from '@/utils/gql'
+import { showInvalidIDMsg, showSuccessMsg } from '@/utils/alerts'
+import Tool from '@/models/tool'
 
 export default {
   name: 'ToolDetail',
@@ -444,7 +444,7 @@ export default {
   components: {
     Fab,
     ExtendedFab,
-    ButtonDropdown,
+    Dropdown,
     vSelect,
     NfcEncode,
     AddPhoto,
@@ -632,8 +632,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .tool-detail-page {
   background-color: $background-light-gray;
   display: flex;

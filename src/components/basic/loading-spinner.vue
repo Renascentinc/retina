@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+
 $spinner-size: 30px;
 $tenth-spinner-size: $spinner-size / 10;
 

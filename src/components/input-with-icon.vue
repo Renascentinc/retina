@@ -4,8 +4,7 @@
       <i
         :class="iconClass"
         class="fas"
-      >
-      </i>
+      />
     </div>
     <slot />
   </div>
@@ -25,7 +24,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../styles/variables';
+  
 
   $login-input-border-radius: 5px;
 

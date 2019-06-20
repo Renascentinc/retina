@@ -1,4 +1,4 @@
-import Platforms from '../utils/platforms'
+import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
 
 export default {

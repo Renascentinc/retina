@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+
 
 .privacy-page {
   background-color: #fff;

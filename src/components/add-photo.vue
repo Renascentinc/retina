@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import ExtendedFab from '../components/extended-fab.vue'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
 
 export default {
   name: 'AddPhoto',
@@ -133,8 +133,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .photo-box {
   width: calc(100% - 23px);
   margin-left: auto;

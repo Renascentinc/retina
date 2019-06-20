@@ -5,12 +5,7 @@
       class="nfc-scan"
       @click="onClick"
     >
-      <svgicon
-        icon="nfc"
-        width="22"
-        height="22"
-      >
-      </svgicon>
+      <img class="nfc-icon" src="@/assets/icons/nfc.svg"/>
       <span>SCAN</span>
     </button>
   </div>
@@ -18,9 +13,8 @@
 
 <script>
 import swal from 'sweetalert2'
-import Platforms from '../utils/platforms'
-import nfcMixin from '../mixins/nfc'
-import '../assets/icons/svg/nfc'
+import Platforms from '@/utils/platforms'
+import nfcMixin from '@/mixins/nfc'
 
 export default {
   name: 'NfcScan',
@@ -83,8 +77,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../styles/variables';
-
   .nfc-scan-container {
     display: flex;
 
@@ -103,13 +95,17 @@ export default {
         color: $dark-avatar
       }
 
+      .nfc-icon {
+        height: 22px;
+        width: 22px;
+      }
+
       &.inactive {
         opacity: .5;
         color: $disabled-gray;
 
-        path[pid="1"] {
-          stroke: transparent;
-          fill: $disabled-gray !important;
+        .nfc-icon {
+          opacity: .5;
         }
       }
     }

@@ -1,4 +1,3 @@
-@import 'variables';
 @import 'fonts';
 @import 'drawer';
 @import 'navbar';
@@ -8,6 +7,9 @@
 @import 'search-bar';
 @import 'standard-list-view-page';
 @import 'action-sidebar';
+@import 'add-button';
+@import 'search-result';
+@import 'search-input';
 
 * {
   font-family: $font-family;

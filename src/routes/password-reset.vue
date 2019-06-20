@@ -1,6 +1,6 @@
 <template>
   <div class="page password-reset-page">
-    <img class="logo" src="../assets/icons/web/red_transparent_512x512.png">
+    <img class="logo" src="@/assets/icons/red_transparent_512x512.svg">
 
     <span class="header-text">
       RESET YOUR PASSWORD
@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import { resetCodeValidityQuery, passwordResetMutation } from '../utils/gql'
-import { showSuccessMsg, showErrorMsg } from '../utils/alerts'
-import ExtendedFab from '../components/extended-fab.vue'
-import ApiStatusCodes from '../utils/api-status-codes'
+import { resetCodeValidityQuery, passwordResetMutation } from '@/utils/gql'
+import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import ApiStatusCodes from '@/utils/api-status-codes'
 
 export default {
   name: 'PasswordReset',
@@ -117,7 +117,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .password-reset-page {
   display: flex;

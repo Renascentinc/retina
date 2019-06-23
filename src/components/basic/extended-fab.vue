@@ -66,7 +66,6 @@ export default {
 </script>
 
 <style lang="scss">
-  
 
   .extended-fab {
       background-color: $renascent-red;

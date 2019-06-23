@@ -2,7 +2,7 @@
   "name": "retina",
   "version": "3.1.0",
   "private": true,
-  "description": "The Renascent inc. Asset Tracking Application",
+  "description": "Renascent inc. Asset Tracking Application",
   "author": "Renascent inc.",
   "scripts": {
     "setup": "yarn && mkdir www plugins platforms && cordova prepare && yarn mobile:assets",
@@ -16,7 +16,8 @@
     "ios": "yarn build:cordova && cordova build ios",
     "test": "yarn lint && yarn test:unit",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "clean:lock": "yarn-deduplicate yarn.lock"
   },
   "dependencies": {
     "@johmun/vue-tags-input": "^1.5.5",
@@ -65,17 +66,18 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "app-icon": "^0.12.0",
-    "cordova": "^9.0.0",
-    "cordova-splash": "^1.0.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
+    "cordova": "^9.0.0",
+    "cordova-splash": "^1.0.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.17.2",
     "sass-loader": "^7.1.0",
     "sinon": "^7.3.2",
-    "vue-template-compiler": "^2.6.9"
+    "vue-template-compiler": "^2.6.9",
+    "yarn-deduplicate": "^1.1.1"
   },
   "postcss": {
     "plugins": {

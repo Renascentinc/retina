@@ -229,7 +229,6 @@ export default {
 
 <style lang="scss">
 
-
 .configuration-page {
   display: flex;
   flex-direction: column;

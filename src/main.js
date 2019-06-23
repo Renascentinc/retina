@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 
 import '../node_modules/v-calendar/lib/v-calendar.min.css'
-import './styles/app.scss'
 
 import Vue from 'vue'
 import VueLazyload from 'vue-lazyload'
@@ -38,6 +37,22 @@ Vue.use(VueMq, {
   }
 })
 
+Validator.localize({
+  en: {
+    attributes: {
+      brand: 'brand',
+      type: 'type',
+      owner: 'owner',
+      modelNumber: 'model number',
+      serialNumber: 'serial number',
+      modelYear: 'model year',
+      purchasedFrom: 'purchased from',
+      price: 'price',
+      passwordResetEmail: 'email'
+    }
+  }
+})
+
 window.addEventListener('load', () => {
   fastclick.attach(document.body)
 
@@ -47,21 +62,5 @@ window.addEventListener('load', () => {
     el: '#app',
     apolloProvider,
     render: h => h(App)
-  })
-
-  Validator.localize({
-    en: {
-      attributes: {
-        brand: 'brand',
-        type: 'type',
-        owner: 'owner',
-        modelNumber: 'model number',
-        serialNumber: 'serial number',
-        modelYear: 'model year',
-        purchasedFrom: 'purchased from',
-        price: 'price',
-        passwordResetEmail: 'email'
-      }
-    }
   })
 })

@@ -24,8 +24,6 @@ export default {
 </script>
 
 <style lang="scss">
-  
-
   $login-input-border-radius: 5px;
 
   .input-with-icon {

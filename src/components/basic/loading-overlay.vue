@@ -30,7 +30,6 @@ export default {
 
 <style lang="scss">
 
-
 .loading-overlay {
   background-color: black;
   position: absolute;

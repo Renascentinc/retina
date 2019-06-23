@@ -348,7 +348,6 @@ export default {
 
 <style lang="scss">
 
-
   .card-change-enter-active {
     transition: opacity .25s;
   }

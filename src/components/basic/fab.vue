@@ -40,8 +40,6 @@ export default {
 </script>
 
 <style lang="scss">
-  
-
   .fab {
       background-color: $renascent-red;
       box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);

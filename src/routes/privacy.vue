@@ -68,7 +68,6 @@ export default {
 
 <style lang="scss">
 
-
 .privacy-page {
   background-color: #fff;
   overflow-y: auto;

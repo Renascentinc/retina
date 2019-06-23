@@ -1,5 +1,5 @@
 <template>
-  <!-- CSS inlined due to print/eport libraries -->
+  <!-- CSS inlined due to print/export library limitations -->
   <div
     class="history-table-export"
     style="width: 100%;

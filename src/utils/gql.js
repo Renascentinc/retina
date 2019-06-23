@@ -256,6 +256,17 @@ export const multiToolQuery = gql`
   }
 `
 
+export const searchUserQuery = gql`
+  query users($query: String!) {
+    searchUser(query: $query) {
+      id
+      first_name
+      last_name
+      role
+    }
+  }
+`
+
 export const searchToolsQuery = gql`
   query tools($query: String, $toolFilter: ToolFilter, $pagingParameters: PagingParameters) {
     searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
@@ -312,6 +323,42 @@ export const toolTransferMutation = gql`
            type
         }
       }
+    }
+  }
+`
+
+export const getUserById = gql`
+  query users($user_id: ID!) {
+    getUser(user_id: $user_id) {
+      id
+      first_name
+      last_name
+      email
+      phone_number
+      role
+      status
+    }
+  }
+`
+
+export const deleteUserMutation = gql`
+  mutation deleteUser($updatedUser: UpdatedUser!) {
+    updateUser(updatedUser: $updatedUser) {
+      id
+    }
+  }
+`
+
+export const updateUserMutation = gql`
+  mutation updateStatus($user: UpdatedUser!) {
+    updateUser(updatedUser: $user) {
+      id
+      first_name
+      last_name
+      email
+      phone_number
+      role
+      status
     }
   }
 `

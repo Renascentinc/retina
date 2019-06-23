@@ -105,8 +105,8 @@ export default {
     toggle () {
       if (!this.disabled) {
         this.activated = !this.activated
+        this.flag()
       }
-      this.flag()
     },
 
     filteredOptions () {
@@ -123,8 +123,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s;
 }

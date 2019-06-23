@@ -2,9 +2,16 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import { defaultClient as apollo } from './apollo'
 import imageCompression from 'browser-image-compression'
-import { updateToolMutation, createConfigurableItemMutation, decomissionToolMutation, createNewToolMutation } from './utils/gql'
 import { showErrorMsg } from './utils/alerts'
 import swal from 'sweetalert2'
+import {
+  updateToolMutation,
+  createConfigurableItemMutation,
+  decomissionToolMutation,
+  createNewToolMutation,
+  deleteUserMutation,
+  updateUserMutation
+} from './utils/gql'
 
 Vue.use(Vuex)
 
@@ -128,8 +135,7 @@ export default new Vuex.Store({
           }
         })
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
+        window.console.error(error)
         showErrorMsg()
       }
     },
@@ -147,8 +153,7 @@ export default new Vuex.Store({
 
         return response
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
+        window.console.error(error)
         showErrorMsg()
       }
     },
@@ -167,8 +172,7 @@ export default new Vuex.Store({
           }
         })
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
+        window.console.error(error)
         tool.status = currentStatus
         showErrorMsg()
       }
@@ -204,10 +208,44 @@ export default new Vuex.Store({
         })
         commit('setToolSelection', tool.id, false)
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error)
+        window.console.error(error)
         showErrorMsg()
       }
+    },
+
+    async deleteUser (store, user) {
+      let result = await swal({
+        type: 'warning',
+        title: 'CONFIRM DELETE USER',
+        text: `Are You Sure You Want To Delete ${user.full_name}? This Action Cannot Be Undone`,
+        reverseButtons: true,
+        showCancelButton: true,
+        confirmButtonText: 'DELETE',
+        cancelButtonText: 'CANCEL',
+        confirmButtonColor: '#CE352F'
+      })
+
+      if (!result.value) {
+        return
+      }
+
+      user.status = 'INACTIVE'
+      await apollo.mutate({
+        mutation: deleteUserMutation,
+        variables: {
+          updatedUser: user.getState()
+        }
+      })
+    },
+
+    async updateUser (store, user) {
+      await apollo.mutate({
+        mutation: updateUserMutation,
+
+        variables: {
+          user: user.getState()
+        }
+      })
     }
   }
 })

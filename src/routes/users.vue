@@ -62,11 +62,11 @@
 <script>
 import UserSearchInput from '@/components/user-search-input'
 import UserSearchResult from '@/components/user-search-result'
-import gql from 'graphql-tag'
 import Roles from '@/utils/roles'
 import ExtendedFab from '@/components/basic/extended-fab'
 import AddButton from '@/components/add-button'
 import LoadingSpinner from '@/components/basic/loading-spinner'
+import { usersQuery, searchUserQuery } from '@/utils/gql'
 
 export default {
   name: 'Users',
@@ -81,50 +81,20 @@ export default {
 
   apollo: {
     getAllUser: {
-      query: gql`
-        query {
-          getAllUser {
-            id
-            first_name
-            last_name
-            role
-          }
-        }
-      `,
+      query: usersQuery,
       fetchPolicy: 'network-only'
     },
 
     searchUser: {
-      query: gql`
-        query users($query: String!) {
-          searchUser(query: $query) {
-            id
-            first_name
-            last_name
-            role
-          }
-        }
-      `,
+      query: searchUserQuery,
       variables () {
         let options = {
-          query: ''
-        }
-
-        if (this.searchString) {
-          options.query = this.searchString
+          query: this.searchString ? this.searchString : ''
         }
 
         return options
       },
       fetchPolicy: 'network-only'
-    }
-  },
-
-  data () {
-    return {
-      searchUser: [],
-      getAllUser: [],
-      searchString: null
     }
   },
 
@@ -136,11 +106,11 @@ export default {
     },
 
     users () {
-      if (!this.searchString) {
-        return this.getAllUser || []
+      if (this.searchString) {
+        return this.searchUser || []
       }
 
-      return this.searchUser || []
+      return this.getAllUser || []
     }
   },
 

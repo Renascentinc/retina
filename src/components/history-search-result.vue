@@ -396,7 +396,6 @@ export default {
 
 <style lang="scss">
 
-
 .row-container {
   display: flex;
   flex-direction: column;

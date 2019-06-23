@@ -48,14 +48,14 @@
           />
 
           <span id="userid">
-            #{{ getUser.id }}
+            #{{ user.id }}
           </span>
 
           <div
             v-if="!editState"
             class="name"
           >
-            {{ getUser.first_name }} {{ getUser.last_name }}
+            {{ user.full_name }}
           </div>
 
           <div
@@ -64,7 +64,7 @@
           >
             <input
               v-validate="'required'"
-              v-model="newFirstName"
+              v-model="editedUser.first_name"
               name="first name"
               class="name light-input"
             >
@@ -78,7 +78,7 @@
             </div>
             <input
               v-validate="'required'"
-              v-model="newLastName"
+              v-model="editedUser.last_name"
               class="name light-input"
               name="last name"
             >
@@ -95,7 +95,7 @@
           <span
             class="user-role"
           >
-            {{ getUser.role }}
+            {{ user.role }}
           </span>
 
           <div
@@ -131,22 +131,22 @@
                 <div class="contact-item">
                   <fab
                     id="call-btn"
-                    :on-click="phoneNumber ? phoneCall : () => 0"
-                    :active="!phoneNumber"
+                    :on-click="() => user.startPhoneCall()"
+                    :active="!user.phone_number"
                     icon-class="fa-phone"
                   />
 
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="phoneNumber ? phoneCall() : () => 0"
+                    @click="() => user.startPhoneCall()"
                   >
-                    {{ formattedPhone }}
+                    {{ user.formattedPhoneNumber }}
                   </button>
                   <input
                     v-validate="{required: true, numeric: true, min: 10}"
                     v-if="editState"
-                    v-model="newPhone"
+                    v-model="editedUser.phone_number"
                     name="phone"
                     class="contact-text light-input"
 
@@ -157,8 +157,8 @@
                 <div class="contact-item">
                   <fab
                     id="email-btn"
-                    :on-click="email ? sendEmail : () => 0"
-                    :active="!email"
+                    :on-click="() => user.startEmail()"
+                    :active="!user.email"
                     icon-class="fa-envelope"
                     type="string"
                   />
@@ -166,14 +166,14 @@
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="email ? sendEmail() : () => 0"
+                    @click="() => user.startEmail()"
                   >
-                    {{ getUser.email }}
+                    {{ user.email }}
                   </button>
                   <input
                     v-validate="'required|email'"
                     v-if="editState"
-                    v-model="newEmail"
+                    v-model="editedUser.email"
                     name="email"
                     class="contact-text light-input"
                   >
@@ -192,7 +192,7 @@
           <div
             v-if="editState && isAdmin && !isCurrentUser"
             class="container search-result"
-            @click="deactivateUser"
+            @click="performUserDelete"
           >
             <div class="default-text">
               <i class="fas fa-times"></i>
@@ -220,13 +220,14 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
 import Fab from '@/components/basic/fab'
 import ExtendedFab from '@/components/basic/extended-fab'
 import Dropdown from '@/components/basic/dropdown'
 import Roles from '@/utils/roles'
-import PhoneNumberFormatter from 'phone-number-formats'
-import swal from 'sweetalert2'
+import { getUserById } from '@/utils/gql'
+import User from '@/models/user'
+import { showInvalidIDMsg, showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'ToolDetail',
@@ -239,23 +240,20 @@ export default {
 
   apollo: {
     getUser: {
-      query: gql`
-        query users($user_id: ID!) {
-          getUser(user_id: $user_id) {
-            id
-            first_name
-            last_name
-            email
-            phone_number
-            role
-            status
-          }
-        }
-      `,
+      query: getUserById,
       variables () {
-        let options = {}
-        options.user_id = this.$router.currentRoute.params.userId
-        return options
+        return {
+          user_id: this.$router.currentRoute.params.userId
+        }
+      },
+      result (apiResult) {
+        let user = apiResult.data.getUser
+        if (user) {
+          this.user.update(user)
+        } else {
+          showInvalidIDMsg()
+          this.$router.push({ path: '/users' })
+        }
       },
       fetchPolicy: 'network-only'
     }
@@ -263,20 +261,17 @@ export default {
 
   data () {
     return {
-      getUser: {},
+      user: new User(),
+      editedUser: null,
       roles: Object.values(Roles),
       editState: false,
-      newFirstName: '',
-      newLastName: '',
-      newPhone: '',
-      newEmail: '',
       changingRole: false
     }
   },
 
   computed: {
     isCurrentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
+      return JSON.parse(window.localStorage.getItem('currentUser')).id === this.user.id
     },
 
     isAdmin () {
@@ -285,74 +280,14 @@ export default {
 
     canEdit () {
       return this.isAdmin || this.isCurrentUser
-    },
-
-    formattedPhone () {
-      if (this.getUser && this.getUser.phone_number) {
-        return new PhoneNumberFormatter(this.getUser.phone_number).format({
-          type: 'domestic'
-        }).string
-      }
-      return ''
-    },
-
-    phoneNumber () {
-      return this.getUser.phone_number
-    },
-
-    email () {
-      return this.getUser.email
     }
   },
 
   methods: {
-    showSuccessfulDeleteMsg () {
-      swal({
-        type: 'success',
-        title: 'SUCCESS',
-        text: 'Successfully Delete User',
-        timer: 1500,
-        showConfirmButton: false
-      })
-    },
-
-    deactivateUser () {
-      swal({
-        type: 'warning',
-        title: 'CONFIRM DELETE USER',
-        text: `Are You Sure You Want To Delete ${this.getUser.first_name} ${this.getUser.last_name}? This Action Cannot Be Undone`,
-        reverseButtons: true,
-        showCancelButton: true,
-        confirmButtonText: 'DELETE',
-        cancelButtonText: 'CANCEL',
-        confirmButtonColor: '#CE352F'
-      }).then(result => {
-        if (result.value) {
-          this.getUser.status = 'INACTIVE'
-          this.$apollo.mutate({
-            mutation: gql`mutation deleteUser($updatedUser: UpdatedUser!) {
-              updateUser(updatedUser: $updatedUser) {
-                id
-              }
-            }`,
-            variables: {
-              updatedUser: {
-                id: this.getUser.id,
-                first_name: this.newFirstName,
-                last_name: this.newLastName,
-                email: this.newEmail,
-                phone_number: this.newPhone,
-                role: this.getUser.role,
-                status: this.getUser.status
-              }
-            }
-          }).then(() => {
-            this.showSuccessfulDeleteMsg()
-            this.transitionToUsers()
-          })
-        }
-      })
-    },
+    ...mapActions([
+      'updateUser',
+      'deleteUser'
+    ]),
 
     toggleChangingRole () {
       this.changingRole = !this.changingRole
@@ -370,99 +305,41 @@ export default {
       if (this.editState) {
         this.saveUser()
       } else {
-        this.newFirstName = this.getUser.first_name
-        this.newLastName = this.getUser.last_name
-        this.newPhone = this.getUser.phone_number
-        this.newEmail = this.getUser.email
+        this.editedUser = new User(this.user)
         this.editState = true
       }
     },
 
-    saveUser () {
-      this.$validator.validate().then(result => {
-        if (result) {
-          this.$apollo
-            .mutate({
-              mutation: gql`
-                mutation updateStatus($user: UpdatedUser!) {
-                  updateUser(updatedUser: $user) {
-                    id
-                    first_name
-                    last_name
-                    email
-                    phone_number
-                    role
-                    status
-                  }
-                }
-              `,
+    async performUserDelete () {
+      await this.deleteUser(this.editedUser)
+      showSuccessMsg('Successfully Deleted User')
+      this.transitionToUsers()
+    },
 
-              variables: {
-                user: {
-                  id: this.getUser.id,
-                  first_name: this.newFirstName,
-                  last_name: this.newLastName,
-                  email: this.newEmail,
-                  phone_number: this.newPhone,
-                  role: this.getUser.role,
-                  status: this.getUser.status
-                }
-              }
-            })
-            .then(result => {
-              if (result) {
-                this.$apollo.queries.getUser.refetch()
-                this.editState = false
-              }
-            }).catch(() => {
-              swal({
-                type: 'error',
-                title: 'ERROR',
-                text: 'There was an error saving changes. Please try again.',
-                timer: 2000,
-                showConfirmButton: false
-              })
-            })
+    async saveUser () {
+      let isValid = this.$validator.validate()
+
+      if (isValid) {
+        try {
+          await this.updateUser(this.editedUser)
+          this.user.update(this.editedUser)
+          this.editState = false
+        } catch (error) {
+          showErrorMsg('There was an error saving changes. Please try again or contact support.')
         }
-      })
+      }
     },
 
-    updateRole (newRole) {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation updateStatus($user: UpdatedUser!) {
-              updateUser(updatedUser: $user) {
-                role
-              }
-            }
-          `,
+    async updateRole (newRole) {
+      this.editedUser = new User(this.user)
+      this.editedUser.role = newRole
 
-          variables: {
-            user: {
-              id: this.getUser.id,
-              first_name: this.getUser.first_name,
-              last_name: this.getUser.last_name,
-              email: this.getUser.email,
-              phone_number: this.getUser.phone_number,
-              role: newRole,
-              status: this.getUser.status
-            }
-          }
-        })
-        .then(result => {
-          if (result) {
-            this.$apollo.queries.getUser.refetch()
-          }
-        })
-    },
-
-    phoneCall () {
-      window.location.href = `tel:${this.getUser.phone_number}`
-    },
-
-    sendEmail () {
-      window.location = `mailto:${this.getUser.email}`
+      try {
+        await this.updateUser(this.editedUser)
+        this.user.update(this.editedUser)
+      } catch (error) {
+        showErrorMsg('There was an error saving changes. Please try again or contact support.')
+      }
     }
   }
 }

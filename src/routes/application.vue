@@ -183,9 +183,11 @@ export default {
       this.$router.push({ name: 'configuration' })
       this.closeDrawer()
     },
+
     sendSupportEmail () {
-      window.location = 'mailto:retinasupport@renascentinc.com'
+      window.location.href = 'mailto:retinasupport@renascentinc.com'
     },
+
     closeDrawer () {
       this.$refs.drawer.toggle(false)
     },

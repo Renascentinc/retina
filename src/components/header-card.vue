@@ -41,7 +41,6 @@ export default {
 
 <style lang="scss">
 
-
 .header-card {
   background-color: white;
   display: flex;

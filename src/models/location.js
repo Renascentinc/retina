@@ -12,6 +12,10 @@ export default class Location {
     return true
   }
 
+  get iconClass () {
+    return 'fa-map-marker-alt'
+  }
+
   update (location) {
     this.id = location.id
     this.type = location.type

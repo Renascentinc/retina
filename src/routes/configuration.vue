@@ -3,7 +3,7 @@
 
     <loading-overlay :active="deleting" />
 
-    <header-card :title="`${page}S`"/>
+    <header-card :title="pageTitle"/>
 
     <div class="navigation">
       <i class="fas fa-arrow-left" @click="decrementTab"/>
@@ -76,8 +76,21 @@ export default {
   },
 
   computed: {
+    pageTitle () {
+      switch (this.page) {
+        case ConfigurableItems.BRAND:
+          return 'Brands'
+        case ConfigurableItems.TYPE:
+          return 'Types'
+        case ConfigurableItems.PURCHASED_FROM:
+          return 'Suppliers'
+        default:
+          return ''
+      }
+    },
+
     page () {
-      var pages = [
+      let pages = [
         ConfigurableItems.BRAND,
         ConfigurableItems.TYPE,
         ConfigurableItems.PURCHASED_FROM
@@ -260,11 +273,13 @@ export default {
     justify-content: center;
     flex-direction: row;
     width: 100%;
+    height: calc(100% - 73px);
 
     .configs {
       overflow-y: auto;
       flex: 1 1 auto;
       max-width: 500px;
+      padding-bottom: 10px;
     }
   }
 }

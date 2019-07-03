@@ -36,96 +36,18 @@
         v-if="showingDetails"
         class="details"
       >
-        <div class="detail-row">
-          <span class="label">
-            TIME
-          </span>
-          <span class="value">
-            {{ entry.metadata.formattedTimeStamp }}
-          </span>
-        </div>
-        <div class="detail-row">
-          <span class="label">
-            DONE BY
-          </span>
-          <span class="value">
-            {{ entry.metadata.actor.name }}
-          </span>
-        </div>
-        <div class="detail-row">
-          <span class="label">
-            STATUS
-          </span>
-          <span
-            v-if="!statusDiff"
-            class="value"
-          >
-            {{ status }}
-          </span>
-          <span
-            v-if="statusDiff"
-            class="value"
-          >
-            <span class="lhs">
-              {{ status.lhs }}
-            </span>
-            <i class="fas fa-long-arrow-alt-right"></i>
-            <span class="rhs">
-              {{ status.rhs }}
-            </span>
-          </span>
-        </div>
-        <div class="detail-row">
-          <span class="label">
-            OWNER
-          </span>
-          <span
-            v-if="!ownerDiff"
-            class="value"
-          >
-            {{ owner }}
-          </span>
-          <span
-            v-if="ownerDiff"
-            class="value"
-          >
-            <span class="lhs">
-              {{ owner.lhs }}
-            </span>
-            <i class="fas fa-long-arrow-alt-right"></i>
-            <span class="rhs">
-              {{ owner.rhs }}
-            </span>
-          </span>
-        </div>
-
         <div
-          v-for="change in diff"
-          :key="change.path[0]"
-          class="detail-row diff-row"
+          v-for="change in entry.diff"
+          :key="change.title"
+          class="detail-row"
         >
           <span class="label">
-            {{ change.path[0] }}
+            {{ change.title }}
           </span>
           <span class="value">
-            <span class="lhs">
-              {{ change.lhs || '-' }}
-            </span>
-            <i class="fas fa-long-arrow-alt-right"></i>
-            <span class="rhs">
-              {{ change.rhs || '-' }}
-            </span>
-          </span>
-        </div>
-        <div
-          v-if="entry.metadata.action_note !== null"
-          class="detail-row diff-row"
-        >
-          <span class="label">
-            NOTE
-          </span>
-          <span class="value">
-            {{ entry.metadata.action_note }}
+            <span v-if="change.previousValue" class="lhs"> {{ change.previousValue }} </span>
+            <i v-if="change.previousValue" class="fas fa-long-arrow-alt-right"/>
+            <span class="rhs"> {{ change.value }} </span>
           </span>
         </div>
       </div>
@@ -154,23 +76,13 @@ export default {
 
   data () {
     return {
-      details: false,
-      statusDiff: null,
-      ownerDiff: null
+      details: false
     }
   },
 
   computed: {
     showingDetails () {
       return this.details && this.isDetailResult
-    },
-
-    status () {
-      return this.statusDiff || this.entry.currentSnapshot.status
-    },
-
-    owner () {
-      return this.ownerDiff || this.entry.currentSnapshot.owner.name
     }
   },
 
@@ -214,13 +126,13 @@ export default {
     .caret-box {
       cursor: pointer;
 
-      &:active {
-        background-color: $renascent-red !important;
-        opacity: 0.6;
-        * {
-          color: white !important;
-        }
-      }
+      // &:active {
+      //   background-color: $renascent-red !important;
+      //   opacity: 0.6;
+      //   * {
+      //     color: white !important;
+      //   }
+      // }
     }
 
     .id {

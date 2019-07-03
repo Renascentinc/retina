@@ -568,7 +568,7 @@ export default {
     ]),
 
     transitionToHistory () {
-      this.$router.push({ name: 'historyDetail', params: { toolId: this.tool.id } })
+      this.$router.push({ name: 'history', query: { toolId: this.tool.id } })
     },
 
     transitionToTools () {

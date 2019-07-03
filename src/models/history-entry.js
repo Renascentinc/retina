@@ -1,6 +1,5 @@
 import Tool from '@/models/tool'
 import User from '@/models/user'
-// import DeepDiff from 'deep-diff'
 
 export default class HistoryEntry {
   id
@@ -20,14 +19,88 @@ export default class HistoryEntry {
       },
       {
         title: 'STATUS',
-        value: this.currentSnapshot.formattedStatus
+        value: this.currentSnapshot.formattedStatus,
+        previousValue: this.previousSnapshot && this.previousSnapshot.status !== this.currentSnapshot.status ? this.previousSnapshot.formattedStatus : null
       },
       {
         title: 'OWNER',
-        value: this.currentSnapshot.owner.name
+        value: this.currentSnapshot.owner.name,
+        previousValue: this.previousSnapshot && this.previousSnapshot.owner.id !== this.currentSnapshot.owner.id ? this.previousSnapshot.owner.name : null
       }
     ]
 
+    if (this.previousSnapshot) {
+      if (this.previousSnapshot.model_number !== this.currentSnapshot.model_number) {
+        diff.push({
+          title: 'MODEL NUMBER',
+          value: this.currentSnapshot.model_number,
+          previousValue: this.previousSnapshot.model_number
+        })
+      }
+
+      if (this.previousSnapshot.serial_number !== this.currentSnapshot.serial_number) {
+        diff.push({
+          title: 'SERIAL NUMBER',
+          value: this.currentSnapshot.serial_number,
+          previousValue: this.previousSnapshot.serial_number
+        })
+      }
+
+      if (this.previousSnapshot.date_purchased !== this.currentSnapshot.date_purchased) {
+        diff.push({
+          title: 'PURCHASE DATE',
+          value: this.currentSnapshot.formattedDate,
+          previousValue: this.previousSnapshot.formattedDate
+        })
+      }
+
+      if (this.previousSnapshot.price !== this.currentSnapshot.price) {
+        diff.push({
+          title: 'PRICE',
+          value: this.currentSnapshot.formattedPrice,
+          previousValue: this.previousSnapshot.formattedPrice
+        })
+      }
+
+      if (this.previousSnapshot.year !== this.currentSnapshot.year) {
+        diff.push({
+          title: 'MODEL YEAR',
+          value: this.currentSnapshot.year,
+          previousValue: this.previousSnapshot.year || '-'
+        })
+      }
+
+      if (this.previousSnapshot.photo !== this.currentSnapshot.photo) {
+        diff.push({
+          title: 'PHOTO',
+          value: 'PHOTO UPDATED'
+        })
+      }
+
+      if (this.previousSnapshot.brand.id !== this.currentSnapshot.brand.id) {
+        diff.push({
+          title: 'BRAND',
+          value: this.currentSnapshot.brand.name,
+          previousValue: this.previousSnapshot.brand.name
+        })
+      }
+
+      if (this.previousSnapshot.type.id !== this.currentSnapshot.type.id) {
+        diff.push({
+          title: 'TYPE',
+          value: this.currentSnapshot.type.name,
+          previousValue: this.previousSnapshot.type.name
+        })
+      }
+
+      if (this.previousSnapshot.purchased_from.id !== this.currentSnapshot.purchased_from.id) {
+        diff.push({
+          title: 'SUPPLIER',
+          value: this.currentSnapshot.purchased_from.name,
+          previousValue: this.previousSnapshot.purchased_from.name
+        })
+      }
+    }
     return diff
   }
 

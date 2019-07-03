@@ -110,8 +110,8 @@ export default {
     },
 
     filteredOptions () {
-      var array = this.options
-      var index = array.indexOf(this.buttonText)
+      let array = this.options
+      let index = array.indexOf(this.buttonText)
       if (index !== -1) {
         array.splice(index, 1)
       }

@@ -32,7 +32,26 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   }
 })
 
-const cache = new InMemoryCache({ fragmentMatcher })
+const cache = new InMemoryCache({
+  fragmentMatcher,
+  dataIdFromObject: object => {
+    // fixing issue on history page where objects were getting scrambled with each other (same ids but different data at different snapshots in time).
+    // using a combination of fields to create a unique identifier for the entries
+    if (object.__typename === 'PreviousToolSnapshotDiff') {
+      return `${object.id}${object.__typename}${object.owner ? object.owner.id || object.owner.id : ''}${object.status}`
+    }
+
+    if (object.__typename === 'ToolSnapshotMetadata') {
+      return `${object.timestamp}${object.__typename}`
+    }
+
+    if (router.currentRoute.path.includes('history') && (object.__typename === 'Tool' || object.__typename === 'ConfigurableItem' || object.__typename === 'User')) {
+      return `${JSON.stringify(object)}`
+    }
+
+    return `${object.id}${object.__typename}`
+  }
+})
 
 const httpLink = new HttpLink({
   uri: process.env.NODE_ENV === 'production' ? 'https://retina-api.renascentinc.com/graphql' : 'http://retina-api-develop.us-east-2.elasticbeanstalk.com/graphql'

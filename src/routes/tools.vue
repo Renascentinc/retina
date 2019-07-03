@@ -13,7 +13,7 @@
     </div>
 
     <extended-fab
-      v-if="$mq === 'mobile' && currentState === states.INITIAL"
+      v-if="$mq === 'mobile' && transferState === states.INITIAL"
       :on-click="moveToSelectingState"
       class="transfer-btn"
       icon-class="fa-exchange-alt"
@@ -26,7 +26,7 @@
         v-if="$mq === 'desktop'"
       >
         <extended-fab
-          v-if="currentState === states.INITIAL"
+          v-if="transferState === states.INITIAL"
           :on-click="moveToSelectingState"
           class="transfer-btn"
           icon-class="fa-exchange-alt"
@@ -34,7 +34,7 @@
         />
 
         <extended-fab
-          v-if="currentState === states.SELECTING"
+          v-if="transferState === states.SELECTING"
           :on-click="cancelTransfer"
           class="cancel-fab-btn"
           icon-class="fa-times"
@@ -42,7 +42,7 @@
         />
 
         <extended-fab
-          v-if="currentState === states.SELECTING"
+          v-if="transferState === states.SELECTING"
           :on-click="toggleViewSelected"
           :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
           :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
@@ -50,7 +50,7 @@
         />
 
         <extended-fab
-          v-if="currentState === states.SELECTING"
+          v-if="transferState === states.SELECTING"
           :on-click="proceedToFinalize"
           :disabled="numSelectedTools === 0"
           :class="{ disabled: numSelectedTools === 0 }"
@@ -60,7 +60,7 @@
         />
 
         <extended-fab
-          v-if="currentState === states.INITIAL"
+          v-if="transferState === states.INITIAL"
           :on-click="transitionToAdd"
           class="add-btn"
           icon-class="fa-plus"
@@ -68,7 +68,7 @@
         />
 
         <extended-fab
-          v-if="currentState === states.FINALIZING"
+          v-if="transferState === states.FINALIZING"
           :on-click="moveToSelectingState"
           class="back-efab"
           icon-class="fa-arrow-left"
@@ -76,7 +76,7 @@
         />
 
         <v-select
-          v-if="currentState === states.FINALIZING"
+          v-if="transferState === states.FINALIZING"
           v-model="transferTarget"
           :options="transferTargets"
           :filterable="false"
@@ -84,7 +84,7 @@
         />
 
         <extended-fab
-          v-if="currentState === states.FINALIZING"
+          v-if="transferState === states.FINALIZING"
           :on-click="finalizeTransfer"
           :disabled="!transferTarget.id || numSelectedTools === 0"
           class="finish-transfer"
@@ -96,12 +96,12 @@
       <div
         v-infinite-scroll="loadMore"
         ref="scrollElement"
-        :class="{ finalizing: currentState === states.FINALIZING }"
+        :class="{ finalizing: transferState === states.FINALIZING }"
         infinite-scroll-throttle-delay="200"
         class="scroll-container"
       >
         <add-button
-          v-if="$mq === 'mobile' && currentState === states.INITIAL"
+          v-if="$mq === 'mobile' && transferState === states.INITIAL"
           :key="0"
           :on-click="transitionToAdd"
           text="TOOL"
@@ -134,7 +134,7 @@
             :key="tool.id"
             :tool="tool"
             :on-select="transitionToToolInfo"
-            :show-select="currentState !== states.INITIAL"
+            :show-select="transferState !== states.INITIAL"
           />
         </transition-group>
 
@@ -149,7 +149,7 @@
 
     <transition name="fade">
       <div
-        v-if="$mq === 'mobile' && currentState === states.SELECTING"
+        v-if="$mq === 'mobile' && transferState === states.SELECTING"
         class="nav-bar selection-action-bar"
       >
         <div class="icon-text-container">
@@ -190,7 +190,7 @@
 
     <transition name="fade">
       <div
-        v-if="$mq === 'mobile' && currentState === states.FINALIZING"
+        v-if="$mq === 'mobile' && transferState === states.FINALIZING"
         class="finalizing-action-bar"
       >
         <div class="finalize-row finalize-header">
@@ -242,7 +242,8 @@ import Platforms from '@/utils/platforms'
 import nfcMixin from '@/mixins/nfc'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import LoadingSpinner from '@/components/basic/loading-spinner'
-import { mapGetters, mapState } from 'vuex'
+import Tool from '@/models/tool'
+import { mapGetters, mapState, mapMutations } from 'vuex'
 import {
   locationsQuery,
   usersQuery,
@@ -286,8 +287,11 @@ export default {
       query: multiToolQuery,
       variables () {
         return {
-          tool_ids: this.$store.getters.selectedTools
+          tool_ids: this.selectedTools
         }
+      },
+      update (data) {
+        return data.getMultipleTool.map(tool => new Tool(tool))
       },
       fetchPolicy: 'network-only'
     },
@@ -316,6 +320,9 @@ export default {
         }
 
         return options
+      },
+      update (data) {
+        return data.searchTool.map(tool => new Tool(tool))
       },
       fetchPolicy: 'network-only'
     }
@@ -351,16 +358,17 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'tools/showOnlySelectedTools',
-      'tools/transferState'
+    ...mapState('tools', [
+      'showOnlySelectedTools',
+      'transferState'
     ]),
 
-    ...mapGetters([
-      'users/currentUser',
-      'users/isAdminUser',
-      'users/isCurrentUser',
-      'tools/selectedTools'
+    ...mapGetters('users', [
+      'currentUser'
+    ]),
+
+    ...mapGetters('tools', [
+      'selectedTools'
     ]),
 
     infiniteScrollPageNumber () {
@@ -369,7 +377,7 @@ export default {
     },
 
     isNonAdminTransfer () {
-      return this.currentState === this.states.SELECTING && !this.isAdmin
+      return this.transferState === this.states.SELECTING && !this.isAdmin
     },
 
     tools () {
@@ -429,6 +437,14 @@ export default {
   },
 
   methods: {
+    ...mapMutations('tools', [
+      'toggleToolSelection',
+      'toggleShowOnlySelectedTools',
+      'setShowOnlySelectedTools',
+      'updateTransferStatus',
+      'resetSelectedTools'
+    ]),
+
     clearSearchFilters () {
       this.filters = null
       this.tags = []
@@ -445,10 +461,10 @@ export default {
     },
 
     onScan (value) {
-      if (this.currentState === this.states.INITIAL) {
+      if (this.transferState === this.states.INITIAL) {
         this.transitionToToolInfo(value)
       } else {
-        this.$store.commit('toggleToolSelection', value)
+        this.toggleToolSelection(value)
       }
     },
 
@@ -479,8 +495,8 @@ export default {
     },
 
     moveToSelectingState () {
-      this.$store.commit('setShowOnlySelectedTools', false)
-      this.$store.commit('updateTransferStatus', this.states.SELECTING)
+      this.setShowOnlySelectedTools(false)
+      this.updateTransferStatus(this.states.SELECTING)
       if (!this.isAdmin) {
         this.clearSearchFilters()
         this.resetScrollPosition()
@@ -488,14 +504,14 @@ export default {
     },
 
     cancelTransfer () {
-      this.$store.commit('resetSelectedTools')
-      this.$store.commit('setShowOnlySelectedTools', false)
-      this.$store.commit('updateTransferStatus', this.states.INITIAL)
+      this.resetSelectedTools()
+      this.setShowOnlySelectedTools(false)
+      this.updateTransferStatus(this.states.INITIAL)
       this.resetInfiniteScroll()
     },
 
     toggleViewSelected () {
-      this.$store.commit('toggleShowOnlySelectedTools')
+      this.toggleShowOnlySelectedTools()
       this.resetScrollPosition()
     },
 
@@ -536,7 +552,7 @@ export default {
         let { data: { transferMultipleTool } } = await this.$apollo.mutate({
           mutation: toolTransferMutation,
           variables: {
-            tool_id_list: this.$store.getters.selectedTools,
+            tool_id_list: this.selectedTools,
             to_owner_id: this.transferTarget.id
           }
         })
@@ -546,9 +562,9 @@ export default {
           let idx = this.searchTool.findIndex(entry => entry.id === tool.id)
           this.searchTool[idx] = tool
         })
-        this.$store.commit('resetSelectedTools')
-        this.$store.commit('setShowOnlySelectedTools', false)
-        this.$store.commit('updateTransferStatus', this.states.INITIAL)
+        this.resetSelectedTools()
+        this.setShowOnlySelectedTools(false)
+        this.updateTransferStatus(this.states.INITIAL)
         showSuccessMsg('Transfer Successful')
       } catch {
         showErrorMsg('Error Transferring Tools. Please Try Again or Contact Support')
@@ -558,8 +574,8 @@ export default {
     },
 
     proceedToFinalize () {
-      this.$store.commit('setShowOnlySelectedTools', true)
-      this.$store.commit('updateTransferStatus', this.states.FINALIZING)
+      this.setShowOnlySelectedTools(true)
+      this.updateTransferStatus(this.states.FINALIZING)
       this.resetScrollPosition()
     }
   }

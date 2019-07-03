@@ -17,7 +17,7 @@ import apolloProvider from './apollo'
 import fastclick from 'fastclick'
 
 if (process.env.VUE_APP_PLATFORM === 'cordova') {
-  var cordovaScript = document.createElement('script')
+  let cordovaScript = document.createElement('script')
   cordovaScript.setAttribute('type', 'text/javascript')
   cordovaScript.setAttribute('src', 'cordova.js')
   document.body.appendChild(cordovaScript)

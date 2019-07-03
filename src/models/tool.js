@@ -27,10 +27,10 @@ export default class Tool {
   price
   photo
   image
-  brand
-  type
-  purchased_from
-  owner
+  brand = {}
+  type = {}
+  purchased_from = {}
+  owner = {}
 
   get formattedYear () {
     return this.year || '-'
@@ -50,6 +50,10 @@ export default class Tool {
     }
 
     return this.status.replace(/_/g, ' ').toUpperCase()
+  }
+
+  get name () {
+    return `${this.brand.name} ${this.type.name}`
   }
 
   get formattedPrice () {

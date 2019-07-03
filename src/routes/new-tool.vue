@@ -443,7 +443,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
+    ...mapActions('tools', [
       'createNewTool'
     ]),
 

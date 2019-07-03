@@ -8,9 +8,6 @@ import {
 
 const users = {
   namespaced: true,
-  state: {
-
-  },
 
   getters: {
     currentUser () {
@@ -24,10 +21,6 @@ const users = {
     isAdminUser (state, getters) {
       return getters.currentUser.role === Roles.ADMIN
     }
-  },
-
-  mutations: {
-
   },
 
   actions: {

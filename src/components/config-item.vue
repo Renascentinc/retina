@@ -138,7 +138,7 @@ export default {
 
     save () {
       if (this.$props.configItem.name !== this.changedName) {
-        var changedConfig = {
+        let changedConfig = {
           id: this.$props.configItem.id,
           name: this.changedName,
           sanctioned: this.$props.configItem.sanctioned

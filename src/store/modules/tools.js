@@ -58,10 +58,10 @@ const tools = {
 
   actions: {
     async saveSpecialToolMetadata ({ dispatch }, tool) {
-      let brandResponse = await dispatch('configurable-items/createNewConfigurableItem', tool.brand)
-      let typeResponse = await dispatch('configurable-items/createNewConfigurableItem', tool.type)
-      let purchaseResponse = await dispatch('configurable-items/createNewConfigurableItem', tool.purchased_from)
-      let photoResponse = await dispatch('tools/savePhoto', tool.image)
+      let brandResponse = await dispatch('createNewConfigurableItem', tool.brand)
+      let typeResponse = await dispatch('createNewConfigurableItem', tool.type)
+      let purchaseResponse = await dispatch('createNewConfigurableItem', tool.purchased_from)
+      let photoResponse = await dispatch('savePhoto', tool.image)
 
       if (brandResponse) tool.brand.id = brandResponse.data.createConfigurableItem.id
       if (typeResponse) tool.type.id = typeResponse.data.createConfigurableItem.id
@@ -90,7 +90,7 @@ const tools = {
 
           fd.append('file', compressedImage)
 
-          var xhr = new XMLHttpRequest()
+          let xhr = new XMLHttpRequest()
 
           xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
 
@@ -105,7 +105,7 @@ const tools = {
 
     async updateTool ({ dispatch }, tool) {
       try {
-        await dispatch('tools/saveSpecialToolMetadata', tool)
+        await dispatch('saveSpecialToolMetadata', tool)
 
         await apollo.mutate({
           mutation: updateToolMutation,
@@ -121,7 +121,7 @@ const tools = {
 
     async createNewTool ({ dispatch }, tool) {
       try {
-        await dispatch('tools/saveSpecialToolMetadata', tool)
+        await dispatch('saveSpecialToolMetadata', tool)
 
         let response = await apollo.mutate({
           mutation: createNewToolMutation,
@@ -185,7 +185,7 @@ const tools = {
             decomission_reason: result.value
           }
         })
-        commit('tools/setToolSelection', tool.id, false)
+        commit('setToolSelection', tool.id, false)
       } catch (error) {
         window.console.error(error)
         showErrorMsg()

@@ -13,6 +13,10 @@ export default class User {
     return true
   }
 
+  get iconClass () {
+    return 'fa-user'
+  }
+
   get name () {
     if (this.first_name && this.last_name) {
       return `${this.first_name} ${this.last_name}`

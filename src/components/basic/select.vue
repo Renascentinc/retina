@@ -712,7 +712,7 @@ export default {
             ref = val
           }
         })
-        var index = this.mutableValue.indexOf(ref)
+        let index = this.mutableValue.indexOf(ref)
         this.mutableValue.splice(index, 1)
       } else {
         this.mutableValue = null

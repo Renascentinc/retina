@@ -32,8 +32,7 @@
           :class="{ active: !!dateRange }"
           class="fas fa-calendar-alt open-datepicker"
           @click="toggleDatepicker"
-        >
-        </button>
+        />
       </v-date-picker>
     </div>
     <div class="menu-container">
@@ -187,7 +186,6 @@ export default {
         TYPE: 'type_ids',
         STATUS: 'tool_statuses'
       },
-      currentToolId: this.$router.currentRoute.params.toolId,
       snapshots: [],
       tags: [],
       tagFilters: null,
@@ -198,6 +196,10 @@ export default {
   },
 
   computed: {
+    currentToolId () {
+      return this.$route.query.toolId
+    },
+
     isDecomissionedTool () {
       if (!this.snapshots.length) {
         return
@@ -264,11 +266,11 @@ export default {
     },
 
     goBack () {
-      this.currentToolId = null
+      this.$router.push({ name: 'history' })
     },
 
     selectHistoryEntry (toolId) {
-      this.currentToolId = toolId
+      this.$router.push({ name: 'history', query: { toolId } })
     },
 
     clearFilters () {
@@ -303,9 +305,9 @@ export default {
 
     async exportTable () {
       this.loading = true
-      var element = document.querySelector('.history-table-export')
+      let element = document.querySelector('.history-table-export')
 
-      var opt = {
+      let options = {
         filename: 'transactions_export.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2 },
@@ -317,7 +319,7 @@ export default {
       }
 
       try {
-        await html2pdf().from(element).set(opt).save()
+        await html2pdf().from(element).set(options).save()
         this.loading = false
       } catch (error) {
         window.console.error(error)
@@ -326,7 +328,7 @@ export default {
     },
 
     printTable () {
-      var element = document.querySelector('.history-table-export')
+      let element = document.querySelector('.history-table-export')
       window.cordova.plugins.printer.print(element, { name: 'retina_history.html', landscape: true })
     },
 

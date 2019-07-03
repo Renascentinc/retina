@@ -6,29 +6,28 @@
     >
       <div class="row">
         <span class="title">
-          {{ name }}
+          {{ tool.name }}
         </span>
       </div>
       <div class="row">
         <span class="subtitle">
-          {{ id }}
+          {{ tool.formattedId }}
         </span>
         <span
-          :class="statusClass"
+          :class="tool.statusClass"
           class="tool-status"
         >
-          {{ status }}
+          {{ tool.formattedStatus }}
         </span>
       </div>
       <div class="row">
         <i
-          :class="assigneeIcon"
+          :class="tool.owner.iconClass"
           class="fas user-icon"
-        >
-        </i>
+        />
 
         <span class="tool-assignee">
-          {{ assignee }}
+          {{ tool.owner.name }}
         </span>
       </div>
     </div>
@@ -49,7 +48,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'ToolSearchResult',
@@ -72,39 +71,9 @@ export default {
   },
 
   computed: {
-    ...mapState([
+    ...mapState('tools', [
       'selectedToolsMap'
     ]),
-
-    id () {
-      return `#${this.tool.id}`
-    },
-
-    name () {
-      return `${this.tool.brand.name} ${this.tool.type.name}`
-    },
-
-    statusClass () {
-      return this.tool.status
-        .split('_')
-        .join('-')
-        .toLowerCase()
-    },
-
-    status () {
-      return this.tool.status
-        .split('_')
-        .join(' ')
-        .toLowerCase()
-    },
-
-    assignee () {
-      return this.tool.owner.isUser || this.tool.owner.type === 'USER' ? `${this.tool.owner.first_name} ${this.tool.owner.last_name}` : this.tool.owner.name
-    },
-
-    assigneeIcon () {
-      return this.tool.owner.isUser || this.tool.owner.type === 'USER' ? 'fa-user' : 'fa-map-marker-alt'
-    },
 
     selected () {
       return this.selectedToolsMap[this.tool.id]
@@ -112,12 +81,16 @@ export default {
   },
 
   methods: {
+    ...mapMutations('tools', [
+      'toggleToolSelection'
+    ]),
+
     onClick () {
       this.onSelect(this.tool.id)
     },
 
     toggleSelect () {
-      this.$store.commit('toggleToolSelection', this.tool.id)
+      this.toggleToolSelection(this.tool.id)
     }
   }
 }

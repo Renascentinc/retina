@@ -270,15 +270,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'users/currentUser',
-      'users/isAdminUser',
-      'users/isCurrentUser'
+    ...mapGetters('users', [
+      'isAdminUser',
+      'isCurrentUser'
     ]),
-
-    isCurrentUser () {
-      return this.currentUser.id === this.user.id
-    },
 
     canEdit () {
       return this.isAdminUser || this.isCurrentUser
@@ -286,9 +281,9 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'users/updateUser',
-      'users/deleteUser'
+    ...mapActions('users', [
+      'updateUser',
+      'deleteUser'
     ]),
 
     toggleChangingRole () {

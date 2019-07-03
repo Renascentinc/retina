@@ -238,11 +238,11 @@ import ExtendedFab from '@/components/basic/extended-fab'
 import NfcScan from '@/components/nfc-scan'
 import AddButton from '@/components/add-button'
 import vSelect from '@/components/basic/select'
-import Roles from '@/utils/roles'
 import Platforms from '@/utils/platforms'
 import nfcMixin from '@/mixins/nfc'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import LoadingSpinner from '@/components/basic/loading-spinner'
+import { mapGetters, mapState } from 'vuex'
 import {
   locationsQuery,
   usersQuery,
@@ -351,29 +351,25 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'tools/showOnlySelectedTools',
+      'tools/transferState'
+    ]),
+
+    ...mapGetters([
+      'users/currentUser',
+      'users/isAdminUser',
+      'users/isCurrentUser',
+      'tools/selectedTools'
+    ]),
+
     infiniteScrollPageNumber () {
       let tools = (this.showOnlySelectedTools ? this.getMultipleTool : this.searchTool) || []
       return Math.ceil(tools.length / this.pageSize)
     },
 
-    currentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser'))
-    },
-
-    isAdmin () {
-      return this.currentUser.role === Roles.ADMIN
-    },
-
     isNonAdminTransfer () {
       return this.currentState === this.states.SELECTING && !this.isAdmin
-    },
-
-    showOnlySelectedTools () {
-      return this.$store.state.showOnlySelectedTools
-    },
-
-    currentState () {
-      return this.$store.state.transferState
     },
 
     tools () {
@@ -417,7 +413,7 @@ export default {
     },
 
     numSelectedTools () {
-      return this.$store.getters.selectedTools.length
+      return this.selectedTools.length
     },
 
     formattedNumSelectedTools () {

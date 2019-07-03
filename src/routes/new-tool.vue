@@ -169,7 +169,7 @@
           <v-select
             v-model="newTool.owner"
             :options="userOptions"
-            label="full_name"
+            label="name"
             class="dark-input"
           />
         </div>

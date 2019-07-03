@@ -9,7 +9,7 @@
         v-if="$mq === 'desktop'"
       >
         <extended-fab
-          v-if="isAdmin"
+          v-if="isAdminUser"
           :on-click="transitionToAddUser"
           class="add-user-fab"
           icon-class="fa-plus"
@@ -18,7 +18,7 @@
       </div>
       <div class="scroll-container">
         <add-button
-          v-if="$mq === 'mobile' && isAdmin"
+          v-if="$mq === 'mobile' && isAdminUser"
           :key="0"
           :on-click="transitionToAddUser"
           text="USER"
@@ -62,11 +62,11 @@
 <script>
 import UserSearchInput from '@/components/user-search-input'
 import UserSearchResult from '@/components/user-search-result'
-import Roles from '@/utils/roles'
 import ExtendedFab from '@/components/basic/extended-fab'
 import AddButton from '@/components/add-button'
 import LoadingSpinner from '@/components/basic/loading-spinner'
 import { usersQuery, searchUserQuery } from '@/utils/gql'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Users',
@@ -89,7 +89,7 @@ export default {
       query: searchUserQuery,
       variables () {
         let options = {
-          query: this.searchString ? this.searchString : ''
+          query: this.searchString
         }
 
         return options
@@ -98,19 +98,20 @@ export default {
     }
   },
 
+  data () {
+    return {
+      searchString: ''
+    }
+  },
+
   computed: {
-    isAdmin () {
-      return (
-        JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
-      )
-    },
+    ...mapGetters([
+      'users/isAdminUser'
+    ]),
 
     users () {
-      if (this.searchString) {
-        return this.searchUser || []
-      }
-
-      return this.getAllUser || []
+      let users = this.searchString ? this.searchUser : this.getAllUser
+      return users || []
     }
   },
 

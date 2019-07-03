@@ -362,3 +362,224 @@ export const updateUserMutation = gql`
     }
   }
 `
+
+// export const searchToolSnapshotQuery = gql`
+//   query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
+//     searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
+//       id
+//       tool {
+//         id
+//         brand {
+//           id
+//           name
+//         }
+//         type {
+//           id,
+//           name
+//         }
+//         status
+//         owner {
+//           ... on Location {
+//              id
+//              name
+//              type
+//           }
+//           ... on User {
+//              id
+//              first_name
+//              last_name
+//              type
+//           }
+//         }
+//       }
+//       metadata {
+//         timestamp,
+//         tool_action
+//       }
+//     }
+//   }
+// `
+
+export const searchToolSnapshotQuery = gql`
+  query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
+    searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
+      id
+      metadata {
+        timestamp
+        tool_action
+        action_note
+        actor {
+          id
+          first_name
+          last_name
+        }
+      }
+      tool {
+        id
+        status
+        photo
+        model_number
+        serial_number
+        brand {
+          id
+          name
+        }
+        type {
+          id
+          name
+        }
+        purchased_from {
+          id
+          name
+        }
+        owner {
+          ... on Location {
+            id
+            name
+            type
+          }
+          ... on User {
+            id
+            first_name
+            last_name
+            type
+          }
+        }
+        date_purchased
+        price
+        year
+      }
+      previous_tool_snapshot {
+        tool {
+          id
+          status
+          model_number
+          serial_number
+          brand {
+            id
+            name
+          }
+          type {
+            id
+            name
+          }
+          purchased_from {
+            id
+            name
+          }
+          owner {
+            ... on Location {
+              id
+              name
+              type
+            }
+            ... on User {
+              id
+              first_name
+              last_name
+              type
+            }
+          }
+          date_purchased
+          price
+          year
+        }
+      }
+    }
+  }
+`
+
+export const recomissionToolMutation = gql`
+  mutation recomissionTool($tool_id: ID!, $status: InServiceToolStatus!) {
+    recomissionTool(tool_id: $tool_id, recomissioned_status: $status) {
+      status
+    }
+  }
+`
+
+export const getToolSnapshotByIdQuery = gql`
+  query getToolSnapshot($id: ID!) {
+    getToolSnapshot(tool_snapshot_id: $id) {
+      id
+      metadata {
+        action_note
+        actor {
+          id
+          first_name
+          last_name
+        }
+      }
+      tool {
+        id
+        status
+        photo
+        model_number
+        serial_number
+        brand {
+          id
+          name
+        }
+        type {
+          id
+          name
+        }
+        purchased_from {
+          id
+          name
+        }
+        owner {
+          ... on Location {
+            id
+            name
+            type
+          }
+          ... on User {
+            id
+            first_name
+            last_name
+            type
+          }
+        }
+        date_purchased
+        price
+        year
+      }
+      previous_tool_snapshot {
+        tool {
+          id
+          status
+          model_number
+          serial_number
+          brand {
+            id
+            name
+          }
+          type {
+            id
+            name
+          }
+          purchased_from {
+            id
+            name
+          }
+          owner {
+            ... on Location {
+              id
+              name
+              type
+            }
+            ... on User {
+              id
+              first_name
+              last_name
+              type
+            }
+          }
+          date_purchased
+          price
+          year
+        }
+      }
+    }
+  }
+`

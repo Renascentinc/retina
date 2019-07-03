@@ -3,15 +3,15 @@
   "version": "3.1.0",
   "private": true,
   "description": "Renascent inc. Asset Tracking Application",
-  "author": "Renascent inc.",
+  "author": "Renascent Inc.",
   "scripts": {
     "setup": "yarn && mkdir www plugins platforms && cordova prepare && yarn mobile:assets",
     "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode=development",
-    "build:cordova": "VUE_APP_PLATFORM=cordova vue-cli-service build",
-    "build:cordova:dev": "VUE_APP_PLATFORM=cordova vue-cli-service build --mode=development",
     "mobile:assets": "app-icon generate -i public/static/icon-ios.png --platforms=ios && app-icon generate -i public/static/icon-android.png --platforms=android && cordova-splash --splash=public/static/launch.png",
+    "build:mobile": "VUE_APP_PLATFORM=cordova vue-cli-service build",
+    "build:mobile:dev": "VUE_APP_PLATFORM=cordova vue-cli-service build --mode=development",
     "android": "yarn build:cordova && cordova build android",
     "ios": "yarn build:cordova && cordova build ios",
     "test": "yarn lint && yarn test:unit",
@@ -97,7 +97,8 @@
       },
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-printer": {}
+      "cordova-plugin-printer": {},
+      "cordova-plugin-statusbar": {}
     },
     "platforms": [
       "ios",

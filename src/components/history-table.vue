@@ -108,7 +108,7 @@
           height: 45px;
           font-weight: 600; border-right: solid 1px lightgray;"
           >
-            <span>{{ entry.tool.id }}</span>
+            <span>{{ entry.currentSnapshot.id }}</span>
           </div>
           <div
             class="dt-cell name"
@@ -122,7 +122,7 @@
           font-weight: 600;
           flex: 0 0 calc(20% - 15px);"
           >
-            <span>{{ `${ entry.tool.brand.name } ${ entry.tool.type.name }` }}</span>
+            <span>{{ `${ entry.currentSnapshot.brand.name } ${ entry.currentSnapshot.type.name }` }}</span>
           </div>
           <div
             class="dt-cell name"
@@ -136,7 +136,7 @@
           font-weight: 600;
           flex: 0 0 calc(20% - 15px);"
           >
-            <span>{{ entry.tool.owner.type === 'USER' ? `${ entry.tool.owner.first_name } ${ entry.tool.owner.last_name }` : entry.tool.owner.name }}</span>
+            <span>{{ entry.currentSnapshot.owner.name }}</span>
           </div>
           <div
             class="dt-cell name"
@@ -150,7 +150,7 @@
           font-weight: 600;
           flex: 0 0 calc(20% - 15px);"
           >
-            <span>{{ entry.tool.status }}</span>
+            <span>{{ entry.currentSnapshot.status }}</span>
           </div>
           <div
             class="dt-cell date"

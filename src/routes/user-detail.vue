@@ -30,7 +30,7 @@
         />
 
         <dropdown
-          v-if="isAdmin"
+          v-if="isAdminUser"
           :on-click="updateRole"
           :options="roles"
           :flag="toggleChangingRole"
@@ -55,7 +55,7 @@
             v-if="!editState"
             class="name"
           >
-            {{ user.full_name }}
+            {{ user.name }}
           </div>
 
           <div
@@ -99,11 +99,11 @@
           </span>
 
           <div
-            v-if="isAdmin"
+            v-if="isAdminUser"
             class="actions"
           >
             <dropdown
-              v-if="$mq === 'mobile' && isAdmin"
+              v-if="$mq === 'mobile' && isAdminUser"
               :on-click="updateRole"
               :options="roles"
               button-text="CHANGE ROLE"
@@ -190,7 +190,7 @@
             </div>
           </div>
           <div
-            v-if="editState && isAdmin && !isCurrentUser"
+            v-if="editState && isAdminUser && !isCurrentUser"
             class="container search-result"
             @click="performUserDelete"
           >
@@ -227,7 +227,7 @@ import Roles from '@/utils/roles'
 import { getUserById } from '@/utils/gql'
 import User from '@/models/user'
 import { showInvalidIDMsg, showSuccessMsg, showErrorMsg } from '@/utils/alerts'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ToolDetail',
@@ -270,23 +270,25 @@ export default {
   },
 
   computed: {
-    isCurrentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).id === this.user.id
-    },
+    ...mapGetters([
+      'users/currentUser',
+      'users/isAdminUser',
+      'users/isCurrentUser'
+    ]),
 
-    isAdmin () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
+    isCurrentUser () {
+      return this.currentUser.id === this.user.id
     },
 
     canEdit () {
-      return this.isAdmin || this.isCurrentUser
+      return this.isAdminUser || this.isCurrentUser
     }
   },
 
   methods: {
     ...mapActions([
-      'updateUser',
-      'deleteUser'
+      'users/updateUser',
+      'users/deleteUser'
     ]),
 
     toggleChangingRole () {
@@ -311,22 +313,28 @@ export default {
     },
 
     async performUserDelete () {
-      await this.deleteUser(this.editedUser)
-      showSuccessMsg('Successfully Deleted User')
-      this.transitionToUsers()
+      try {
+        await this.deleteUser(this.editedUser)
+        showSuccessMsg('Successfully Deleted User')
+        this.transitionToUsers()
+      } catch (error) {
+        showErrorMsg('There was an error saving changes. Please try again or contact support.')
+      }
     },
 
     async saveUser () {
       let isValid = this.$validator.validate()
 
-      if (isValid) {
-        try {
-          await this.updateUser(this.editedUser)
-          this.user.update(this.editedUser)
-          this.editState = false
-        } catch (error) {
-          showErrorMsg('There was an error saving changes. Please try again or contact support.')
-        }
+      if (!isValid) {
+        return
+      }
+
+      try {
+        await this.updateUser(this.editedUser)
+        this.user.update(this.editedUser)
+        this.editState = false
+      } catch (error) {
+        showErrorMsg('There was an error saving changes. Please try again or contact support.')
       }
     },
 

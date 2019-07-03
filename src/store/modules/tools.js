@@ -1,21 +1,17 @@
-import Vuex from 'vuex'
 import Vue from 'vue'
-import { defaultClient as apollo } from './apollo'
+import { defaultClient as apollo } from '@/apollo'
 import imageCompression from 'browser-image-compression'
-import { showErrorMsg } from './utils/alerts'
+import { showErrorMsg } from '@/utils/alerts'
 import swal from 'sweetalert2'
 import {
   updateToolMutation,
-  createConfigurableItemMutation,
   decomissionToolMutation,
-  createNewToolMutation,
-  deleteUserMutation,
-  updateUserMutation
-} from './utils/gql'
+  createNewToolMutation
+} from '@/utils/gql'
 
-Vue.use(Vuex)
+const tools = {
+  namespaced: true,
 
-export default new Vuex.Store({
   state: {
     selectedToolsMap: { },
     transferState: 'INITIAL',
@@ -62,32 +58,15 @@ export default new Vuex.Store({
 
   actions: {
     async saveSpecialToolMetadata ({ dispatch }, tool) {
-      let brandResponse = await dispatch('createNewConfigurableItem', tool.brand)
-      let typeResponse = await dispatch('createNewConfigurableItem', tool.type)
-      let purchaseResponse = await dispatch('createNewConfigurableItem', tool.purchased_from)
-      let photoResponse = await dispatch('savePhoto', tool.image)
+      let brandResponse = await dispatch('configurable-items/createNewConfigurableItem', tool.brand)
+      let typeResponse = await dispatch('configurable-items/createNewConfigurableItem', tool.type)
+      let purchaseResponse = await dispatch('configurable-items/createNewConfigurableItem', tool.purchased_from)
+      let photoResponse = await dispatch('tools/savePhoto', tool.image)
 
       if (brandResponse) tool.brand.id = brandResponse.data.createConfigurableItem.id
       if (typeResponse) tool.type.id = typeResponse.data.createConfigurableItem.id
       if (purchaseResponse) tool.purchased_from.id = purchaseResponse.data.createConfigurableItem.id
       if (photoResponse) tool.photo = photoResponse
-    },
-
-    async createNewConfigurableItem (store, configurableItem) {
-      if (!configurableItem || !configurableItem.isNewConfigurableItem) {
-        return
-      }
-
-      await apollo.mutate({
-        mutation: createConfigurableItemMutation,
-        variables: {
-          newConfigurableItem: {
-            type: configurableItem.type,
-            name: configurableItem.name,
-            sanctioned: true
-          }
-        }
-      })
     },
 
     savePhoto (store, image) {
@@ -126,7 +105,7 @@ export default new Vuex.Store({
 
     async updateTool ({ dispatch }, tool) {
       try {
-        await dispatch('saveSpecialToolMetadata', tool)
+        await dispatch('tools/saveSpecialToolMetadata', tool)
 
         await apollo.mutate({
           mutation: updateToolMutation,
@@ -142,7 +121,7 @@ export default new Vuex.Store({
 
     async createNewTool ({ dispatch }, tool) {
       try {
-        await dispatch('saveSpecialToolMetadata', tool)
+        await dispatch('tools/saveSpecialToolMetadata', tool)
 
         let response = await apollo.mutate({
           mutation: createNewToolMutation,
@@ -206,46 +185,13 @@ export default new Vuex.Store({
             decomission_reason: result.value
           }
         })
-        commit('setToolSelection', tool.id, false)
+        commit('tools/setToolSelection', tool.id, false)
       } catch (error) {
         window.console.error(error)
         showErrorMsg()
       }
-    },
-
-    async deleteUser (store, user) {
-      let result = await swal({
-        type: 'warning',
-        title: 'CONFIRM DELETE USER',
-        text: `Are You Sure You Want To Delete ${user.name}? This Action Cannot Be Undone`,
-        reverseButtons: true,
-        showCancelButton: true,
-        confirmButtonText: 'DELETE',
-        cancelButtonText: 'CANCEL',
-        confirmButtonColor: '#CE352F'
-      })
-
-      if (!result.value) {
-        return
-      }
-
-      user.status = 'INACTIVE'
-      await apollo.mutate({
-        mutation: deleteUserMutation,
-        variables: {
-          updatedUser: user.getState()
-        }
-      })
-    },
-
-    async updateUser (store, user) {
-      await apollo.mutate({
-        mutation: updateUserMutation,
-
-        variables: {
-          user: user.getState()
-        }
-      })
     }
   }
-})
+}
+
+export default tools

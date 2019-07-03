@@ -203,7 +203,7 @@ export default {
           }
         })
 
-        user.full_name = `${user.first_name} ${user.last_name}`
+        user.name = `${user.first_name} ${user.last_name}`
 
         window.localStorage.setItem('token', token)
         window.localStorage.setItem('currentUser', JSON.stringify(user))

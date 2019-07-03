@@ -37,4 +37,5 @@ git pull
 git checkout -b release/v1.2.3
 yarn version (--major, --minor, --patch)
 git push --follow-tags
+open https://github.com/Renascentinc/retina/compare/master...release/v1.2.3
 ```

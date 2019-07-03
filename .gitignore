@@ -3,9 +3,9 @@ node_modules
 dist/
 
 # cordova
-www/*
-plugins/*
-platforms/*
+www/
+plugins/
+platforms/
 
 # local env files
 .env.local

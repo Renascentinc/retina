@@ -141,6 +141,7 @@ import statuses from '@/utils/statuses'
 import { searchToolSnapshotQuery, recomissionToolMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import HistoryEntry from '@/models/history-entry'
+import moment from 'moment'
 
 export default {
   name: 'History',
@@ -220,11 +221,10 @@ export default {
       let dateRange
       if (this.dateRange) {
         dateRange = {}
-        let startTime = new Date(this.dateRange.start)
-        let endTime = new Date(this.dateRange.end)
-        endTime.setDate(endTime.getDate() + 1)
-        endTime.setUTCHours(23)
-        startTime.setUTCHours(0)
+        let startTime = moment(this.dateRange.start)
+        let endTime = moment(this.dateRange.end)
+        endTime.endOf('day')
+        startTime.startOf('day')
         dateRange.start_time = startTime.toISOString()
         dateRange.end_time = endTime.toISOString()
       }
@@ -282,12 +282,12 @@ export default {
     updateDateFilterTag () {
       if (this.dateRange) {
         let idx = this.tags.findIndex(tag => tag.isDatespanFilter)
-        let startTime = new Date(this.dateRange.start)
-        let endTime = new Date(this.dateRange.end)
+        let startTime = moment(this.dateRange.start)
+        let endTime = moment(this.dateRange.end)
         let dateRangeTag = {
           isDatespanFilter: true,
-          text: `${startTime.getMonth() + 1}/${startTime.getDate()}-${endTime.getMonth() + 1}/${endTime.getDate()}`,
-          name: `${startTime.getMonth() + 1}/${startTime.getDate()}-${endTime.getMonth() + 1}/${endTime.getDate()}`,
+          text: `${startTime.format('MM/DD')}-${endTime.format('MM/DD')}`,
+          name: `${startTime.format('MM/DD')}-${endTime.format('MM/DD')}`,
           iconClass: 'fa-calendar-alt'
         }
         if (idx > -1) {

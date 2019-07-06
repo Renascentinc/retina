@@ -410,7 +410,7 @@ export default {
       isSavingTool: false,
       statuses,
       validations: {
-        modelYear: `numeric|date_format:YYYY|date_between:1950,${new Date().getFullYear()},true`
+        modelYear: `date_format:YYYY|before:${new Date().getFullYear()},true`
       },
       moneyInputConfig: {
         decimal: '.',

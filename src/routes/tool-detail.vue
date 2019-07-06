@@ -490,7 +490,7 @@ export default {
       editState: false,
       saving: false,
       validations: {
-        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear()}`
+        modelYear: `date_format:YYYY|before:${new Date().getFullYear()},true`
       },
       moneyInputConfig: {
         decimal: '.',

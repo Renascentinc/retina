@@ -185,7 +185,7 @@ export default {
         items = items.concat(this.tools)
       }
 
-      return items
+      return this.tag ? items : []
     },
 
     filteredItems () {

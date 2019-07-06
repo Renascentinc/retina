@@ -1,8 +1,19 @@
 <template>
-  <div class="search-result">
+  <div class="search-result" @click="onClick">
+    <div class="thumbnail-container">
+      <img
+        v-if="tool.photo"
+        :src="tool.photo"
+        class="photo-thumbnail"
+      >
+
+      <i
+        v-if="!tool.photo"
+        class="fas fa-image no-image"
+      />
+    </div>
     <div
       class="main-container"
-      @click="onClick"
     >
       <div class="row">
         <span class="title">
@@ -99,6 +110,25 @@ export default {
 <style lang="scss">
 
 @import "../styles/search-result";
+
+.thumbnail-container {
+  width: 81px;
+  height: 81px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .photo-thumbnail {
+    height: 60px;
+    width: 60px;
+    border-radius: 5px;
+  }
+
+  .no-image {
+    font-size: 30px;
+    color: $renascent-dark-gray;
+  }
+}
 
 .tool-status {
   text-transform: none;

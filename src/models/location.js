@@ -22,6 +22,7 @@ export default class Location {
     this.city = location.city
     this.state = location.state
     this.zip = location.zip
+    this.name = location.name
     this.address_line_one = location.address_line_one
     this.address_line_two = location.address_line_two
   }

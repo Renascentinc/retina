@@ -239,6 +239,7 @@ export const multiToolQuery = gql`
         name
       }
       status
+      photo
       owner {
         ... on Location {
            id
@@ -280,6 +281,7 @@ export const searchToolsQuery = gql`
         name
       }
       status
+      photo
       owner {
         ... on Location {
            id

@@ -5,12 +5,12 @@
       class="photo-box"
     >
       <img
-        v-lazy="`${localImageUrl}`"
-        v-if="localImageUrl"
+        :src="imageUrl"
+        v-if="imageUrl"
         class="image"
       >
       <i
-        v-if="!localImageUrl"
+        v-if="!imageUrl"
         class="fas fa-image no-image"
       />
     </div>
@@ -82,6 +82,10 @@ export default {
     },
     onImageChange: {
       type: Function,
+      required: true
+    },
+    imageUrl: {
+      type: String,
       required: true
     }
   },

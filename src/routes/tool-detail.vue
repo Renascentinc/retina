@@ -399,6 +399,7 @@
             <add-photo
               :on-image-change="onImageChange"
               :edit-state="editState"
+              :image-url="tool.photo"
             />
           </div>
         </div>

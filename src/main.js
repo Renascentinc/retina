@@ -3,7 +3,6 @@
 import '../node_modules/v-calendar/lib/v-calendar.min.css'
 
 import Vue from 'vue'
-import VueLazyload from 'vue-lazyload'
 import App from './App'
 import DrawerLayout from 'vue-drawer-layout'
 import VCalendar from 'v-calendar'
@@ -28,7 +27,6 @@ Vue.use(VueInfiniteScroll)
 Vue.use(DrawerLayout)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
-Vue.use(VueLazyload)
 Vue.use(money, { precision: 2 })
 Vue.use(VueMq, {
   breakpoints: {

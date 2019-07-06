@@ -272,8 +272,12 @@ export default {
   computed: {
     ...mapGetters('users', [
       'isAdminUser',
-      'isCurrentUser'
+      'currentUser'
     ]),
+
+    isCurrentUser () {
+      return this.currentUser.id === this.user.id
+    },
 
     canEdit () {
       return this.isAdminUser || this.isCurrentUser

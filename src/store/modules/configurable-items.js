@@ -2,13 +2,15 @@ import { defaultClient as apollo } from '@/apollo'
 import { createConfigurableItemMutation } from '@/utils/gql'
 
 const configurableItems = {
+  namespaced: true,
+
   actions: {
-    async createNewConfigurableItem (store, configurableItem) {
+    createNewConfigurableItem (store, configurableItem) {
       if (!configurableItem || !configurableItem.isNewConfigurableItem) {
         return
       }
 
-      await apollo.mutate({
+      return apollo.mutate({
         mutation: createConfigurableItemMutation,
         variables: {
           newConfigurableItem: {

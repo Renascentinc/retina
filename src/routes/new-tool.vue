@@ -354,7 +354,7 @@ import { configurableItemQuery, usersQuery } from '@/utils/gql'
 import Tool from '@/models/tool'
 import User from '@/models/user'
 import LoadingOverlay from '@/components/basic/loading-overlay'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 
 export default {
@@ -421,6 +421,10 @@ export default {
   },
 
   computed: {
+    ...mapGetters('users', [
+      'currentUser'
+    ]),
+
     userOptions () {
       if (!this.getAllUser) {
         return []
@@ -504,7 +508,7 @@ export default {
         model_number: '',
         serial_number: '',
         price: '',
-        owner: new User(JSON.parse(window.localStorage.getItem('currentUser')))
+        owner: new User(this.currentUser)
       })
     }
   }

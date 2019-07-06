@@ -14,7 +14,7 @@
       <div class="configs">
         <add-result
           :on-save="addConfig"
-          :text="page.toUpperCase()"
+          :text="addItemText"
         />
 
         <config-item
@@ -84,6 +84,19 @@ export default {
           return 'Types'
         case ConfigurableItems.PURCHASED_FROM:
           return 'Suppliers'
+        default:
+          return ''
+      }
+    },
+
+    addItemText () {
+      switch (this.page) {
+        case ConfigurableItems.BRAND:
+          return 'BRAND'
+        case ConfigurableItems.TYPE:
+          return 'TYPE'
+        case ConfigurableItems.PURCHASED_FROM:
+          return 'SUPPLIER'
         default:
           return ''
       }

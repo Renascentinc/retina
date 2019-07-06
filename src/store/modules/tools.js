@@ -58,9 +58,9 @@ const tools = {
 
   actions: {
     async saveSpecialToolMetadata ({ dispatch }, tool) {
-      let brandResponse = await dispatch('createNewConfigurableItem', tool.brand)
-      let typeResponse = await dispatch('createNewConfigurableItem', tool.type)
-      let purchaseResponse = await dispatch('createNewConfigurableItem', tool.purchased_from)
+      let brandResponse = await dispatch('configurableItems/createNewConfigurableItem', tool.brand, { root: true })
+      let typeResponse = await dispatch('configurableItems/createNewConfigurableItem', tool.type, { root: true })
+      let purchaseResponse = await dispatch('configurableItems/createNewConfigurableItem', tool.purchased_from, { root: true })
       let photoResponse = await dispatch('savePhoto', tool.image)
 
       if (brandResponse) tool.brand.id = brandResponse.data.createConfigurableItem.id

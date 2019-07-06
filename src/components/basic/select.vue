@@ -57,7 +57,7 @@
           :aria-expanded="dropdownOpen"
           type="search"
           class="form-control"
-          autocomplete="off"
+          autocomplete="custom-info"
           role="combobox"
           aria-label="Search for option"
           @keydown.delete="maybeDeleteValue"

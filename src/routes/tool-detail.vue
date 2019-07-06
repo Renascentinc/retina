@@ -422,7 +422,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
 import Fab from '@/components/basic/fab.vue'
 import ExtendedFab from '@/components/basic/extended-fab'
 import DatePicker from '@/components/basic/date-picker'
@@ -503,8 +503,13 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'transferState'
+    ...mapState('tools', [
+      'transferState',
+      'selectedToolsMap'
+    ]),
+
+    ...mapGetters('users', [
+      'currentUser'
     ]),
 
     statusOptions () {
@@ -518,7 +523,7 @@ export default {
     },
 
     isToolSelected () {
-      return !!this.$store.state.selectedToolsMap[this.tool.id]
+      return !!this.selectedToolsMap[this.tool.id]
     },
 
     brandOptions () {
@@ -534,16 +539,14 @@ export default {
     },
 
     canEdit () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return currentUser.role === 'ADMINISTRATOR'
+      return this.currentUser.role === 'ADMINISTRATOR'
     },
 
     isTransferable () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
       return (
-        currentUser.role === 'ADMINISTRATOR' ||
+        this.currentUser.role === 'ADMINISTRATOR' ||
         (this.tool.owner.isLocation && this.tool.status === 'AVAILABLE') ||
-        (this.tool.owner.isUser && currentUser.id === this.tool.owner.id)
+        (this.tool.owner.isUser && this.currentUser.id === this.tool.owner.id)
       )
     }
   },
@@ -556,13 +559,13 @@ export default {
   },
 
   methods: {
-    ...mapActions([
+    ...mapActions('tools', [
       'updateTool',
       'saveStatusChange',
       'decomissionTool'
     ]),
 
-    ...mapMutations([
+    ...mapMutations('tools', [
       'toggleToolSelection',
       'updateTransferStatus'
     ]),

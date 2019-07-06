@@ -32,7 +32,6 @@
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-printer": "^0.7.3",
     "debounce": "^1.2.0",
-    "deep-diff": "^1.0.2",
     "fastclick": "https://github.com/Renascentinc/fastclick.git",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
@@ -48,10 +47,8 @@
     "vue-avatar": "^2.1.6",
     "vue-drawer-layout": "^1.0.0",
     "vue-infinite-scroll": "^2.0.2",
-    "vue-lazyload": "^1.2.6",
     "vue-mq": "^0.2.1",
     "vue-router": "^3.0.1",
-    "vue-svgicon": "^3.2.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

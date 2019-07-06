@@ -6,7 +6,7 @@
     <loading-overlay :active="currentState === states.AUTHENTICATING"/>
 
     <div class="top-panel">
-      <img class="logo" src="@/assets/icons/red_transparent_512x512.svg">
+      <img class="logo" src="@/assets/icons/red_transparent_512x512.png">
 
       <div class="name-container">
         <span class="retina-name"> RETINA </span>

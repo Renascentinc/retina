@@ -1,6 +1,6 @@
 <template>
   <div class="page password-reset-page">
-    <img class="logo" src="@/assets/icons/red_transparent_512x512.svg">
+    <img class="logo" src="@/assets/icons/red_transparent_512x512.png">
 
     <span class="header-text">
       RESET YOUR PASSWORD

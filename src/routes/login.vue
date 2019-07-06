@@ -3,35 +3,14 @@
     :class="$mq"
     class="page login-page"
   >
-    <transition name="fade">
-      <div
-        v-if="currentState === states.AUTHENTICATING"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
+    <loading-overlay :active="currentState === states.AUTHENTICATING"/>
 
     <div class="top-panel">
-      <img
-        class="logo"
-        src="../assets/icons/web/red_transparent_512x512.png"
-      >
+      <img class="logo" src="@/assets/icons/red_transparent_512x512.png">
 
       <div class="name-container">
-        <span
-          class="retina-name"
-        >
-          RETINA
-        </span>
-        <span
-          class="renascent-name"
-        >
-          Renascent, Inc.
-        </span>
+        <span class="retina-name"> RETINA </span>
+        <span class="renascent-name"> Renascent, Inc. </span>
       </div>
     </div>
     <div class="bottom-panel">
@@ -105,19 +84,25 @@
           class="login-btn"
           icon-class="fa-arrow-right"
           button-text="SIGN IN"
+<<<<<<< HEAD
         >
         </extended-fab>
+=======
+          type="submit"
+        />
+>>>>>>> retina-339-refactor
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
-import gql from 'graphql-tag'
-import ApiStatusCodes from '../utils/api-status-codes'
-import InputWithIcon from '../components/input-with-icon'
-import ExtendedFab from '../components/extended-fab'
+import { requestPasswordResetMutation, loginMutation } from '@/utils/gql'
+import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import ApiStatusCodes from '@/utils/api-status-codes'
+import InputWithIcon from '@/components/input-with-icon'
+import ExtendedFab from '@/components/basic/extended-fab'
+import LoadingOverlay from '@/components/basic/loading-overlay'
 import swal from 'sweetalert2'
 
 export default {
@@ -125,7 +110,8 @@ export default {
 
   components: {
     InputWithIcon,
-    ExtendedFab
+    ExtendedFab,
+    LoadingOverlay
   },
 
   data () {
@@ -161,7 +147,7 @@ export default {
     return {
       organizationName: '',
       username: '',
-      domain: '@renascentinc.com',
+      defaultDomain: '@renascentinc.com',
       password: '',
       currentState: states.INITIAL,
       states
@@ -173,27 +159,13 @@ export default {
       if (this.username.indexOf('@') > -1) {
         return this.username
       }
-      return `${this.username}${this.domain}`
+      return `${this.username}${this.defaultDomain}`
     }
   },
 
-  beforeRouteEnter (to, from, next) {
-    window.localStorage.getItem('token') ? next('/') : next()
-  },
-
   methods: {
-    showPasswordResetError () {
-      swal({
-        type: 'error',
-        title: 'RESET FAILURE',
-        text: 'There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
-
-    requestPasswordReset () {
-      swal({
+    async requestPasswordReset () {
+      let result = await swal({
         title: 'RESET PASSWORD',
         text: 'Enter your email address',
         input: 'email',
@@ -203,36 +175,39 @@ export default {
         cancelButtonText: 'CANCEL',
         confirmButtonText: 'SUBMIT',
         confirmButtonColor: '#404040'
+<<<<<<< HEAD
       }).then(result => {
         if (result && result.value) {
           this.$apollo.mutate({
             mutation: gql`mutation attemptRequestPasswordReset($email: String!) {
               requestPasswordReset(email: $email)
             }`,
+=======
+      })
+
+      if (result && result.value) {
+        try {
+          let { data: { requestPasswordReset } } = await this.$apollo.mutate({
+            mutation: requestPasswordResetMutation,
+>>>>>>> retina-339-refactor
             variables: {
               email: result.value
             }
-          }).then(response => {
-            if (!response.data.requestPasswordReset) {
-              this.showPasswordResetError()
-            }
-          }).catch(() => {
-            this.showPasswordResetError()
           })
 
-          swal({
-            type: 'success',
-            text: 'Instructions for resetting your password will be sent to your email',
-            timer: 2000,
-            showConfirmButton: false
-          })
+          if (requestPasswordReset) {
+            showSuccessMsg('Instructions for resetting your password will be sent to your email')
+          }
+        } catch {
+          showErrorMsg('There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support', 'RESET FAILURE')
         }
-      })
+      }
     },
 
-    attemptUserLogin () {
+    async attemptUserLogin () {
       this.currentState = this.states.AUTHENTICATING
 
+<<<<<<< HEAD
       this.$apollo.mutate({
         mutation: gql`mutation attemptUserLogin($organization_name: String!, $email: String!, $password: String!) {
            login(organization_name: $organization_name, email: $email, password: $password) {
@@ -246,22 +221,24 @@ export default {
               role,
               status
             }
+=======
+      try {
+        let { data: { login: { token, user } } } = await this.$apollo.mutate({
+          mutation: loginMutation,
+          variables: {
+            organization_name: this.organizationName,
+            email: this.email,
+            password: this.password
+>>>>>>> retina-339-refactor
           }
-        }`,
-        variables: {
-          organization_name: this.organizationName,
-          email: this.email,
-          password: this.password
-        }
-      }).then(result => {
-        let { data: { login: { token, user } } } = result
+        })
 
-        user.full_name = `${user.first_name} ${user.last_name}`
+        user.name = `${user.first_name} ${user.last_name}`
 
         window.localStorage.setItem('token', token)
         window.localStorage.setItem('currentUser', JSON.stringify(user))
         this.$router.push({ path: '/' })
-      }).catch(error => {
+      } catch (error) {
         if (error.graphQLErrors && error.graphQLErrors.length) {
           let { graphQLErrors: [{ extensions: { code } }] } = error
 
@@ -273,21 +250,22 @@ export default {
             this.currentState = this.states.GENERIC_ERROR
           }
         } else if (error.networkError) {
-          // remove token just in case a stale one happens to be sitting around.
-          // theoretically should never happen but if it ever did the user would
-          // be unable to login without clearing their localStorage
           this.currentState = this.states.NETWORK_ERROR
         } else {
           this.currentState = this.states.GENERIC_ERROR
         }
-      })
+      }
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    window.localStorage.getItem('token') ? next('/') : next()
   }
 }
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
+
 $login-input-border-radius: 5px;
 
 .login-page {

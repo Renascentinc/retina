@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  name: 'ButtonDropdown',
+  name: 'Dropdown',
 
   props: {
     iconClass: {
@@ -110,8 +110,8 @@ export default {
     },
 
     filteredOptions () {
-      var array = this.options
-      var index = array.indexOf(this.buttonText)
+      let array = this.options
+      let index = array.indexOf(this.buttonText)
       if (index !== -1) {
         array.splice(index, 1)
       }
@@ -123,8 +123,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s;
 }

@@ -42,8 +42,8 @@
 
 <script>
 import VueTagsInput from '@johmun/vue-tags-input'
-import ConfigurableItems from '../utils/configurable-items'
-import Statuses from '../utils/statuses'
+import ConfigurableItems from '@/utils/configurable-items'
+import Statuses from '@/utils/statuses'
 import gql from 'graphql-tag'
 
 export default {
@@ -219,9 +219,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
-@import '../styles/search-input';
-
 .tag {
   background-color: $renascent-red !important;
   border-radius: 4px;

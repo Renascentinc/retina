@@ -3,12 +3,12 @@
   "name": "Retina",
   "icons": [
     {
-      "src": "../src/assets/icons/web/white_192x192.png",
+      "src": "./static/white_192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "../src/assets/icons/web/white_512x512.png",
+      "src": "./static/white_512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

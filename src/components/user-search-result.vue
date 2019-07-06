@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
+
 @import "../styles/search-result";
 $tool-search-result-border-radius: 3px;
 

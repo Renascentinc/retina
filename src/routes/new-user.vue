@@ -224,12 +224,12 @@
 </template>
 
 <script>
-import HeaderCard from '../components/header-card'
-import UserSearchResult from '../components/user-search-result.vue'
-import ExtendedFab from '../components/extended-fab.vue'
-import Fab from '../components/fab'
-import vSelect from '../components/select'
-import Roles from '../utils/roles'
+import HeaderCard from '@/components/header-card'
+import UserSearchResult from '@/components/user-search-result.vue'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import Fab from '@/components/basic/fab'
+import vSelect from '@/components/basic/select'
+import Roles from '@/utils/roles'
 import swal from 'sweetalert2'
 import gql from 'graphql-tag'
 
@@ -359,7 +359,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
   .card-change-enter-active {
     transition: opacity .25s;

@@ -1,29 +1,41 @@
-# retina-v4
+# Retina
 
-## Project setup
+Renascent Inc. Asset Tracking Application
+
+[![Build Status](https://travis-ci.org/Renascentinc/retina.png)](https://travis-ci.org/Renascentinc/retina)
+
+### Project setup
 ```
-yarn install
+brew install imagemagick
+git clone git@github.com:Renascentinc/retina.git
+cd retina
+yarn setup
 ```
 
 ### Compiles and hot-reloads for development
 ```
-yarn run serve
+yarn start
 ```
 
 ### Compiles and minifies for production
 ```
-yarn run build
+yarn build
 ```
 
-### Run your tests
+### Run tests
 ```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
+yarn test
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Branching
+This project follows [Git Flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+
+### Releasing
+```
+git checkout develop
+git pull
+git checkout -b release/v1.2.3
+yarn version (--major, --minor, --patch)
+git push --follow-tags
+open https://github.com/Renascentinc/retina/compare/master...release/v1.2.3
+```

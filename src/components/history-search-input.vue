@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import ConfigurableItems from '../utils/configurable-items'
+import ConfigurableItems from '@/utils/configurable-items'
 import VueTagsInput from '@johmun/vue-tags-input'
-import HistoryActions from '../utils/history-actions'
-import Statuses from '../utils/statuses'
+import HistoryActions from '@/utils/history-actions'
+import Statuses from '@/utils/statuses'
 import gql from 'graphql-tag'
 
 export default {
@@ -251,9 +251,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
-@import '../styles/search-input';
-
 .tag {
   background-color: $renascent-red !important;
   border-radius: 4px;

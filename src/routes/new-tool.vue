@@ -1,22 +1,12 @@
 <template>
   <div class="page new-tool-page">
+    <loading-overlay :active="isSavingTool"/>
+
     <header-card
       title="New Tool"
       exit-link="/tools"
     >
     </header-card>
-
-    <transition name="fade">
-      <div
-        v-if="isSavingTool"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
 
     <transition name="card-change">
       <div
@@ -28,8 +18,8 @@
             BRAND
           </span>
           <v-select
-            v-validate:brand="'required|max:40'"
-            v-model="brand"
+            v-validate="'required|max:40'"
+            v-model="newTool.brand"
             :options="brandOptions"
             name="brand"
             label="name"
@@ -63,8 +53,8 @@
             TYPE
           </span>
           <v-select
-            v-validate:type="'required|max:40'"
-            v-model="type"
+            v-validate="'required|max:40'"
+            v-model="newTool.type"
             :options="typeOptions"
             name="type"
             label="name"
@@ -99,12 +89,13 @@
           </span>
           <input
             v-validate="'required|max:40'"
-            v-model="modelNumber"
+            v-model="newTool.model_number"
             name="modelNumber"
             class="light-input"
             placeholder="eg. 18392049437"
             autocorrect="off"
             autocapitalize="off"
+            autocomplete="off"
             spellcheck="false"
           >
           <div class="error-container">
@@ -123,12 +114,13 @@
           </span>
           <input
             v-validate="'required|max:40'"
-            v-model="serialNumber"
+            v-model="newTool.serial_number"
             name="serialNumber"
             class="light-input"
             placeholder="eg. 0348529873023"
             autocorrect="off"
             autocapitalize="off"
+            autocomplete="off"
             spellcheck="false"
           >
           <div class="error-container">
@@ -147,12 +139,13 @@
           </span>
           <input
             v-validate="validations.modelYear"
-            v-model="modelYear"
+            v-model="newTool.year"
             name="modelYear"
             class="light-input"
             placeholder="eg. 2018"
             type="number"
             inputmode="numeric"
+            autocomplete="off"
             pattern="[0-9]*"
           >
           <div class="error-container">
@@ -177,12 +170,11 @@
             ASSIGN TO USER
           </span>
           <v-select
-            v-model="owner"
+            v-model="newTool.owner"
             :options="userOptions"
-            label="full_name"
+            label="name"
             class="dark-input"
-          >
-          </v-select>
+          />
         </div>
 
         <div class="input-group-container">
@@ -190,7 +182,7 @@
             PURCHASED FROM
           </span>
           <v-select
-            v-model="purchasedFrom"
+            v-model="newTool.purchased_from"
             :options="purchasedFromOptions"
             label="name"
             class="dark-input"
@@ -215,7 +207,7 @@
             STATUS
           </span>
           <v-select
-            v-model="status"
+            v-model="newTool.statusObject"
             :options="statuses"
             :searchable="false"
             label="name"
@@ -228,25 +220,10 @@
           <span class="form-label">
             PURCHASE DATE
           </span>
-          <v-date-picker
-            v-model="purchaseDate"
-            :input-props="{ readonly: true }"
-            :attributes="[{ popover: { visibility: 'hidden' } }]"
-            :max-date="new Date()"
-            :popover-visibility="datePickerVisibility"
-            popover-direction="top"
-            mode="single"
-            @input="toggleDatepicker"
-          >
-            <button
-              slot-scope="{ inputValue }"
-              :class="{ placeholder: !inputValue }"
-              class="dark-input purchase-date-input"
-              @click="toggleDatepicker"
-            >
-              {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
-            </button>
-          </v-date-picker>
+          <date-picker
+            :date="newTool.jsDate"
+            :on-date-change="onDateChange"
+          />
         </div>
 
         <div class="input-group-container">
@@ -255,7 +232,7 @@
           </span>
           <input
             v-money="moneyInputConfig"
-            v-model="price"
+            v-model.lazy="newTool.formattedPrice"
             name="price"
             class="light-input"
           >
@@ -268,47 +245,10 @@
         v-if="currentState === 3"
         class="new-tool-input-card photo-input-card"
       >
-        <input
-          id="file"
-          ref="file"
-          name="file"
-          style="display: none;"
-          type="file"
-          accept="image/*"
-          capture="camera"
-        >
-
-        <label
-          v-if="!imgSrc"
-          for="file"
-          class="dark-input add-photo"
-        >
-          <label
-            for="file"
-            class="fas fa-camera"
-          ></label>
-          Add Photo
-        </label>
-
-        <div
-          v-if="imgSrc"
-          class="image-container"
-        >
-          <img
-            :src="imgSrc"
-            class="img-preview"
-          >
-        </div>
-
-        <extended-fab
-          v-if="imgSrc"
-          :on-click="deletePhoto"
-          :outline-display="true"
-          class="delete-photo-efab"
-          icon-class="fa-times"
-          button-text="REMOVE PHOTO"
-        >
-        </extended-fab>
+        <add-photo
+          :on-image-change="onImageChange"
+          :edit-state="true"
+        />
       </div>
     </transition>
 
@@ -317,14 +257,12 @@
         v-if="currentState === 4"
         class="new-tool-input-card step-4"
       >
-        <nfc-encode :tool-id="tool ? tool.id : ''">
-        </nfc-encode>
+        <nfc-encode :tool-id="newTool.id"/>
 
         <tool-search-result
-          :tool="tool"
+          :tool="newTool"
           :on-select="transitionToToolInfo"
-        >
-        </tool-search-result>
+        />
 
         <div class="done-action-container">
           <extended-fab
@@ -333,16 +271,14 @@
             class="add-another-efab"
             icon-class="fa-undo"
             button-text="ADD ANOTHER"
-          >
-          </extended-fab>
+          />
 
           <extended-fab
             :on-click="transitionToTools"
             class="done-efab"
             icon-class="fa-arrow-right"
             button-text="DONE"
-          >
-          </extended-fab>
+          />
         </div>
       </div>
     </transition>
@@ -358,8 +294,7 @@
             :on-click="() => --currentState"
             class="page-back"
             icon-class="fa-arrow-left"
-          >
-          </fab>
+          />
         </div>
 
         <div class="pager">
@@ -392,8 +327,7 @@
             :on-click="advanceStep"
             class="page-forward"
             icon-class="fa-arrow-right"
-          >
-          </fab>
+          />
 
           <extended-fab
             v-if="currentState === 3"
@@ -401,8 +335,7 @@
             class="page-forward"
             icon-class=""
             button-text="FINISH"
-          >
-          </extended-fab>
+          />
         </div>
       </div>
     </transition>
@@ -410,17 +343,22 @@
 </template>
 
 <script>
-import HeaderCard from '../components/header-card'
-import ToolSearchResult from '../components/tool-search-result.vue'
-import ExtendedFab from '../components/extended-fab.vue'
-import Fab from '../components/fab'
-import vSelect from '../components/select'
-import gql from 'graphql-tag'
-import ConfigurableItems from '../utils/configurable-items'
-import Statuses from '../utils/statuses'
-import NfcEncode from '../components/nfc-encode'
-import swal from 'sweetalert2'
-import imageCompression from 'browser-image-compression'
+import HeaderCard from '@/components/header-card'
+import ToolSearchResult from '@/components/tool-search-result.vue'
+import DatePicker from '@/components/basic/date-picker'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import Fab from '@/components/basic/fab'
+import vSelect from '@/components/basic/select'
+import ConfigurableItems from '@/utils/configurable-items'
+import Statuses from '@/utils/statuses'
+import NfcEncode from '@/components/nfc-encode'
+import AddPhoto from '@/components/add-photo'
+import { configurableItemQuery, usersQuery } from '@/utils/gql'
+import Tool from '@/models/tool'
+import User from '@/models/user'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import { mapActions } from 'vuex'
+import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 
 export default {
   name: 'NewTool',
@@ -431,31 +369,20 @@ export default {
     ExtendedFab,
     Fab,
     vSelect,
-    NfcEncode
+    NfcEncode,
+    LoadingOverlay,
+    AddPhoto,
+    DatePicker
   },
 
   apollo: {
     getAllUser: {
-      query: gql`query {
-        getAllUser {
-          id
-          first_name
-          last_name
-          role
-        }
-      }`,
+      query: usersQuery,
       fetchPolicy: 'network-only'
     },
 
     getAllConfigurableItem: {
-      query: gql`query {
-        getAllConfigurableItem {
-          id
-          type
-          name
-          sanctioned
-        }
-      }`,
+      query: configurableItemQuery,
       fetchPolicy: 'network-only'
     }
   },
@@ -477,23 +404,9 @@ export default {
     ]
 
     return {
-      brand: null,
-      type: null,
-      owner: JSON.parse(window.localStorage.getItem('currentUser')),
-      modelNumber: null,
-      serialNumber: null,
-      modelYear: null,
-      purchasedFrom: null,
-      price: null,
-      photo: null,
-      status: statuses[1],
       currentState: 1,
-      purchaseDate: null,
+      newTool: this.getDefaultTool(),
       datePickerVisibility: 'hidden',
-      getAllConfigurableItem: [],
-      getAllUser: [],
-      tool: null,
-      imgSrc: null,
       isSavingTool: false,
       statuses,
       validations: {
@@ -512,10 +425,11 @@ export default {
 
   computed: {
     userOptions () {
-      return this.getAllUser.map(user => {
-        user.full_name = `${user.first_name} ${user.last_name}`
-        return user
-      })
+      if (!this.getAllUser) {
+        return []
+      }
+
+      return this.getAllUser.map(user => new User(user))
     },
 
     brandOptions () {
@@ -528,75 +442,65 @@ export default {
 
     purchasedFromOptions () {
       return this.getConfigurableItemsForType(ConfigurableItems.PURCHASED_FROM)
-    },
-
-    nfcDisabled () {
-      return !window.nfc
     }
   },
 
   methods: {
-    showSuccessMsg () {
-      swal({
-        type: 'success',
-        title: 'SUCCESS',
-        text: 'Successfully Added Tool',
-        timer: 1500,
-        showConfirmButton: false
-      })
-    },
-    showErrorMsg () {
-      swal({
-        type: 'error',
-        title: 'SAVE FAILURE',
-        text: 'There was an issue saving new tool. Please try again or contact support',
-        timer: 2000,
-        showConfirmButton: false
-      })
+    ...mapActions('tools', [
+      'createNewTool'
+    ]),
+
+    transitionToToolInfo (toolId) {
+      this.$router.push({ name: 'toolDetail', params: { toolId } })
     },
 
-    toggleDatepicker () {
-      if (this.datePickerVisibility === 'visible') {
-        this.datePickerVisibility = 'hidden'
-      } else {
-        this.datePickerVisibility = 'visible'
-      }
+    transitionToTools () {
+      this.$router.push({ path: '/tools' })
     },
 
-    updateImageDisplay () {
-      this.imgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
+    onImageChange (newImage) {
+      this.newTool.image = newImage
     },
 
-    deletePhoto () {
-      this.$refs.file.value = ''
-      this.imgSrc = null
-      this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
+    onDateChange (newDate) {
+      this.newTool.jsDate = newDate
     },
 
     getConfigurableItemsForType (type) {
+      if (!this.getAllConfigurableItem) {
+        return []
+      }
+
       return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
     },
 
-    advanceStep () {
-      this.$validator.validate().then(result => {
-        if (result) {
-          if (this.currentState === 3) {
-            this.saveTool()
-          } else if (this.currentState === 2) {
+    async advanceStep () {
+      let result = await this.$validator.validate()
+      if (result) {
+        if (this.currentState === 3) {
+          this.isSavingTool = true
+          try {
+            let response = await this.createNewTool(this.newTool)
+            this.newTool = new Tool(response.data.createTool)
             ++this.currentState
-            this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
-          } else {
-            ++this.currentState
+            showSuccessMsg()
+          } catch {
+            showErrorMsg()
           }
+          this.isSavingTool = false
+          this.$apollo.queries.getAllConfigurableItem.refetch()
+        } else {
+          ++this.currentState
         }
-      })
+      }
     },
 
     addAnother () {
-      this.resetData()
+      this.newTool = this.getDefaultTool()
       this.currentState = 1
     },
 
+<<<<<<< HEAD
     resetData () {
       this.brand = null
       this.type = null
@@ -780,6 +684,16 @@ export default {
       }).finally(() => {
         this.isSavingTool = false
         this.$apollo.queries.getAllConfigurableItem.refetch()
+=======
+    getDefaultTool () {
+      return new Tool({
+        year: '',
+        status: Statuses.AVAILABLE,
+        model_number: '',
+        serial_number: '',
+        price: '',
+        owner: this.$store.getters['users/currentUser']
+>>>>>>> retina-339-refactor
       })
     }
   }
@@ -787,7 +701,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .card-change-enter-active {
   transition: opacity .25s;

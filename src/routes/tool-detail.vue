@@ -1,16 +1,6 @@
 <template>
   <div class="page tool-detail-page">
-    <transition name="fade">
-      <div
-        v-if="saving"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
+    <loading-overlay :active="saving"/>
 
     <div class="info-menu-container">
       <div
@@ -23,8 +13,7 @@
           icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
           button-text="BACK"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="canEdit && $mq === 'desktop'"
@@ -32,8 +21,7 @@
           :disabled="changingStatus"
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :button-text="editState ? 'SAVE CHANGES' : 'EDIT TOOL'"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="editState && $mq === 'desktop'"
@@ -41,8 +29,7 @@
           :disabled="changingStatus"
           icon-class="fa-times"
           button-text="CANCEL"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="$mq === 'desktop' && isTransferable"
@@ -51,8 +38,7 @@
           :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
           icon-class="fa-exchange-alt"
           class="action-btn transfer-btn"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="$mq === 'desktop'"
@@ -61,16 +47,19 @@
           :outline-display="false"
           icon-class="fa-book-open"
           button-text="VIEW HISTORY"
-        >
-        </extended-fab>
+        />
 
+<<<<<<< HEAD
         <button-dropdown
           v-if="$mq === 'desktop' && isTransferable"
+=======
+        <dropdown
+          v-if="isTransferable"
+>>>>>>> retina-339-refactor
           :on-click="updateStatus"
           :options="statusOptions"
           button-text="CHANGE STATUS"
-        >
-        </button-dropdown>
+        />
       </div>
 
       <div class="header-cards-container">
@@ -79,8 +68,7 @@
             v-if="$mq === 'mobile'"
             class="fas fa-arrow-left backarrow"
             to="/tools"
-          >
-          </router-link>
+          />
 
           <span class="toolid">
             #{{ getTool.id }}
@@ -174,13 +162,16 @@
             v-if="isTransferable"
             class="actions"
           >
+<<<<<<< HEAD
             <button-dropdown
               v-if="$mq === 'mobile'"
+=======
+            <dropdown
+>>>>>>> retina-339-refactor
               :on-click="updateStatus"
               :options="statusOptions"
               button-text="CHANGE STATUS"
-            >
-            </button-dropdown>
+            />
 
             <button
               v-if="$mq === 'mobile'"
@@ -202,10 +193,16 @@
             <div class="card-details owner-details">
               <div class="user-symbol">
                 <i
+<<<<<<< HEAD
                   :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
                   class="fas fa-user"
                 >
                 </i>
+=======
+                  :class="{ 'fa-user': tool.owner.isUser, 'fa-map-marker-alt': tool.owner.isLocation }"
+                  class="fas"
+                />
+>>>>>>> retina-339-refactor
               </div>
               <div class="owner-name">
                 <div
@@ -228,8 +225,7 @@
                   :disabled="!phoneNumber"
                   class="call-btn"
                   icon-class="fa-phone"
-                >
-                </fab>
+                />
 
                 <div class="spacer"></div>
 
@@ -238,8 +234,7 @@
                   :disabled="!email"
                   class="email-btn"
                   icon-class="fa-envelope"
-                >
-                </fab>
+                />
               </div>
             </div>
           </div>
@@ -256,8 +251,12 @@
               <span class="general-data">
                 {{ getTool.id }}
               </span>
+<<<<<<< HEAD
               <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''">
               </nfc-encode>
+=======
+              <nfc-encode :tool-id="tool.id"/>
+>>>>>>> retina-339-refactor
 
               <span class="general-label">
                 Serial Number
@@ -379,6 +378,7 @@
                 {{ formattedDate(getTool.date_purchased) }}
               </span>
 
+<<<<<<< HEAD
               <v-date-picker
                 v-if="editState"
                 v-model="newPurchaseDate"
@@ -400,6 +400,13 @@
                   {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
                 </button>
               </v-date-picker>
+=======
+              <date-picker
+                v-if="editState"
+                :date="editedTool.jsDate"
+                :on-date-change="onDateChange"
+              />
+>>>>>>> retina-339-refactor
 
               <span class="general-label">
                 Purchase Price
@@ -426,8 +433,7 @@
                 :outline-display="false"
                 icon-class="fa-book-open"
                 button-text="VIEW HISTORY"
-              >
-              </extended-fab>
+              />
             </div>
           </div>
 
@@ -437,6 +443,7 @@
             <div class="card-title">
               Photo
             </div>
+<<<<<<< HEAD
             <div
               v-if="!editState"
               class="photo-box"
@@ -489,17 +496,14 @@
                   class="img-preview"
                 >
               </div>
+=======
+>>>>>>> retina-339-refactor
 
-              <extended-fab
-                v-if="newImgSrc"
-                :on-click="deletePhoto"
-                :outline-display="true"
-                class="delete-photo-efab"
-                icon-class="fa-times"
-                button-text="REMOVE PHOTO"
-              >
-              </extended-fab>
-            </div>
+            <add-photo
+              :on-image-change="onImageChange"
+              :edit-state="editState"
+              :image-url="tool.photo"
+            />
           </div>
         </div>
       </div>
@@ -510,20 +514,19 @@
       :on-click="cancelEdit"
       icon-class="fa-times"
       class="cancel"
-    >
-    </fab>
+    />
 
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit"
-    >
-    </fab>
+    />
   </div>
 </template>
 
 <script>
+<<<<<<< HEAD
 import gql from 'graphql-tag'
 import Fab from '../components/fab.vue'
 import ExtendedFab from '../components/extended-fab.vue'
@@ -535,6 +538,23 @@ import swal from 'sweetalert2'
 import nfcMixin from '../mixins/nfc'
 import Platforms from '../utils/platforms'
 import imageCompression from 'browser-image-compression'
+=======
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
+import Fab from '@/components/basic/fab.vue'
+import ExtendedFab from '@/components/basic/extended-fab'
+import DatePicker from '@/components/basic/date-picker'
+import vSelect from '@/components/basic/select'
+import Dropdown from '@/components/basic/dropdown'
+import NfcEncode from '@/components/nfc-encode'
+import AddPhoto from '@/components/add-photo'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
+import ConfigurableItems from '@/utils/configurable-items.js'
+import { configurableItemQuery, toolQuery } from '@/utils/gql'
+import { showInvalidIDMsg, showSuccessMsg } from '@/utils/alerts'
+import Tool from '@/models/tool'
+>>>>>>> retina-339-refactor
 
 export default {
   name: 'ToolDetail',
@@ -542,12 +562,17 @@ export default {
   components: {
     Fab,
     ExtendedFab,
-    ButtonDropdown,
+    Dropdown,
     vSelect,
-    NfcEncode
+    NfcEncode,
+    AddPhoto,
+    DatePicker,
+    LoadingOverlay
   },
 
-  mixins: [ nfcMixin ],
+  mixins: [
+    nfcMixin
+  ],
 
   apollo: {
     getAllConfigurableItem: {
@@ -624,6 +649,7 @@ export default {
 
   data () {
     return {
+<<<<<<< HEAD
       newImgSrc: null,
       reason: null,
       changingStatus: false,
@@ -638,8 +664,12 @@ export default {
       newPurchaseDate: null,
       newPrice: null,
       oosStatus: null,
+=======
+      tool: new Tool(),
+      editedTool: null,
+      editState: false,
+>>>>>>> retina-339-refactor
       saving: false,
-      datePickerVisibility: 'hidden',
       validations: {
         modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
       },
@@ -655,6 +685,15 @@ export default {
   },
 
   computed: {
+    ...mapState('tools', [
+      'transferState',
+      'selectedToolsMap'
+    ]),
+
+    ...mapGetters('users', [
+      'currentUser'
+    ]),
+
     statusOptions () {
       let statusOptions = ['AVAILABLE', 'IN USE', 'MAINTENANCE']
 
@@ -676,7 +715,11 @@ export default {
     },
 
     isToolSelected () {
+<<<<<<< HEAD
       return !!this.$store.state.selectedToolsMap[this.getTool.id]
+=======
+      return !!this.selectedToolsMap[this.tool.id]
+>>>>>>> retina-339-refactor
     },
 
     brandOptions () {
@@ -692,8 +735,7 @@ export default {
     },
 
     canEdit () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return currentUser.role === 'ADMINISTRATOR'
+      return this.currentUser.role === 'ADMINISTRATOR'
     },
 
     owner () {
@@ -726,11 +768,16 @@ export default {
     },
 
     isTransferable () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
       return (
+<<<<<<< HEAD
         currentUser.role === 'ADMINISTRATOR' ||
         (this.owner.type === 'LOCATION' && this.status === 'AVAILABLE') ||
         (this.owner.type === 'USER' && currentUser.id === this.owner.id)
+=======
+        this.currentUser.role === 'ADMINISTRATOR' ||
+        (this.tool.owner.isLocation && this.tool.status === 'AVAILABLE') ||
+        (this.tool.owner.isUser && this.currentUser.id === this.tool.owner.id)
+>>>>>>> retina-339-refactor
       )
     },
 
@@ -761,6 +808,7 @@ export default {
   },
 
   methods: {
+<<<<<<< HEAD
     showInvalidIDMsg () {
       swal({
         type: 'error',
@@ -808,19 +856,29 @@ export default {
         this.datePickerVisibility = 'visible'
       }
     },
+=======
+    ...mapActions('tools', [
+      'updateTool',
+      'saveStatusChange',
+      'decomissionTool'
+    ]),
+>>>>>>> retina-339-refactor
 
-    deletePhoto () {
-      this.$refs.file.value = ''
-      this.newImgSrc = null
-      this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
-    },
+    ...mapMutations('tools', [
+      'toggleToolSelection',
+      'updateTransferStatus'
+    ]),
 
     toggleChangingStatus () {
       this.changingStatus = !this.changingStatus
     },
 
     transitionToHistory () {
+<<<<<<< HEAD
       this.$router.push({ name: 'historyDetail', params: { toolId: this.getTool.id } })
+=======
+      this.$router.push({ name: 'history', query: { toolId: this.tool.id } })
+>>>>>>> retina-339-refactor
     },
 
     transitionToTools () {
@@ -842,13 +900,17 @@ export default {
       this.editState = false
     },
 
-    toggleEditState () {
+    async toggleEditState () {
       if (this.editState) {
-        this.$validator.validate().then(result => {
-          if (result) {
-            this.saveTool()
-          }
-        })
+        let result = await this.$validator.validate()
+        if (result) {
+          this.saving = true
+          await this.updateTool(this.editedTool)
+          this.tool.update(this.editedTool)
+          this.$apollo.queries.getAllConfigurableItem.refetch()
+          this.editState = false
+          this.saving = false
+        }
       } else {
         this.newBrand = this.getTool.brand
         this.newType = this.getTool.type
@@ -859,10 +921,10 @@ export default {
         this.newPurchaseDate = this.getTool.date_purchased && new Date(this.getTool.date_purchased)
         this.newPrice = this.getTool.price ? this.getTool.price : null
         this.editState = true
-        this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
       }
     },
 
+<<<<<<< HEAD
     createNewConfigurableItem (configurableItem) {
       return this.$apollo.mutate({
         mutation: gql`
@@ -1002,10 +1064,25 @@ export default {
       this.$store.commit('toggleToolSelection', this.getTool.id)
       if (this.$store.state.transferState === 'INITIAL') {
         this.$store.commit('updateTransferStatus', 'SELECTING')
-      }
-      this.$router.push({ path: '/tools' })
+=======
+    onImageChange (newImage) {
+      this.editedTool.image = newImage
     },
 
+    onDateChange (newDate) {
+      this.editedTool.jsDate = newDate
+    },
+
+    toggleTransferStatus () {
+      this.toggleToolSelection(this.tool.id)
+      if (this.transferState === 'INITIAL') {
+        this.updateTransferStatus('SELECTING')
+>>>>>>> retina-339-refactor
+      }
+      this.transitionToTools()
+    },
+
+<<<<<<< HEAD
     phoneCall () {
       window.location.href = `tel:${this.owner.phone_number}`
     },
@@ -1105,10 +1182,19 @@ export default {
             })
           }
         })
+=======
+    async updateStatus (newStatus) {
+      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
+
+      if (newStatus === 'LOST_OR_STOLEN' || newStatus === 'BEYOND_REPAIR') {
+        await this.decomissionTool({ tool: this.tool, newStatus })
+        showSuccessMsg()
+        this.transitionToTools()
+>>>>>>> retina-339-refactor
       } else {
-        newStatus = newStatus.replace(/ /g, '_').toUpperCase()
-        this.saveStatusChange(newStatus)
+        this.saveStatusChange({ tool: this.tool, newStatus })
       }
+<<<<<<< HEAD
     },
 
     saveStatusChange (newStatus) {
@@ -1162,14 +1248,14 @@ export default {
           this.getTool.status = currentStatus
           this.showSaveErrorMsg()
         })
+=======
+>>>>>>> retina-339-refactor
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .tool-detail-page {
   background-color: $background-light-gray;
   display: flex;
@@ -1342,15 +1428,6 @@ export default {
     .general-card {
       padding-bottom: 10px;
 
-      .purchase-date-input {
-        padding-left: 10px;
-        text-align: left;
-
-        &.placeholder {
-          color: $form-placeholder-color;
-        }
-      }
-
       .general-details {
         display: flex;
         flex-direction: column;
@@ -1400,68 +1477,6 @@ export default {
     .photo-card {
       padding-bottom: 11px;
       margin-bottom: 80px;
-
-      .photo-box {
-        width: calc(100% - 23px);
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 10px;
-        overflow: hidden;
-
-        .image {
-          height: 100%;
-          width: 100%;
-          border-radius: 2px;
-        }
-
-        .no-image {
-          color: $background-dark-gray;
-          font-size: 60px;
-          width: 100%;
-          text-align: center;
-          margin-top: 20px;
-          margin-bottom: 20px;
-        }
-      }
-
-      .add-photo-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 275px;
-        padding: 0 20px;
-
-        .img-preview {
-          max-height: 175px;
-          max-width: 100%;
-        }
-
-        .add-photo {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100px;
-
-          .fa-camera {
-            margin-right: 5px;
-          }
-        }
-
-        .delete-photo-efab {
-          border-color: transparent;
-          box-shadow: none;
-          font-size: 15px;
-        }
-
-        .image-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 175px;
-          width: 100%;
-        }
-      }
     }
 
     .owner-card {

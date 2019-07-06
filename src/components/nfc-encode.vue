@@ -5,12 +5,7 @@
     @click="onClick"
   >
     <div class="fab-icon-container">
-      <svgicon
-        icon="nfc"
-        width="22"
-        height="22"
-      >
-      </svgicon>
+      <img class="nfc-icon" src="@/assets/icons/nfc.svg"/>
     </div>
     <span class="efab-text">
       ENCODE TAG
@@ -20,8 +15,7 @@
 
 <script>
 import swal from 'sweetalert2'
-import nfcMixin from '../mixins/nfc'
-import '../assets/icons/svg/nfc'
+import nfcMixin from '@/mixins/nfc'
 
 export default {
   name: 'NfcEncode',
@@ -31,7 +25,8 @@ export default {
   props: {
     toolId: {
       type: String,
-      required: true
+      required: false,
+      default: ''
     }
   },
 
@@ -87,6 +82,10 @@ export default {
     },
 
     _nfcCallback (tag) {
+      if (!this.toolId) {
+        return
+      }
+
       const record = [
         window.ndef.textRecord(`${this.toolId} - Property of Renascent, Inc. (http://renascentinc.com)`)
       ]
@@ -112,7 +111,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../styles/variables';
 
   .nfc-encode {
       padding: 5px 15px;
@@ -130,15 +128,19 @@ export default {
       background: transparent;
       width: 190px;
 
+      .nfc-icon {
+        height: 22px;
+        width: 22px;
+      }
+
       &.inactive {
         opacity: .5;
         color: $disabled-gray;
         border: solid 1px $disabled-gray;
         box-shadow: none;
 
-        path[pid="1"] {
-          stroke: transparent;
-          fill: $disabled-gray !important;
+        .nfc-icon {
+          opacity: .5;
         }
       }
 

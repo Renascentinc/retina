@@ -3,34 +3,26 @@
 import '../node_modules/v-calendar/lib/v-calendar.min.css'
 
 import Vue from 'vue'
-import VueApollo from 'vue-apollo'
-import VueLazyload from 'vue-lazyload'
 import App from './App'
-import router from './router'
-import store from './store'
-import fastclick from 'fastclick'
 import DrawerLayout from 'vue-drawer-layout'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { setContext } from 'apollo-link-context'
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
-import { onError } from 'apollo-link-error'
-import ApiStatusCodes from './utils/api-status-codes'
 import VCalendar from 'v-calendar'
 import VeeValidate, { Validator } from 'vee-validate'
 import VueMq from 'vue-mq'
-import VueSVGIcon from 'vue-svgicon'
-import swal from 'sweetalert2'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import money from 'v-money'
+import router from './router'
+import store from './store'
+import apolloProvider from './apollo'
+import fastclick from 'fastclick'
 
 if (process.env.VUE_APP_PLATFORM === 'cordova') {
-  var cordovaScript = document.createElement('script')
+  let cordovaScript = document.createElement('script')
   cordovaScript.setAttribute('type', 'text/javascript')
   cordovaScript.setAttribute('src', 'cordova.js')
   document.body.appendChild(cordovaScript)
 }
 
+<<<<<<< HEAD
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
     '__schema': {
@@ -115,14 +107,13 @@ const apolloProvider = new VueApollo({
   defaultClient
 })
 
+=======
+>>>>>>> retina-339-refactor
 Vue.config.productionTip = false
 Vue.use(VueInfiniteScroll)
 Vue.use(DrawerLayout)
-Vue.use(VueApollo)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)
-Vue.use(VueSVGIcon)
-Vue.use(VueLazyload)
 Vue.use(money, { precision: 2 })
 Vue.use(VueMq, {
   breakpoints: {
@@ -131,6 +122,7 @@ Vue.use(VueMq, {
   }
 })
 
+<<<<<<< HEAD
 fastclick.attach(document.body)
 
 new Vue({
@@ -142,6 +134,9 @@ new Vue({
 })
 
 const dictionary = {
+=======
+Validator.localize({
+>>>>>>> retina-339-refactor
   en: {
     attributes: {
       brand: 'brand',
@@ -155,6 +150,22 @@ const dictionary = {
       passwordResetEmail: 'email'
     }
   }
+<<<<<<< HEAD
 }
 
 Validator.localize(dictionary)
+=======
+})
+
+window.addEventListener('load', () => {
+  fastclick.attach(document.body)
+
+  new Vue({
+    router,
+    store,
+    el: '#app',
+    apolloProvider,
+    render: h => h(App)
+  })
+})
+>>>>>>> retina-339-refactor

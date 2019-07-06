@@ -8,34 +8,31 @@
         class="floating-action-bar"
       >
         <extended-fab
+<<<<<<< HEAD
           v-if="isAdmin && $mq === 'desktop'"
+=======
+          v-if="isAdminUser"
+>>>>>>> retina-339-refactor
           :on-click="transitionToAddUser"
           class="add-user-fab"
           icon-class="fa-plus"
           button-text="ADD USER"
-        >
-        </extended-fab>
+        />
       </div>
       <div class="user-scroll-container">
         <add-button
-          v-if="$mq === 'mobile' && isAdmin"
+          v-if="$mq === 'mobile' && isAdminUser"
           :key="0"
           :on-click="transitionToAddUser"
           text="USER"
-        >
-        </add-button>
+        />
 
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchUser.loading"
-            class="loading-container"
-          >
-            <div class="half-circle-spinner">
-              <div class="circle circle-1"></div>
-              <div class="circle circle-2"></div>
-            </div>
-          </div>
-        </transition>
+        <div
+          class="list-loading-container loading-container"
+          :class="{ 'active': $apollo.queries.searchUser.loading }"
+        >
+          <loading-spinner/>
+        </div>
 
         <transition name="fade">
           <div
@@ -66,17 +63,19 @@
 </template>
 
 <script>
-import UserSearchInput from '../components/user-search-input'
-import UserSearchResult from '../components/user-search-result'
-import gql from 'graphql-tag'
-import Roles from '../utils/roles'
-import ExtendedFab from '../components/extended-fab'
-import AddButton from '../components/add-button'
+import UserSearchInput from '@/components/user-search-input'
+import UserSearchResult from '@/components/user-search-result'
+import ExtendedFab from '@/components/basic/extended-fab'
+import AddButton from '@/components/add-button'
+import LoadingSpinner from '@/components/basic/loading-spinner'
+import { usersQuery, searchUserQuery } from '@/utils/gql'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Users',
 
   components: {
+    LoadingSpinner,
     UserSearchInput,
     UserSearchResult,
     ExtendedFab,
@@ -85,37 +84,15 @@ export default {
 
   apollo: {
     getAllUser: {
-      query: gql`
-        query {
-          getAllUser {
-            id
-            first_name
-            last_name
-            role
-          }
-        }
-      `,
+      query: usersQuery,
       fetchPolicy: 'network-only'
     },
 
     searchUser: {
-      query: gql`
-        query users($query: String!) {
-          searchUser(query: $query) {
-            id
-            first_name
-            last_name
-            role
-          }
-        }
-      `,
+      query: searchUserQuery,
       variables () {
         let options = {
-          query: ''
-        }
-
-        if (this.searchString) {
-          options.query = this.searchString
+          query: this.searchString
         }
 
         return options
@@ -126,25 +103,18 @@ export default {
 
   data () {
     return {
-      searchUser: [],
-      getAllUser: [],
-      searchString: null
+      searchString: ''
     }
   },
 
   computed: {
-    isAdmin () {
-      return (
-        JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
-      )
-    },
+    ...mapGetters('users', [
+      'isAdminUser'
+    ]),
 
     users () {
-      if (!this.searchString) {
-        return this.getAllUser || []
-      }
-
-      return this.searchUser || []
+      let users = this.searchString ? this.searchUser : this.getAllUser
+      return users || []
     }
   },
 
@@ -165,8 +135,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .users-page {
   display: flex;
   flex-direction: column;

@@ -1,27 +1,19 @@
 <template>
   <div class="page history-page">
+    <loading-overlay :active="loading"/>
+
+    <!-- this is the actual table that gets printed or exported to PDF. Invisible to the user -->
     <history-table
-      :search-tool-snapshot="searchToolSnapshot"
-    >
-    </history-table>
-    <transition name="fade">
-      <div
-        v-if="loading"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
+      :search-tool-snapshot="snapshots"
+    />
+
     <div class="search-bar">
       <history-search-input
         :allow-tool-id-search="!currentToolId"
         :update-tags="updateTagFilters"
         :tags="tags"
-      >
-      </history-search-input>
+      />
+
       <v-date-picker
         v-model="dateRange"
         :input-props="{ readonly: true }"
@@ -40,8 +32,7 @@
           :class="{ active: !!dateRange }"
           class="fas fa-calendar-alt open-datepicker"
           @click="toggleDatepicker"
-        >
-        </button>
+        />
       </v-date-picker>
     </div>
     <div class="history-main-content">
@@ -50,16 +41,14 @@
         :on-click="printTable"
         class="print-btn"
         icon-class="fa-print"
-      >
-      </fab>
+      />
 
       <fab
         v-if="$mq === 'mobile' && !isNativeApp"
         :on-click="exportTable"
         class="print-btn"
         icon-class="fa-file-pdf"
-      >
-      </fab>
+      />
       <div
         class="floating-action-bar"
       >
@@ -68,24 +57,21 @@
           :on-click="printTable"
           icon-class="fa-print"
           button-text="PRINT"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="$mq === 'desktop' && !isNativeApp"
           :on-click="exportTable"
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="$mq === 'desktop' && isDecomissionedTool"
           :on-click="recover"
           icon-class="fa-undo-alt"
           button-text="RECOVER"
-        >
-        </extended-fab>
+        />
       </div>
       <div class="report">
         <span
@@ -104,9 +90,10 @@
             class="fas fa-arrow-left back"
             @click="goBack"
           ></span>
-          #{{ currentToolId }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.brand.name }} {{ searchToolSnapshot[0] && searchToolSnapshot[0].tool.type.name }}
+          #{{ currentToolId }} {{ snapshots[0] && snapshots[0].currentSnapshot.brand.name }} {{ snapshots[0] && snapshots[0].currentSnapshot.type.name }}
         </span>
 
+<<<<<<< HEAD
         <div id="export-table">
           <transition name="list-loading">
             <div
@@ -119,11 +106,20 @@
               </div>
             </div>
           </transition>
+=======
+        <div id="export-table" class="scroll-container">
+          <div
+            class="list-loading-container loading-container"
+            :class="{ 'active': $apollo.queries.searchToolSnapshot.loading }"
+          >
+            <loading-spinner/>
+          </div>
+>>>>>>> retina-339-refactor
 
           <div class="dt-body">
             <transition-group name="list-element">
               <history-search-result
-                v-for="entry in searchToolSnapshot"
+                v-for="entry in snapshots"
                 :key="entry.id"
                 :entry="entry"
                 :select-tool="selectHistoryEntry"
@@ -139,8 +135,7 @@
           button-text="RECOVER"
           icon-class="fa-undo-alt"
           class="restore-efab"
-        >
-        </extended-fab>
+        />
       </div>
     </div>
   </div>
@@ -148,15 +143,19 @@
 
 <script>
 import Vue from 'vue'
-import HistorySearchInput from '../components/history-search-input'
-import ExtendedFab from '../components/extended-fab.vue'
-import Fab from '../components/fab'
+import HistorySearchInput from '@/components/history-search-input'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import Fab from '@/components/basic/fab'
 import html2pdf from 'html2pdf.js'
-import gql from 'graphql-tag'
 import swal from 'sweetalert2'
-import HistoryTable from '../components/history-table'
-import HistorySearchResult from '../components/history-search-result'
-import statuses from '../utils/statuses'
+import HistoryTable from '@/components/history-table'
+import HistorySearchResult from '@/components/history-search-result'
+import LoadingSpinner from '@/components/basic/loading-spinner'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import statuses from '@/utils/statuses'
+import { searchToolSnapshotQuery, recomissionToolMutation } from '@/utils/gql'
+import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import HistoryEntry from '@/models/history-entry'
 
 export default {
   name: 'History',
@@ -166,53 +165,26 @@ export default {
     Fab,
     ExtendedFab,
     HistoryTable,
-    HistorySearchResult
+    HistorySearchResult,
+    LoadingSpinner,
+    LoadingOverlay
   },
 
   apollo: {
     searchToolSnapshot: {
-      query: gql`query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
-        searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
-          id
-          tool {
-            id
-            brand {
-              id
-              name
-            }
-            type {
-              id,
-              name
-            }
-            status
-            owner {
-              ... on Location {
-                 id
-                 name
-                 type
-              }
-              ... on User {
-                 id
-                 first_name
-                 last_name
-                 type
-              }
-            }
-          }
-          metadata {
-            timestamp,
-            tool_action
-          }
-        }
-      }`,
+      query: searchToolSnapshotQuery,
       variables () {
         return {
           toolSnapshotFilter: {
             only_latest_snapshot: !this.currentToolId,
             tool_ids: this.currentToolId,
-            ...this.filters
+            time_span: this.dateRangeFilter,
+            ...this.tagFilters
           }
         }
+      },
+      result (apiResult) {
+        this.snapshots = apiResult.data.searchToolSnapshot.map(snapshot => new HistoryEntry(snapshot))
       },
       fetchPolicy: 'network-only'
     }
@@ -229,8 +201,7 @@ export default {
         TYPE: 'type_ids',
         STATUS: 'tool_statuses'
       },
-      currentToolId: this.$router.currentRoute.params.toolId,
-      searchToolSnapshot: [],
+      snapshots: [],
       tags: [],
       tagFilters: null,
       dateRange: null,
@@ -240,8 +211,16 @@ export default {
   },
 
   computed: {
+    currentToolId () {
+      return this.$route.query.toolId
+    },
+
     isDecomissionedTool () {
-      return (this.searchToolSnapshot[0] && this.currentToolId) ? (this.searchToolSnapshot[0].tool.status === statuses.BEYOND_REPAIR || this.searchToolSnapshot[0].tool.status === statuses.LOST_OR_STOLEN) : false
+      if (!this.snapshots.length) {
+        return
+      }
+
+      return this.snapshots[0].currentSnapshot.status === statuses.BEYOND_REPAIR || this.snapshots[0].currentSnapshot.status === statuses.LOST_OR_STOLEN
     },
 
     datePickerVisibility () {
@@ -259,22 +238,18 @@ export default {
         let startTime = new Date(this.dateRange.start)
         let endTime = new Date(this.dateRange.end)
         endTime.setDate(endTime.getDate() + 1)
-        endTime.setUTCHours(0)
+        endTime.setUTCHours(23)
         startTime.setUTCHours(0)
         dateRange.start_time = startTime.toISOString()
         dateRange.end_time = endTime.toISOString()
       }
       return dateRange
-    },
-
-    filters () {
-      return { time_span: this.dateRangeFilter, ...this.tagFilters }
     }
   },
 
   methods: {
-    recover () {
-      swal({
+    async recover () {
+      let result = await swal({
         type: 'warning',
         title: 'CONFIRM RECOVERY',
         text: `Are you sure you want to recover this tool?`,
@@ -284,41 +259,33 @@ export default {
         cancelButtonText: 'CANCEL',
         confirmButtonColor: '#CE352F'
 
-      }).then((result) => {
-        if (result.value) {
-          this.$apollo.mutate({
-            mutation: gql`
-              mutation recomissionTool($tool_id: ID!, $status: InServiceToolStatus!) {
-                recomissionTool(tool_id: $tool_id, recomissioned_status: $status) {
-                  status
-                }
-              }
-            `,
+      })
+
+      if (result.value) {
+        try {
+          await this.$apollo.mutate({
+            mutation: recomissionToolMutation,
             variables: {
-              tool_id: this.$router.currentRoute.params.toolId,
+              tool_id: this.currentToolId,
               status: 'AVAILABLE'
             }
-          }).then((result) => {
-            swal({
-              type: 'success',
-              title: 'TOOL RECOVERED',
-              timer: 1500
-            })
-            this.$apollo.queries.searchToolSnapshot.refresh()
           })
+
+          showSuccessMsg('', 'TOOL RECOVERED')
+          this.$apollo.queries.searchToolSnapshot.refresh()
+        } catch (error) {
+          window.console.error(error)
+          showErrorMsg()
         }
-      })
+      }
     },
 
     goBack () {
-      this.currentToolId = null
-      this.$router.go(-1)
+      this.$router.push({ name: 'history' })
     },
 
     selectHistoryEntry (toolId) {
-      this.$router.push({ name: 'historyDetail', params: { toolId } })
-      this.clearFilters()
-      this.currentToolId = toolId
+      this.$router.push({ name: 'history', query: { toolId } })
     },
 
     clearFilters () {
@@ -334,8 +301,8 @@ export default {
         let endTime = new Date(this.dateRange.end)
         let dateRangeTag = {
           isDatespanFilter: true,
-          text: `${startTime.getMonth()}/${startTime.getDate()}-${endTime.getMonth()}/${endTime.getDate()}`,
-          name: `${startTime.getMonth()}/${startTime.getDate()}-${endTime.getMonth()}/${endTime.getDate()}`,
+          text: `${startTime.getMonth() + 1}/${startTime.getDate()}-${endTime.getMonth() + 1}/${endTime.getDate()}`,
+          name: `${startTime.getMonth() + 1}/${startTime.getDate()}-${endTime.getMonth() + 1}/${endTime.getDate()}`,
           iconClass: 'fa-calendar-alt'
         }
         if (idx > -1) {
@@ -351,11 +318,11 @@ export default {
       this.updateDateFilterTag()
     },
 
-    exportTable () {
+    async exportTable () {
       this.loading = true
-      var element = document.querySelector('.history-table-export')
+      let element = document.querySelector('.history-table-export')
 
-      var opt = {
+      let options = {
         filename: 'transactions_export.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2 },
@@ -366,13 +333,17 @@ export default {
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       }
 
-      html2pdf().from(element).set(opt).save().then(() => {
+      try {
+        await html2pdf().from(element).set(options).save()
         this.loading = false
-      })
+      } catch (error) {
+        window.console.error(error)
+        showErrorMsg()
+      }
     },
 
     printTable () {
-      var element = document.querySelector('.history-table-export')
+      let element = document.querySelector('.history-table-export')
       window.cordova.plugins.printer.print(element, { name: 'retina_history.html', landscape: true })
     },
 
@@ -405,7 +376,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .desktop {
   .history-page {

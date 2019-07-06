@@ -6,10 +6,7 @@
     <vue-drawer-layout
       ref="drawer"
       :drawer-width="270"
-      :enable="false"
-      :animatable="true"
-      :backdrop="true"
-      :content-drawable="$mq === 'desktop' ? true : false"
+      :content-drawable="false"
       @mask-click="closeDrawer"
     >
       <div
@@ -17,16 +14,16 @@
         class="drawer-content"
       >
         <div class="account-info">
-          <avatar :username="`${ firstname } ${ lastname }`"></avatar>
+          <avatar :username="currentUser.name"></avatar>
           <span class="username">
-            <span> {{ firstname }} </span>
-            <span> {{ lastname }} </span>
+            <span> {{ currentUser.first_name }} </span>
+            <span> {{ currentUser.last_name }} </span>
           </span>
           <span class="role">
-            {{ role }}
+            {{ currentUser.role }}
           </span>
           <span class="email">
-            {{ email }}
+            {{ currentUser.email }}
           </span>
           <hr class="line">
         </div>
@@ -129,10 +126,11 @@
 <script>
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
-import authenticatedRouteMixin from '../mixins/authenticatedRoute'
-import nfcMixin from '../mixins/nfc'
-import Platforms from '../utils/platforms'
+import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
+import Roles from '@/utils/roles'
 import swal from 'sweetalert2'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Application',
@@ -141,7 +139,7 @@ export default {
     Avatar
   },
 
-  mixins: [ authenticatedRouteMixin, nfcMixin ],
+  mixins: [ nfcMixin ],
 
   data () {
     return {
@@ -150,28 +148,12 @@ export default {
   },
 
   computed: {
-    currentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser'))
-    },
-
-    firstname () {
-      return this.currentUser.first_name
-    },
-
-    lastname () {
-      return this.currentUser.last_name
-    },
-
-    email () {
-      return this.currentUser.email
-    },
-
-    role () {
-      return this.currentUser.role
-    },
+    ...mapGetters('users', [
+      'currentUser'
+    ]),
 
     isAdmin () {
-      return this.currentUser.role === 'ADMINISTRATOR'
+      return this.currentUser.role === Roles.ADMIN
     }
   },
 
@@ -187,9 +169,11 @@ export default {
       this.$router.push({ name: 'configuration' })
       this.closeDrawer()
     },
+
     sendSupportEmail () {
-      window.location = 'mailto:retinasupport@renascentinc.com'
+      window.location.href = 'mailto:retinasupport@renascentinc.com'
     },
+
     closeDrawer () {
       this.$refs.drawer.toggle(false)
     },
@@ -309,6 +293,10 @@ export default {
         })
       })
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    window.localStorage.getItem('token') ? next() : next('/login')
   }
 }
 </script>

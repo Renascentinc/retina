@@ -11,8 +11,7 @@
           icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
           button-text="BACK"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="canEdit && $mq === 'desktop'"
@@ -20,8 +19,7 @@
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :disabled="changingRole"
           :button-text="editState ? 'SAVE CHANGES' : 'EDIT USER'"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
           v-if="editState && $mq === 'desktop'"
@@ -29,18 +27,21 @@
           :disabled="changingRole"
           icon-class="fa-times"
           button-text="CANCEL"
-        >
-        </extended-fab>
+        />
 
+<<<<<<< HEAD
         <button-dropdown
           v-if="$mq === 'desktop' && isAdmin"
+=======
+        <dropdown
+          v-if="isAdminUser"
+>>>>>>> retina-339-refactor
           :on-click="updateRole"
           :options="roles"
           :flag="toggleChangingRole"
           :disabled="editState"
           button-text="CHANGE ROLE"
-        >
-        </button-dropdown>
+        />
       </div>
       <div class="header-cards-container">
         <div class="header">
@@ -49,18 +50,17 @@
             id="backarrow"
             class="fas fa-arrow-left"
             to="/users/"
-          >
-          </router-link>
+          />
 
           <span id="userid">
-            #{{ getUser.id }}
+            #{{ user.id }}
           </span>
 
           <div
             v-if="!editState"
             class="name"
           >
-            {{ getUser.first_name }} {{ getUser.last_name }}
+            {{ user.name }}
           </div>
 
           <div
@@ -69,7 +69,7 @@
           >
             <input
               v-validate="'required'"
-              v-model="newFirstName"
+              v-model="editedUser.first_name"
               name="first name"
               class="name light-input"
             >
@@ -83,7 +83,7 @@
             </div>
             <input
               v-validate="'required'"
-              v-model="newLastName"
+              v-model="editedUser.last_name"
               class="name light-input"
               name="last name"
             >
@@ -100,20 +100,19 @@
           <span
             class="user-role"
           >
-            {{ getUser.role }}
+            {{ user.role }}
           </span>
 
           <div
-            v-if="isAdmin"
+            v-if="isAdminUser"
             class="actions"
           >
-            <button-dropdown
-              v-if="$mq === 'mobile' && isAdmin"
+            <dropdown
+              v-if="$mq === 'mobile' && isAdminUser"
               :on-click="updateRole"
               :options="roles"
               button-text="CHANGE ROLE"
-            >
-            </button-dropdown>
+            />
           </div>
         </div>
         <div class="cards">
@@ -137,23 +136,22 @@
                 <div class="contact-item">
                   <fab
                     id="call-btn"
-                    :on-click="phoneNumber ? phoneCall : () => 0"
-                    :active="!phoneNumber"
+                    :on-click="() => user.startPhoneCall()"
+                    :active="!user.phone_number"
                     icon-class="fa-phone"
-                  >
-                  </fab>
+                  />
 
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="phoneNumber ? phoneCall() : () => 0"
+                    @click="() => user.startPhoneCall()"
                   >
-                    {{ formattedPhone }}
+                    {{ user.formattedPhoneNumber }}
                   </button>
                   <input
                     v-validate="{required: true, numeric: true, min: 10}"
                     v-if="editState"
-                    v-model="newPhone"
+                    v-model="editedUser.phone_number"
                     name="phone"
                     class="contact-text light-input"
 
@@ -164,24 +162,23 @@
                 <div class="contact-item">
                   <fab
                     id="email-btn"
-                    :on-click="email ? sendEmail : () => 0"
-                    :active="!email"
+                    :on-click="() => user.startEmail()"
+                    :active="!user.email"
                     icon-class="fa-envelope"
                     type="string"
-                  >
-                  </fab>
+                  />
 
                   <button
                     v-if="!editState"
                     class="contact-text"
-                    @click="email ? sendEmail() : () => 0"
+                    @click="() => user.startEmail()"
                   >
-                    {{ getUser.email }}
+                    {{ user.email }}
                   </button>
                   <input
                     v-validate="'required|email'"
                     v-if="editState"
-                    v-model="newEmail"
+                    v-model="editedUser.email"
                     name="email"
                     class="contact-text light-input"
                   >
@@ -198,9 +195,9 @@
             </div>
           </div>
           <div
-            v-if="editState && isAdmin && !isCurrentUser"
+            v-if="editState && isAdminUser && !isCurrentUser"
             class="container search-result"
-            @click="deactivateUser"
+            @click="performUserDelete"
           >
             <div class="default-text">
               <i class="fas fa-times"></i>
@@ -216,27 +213,26 @@
       :on-click="cancelEdit"
       icon-class="fa-times"
       class="cancel"
-    >
-    </fab>
+    />
 
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit"
-    >
-    </fab>
+    />
   </div>
 </template>
 
 <script>
-import gql from 'graphql-tag'
-import Fab from '../components/fab'
-import ExtendedFab from '../components/extended-fab'
-import ButtonDropdown from '../components/button-dropdown'
-import Roles from '../utils/roles'
-import PhoneNumberFormatter from 'phone-number-formats'
-import swal from 'sweetalert2'
+import Fab from '@/components/basic/fab'
+import ExtendedFab from '@/components/basic/extended-fab'
+import Dropdown from '@/components/basic/dropdown'
+import Roles from '@/utils/roles'
+import { getUserById } from '@/utils/gql'
+import User from '@/models/user'
+import { showInvalidIDMsg, showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ToolDetail',
@@ -244,28 +240,25 @@ export default {
   components: {
     Fab,
     ExtendedFab,
-    ButtonDropdown
+    Dropdown
   },
 
   apollo: {
     getUser: {
-      query: gql`
-        query users($user_id: ID!) {
-          getUser(user_id: $user_id) {
-            id
-            first_name
-            last_name
-            email
-            phone_number
-            role
-            status
-          }
-        }
-      `,
+      query: getUserById,
       variables () {
-        let options = {}
-        options.user_id = this.$router.currentRoute.params.userId
-        return options
+        return {
+          user_id: this.$router.currentRoute.params.userId
+        }
+      },
+      result (apiResult) {
+        let user = apiResult.data.getUser
+        if (user) {
+          this.user.update(user)
+        } else {
+          showInvalidIDMsg()
+          this.$router.push({ path: '/users' })
+        }
       },
       fetchPolicy: 'network-only'
     }
@@ -273,49 +266,31 @@ export default {
 
   data () {
     return {
-      getUser: {},
+      user: new User(),
+      editedUser: null,
       roles: Object.values(Roles),
       editState: false,
-      newFirstName: '',
-      newLastName: '',
-      newPhone: '',
-      newEmail: '',
       changingRole: false
     }
   },
 
   computed: {
-    isCurrentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).id === this.getUser.id
-    },
+    ...mapGetters('users', [
+      'isAdminUser',
+      'currentUser'
+    ]),
 
-    isAdmin () {
-      return JSON.parse(window.localStorage.getItem('currentUser')).role === Roles.ADMIN
+    isCurrentUser () {
+      return this.currentUser.id === this.user.id
     },
 
     canEdit () {
-      return this.isAdmin || this.isCurrentUser
-    },
-
-    formattedPhone () {
-      if (this.getUser && this.getUser.phone_number) {
-        return new PhoneNumberFormatter(this.getUser.phone_number).format({
-          type: 'domestic'
-        }).string
-      }
-      return ''
-    },
-
-    phoneNumber () {
-      return this.getUser.phone_number
-    },
-
-    email () {
-      return this.getUser.email
+      return this.isAdminUser || this.isCurrentUser
     }
   },
 
   methods: {
+<<<<<<< HEAD
     showSuccessfulDeleteMsg () {
       swal({
         type: 'success',
@@ -375,6 +350,12 @@ export default {
         }
       })
     },
+=======
+    ...mapActions('users', [
+      'updateUser',
+      'deleteUser'
+    ]),
+>>>>>>> retina-339-refactor
 
     toggleChangingRole () {
       this.changingRole = !this.changingRole
@@ -392,14 +373,12 @@ export default {
       if (this.editState) {
         this.saveUser()
       } else {
-        this.newFirstName = this.getUser.first_name
-        this.newLastName = this.getUser.last_name
-        this.newPhone = this.getUser.phone_number
-        this.newEmail = this.getUser.email
+        this.editedUser = new User(this.user)
         this.editState = true
       }
     },
 
+<<<<<<< HEAD
     saveUser () {
       this.$validator.validate().then(result => {
         if (result) {
@@ -479,52 +458,50 @@ export default {
             })
         }
       })
+=======
+    async performUserDelete () {
+      try {
+        await this.deleteUser(this.editedUser)
+        showSuccessMsg('Successfully Deleted User')
+        this.transitionToUsers()
+      } catch (error) {
+        showErrorMsg('There was an error saving changes. Please try again or contact support.')
+      }
+>>>>>>> retina-339-refactor
     },
 
-    updateRole (newRole) {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation updateStatus($user: UpdatedUser!) {
-              updateUser(updatedUser: $user) {
-                role
-              }
-            }
-          `,
+    async saveUser () {
+      let isValid = this.$validator.validate()
 
-          variables: {
-            user: {
-              id: this.getUser.id,
-              first_name: this.getUser.first_name,
-              last_name: this.getUser.last_name,
-              email: this.getUser.email,
-              phone_number: this.getUser.phone_number,
-              role: newRole,
-              status: this.getUser.status
-            }
-          }
-        })
-        .then(result => {
-          if (result) {
-            this.$apollo.queries.getUser.refetch()
-          }
-        })
+      if (!isValid) {
+        return
+      }
+
+      try {
+        await this.updateUser(this.editedUser)
+        this.user.update(this.editedUser)
+        this.editState = false
+      } catch (error) {
+        showErrorMsg('There was an error saving changes. Please try again or contact support.')
+      }
     },
 
-    phoneCall () {
-      window.location.href = `tel:${this.getUser.phone_number}`
-    },
+    async updateRole (newRole) {
+      this.editedUser = new User(this.user)
+      this.editedUser.role = newRole
 
-    sendEmail () {
-      window.location = `mailto:${this.getUser.email}`
+      try {
+        await this.updateUser(this.editedUser)
+        this.user.update(this.editedUser)
+      } catch (error) {
+        showErrorMsg('There was an error saving changes. Please try again or contact support.')
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .user-detail-page {
   background-color: $background-light-gray;
   display: flex;

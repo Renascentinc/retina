@@ -5,7 +5,7 @@
   "description": "Renascent inc. Asset Tracking Application",
   "author": "Renascent Inc.",
   "scripts": {
-    "setup": "yarn && mkdir www plugins platforms && cordova prepare && yarn mobile:assets",
+    "setup": "yarn && mkdir www plugins platforms && cordova prepare && yarn mobile:assets && yarn --check-files",
     "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode=development",

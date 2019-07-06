@@ -120,12 +120,11 @@ export default class Tool {
     this.owner = tool.owner.isUser || tool.owner.type === 'USER' ? new User(tool.owner) : new Location(tool.owner)
     this.model_number = tool.model_number
     this.serial_number = tool.serial_number
-
-    if (tool.year) this.year = tool.year
-    if (tool.purchased_from) this.purchased_from = tool.purchased_from
-    if (tool.date_purchased) this.date_purchased = tool.date_purchased
-    if (tool.price) this.price = tool.price
-    if (tool.photo) this.photo = tool.photo
+    this.photo = tool.photo
+    this.year = tool.year
+    this.purchased_from = tool.purchased_from
+    this.date_purchased = tool.date_purchased
+    this.price = tool.price
   }
 
   constructor (tool) {

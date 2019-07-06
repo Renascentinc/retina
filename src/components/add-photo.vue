@@ -5,12 +5,12 @@
       class="photo-box"
     >
       <img
-        :src="imageUrl"
-        v-if="imageUrl"
+        :src="imageToDisplay"
+        v-if="imageToDisplay"
         class="image"
       >
       <i
-        v-if="!imageUrl"
+        v-if="!imageToDisplay"
         class="fas fa-image no-image"
       />
     </div>
@@ -39,7 +39,7 @@
           class="fas fa-camera"
         >
         </label>
-        {{ localImageUrl ? 'UPDATE PHOTO' : 'ADD PHOTO' }}
+        {{ imageToDisplay ? 'UPDATE PHOTO' : 'ADD PHOTO' }}
       </label>
 
       <div
@@ -47,14 +47,14 @@
         class="image-container"
       >
         <img
-          v-if="localImageUrl"
-          :src="localImageUrl"
+          v-if="imageToDisplay"
+          :src="imageToDisplay"
           class="img-preview"
         >
       </div>
 
       <extended-fab
-        v-if="localImageUrl"
+        v-if="imageToDisplay"
         :on-click="deletePhoto"
         :outline-display="true"
         class="delete-photo-efab"
@@ -103,6 +103,10 @@ export default {
         return null
       }
       return window.URL.createObjectURL(this.image)
+    },
+
+    imageToDisplay () {
+      return this.localImageUrl || this.imageUrl
     }
   },
 

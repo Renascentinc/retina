@@ -34,7 +34,6 @@ export const toolQuery = gql`
       date_purchased
       price
       photo
-
       owner {
         ... on Location {
           id

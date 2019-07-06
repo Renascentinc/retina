@@ -399,7 +399,7 @@
             <add-photo
               :on-image-change="onImageChange"
               :edit-state="editState"
-              :image-url="tool.photo"
+              :image-url="editState ? editedTool.photo : tool.photo"
             />
           </div>
         </div>
@@ -606,6 +606,7 @@ export default {
 
     onImageChange (newImage) {
       this.editedTool.image = newImage
+      this.editedTool.photo = null
     },
 
     onDateChange (newDate) {

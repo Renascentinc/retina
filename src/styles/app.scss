@@ -4,15 +4,12 @@
 @import 'form-inputs';
 @import 'toast';
 @import 'transitions';
-<<<<<<< HEAD
-=======
 @import 'search-bar';
 @import 'standard-list-view-page';
 @import 'action-sidebar';
 @import 'add-button';
 @import 'search-result';
 @import 'search-input';
->>>>>>> retina-339-refactor
 
 * {
   font-family: $font-family;
@@ -70,6 +67,7 @@ img[lazy=loading] {
       display: flex;
       flex: 1 1 auto;
       flex-direction: column;
+      width: 100%;
       padding-top: constant(safe-area-inset-top);
       padding-top: env(safe-area-inset-top);
     }

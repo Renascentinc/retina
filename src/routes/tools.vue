@@ -18,24 +18,15 @@
       class="transfer-btn"
       icon-class="fa-exchange-alt"
       button-text="TRANSFER"
-<<<<<<< HEAD
-    >
-    </extended-fab>
-    <div class="tools-menu-container">
-=======
     />
 
     <div class="menu-container">
->>>>>>> retina-339-refactor
       <div
-        class="floating-action-bar"
+        class="action-sidebar"
+        v-if="$mq === 'desktop'"
       >
         <extended-fab
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.INITIAL"
-=======
           v-if="transferState === states.INITIAL"
->>>>>>> retina-339-refactor
           :on-click="moveToSelectingState"
           class="transfer-btn"
           icon-class="fa-exchange-alt"
@@ -43,11 +34,7 @@
         />
 
         <extended-fab
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.SELECTING"
-=======
           v-if="transferState === states.SELECTING"
->>>>>>> retina-339-refactor
           :on-click="cancelTransfer"
           class="cancel-fab-btn"
           icon-class="fa-times"
@@ -55,11 +42,7 @@
         />
 
         <extended-fab
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.SELECTING"
-=======
           v-if="transferState === states.SELECTING"
->>>>>>> retina-339-refactor
           :on-click="toggleViewSelected"
           :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
           :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
@@ -67,11 +50,7 @@
         />
 
         <extended-fab
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.SELECTING"
-=======
           v-if="transferState === states.SELECTING"
->>>>>>> retina-339-refactor
           :on-click="proceedToFinalize"
           :disabled="numSelectedTools === 0"
           :class="{ disabled: numSelectedTools === 0 }"
@@ -81,11 +60,7 @@
         />
 
         <extended-fab
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.INITIAL"
-=======
           v-if="transferState === states.INITIAL"
->>>>>>> retina-339-refactor
           :on-click="transitionToAdd"
           class="add-btn"
           icon-class="fa-plus"
@@ -93,11 +68,7 @@
         />
 
         <extended-fab
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
-=======
           v-if="transferState === states.FINALIZING"
->>>>>>> retina-339-refactor
           :on-click="moveToSelectingState"
           class="back-efab"
           icon-class="fa-arrow-left"
@@ -105,11 +76,7 @@
         />
 
         <v-select
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
-=======
           v-if="transferState === states.FINALIZING"
->>>>>>> retina-339-refactor
           v-model="transferTarget"
           :options="transferTargets"
           :filterable="false"
@@ -117,11 +84,7 @@
         />
 
         <extended-fab
-<<<<<<< HEAD
-          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
-=======
           v-if="transferState === states.FINALIZING"
->>>>>>> retina-339-refactor
           :on-click="finalizeTransfer"
           :disabled="!transferTarget.id || numSelectedTools === 0"
           class="finish-transfer"
@@ -135,7 +98,7 @@
         ref="scrollElement"
         :class="{ finalizing: transferState === states.FINALIZING }"
         infinite-scroll-throttle-delay="200"
-        class="tool-scroll-container"
+        class="scroll-container"
       >
         <add-button
           v-if="$mq === 'mobile' && transferState === states.INITIAL"
@@ -154,7 +117,7 @@
         <transition name="fade">
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
-            class="no-tools-container"
+            class="no-results-container"
           >
             <span class="no-tools-text">
               No Tools To Display
@@ -625,39 +588,6 @@ export default {
   display: flex;
   flex-direction: column;
 
-  .search-bar {
-    background-color: #fff;
-    padding: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-    z-index: 5;
-    min-height: 45px;
-    display: flex;
-    min-height: fit-content;
-  }
-
-  .tools-menu-container {
-    display: flex;
-    height: calc(100% - 67px);
-    background-color: $background-light-gray;
-    flex: 1 1 auto;
-  }
-
-  .tool-scroll-container {
-    background-color: $background-light-gray;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-top: 5px;
-    flex: 1 1 auto;
-  }
-
-  .no-tools-container {
-    display: flex;
-    justify-content: center;
-    padding-top: 50px;
-  }
-
   .next-btn.disabled {
     opacity: .5;
   }
@@ -748,18 +678,6 @@ export default {
 }
 
 .mobile .tools-page {
-  .tool-scroll-container {
-    padding-bottom: 70px;
-
-    &.finalizing {
-      padding-bottom: 200px;
-    }
-
-    .floating-action-bar {
-      display: none !important;
-    }
-  }
-
   .transfer-btn {
     position: absolute;
     left: calc(50% - 79px);
@@ -768,42 +686,6 @@ export default {
     bottom: calc(70px + env(safe-area-inset-bottom));
     width: 158px;
     z-index: 100;
-  }
-}
-
-.desktop .tools-page {
-  .tools-menu-container {
-    .tool-scroll-container {
-      padding-bottom: 5px;
-    }
-
-    .floating-action-bar {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: column;
-      padding-top: 15px;
-      align-items: center;
-      flex: 1 1 auto;
-      max-width: 300px;
-
-      .extended-fab {
-        margin-left: 10px;
-        margin-top: 20px;
-      }
-
-      .dark-input {
-        width: 158px;
-        margin-left: 10px;
-        margin-top: 20px;
-        font-size: 14px;
-        height: 40px;
-        font-weight: 500;
-
-        .dropdown-menu {
-          font-size: 14px;
-        }
-      }
-    }
   }
 }
 </style>

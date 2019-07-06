@@ -2,10 +2,10 @@
   <div class="page user-detail-page">
     <div class="info-menu-container">
       <div
-        class="floating-action-bar"
+        class="action-sidebar"
+        v-if="$mq === 'desktop'"
       >
         <extended-fab
-          v-if="$mq === 'desktop'"
           :on-click="transitionToUsers"
           :outline-display="true"
           icon-class="fa-arrow-left"
@@ -14,7 +14,7 @@
         />
 
         <extended-fab
-          v-if="canEdit && $mq === 'desktop'"
+          v-if="canEdit"
           :on-click="toggleEditState"
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :disabled="changingRole"
@@ -22,20 +22,15 @@
         />
 
         <extended-fab
-          v-if="editState && $mq === 'desktop'"
+          v-if="editState"
           :on-click="cancelEdit"
           :disabled="changingRole"
           icon-class="fa-times"
           button-text="CANCEL"
         />
 
-<<<<<<< HEAD
-        <button-dropdown
-          v-if="$mq === 'desktop' && isAdmin"
-=======
         <dropdown
           v-if="isAdminUser"
->>>>>>> retina-339-refactor
           :on-click="updateRole"
           :options="roles"
           :flag="toggleChangingRole"
@@ -290,72 +285,10 @@ export default {
   },
 
   methods: {
-<<<<<<< HEAD
-    showSuccessfulDeleteMsg () {
-      swal({
-        type: 'success',
-        title: 'SUCCESS',
-        text: 'Successfully Delete User',
-        timer: 1500,
-        showConfirmButton: false
-      })
-    },
-
-    deactivateUser () {
-      swal({
-        type: 'warning',
-        title: 'CONFIRM DELETE USER',
-        text: `Are You Sure You Want To Delete ${this.getUser.first_name} ${this.getUser.last_name}? This Action Cannot Be Undone`,
-        reverseButtons: true,
-        showCancelButton: true,
-        confirmButtonText: 'DELETE',
-        cancelButtonText: 'CANCEL',
-        confirmButtonColor: '#CE352F'
-      }).then(result => {
-        if (result.value) {
-          this.getUser.status = 'INACTIVE'
-          this.$apollo.mutate({
-            mutation: gql`mutation deleteUser($updatedUser: UpdatedUser!) {
-              updateUser(updatedUser: $updatedUser) {
-                id
-              }
-            }`,
-            variables: {
-              updatedUser: {
-                id: this.getUser.id,
-                first_name: this.newFirstName,
-                last_name: this.newLastName,
-                email: this.newEmail,
-                phone_number: this.newPhone,
-                role: this.getUser.role,
-                status: this.getUser.status
-              }
-            },
-            refetchQueries: [{
-              query: gql`
-                query {
-                  getAllUser {
-                    id
-                    first_name
-                    last_name
-                    role
-                  }
-                }
-              `
-            }]
-          }).then(() => {
-            this.showSuccessfulDeleteMsg()
-            this.transitionToUsers()
-          })
-        }
-      })
-    },
-=======
     ...mapActions('users', [
       'updateUser',
       'deleteUser'
     ]),
->>>>>>> retina-339-refactor
 
     toggleChangingRole () {
       this.changingRole = !this.changingRole
@@ -378,87 +311,6 @@ export default {
       }
     },
 
-<<<<<<< HEAD
-    saveUser () {
-      this.$validator.validate().then(result => {
-        if (result) {
-          this.$apollo
-            .mutate({
-              mutation: gql`
-                mutation updateStatus($user: UpdatedUser!) {
-                  updateUser(updatedUser: $user) {
-                    id
-                    first_name
-                    last_name
-                    email
-                    phone_number
-                    role
-                    status
-                  }
-                }
-              `,
-
-              variables: {
-                user: {
-                  id: this.getUser.id,
-                  first_name: this.newFirstName,
-                  last_name: this.newLastName,
-                  email: this.newEmail,
-                  phone_number: this.newPhone,
-                  role: this.getUser.role,
-                  status: this.getUser.status
-                }
-              }
-            })
-            .then(result => {
-              if (result) {
-                this.$apollo.queries.getUser.refetch()
-                let {
-                  id,
-                  first_name,
-                  last_name,
-                  email,
-                  phone_number,
-                  role,
-                  status
-                } = result.data.updateUser
-                this.$apollo.provider.clients.defaultClient.writeFragment({
-                  id: `${id}User`,
-                  fragment: gql`
-                   fragment patchUser on User {
-                     first_name
-                     last_name
-                     email
-                     phone_number
-                     role
-                     status
-                     __typename
-                   }
-                  `,
-                  data: {
-                    first_name,
-                    last_name,
-                    email,
-                    phone_number,
-                    role,
-                    status,
-                    __typename: 'User'
-                  }
-                })
-                this.editState = false
-              }
-            }).catch(() => {
-              swal({
-                type: 'error',
-                title: 'ERROR',
-                text: 'There was an error saving changes. Please try again.',
-                timer: 2000,
-                showConfirmButton: false
-              })
-            })
-        }
-      })
-=======
     async performUserDelete () {
       try {
         await this.deleteUser(this.editedUser)
@@ -467,7 +319,6 @@ export default {
       } catch (error) {
         showErrorMsg('There was an error saving changes. Please try again or contact support.')
       }
->>>>>>> retina-339-refactor
     },
 
     async saveUser () {
@@ -503,7 +354,6 @@ export default {
 
 <style lang="scss">
 .user-detail-page {
-  background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
 
@@ -699,23 +549,6 @@ export default {
     display: flex;
     flex-direction: row;
     overflow: hidden;
-
-    .floating-action-bar {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      max-width: 300px;
-      flex: 1 1;
-      padding-top: 80px;
-      overflow-y: auto;
-
-      .container,
-      .extended-fab {
-        margin-left: 10px;
-        margin-top: 20px;
-      }
-    }
 
     .header {
       width: 500px;

@@ -57,7 +57,7 @@ export default class Tool {
   }
 
   get formattedPrice () {
-    return this.price ? `$${this.price / 100}` : '$ -'
+    return this.price ? `$ ${(this.price / 100).toFixed(2)}` : '$ -'
   }
 
   get formattedId () {

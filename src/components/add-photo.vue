@@ -86,7 +86,8 @@ export default {
     },
     imageUrl: {
       type: String,
-      required: true
+      required: false,
+      default: ''
     }
   },
 
@@ -142,6 +143,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
+  padding: 10px;
   overflow: hidden;
 
   .image {

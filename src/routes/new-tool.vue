@@ -95,6 +95,7 @@
             placeholder="eg. 18392049437"
             autocorrect="off"
             autocapitalize="off"
+            autocomplete="off"
             spellcheck="false"
           >
           <div class="error-container">
@@ -119,6 +120,7 @@
             placeholder="eg. 0348529873023"
             autocorrect="off"
             autocapitalize="off"
+            autocomplete="off"
             spellcheck="false"
           >
           <div class="error-container">
@@ -143,6 +145,7 @@
             placeholder="eg. 2018"
             type="number"
             inputmode="numeric"
+            autocomplete="off"
             pattern="[0-9]*"
           >
           <div class="error-container">
@@ -229,7 +232,7 @@
           </span>
           <input
             v-money="moneyInputConfig"
-            v-model="newTool.formattedPrice"
+            v-model.lazy="newTool.formattedPrice"
             name="price"
             class="light-input"
           >
@@ -354,7 +357,7 @@ import { configurableItemQuery, usersQuery } from '@/utils/gql'
 import Tool from '@/models/tool'
 import User from '@/models/user'
 import LoadingOverlay from '@/components/basic/loading-overlay'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 
 export default {
@@ -421,10 +424,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters('users', [
-      'currentUser'
-    ]),
-
     userOptions () {
       if (!this.getAllUser) {
         return []
@@ -508,7 +507,7 @@ export default {
         model_number: '',
         serial_number: '',
         price: '',
-        owner: new User(this.currentUser)
+        owner: this.$store.getters['users/currentUser']
       })
     }
   }

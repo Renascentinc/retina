@@ -112,8 +112,7 @@ export default {
 @import "../styles/search-result";
 
 .thumbnail-container {
-  width: 81px;
-  height: 81px;
+  flex: 0 1 80px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,6 +121,8 @@ export default {
     height: 60px;
     width: 60px;
     border-radius: 5px;
+    object-fit: cover;
+    transition: opacity 5s ease-in;
   }
 
   .no-image {

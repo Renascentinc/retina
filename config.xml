@@ -18,11 +18,11 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Fullscreen" value="false" />
     <preference name="Orientation" value="portrait" />
-    <preference name="deployment-target" value="7.0" />
+    <preference name="deployment-target" value="8.0" />
     <preference name="target-device" value="universal" />
     <preference name="BackgroundColor" value="0xff231F20" />
     <preference name="StatusBarOverlaysWebView" value="true" />
-    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>

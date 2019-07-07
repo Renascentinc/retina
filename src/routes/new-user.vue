@@ -321,7 +321,6 @@ export default {
         ++this.currentState
         this.getUser = result.data.createUser
       }).catch(() => {
-        this.resetData()
         this.currentState = 1
         swal({
           type: 'error',

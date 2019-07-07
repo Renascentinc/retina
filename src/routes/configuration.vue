@@ -290,6 +290,7 @@ export default {
 
     .configs {
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       flex: 1 1 auto;
       max-width: 500px;
       padding-bottom: 10px;

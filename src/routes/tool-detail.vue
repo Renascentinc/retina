@@ -381,6 +381,7 @@
 
               <extended-fab
                 v-if="$mq === 'mobile'"
+                :disabled="editState"
                 :on-click="transitionToHistory"
                 :outline-display="false"
                 icon-class="fa-book-open"

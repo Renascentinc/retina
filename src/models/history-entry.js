@@ -93,11 +93,19 @@ export default class HistoryEntry {
         })
       }
 
-      if (this.previousSnapshot.purchased_from.id !== this.currentSnapshot.purchased_from.id) {
+      if ((this.previousSnapshot.purchased_from || {}).id !== (this.currentSnapshot.purchased_from || {}).id) {
         diff.push({
           title: 'SUPPLIER',
           value: this.currentSnapshot.purchased_from.name,
           previousValue: this.previousSnapshot.purchased_from.name
+        })
+      }
+
+      if (this.previousSnapshot.tagged !== this.currentSnapshot.tagged) {
+        diff.push({
+          title: 'NFC',
+          value: this.currentSnapshot.tagged ? 'TAGGED' : 'NOT TAGGED',
+          previousValue: this.previousSnapshot.tagged ? 'TAGGED' : 'NOT TAGGED'
         })
       }
     }

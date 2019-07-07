@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import swal from 'sweetalert2'
 import nfcMixin from '@/mixins/nfc'
 
@@ -23,14 +24,20 @@ export default {
   mixins: [nfcMixin],
 
   props: {
-    toolId: {
-      type: String,
+    tool: {
+      type: Object,
       required: false,
-      default: ''
+      default () {
+        return {}
+      }
     }
   },
 
   methods: {
+    ...mapActions('tools', [
+      'updateTool'
+    ]),
+
     showSuccessMsg () {
       swal({
         type: 'success',
@@ -81,21 +88,25 @@ export default {
       this.pauseNfcListener()
     },
 
+    onSuccess () {
+      window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
+      this.pauseNfcListener()
+      if (!this.tool.tagged) {
+        this.tool.tagged = true
+        this.updateTool(this.tool)
+      }
+    },
+
     _nfcCallback (tag) {
-      if (!this.toolId) {
+      if (!this.tool.id) {
         return
       }
 
       const record = [
-        window.ndef.textRecord(`${this.toolId} - Property of Renascent, Inc. (http://renascentinc.com)`)
+        window.ndef.textRecord(`${this.tool.id} - Property of Renascent, Inc. (http://renascentinc.com)`)
       ]
 
-      const lock = () => {
-        window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
-        this.pauseNfcListener()
-      }
-
-      window.nfc.write(record, lock, (reason) => this.onError(reason))
+      window.nfc.write(record, () => this.onSuccess(), (reason) => this.onError(reason))
     },
 
     onClick () {

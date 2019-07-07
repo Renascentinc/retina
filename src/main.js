@@ -14,6 +14,7 @@ import router from './router'
 import store from './store'
 import apolloProvider from './apollo'
 import fastclick from 'fastclick'
+import ToggleButton from 'vue-js-toggle-button'
 
 if (process.env.VUE_APP_PLATFORM === 'cordova') {
   let cordovaScript = document.createElement('script')
@@ -23,6 +24,7 @@ if (process.env.VUE_APP_PLATFORM === 'cordova') {
 }
 
 Vue.config.productionTip = false
+Vue.use(ToggleButton)
 Vue.use(VueInfiniteScroll)
 Vue.use(DrawerLayout)
 Vue.use(VCalendar)

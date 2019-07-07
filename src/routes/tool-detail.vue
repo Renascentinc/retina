@@ -232,7 +232,7 @@
               <span class="general-data">
                 {{ tool.id }}
               </span>
-              <nfc-encode :tool-id="tool.id"/>
+              <nfc-encode :tool="tool"/>
 
               <span class="general-label">
                 Serial Number
@@ -378,6 +378,27 @@
                 class="light-input"
                 placeholder="Price"
               >
+
+              <span class="general-label">
+                NFC
+              </span>
+
+              <span
+                v-if="!editState"
+                class="general-data"
+              >
+                {{ tool.tagged ? "Tagged" : "Not Tagged" }}
+              </span>
+
+              <div class="nfc-toggle-container">
+                <toggle-button
+                  v-if="editState"
+                  v-model="editedTool.tagged"
+                  :sync="true"
+                  :labels="{ checked: 'Tagged', unchecked: 'Not Tagged' }"
+                  :width="100"
+                />
+              </div>
 
               <extended-fab
                 v-if="$mq === 'mobile'"
@@ -809,6 +830,10 @@ export default {
 
     .general-card {
       padding-bottom: 10px;
+
+      .nfc-toggle-container {
+        margin-top: 3px;
+      }
 
       .general-details {
         display: flex;

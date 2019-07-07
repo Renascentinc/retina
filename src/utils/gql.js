@@ -34,6 +34,7 @@ export const toolQuery = gql`
       date_purchased
       price
       photo
+      tagged
       owner {
         ... on Location {
           id
@@ -123,7 +124,7 @@ export const createNewToolMutation = gql`
       date_purchased
       price
       photo
-
+      tagged
       owner {
         ... on Location {
           id
@@ -147,16 +148,17 @@ export const deleteConfigurableItemMutation = gql`
   mutation deleteConfigurableItem($id: ID!) {
     deleteConfigurableItem(configurable_item_id: $id) {
       toolsWithConfigurableItem {
-        id,
+        id
         type {
           id
-        },
+        }
         brand {
           id
-        },
-        model_number,
-        serial_number,
-        status,
+        }
+        model_number
+        serial_number
+        status
+        tagged
         owner {
           ... on Location {
             id
@@ -164,13 +166,13 @@ export const deleteConfigurableItemMutation = gql`
           ... on User {
             id
           }
-        },
+        }
         purchased_from {
           id
-        },
-        date_purchased,
-        photo,
-        price,
+        }
+        date_purchased
+        photo
+        price
         year
       }
       deletedConfigurableItem {
@@ -189,14 +191,14 @@ export const requestPasswordResetMutation = gql`
 export const loginMutation = gql`
   mutation attemptUserLogin($organization_name: String!, $email: String!, $password: String!) {
      login(organization_name: $organization_name, email: $email, password: $password) {
-      token,
+      token
       user {
-        id,
-        first_name,
-        last_name,
-        email,
-        phone_number,
-        role,
+        id
+        first_name
+        last_name
+        email
+        phone_number
+        role
         status
       }
     }
@@ -239,6 +241,7 @@ export const multiToolQuery = gql`
       }
       status
       photo
+      tagged
       owner {
         ... on Location {
            id
@@ -281,6 +284,7 @@ export const searchToolsQuery = gql`
       }
       status
       photo
+      tagged
       owner {
         ... on Location {
            id
@@ -311,6 +315,7 @@ export const toolTransferMutation = gql`
         name
       }
       status
+      tagged
       owner {
         ... on Location {
            id
@@ -364,43 +369,6 @@ export const updateUserMutation = gql`
   }
 `
 
-// export const searchToolSnapshotQuery = gql`
-//   query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
-//     searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
-//       id
-//       tool {
-//         id
-//         brand {
-//           id
-//           name
-//         }
-//         type {
-//           id,
-//           name
-//         }
-//         status
-//         owner {
-//           ... on Location {
-//              id
-//              name
-//              type
-//           }
-//           ... on User {
-//              id
-//              first_name
-//              last_name
-//              type
-//           }
-//         }
-//       }
-//       metadata {
-//         timestamp,
-//         tool_action
-//       }
-//     }
-//   }
-// `
-
 export const searchToolSnapshotQuery = gql`
   query searchToolSnapshot($toolSnapshotFilter: ToolSnapshotFilter){
     searchToolSnapshot(toolSnapshotFilter: $toolSnapshotFilter){
@@ -433,6 +401,7 @@ export const searchToolSnapshotQuery = gql`
           id
           name
         }
+        tagged
         owner {
           ... on Location {
             id
@@ -468,6 +437,7 @@ export const searchToolSnapshotQuery = gql`
             id
             name
           }
+          tagged
           owner {
             ... on Location {
               id
@@ -528,6 +498,7 @@ export const getToolSnapshotByIdQuery = gql`
           id
           name
         }
+        tagged
         owner {
           ... on Location {
             id
@@ -563,6 +534,7 @@ export const getToolSnapshotByIdQuery = gql`
             id
             name
           }
+          tagged
           owner {
             ... on Location {
               id

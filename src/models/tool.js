@@ -27,6 +27,7 @@ export default class Tool {
   price
   photo
   image
+  tagged
   brand = {}
   type = {}
   purchased_from = {}
@@ -108,7 +109,8 @@ export default class Tool {
       date_purchased: this.date_purchased,
       price: this.price,
       year: this.year,
-      photo: this.photo
+      photo: this.photo,
+      tagged: this.tagged
     }
   }
 
@@ -125,6 +127,7 @@ export default class Tool {
     this.purchased_from = tool.purchased_from
     this.date_purchased = tool.date_purchased
     this.price = tool.price
+    this.tagged = tool.tagged
   }
 
   constructor (tool) {

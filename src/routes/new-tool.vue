@@ -257,7 +257,7 @@
         v-if="currentState === 4"
         class="new-tool-input-card step-4"
       >
-        <nfc-encode :tool-id="newTool.id"/>
+        <nfc-encode :tool="newTool"/>
 
         <tool-search-result
           :tool="newTool"
@@ -502,7 +502,7 @@ export default {
 
     getDefaultTool () {
       return new Tool({
-        year: '',
+        year: null,
         status: Statuses.AVAILABLE,
         model_number: '',
         serial_number: '',

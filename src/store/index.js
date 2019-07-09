@@ -6,10 +6,12 @@ import configurableItems from './modules/configurable-items'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     users,
     tools,
     configurableItems
   }
 })
+
+export default store

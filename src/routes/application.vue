@@ -191,6 +191,8 @@ export default {
 
       setTimeout(() => {
         window.localStorage.removeItem('token')
+        window.localStorage.removeItem('currentUser')
+        console.log('JC:', this.currentUser)
         this.$router.push({ path: '/login' })
       }, 100)
     },

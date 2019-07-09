@@ -364,7 +364,8 @@ export default {
     ]),
 
     ...mapGetters('users', [
-      'currentUser'
+      'currentUser',
+      'isAdminUser'
     ]),
 
     ...mapGetters('tools', [
@@ -377,7 +378,7 @@ export default {
     },
 
     isNonAdminTransfer () {
-      return this.transferState === this.states.SELECTING && !this.isAdmin
+      return this.transferState === this.states.SELECTING && !this.isAdminUser
     },
 
     tools () {
@@ -497,7 +498,7 @@ export default {
     moveToSelectingState () {
       this.setShowOnlySelectedTools(false)
       this.updateTransferStatus(this.states.SELECTING)
-      if (!this.isAdmin) {
+      if (!this.isAdminUser) {
         this.clearSearchFilters()
         this.resetScrollPosition()
       }

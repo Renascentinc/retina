@@ -359,8 +359,11 @@ export default {
       'transferState'
     ]),
 
-    ...mapGetters('users', [
-      'currentUser',
+    ...mapState('auth', [
+      'currentUser'
+    ]),
+
+    ...mapGetters('auth', [
       'isAdminUser'
     ]),
 

@@ -1,7 +1,5 @@
 import { defaultClient as apollo } from '@/apollo'
-import Roles from '@/utils/roles'
 import swal from 'sweetalert2'
-import User from '@/models/user'
 import {
   deleteUserMutation,
   updateUserMutation
@@ -9,20 +7,6 @@ import {
 
 const users = {
   namespaced: true,
-
-  getters: {
-    currentUser () {
-      const user = window.localStorage.getItem('currentUser')
-
-      if (user) {
-        return new User(JSON.parse(user))
-      }
-    },
-
-    isAdminUser (state, getters) {
-      return getters.currentUser.role === Roles.ADMIN
-    }
-  },
 
   actions: {
     async deleteUser (store, user) {

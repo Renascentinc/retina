@@ -92,13 +92,14 @@
 </template>
 
 <script>
-import { requestPasswordResetMutation, loginMutation } from '@/utils/gql'
+import { requestPasswordResetMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import ApiStatusCodes from '@/utils/api-status-codes'
 import InputWithIcon from '@/components/input-with-icon'
 import ExtendedFab from '@/components/basic/extended-fab'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import swal from 'sweetalert2'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -159,6 +160,10 @@ export default {
   },
 
   methods: {
+    ...mapActions('auth', [
+      'login'
+    ]),
+
     async requestPasswordReset () {
       let result = await swal({
         title: 'RESET PASSWORD',
@@ -194,20 +199,7 @@ export default {
       this.currentState = this.states.AUTHENTICATING
 
       try {
-        let { data: { login: { token, user } } } = await this.$apollo.mutate({
-          mutation: loginMutation,
-          variables: {
-            organization_name: this.organizationName,
-            email: this.email,
-            password: this.password
-          }
-        })
-
-        user.name = `${user.first_name} ${user.last_name}`
-
-        window.localStorage.setItem('token', token)
-        window.localStorage.setItem('currentUser', JSON.stringify(user))
-        this.$router.push({ path: '/' })
+        this.login({ email: this.email, password: this.password, organization_name: this.organizationName })
       } catch (error) {
         if (error.graphQLErrors && error.graphQLErrors.length) {
           let { graphQLErrors: [{ extensions: { code } }] } = error

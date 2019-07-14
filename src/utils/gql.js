@@ -188,6 +188,12 @@ export const requestPasswordResetMutation = gql`
   }
 `
 
+export const logoutMutation = gql`
+  mutation logout {
+    logout
+  }
+`
+
 export const loginMutation = gql`
   mutation attemptUserLogin($organization_name: String!, $email: String!, $password: String!) {
      login(organization_name: $organization_name, email: $email, password: $password) {

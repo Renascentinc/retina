@@ -227,7 +227,7 @@ import Roles from '@/utils/roles'
 import { getUserById } from '@/utils/gql'
 import User from '@/models/user'
 import { showInvalidIDMsg, showSuccessMsg, showErrorMsg } from '@/utils/alerts'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'ToolDetail',
@@ -270,9 +270,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters('users', [
-      'isAdminUser',
+    ...mapState('auth', [
       'currentUser'
+    ]),
+
+    ...mapGetters('auth', [
+      'isAdminUser'
     ]),
 
     isCurrentUser () {

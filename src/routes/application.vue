@@ -30,7 +30,7 @@
 
         <div class="menu-buttons">
           <button
-            v-if="isAdmin"
+            v-if="isAdminUser"
             class="config menu-btn"
             @click="transitionToConfig"
           >
@@ -55,7 +55,7 @@
           </button>
           <button
             class="sign-out menu-btn"
-            @click="signout"
+            @click="logout"
           >
             <i class="fas menu-btn-icon fa-sign-out-alt"></i>
             SIGN OUT
@@ -128,9 +128,8 @@ import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
 import nfcMixin from '@/mixins/nfc'
 import Platforms from '@/utils/platforms'
-import Roles from '@/utils/roles'
 import swal from 'sweetalert2'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Application',
@@ -148,13 +147,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters('users', [
+    ...mapState('auth', [
       'currentUser'
     ]),
 
-    isAdmin () {
-      return this.currentUser.role === Roles.ADMIN
-    }
+    ...mapGetters('auth', [
+      'isAdminUser'
+    ])
   },
 
   mounted () {
@@ -165,6 +164,10 @@ export default {
   },
 
   methods: {
+    ...mapActions('auth', [
+      'logout'
+    ]),
+
     transitionToConfig () {
       this.$router.push({ name: 'configuration' })
       this.closeDrawer()
@@ -180,21 +183,6 @@ export default {
 
     openDrawer () {
       this.$refs.drawer.toggle(true)
-    },
-
-    signout () {
-      this.$apollo.mutate({
-        mutation: gql`mutation logout {
-           logout
-        }`
-      })
-
-      setTimeout(() => {
-        window.localStorage.removeItem('token')
-        window.localStorage.removeItem('currentUser')
-        console.log('JC:', this.currentUser)
-        this.$router.push({ path: '/login' })
-      }, 100)
     },
 
     changePassword () {

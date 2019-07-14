@@ -1,9 +1,11 @@
 import { defaultClient as apollo } from '@/apollo'
 import Roles from '@/utils/roles'
+import User from '@/models/user'
 import {
   loginMutation,
   logoutMutation
 } from '@/utils/gql'
+import router from '@/router'
 
 const auth = {
   namespaced: true,
@@ -15,43 +17,62 @@ const auth = {
 
   getters: {
     isAdminUser (state, getters) {
-      return getters.currentUser.role === Roles.ADMIN
+      return state.currentUser.role === Roles.ADMIN
+    }
+  },
+
+  mutations: {
+    setCurrentUser (state, currentUser) {
+      if (currentUser) {
+        state.currentUser = new User(currentUser)
+      } else {
+        state.currentUser = null
+      }
+    },
+
+    setToken (state, token) {
+      state.token = token
     }
   },
 
   actions: {
-    login (store) {
-      window.localStorage.setItem('token', store.state.auth.token)
-      window.localStorage.setItem('userId', JSON.stringify(store.state.auth.userId))
+    async login ({ commit }, { email, password, organization_name }) {
+      let { data: { login: { token, user } } } = await apollo.mutate({
+        mutation: loginMutation,
+        variables: {
+          organization_name,
+          email,
+          password
+        }
+      })
+
+      commit('setCurrentUser', user)
+      commit('setToken', token)
+
+      window.localStorage.setItem('token', token)
+      window.localStorage.setItem('currentUser', JSON.stringify(user))
+      router.push({ path: '/' })
     },
 
-    logout (store) {
-      window.localStorage.clearItem('token')
-      window.localStorage.clearItem('userId')
+    async logout ({ commit }) {
+      await apollo.mutate({
+        mutation: logoutMutation
+      })
+      window.localStorage.removeItem('token')
+      window.localStorage.removeItem('currentUser')
+      commit('setCurrentUser', null)
+      commit('setToken', null)
+      router.push({ path: '/login' })
     },
 
-    validateToken () {
-
-    },
-
-    fetchOrganizationName () {
-
-    },
-
-    initialize () {
-      // check for token and user id
+    async initialize ({ commit, dispatch }) {
       let token = window.localStorage.getItem('token')
-      let userId = window.localStorage.getItem('userId')
+      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
 
-      if (!token || !userId) {
-        // should just always route to login I think (check for edge cases)
+      if (token && currentUser) {
+        commit('setCurrentUser', currentUser)
+        commit('setToken', token)
       }
-
-      // confirm token is valid
-
-      // fetch user
-
-      // set state
     }
   }
 }

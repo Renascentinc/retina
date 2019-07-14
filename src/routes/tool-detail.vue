@@ -445,7 +445,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import Fab from '@/components/basic/fab.vue'
 import ExtendedFab from '@/components/basic/extended-fab'
 import DatePicker from '@/components/basic/date-picker'
@@ -531,7 +531,7 @@ export default {
       'selectedToolsMap'
     ]),
 
-    ...mapGetters('users', [
+    ...mapState('auth', [
       'currentUser'
     ]),
 

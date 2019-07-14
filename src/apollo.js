@@ -37,16 +37,8 @@ const cache = new InMemoryCache({
   dataIdFromObject: object => {
     // fixing issue on history page where objects were getting scrambled with each other (same ids but different data at different snapshots in time).
     // using a combination of fields to create a unique identifier for the entries
-    if (object.__typename === 'PreviousToolSnapshotDiff') {
-      return `${object.id}${object.__typename}${object.owner ? object.owner.id || object.owner.id : ''}${object.status}`
-    }
-
-    if (object.__typename === 'ToolSnapshotMetadata') {
-      return `${object.timestamp}${object.__typename}`
-    }
-
-    if (router.currentRoute.path.includes('history') && (object.__typename === 'Tool' || object.__typename === 'ConfigurableItem' || object.__typename === 'User')) {
-      return `${JSON.stringify(object)}`
+    if (router.currentRoute.path.includes('history')) {
+      return JSON.stringify(object)
     }
 
     return `${object.id}${object.__typename}`
@@ -81,8 +73,16 @@ const errorLink = onError(({ graphQLErrors = [] }) => {
 export const defaultClient = new ApolloClient({
   link: authLink.concat(errorLink).concat(httpLink),
   connectToDevTools: false,
-  shouldBatch: true,
-  cache
+  queryDeduplication: true,
+  cache,
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'network-only'
+    },
+    query: {
+      fetchPolicy: 'network-only'
+    }
+  }
 })
 
 export default new VueApollo({

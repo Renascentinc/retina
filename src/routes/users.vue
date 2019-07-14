@@ -81,8 +81,8 @@ export default {
 
   apollo: {
     getAllUser: {
-      query: usersQuery,
-      fetchPolicy: 'network-only'
+      query: usersQuery
+
     },
 
     searchUser: {
@@ -93,8 +93,8 @@ export default {
         }
 
         return options
-      },
-      fetchPolicy: 'network-only'
+      }
+
     }
   },
 

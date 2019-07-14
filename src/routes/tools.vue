@@ -274,13 +274,11 @@ export default {
 
   apollo: {
     getAllLocation: {
-      query: locationsQuery,
-      fetchPolicy: 'network-only'
+      query: locationsQuery
     },
 
     getAllUser: {
-      query: usersQuery,
-      fetchPolicy: 'network-only'
+      query: usersQuery
     },
 
     getMultipleTool: {
@@ -292,8 +290,7 @@ export default {
       },
       update (data) {
         return data.getMultipleTool.map(tool => new Tool(tool))
-      },
-      fetchPolicy: 'network-only'
+      }
     },
 
     searchTool: {
@@ -323,8 +320,7 @@ export default {
       },
       update (data) {
         return data.searchTool.map(tool => new Tool(tool))
-      },
-      fetchPolicy: 'network-only'
+      }
     }
   },
 

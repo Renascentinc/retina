@@ -377,13 +377,13 @@ export default {
 
   apollo: {
     getAllUser: {
-      query: usersQuery,
-      fetchPolicy: 'network-only'
+      query: usersQuery
+
     },
 
     getAllConfigurableItem: {
-      query: configurableItemQuery,
-      fetchPolicy: 'network-only'
+      query: configurableItemQuery
+
     }
   },
 

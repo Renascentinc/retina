@@ -1,6 +1,6 @@
 <template>
-  <div class="search-result" @click="onClick">
-    <div class="thumbnail-container">
+  <div class="search-result">
+    <div class="thumbnail-container" @click="onClick">
       <img
         v-if="tool.photo"
         :src="tool.photo"
@@ -14,6 +14,7 @@
     </div>
     <div
       class="main-container"
+      @click="onClick"
     >
       <div class="row">
         <span class="title">

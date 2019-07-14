@@ -254,8 +254,8 @@ export default {
           showInvalidIDMsg()
           this.$router.push({ path: '/users' })
         }
-      },
-      fetchPolicy: 'network-only'
+      }
+
     }
   },
 

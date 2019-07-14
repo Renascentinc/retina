@@ -274,13 +274,11 @@ export default {
 
   apollo: {
     getAllLocation: {
-      query: locationsQuery,
-      fetchPolicy: 'network-only'
+      query: locationsQuery
     },
 
     getAllUser: {
-      query: usersQuery,
-      fetchPolicy: 'network-only'
+      query: usersQuery
     },
 
     getMultipleTool: {
@@ -292,8 +290,7 @@ export default {
       },
       update (data) {
         return data.getMultipleTool.map(tool => new Tool(tool))
-      },
-      fetchPolicy: 'network-only'
+      }
     },
 
     searchTool: {
@@ -323,8 +320,7 @@ export default {
       },
       update (data) {
         return data.searchTool.map(tool => new Tool(tool))
-      },
-      fetchPolicy: 'network-only'
+      }
     }
   },
 
@@ -364,7 +360,8 @@ export default {
     ]),
 
     ...mapGetters('users', [
-      'currentUser'
+      'currentUser',
+      'isAdminUser'
     ]),
 
     ...mapGetters('tools', [
@@ -377,7 +374,7 @@ export default {
     },
 
     isNonAdminTransfer () {
-      return this.transferState === this.states.SELECTING && !this.isAdmin
+      return this.transferState === this.states.SELECTING && !this.isAdminUser
     },
 
     tools () {
@@ -497,7 +494,7 @@ export default {
     moveToSelectingState () {
       this.setShowOnlySelectedTools(false)
       this.updateTransferStatus(this.states.SELECTING)
-      if (!this.isAdmin) {
+      if (!this.isAdminUser) {
         this.clearSearchFilters()
         this.resetScrollPosition()
       }

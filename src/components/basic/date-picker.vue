@@ -47,7 +47,9 @@ export default {
   methods: {
     toggleDatepicker (val) {
       if (this.visibility === 'visible') {
-        this.onDateChange(val)
+        if (!(val instanceof MouseEvent)) {
+          this.onDateChange(val)
+        }
         this.visibility = 'hidden'
       } else {
         this.visibility = 'visible'

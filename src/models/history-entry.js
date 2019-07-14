@@ -108,7 +108,15 @@ export default class HistoryEntry {
           previousValue: this.previousSnapshot.tagged ? 'TAGGED' : 'NOT TAGGED'
         })
       }
+
+      if (this.metadata.action_note) {
+        diff.push({
+          title: 'NOTE',
+          value: this.metadata.action_note
+        })
+      }
     }
+
     return diff
   }
 

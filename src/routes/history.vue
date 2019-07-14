@@ -171,8 +171,7 @@ export default {
       },
       result (apiResult) {
         this.snapshots = apiResult.data.searchToolSnapshot.map(snapshot => new HistoryEntry(snapshot))
-      },
-      fetchPolicy: 'network-only'
+      }
     }
   },
 

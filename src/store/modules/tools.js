@@ -173,7 +173,7 @@ const tools = {
       })
 
       if (!result.value) {
-        return
+        return false
       }
 
       try {
@@ -186,9 +186,11 @@ const tools = {
           }
         })
         commit('setToolSelection', tool.id, false)
+        return true
       } catch (error) {
         window.console.error(error)
         showErrorMsg()
+        return false
       }
     }
   }

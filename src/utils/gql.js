@@ -425,6 +425,7 @@ export const searchToolSnapshotQuery = gql`
           status
           model_number
           serial_number
+          photo
           brand {
             id
             name
@@ -551,6 +552,7 @@ export const getToolSnapshotByIdQuery = gql`
           date_purchased
           price
           year
+          photo
         }
       }
     }

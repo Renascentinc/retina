@@ -63,8 +63,8 @@ export default {
 
   apollo: {
     getAllConfigurableItem: {
-      query: configurableItemQuery,
-      fetchPolicy: 'network-only'
+      query: configurableItemQuery
+
     }
   },
 

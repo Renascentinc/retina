@@ -201,7 +201,7 @@
               <div class="contact-buttons">
                 <fab
                   v-if="tool.owner.isUser"
-                  :on-click="tool.owner.startPhoneCall"
+                  :on-click="() => tool.owner.startPhoneCall()"
                   :disabled="!tool.owner.phone_number"
                   class="call-btn"
                   icon-class="fa-phone"
@@ -211,7 +211,7 @@
 
                 <fab
                   v-if="tool.owner.isUser"
-                  :on-click="tool.owner.startEmail"
+                  :on-click="() => tool.owner.startEmail()"
                   :disabled="!tool.owner.email"
                   class="email-btn"
                   icon-class="fa-envelope"
@@ -320,7 +320,7 @@
                 v-if="!editState"
                 class="general-data"
               >
-                {{ tool.purchased_from.name }}
+                {{ tool.formattedPurchasedFrom }}
               </span>
 
               <v-select
@@ -481,8 +481,8 @@ export default {
 
   apollo: {
     getAllConfigurableItem: {
-      query: configurableItemQuery,
-      fetchPolicy: 'network-only'
+      query: configurableItemQuery
+
     },
 
     getTool: {
@@ -500,8 +500,8 @@ export default {
           showInvalidIDMsg()
           this.$router.push({ path: '/tools' })
         }
-      },
-      fetchPolicy: 'network-only'
+      }
+
     }
   },
 
@@ -647,9 +647,11 @@ export default {
       newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
       if (newStatus === 'LOST_OR_STOLEN' || newStatus === 'BEYOND_REPAIR') {
-        await this.decomissionTool({ tool: this.tool, newStatus })
-        showSuccessMsg()
-        this.transitionToTools()
+        let decomissionCompleted = await this.decomissionTool({ tool: this.tool, newStatus })
+        if (decomissionCompleted) {
+          showSuccessMsg()
+          this.transitionToTools()
+        }
       } else {
         this.saveStatusChange({ tool: this.tool, newStatus })
       }

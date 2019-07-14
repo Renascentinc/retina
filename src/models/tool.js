@@ -81,7 +81,11 @@ export default class Tool {
   }
 
   set jsDate (newPurchaseDate) {
-    this.date_purchased = new Date(newPurchaseDate).toISOString()
+    if (newPurchaseDate) {
+      this.date_purchased = new Date(newPurchaseDate).toISOString()
+    } else {
+      this.date_purchased = null
+    }
   }
 
   get statusObject () {

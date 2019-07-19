@@ -16,7 +16,6 @@ import NewUser from './routes/new-user'
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
   routes: [
     {
       path: '/login',

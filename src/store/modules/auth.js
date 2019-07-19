@@ -18,6 +18,10 @@ const auth = {
   getters: {
     isAdminUser (state, getters) {
       return state.currentUser.role === Roles.ADMIN
+    },
+
+    isAuthenticated (state) {
+      return !!state.token
     }
   },
 
@@ -32,6 +36,22 @@ const auth = {
 
     setToken (state, token) {
       state.token = token
+    },
+
+    setAuthStatus (state, { token, currentUser }) {
+      let user = currentUser ? JSON.stringify(currentUser) : null
+      window.localStorage.setItem('token', token)
+      window.localStorage.setItem('currentUser', user)
+      state.token = token
+      state.currentUser = currentUser
+    },
+
+    clearAuthStatus (state) {
+      window.localStorage.removeItem('token')
+      window.localStorage.removeItem('currentUser')
+      state.currentUser = null
+      state.token = null
+      router.push({ path: '/login' })
     }
   },
 

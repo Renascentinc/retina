@@ -199,7 +199,7 @@ export default {
       this.currentState = this.states.AUTHENTICATING
 
       try {
-        this.login({ email: this.email, password: this.password, organization_name: this.organizationName })
+        await this.login({ email: this.email, password: this.password, organization_name: this.organizationName })
       } catch (error) {
         if (error.graphQLErrors && error.graphQLErrors.length) {
           let { graphQLErrors: [{ extensions: { code } }] } = error

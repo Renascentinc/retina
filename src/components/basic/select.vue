@@ -1155,7 +1155,7 @@ export default {
     min-height: 40px;
     width: 100%;
     text-align: left;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
   }
 

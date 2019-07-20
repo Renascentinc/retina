@@ -373,7 +373,7 @@
               <input
                 v-money="moneyInputConfig"
                 v-if="editState"
-                v-model="editedTool.formattedPrice"
+                v-model.lazy="editedTool.formattedPrice"
                 name="newPrice"
                 class="light-input"
                 placeholder="Price"

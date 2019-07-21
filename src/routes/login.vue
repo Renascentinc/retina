@@ -100,6 +100,8 @@ import ExtendedFab from '@/components/basic/extended-fab'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import swal from 'sweetalert2'
 import { mapActions } from 'vuex'
+import Vue from 'vue'
+import store from '@/store'
 
 export default {
   name: 'Login',
@@ -221,7 +223,9 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    window.localStorage.getItem('token') ? next('/') : next()
+    Vue.nextTick(() => {
+      store.getters['auth/isAuthenticated'] ? next('/') : next()
+    })
   }
 }
 </script>

@@ -507,7 +507,7 @@ export default {
         model_number: '',
         serial_number: '',
         price: '',
-        owner: this.$store.getters['users/currentUser']
+        owner: this.$store.state.auth.currentUser
       })
     }
   }

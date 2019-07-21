@@ -124,12 +124,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
 import nfcMixin from '@/mixins/nfc'
 import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
 import { mapGetters, mapActions, mapState } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'Application',
@@ -152,7 +154,8 @@ export default {
     ]),
 
     ...mapGetters('auth', [
-      'isAdminUser'
+      'isAdminUser',
+      'isAuthenticated'
     ])
   },
 
@@ -286,7 +289,9 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    window.localStorage.getItem('token') ? next() : next('/login')
+    Vue.nextTick(() => {
+      store.getters['auth/isAuthenticated'] ? next() : next('/login')
+    })
   }
 }
 </script>

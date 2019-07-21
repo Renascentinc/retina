@@ -80,9 +80,9 @@ const auth = {
       })
       window.localStorage.removeItem('token')
       window.localStorage.removeItem('currentUser')
-      commit('setCurrentUser', null)
       commit('setToken', null)
       router.push({ path: '/login' })
+      commit('setCurrentUser', null)
     },
 
     async initialize ({ commit, dispatch }) {

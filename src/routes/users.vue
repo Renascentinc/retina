@@ -105,7 +105,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('users', [
+    ...mapGetters('auth', [
       'isAdminUser'
     ]),
 

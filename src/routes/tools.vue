@@ -592,6 +592,12 @@ export default {
     opacity: .5;
   }
 
+  .scroll-container {
+    // important to make sure infinite scrolling works
+    height: fit-content;
+    max-height: calc(100% - 10px);
+  }
+
   .selection-action-bar {
     position: absolute;
     bottom: 0;

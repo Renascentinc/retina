@@ -113,7 +113,7 @@ export default {
 @import "../styles/search-result";
 
 .thumbnail-container {
-  flex: 0 1 80px;
+  flex: 0 0 80px;
   display: flex;
   align-items: center;
   justify-content: center;

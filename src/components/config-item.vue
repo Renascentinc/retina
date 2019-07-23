@@ -6,28 +6,27 @@
     <div
       class="element-container"
     >
-      <i
+      <button
         v-if="!editing"
         class="fas fa-pen edit-icon"
         @click="startEditing"
-      >
-      </i>
-      <i
+      />
+      <button
         v-if="editing"
+        :disabled="!changedName"
+        :class="{ 'disabled': !changedName }"
         class="fas fa-save save-icon"
         @click="save"
-      >
-      </i>
+      />
       <input
         v-if="editing"
         v-model="changedName"
       />
-      <i
+      <button
         v-if="editing"
         class="fas fa-times cancel-icon"
         @click="cancelEdit"
-      >
-      </i>
+      />
       <div
         v-if="!editing"
         class="main-container"
@@ -94,7 +93,7 @@
 </template>
 
 <script>
-import Fab from '../components/fab'
+import Fab from '@/components/basic/fab'
 
 export default {
   name: 'ConfigItem',
@@ -139,7 +138,7 @@ export default {
 
     save () {
       if (this.$props.configItem.name !== this.changedName) {
-        var changedConfig = {
+        let changedConfig = {
           id: this.$props.configItem.id,
           name: this.changedName,
           sanctioned: this.$props.configItem.sanctioned
@@ -169,14 +168,15 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../styles/variables';
-  @import '../styles/search-result';
-
   .search-result {
     &.sanctioned {
       .save-icon, .cancel-icon {
         color: $renascent-red;
         font-size: 30px;
+
+        &.disabled {
+          color: $disabled-gray;
+        }
       }
     }
 

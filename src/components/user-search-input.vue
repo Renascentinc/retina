@@ -46,9 +46,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
-@import '../styles/search-input';
-
 .user-search-input {
   font-weight: bold;
   font-size: 20px;

@@ -1,20 +1,20 @@
-@import 'variables';
 @import 'fonts';
-@import 'loading-spinner';
 @import 'drawer';
 @import 'navbar';
 @import 'form-inputs';
 @import 'toast';
 @import 'transitions';
+@import 'search-bar';
+@import 'standard-list-view-page';
+@import 'action-sidebar';
+@import 'add-button';
+@import 'search-result';
+@import 'search-input';
 
 * {
   font-family: $font-family;
   -webkit-tap-highlight-color: transparent;
   outline: none;
-}
-
-* {
-  font-family: $font-family;
 }
 
 html, body, #app {
@@ -67,6 +67,7 @@ img[lazy=loading] {
       display: flex;
       flex: 1 1 auto;
       flex-direction: column;
+      width: 100%;
       padding-top: constant(safe-area-inset-top);
       padding-top: env(safe-area-inset-top);
     }

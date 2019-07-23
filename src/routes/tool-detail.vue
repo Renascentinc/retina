@@ -1,76 +1,57 @@
 <template>
   <div class="page tool-detail-page">
-    <transition name="fade">
-      <div
-        v-if="saving"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
+    <loading-overlay :active="saving"/>
 
     <div class="info-menu-container">
       <div
-        class="floating-action-bar"
+        class="action-sidebar"
+        v-if="$mq === 'desktop'"
       >
         <extended-fab
-          v-if="$mq === 'desktop'"
           :on-click="transitionToTools"
           :outline-display="true"
           icon-class="fa-arrow-left"
           class="action-btn transfer-btn"
           button-text="BACK"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="canEdit && $mq === 'desktop'"
+          v-if="canEdit"
           :on-click="toggleEditState"
-          :disabled="changingStatus"
           :icon-class="editState ? 'fa-save' : 'fa-pen'"
           :button-text="editState ? 'SAVE CHANGES' : 'EDIT TOOL'"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="editState && $mq === 'desktop'"
+          v-if="editState"
           :on-click="cancelEdit"
-          :disabled="changingStatus"
           icon-class="fa-times"
           button-text="CANCEL"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop' && isTransferable"
-          :disabled="editState || changingStatus"
+          v-if="isTransferable"
+          :disabled="editState"
           :on-click="toggleTransferStatus"
           :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
           icon-class="fa-exchange-alt"
           class="action-btn transfer-btn"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop'"
-          :disabled="editState || changingStatus"
+          :disabled="editState"
           :on-click="transitionToHistory"
           :outline-display="false"
           icon-class="fa-book-open"
           button-text="VIEW HISTORY"
-        >
-        </extended-fab>
+        />
 
-        <button-dropdown
-          v-if="$mq === 'desktop' && isTransferable"
+        <dropdown
+          v-if="isTransferable"
           :on-click="updateStatus"
           :options="statusOptions"
           button-text="CHANGE STATUS"
-        >
-        </button-dropdown>
+        />
       </div>
 
       <div class="header-cards-container">
@@ -79,18 +60,17 @@
             v-if="$mq === 'mobile'"
             class="fas fa-arrow-left backarrow"
             to="/tools"
-          >
-          </router-link>
+          />
 
           <span class="toolid">
-            #{{ getTool.id }}
+            {{ tool.formattedId }}
           </span>
 
           <div
             v-if="!editState"
             class="name"
           >
-            {{ brand }} {{ type }}
+            {{ tool.brand.name }} {{ tool.type.name }}
           </div>
 
           <div
@@ -99,7 +79,7 @@
           >
             <v-select
               v-validate="'required'"
-              v-model="newBrand"
+              v-model="editedTool.brand"
               :options="brandOptions"
               name="brand"
               label="name"
@@ -112,7 +92,7 @@
               >
                 <button
                   class="no-options-btn"
-                  @click="() => newBrand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }"
+                  @click="() => editedTool.brand = { name: props.value, type: 'BRAND', isNewConfigurableItem: true }"
                 >
                   Set Brand To "{{ props.value }}"
                 </button>
@@ -134,7 +114,7 @@
           >
             <v-select
               v-validate="'required'"
-              v-model="newType"
+              v-model="editedTool.type"
               :options="typeOptions"
               name="type"
               label="name"
@@ -147,7 +127,7 @@
               >
                 <button
                   class="no-options-btn"
-                  @click="() => newType = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }"
+                  @click="() => editedTool.type = { name: props.value, type: 'TYPE', isNewConfigurableItem: true }"
                 >
                   Set Type To "{{ props.value }}"
                 </button>
@@ -164,26 +144,23 @@
           </div>
 
           <span
-            :class="statusClass"
+            :class="tool.statusClass"
             class="tool-status"
           >
-            {{ formattedStatus }}
+            {{ tool.formattedStatus }}
           </span>
 
           <div
-            v-if="isTransferable"
+            v-if="isTransferable && $mq === 'mobile'"
             class="actions"
           >
-            <button-dropdown
-              v-if="$mq === 'mobile'"
+            <dropdown
               :on-click="updateStatus"
               :options="statusOptions"
               button-text="CHANGE STATUS"
-            >
-            </button-dropdown>
+            />
 
             <button
-              v-if="$mq === 'mobile'"
               class="action-btn transfer-btn"
               @click="toggleTransferStatus"
             >
@@ -202,44 +179,43 @@
             <div class="card-details owner-details">
               <div class="user-symbol">
                 <i
-                  :class="{ 'fa-user': owner.type === 'USER', 'fa-map-marker-alt': owner.type === 'LOCATION' }"
-                  class="fas fa-user"
-                >
-                </i>
+                  :class="{ 'fa-user': tool.owner.isUser, 'fa-map-marker-alt': tool.owner.isLocation }"
+                  class="fas"
+                />
               </div>
               <div class="owner-name">
                 <div
-                  v-if="owner.type === 'LOCATION'"
+                  v-if="tool.owner.isLocation"
                   class="owner-location"
                 >
-                  {{ owner.name }}
+                  {{ tool.owner.name }}
                 </div>
                 <div
-                  v-if="owner.type === 'USER'"
+                  v-if="tool.owner.isUser"
                   class="owner-user"
                 >
-                  <span> {{ owner.first_name }} </span>
-                  <span> {{ owner.last_name }} </span>
+                  <span> {{ tool.owner.first_name }} </span>
+                  <span> {{ tool.owner.last_name }} </span>
                 </div>
               </div>
               <div class="contact-buttons">
                 <fab
-                  :on-click="phoneCall"
-                  :disabled="!phoneNumber"
+                  v-if="tool.owner.isUser"
+                  :on-click="() => tool.owner.startPhoneCall()"
+                  :disabled="!tool.owner.phone_number"
                   class="call-btn"
                   icon-class="fa-phone"
-                >
-                </fab>
+                />
 
                 <div class="spacer"></div>
 
                 <fab
-                  :on-click="sendEmail"
-                  :disabled="!email"
+                  v-if="tool.owner.isUser"
+                  :on-click="() => tool.owner.startEmail()"
+                  :disabled="!tool.owner.email"
                   class="email-btn"
                   icon-class="fa-envelope"
-                >
-                </fab>
+                />
               </div>
             </div>
           </div>
@@ -254,10 +230,9 @@
                 Retina ID
               </span>
               <span class="general-data">
-                {{ getTool.id }}
+                {{ tool.id }}
               </span>
-              <nfc-encode :tool-id="getTool && getTool.id ? getTool.id : ''">
-              </nfc-encode>
+              <nfc-encode :tool="tool"/>
 
               <span class="general-label">
                 Serial Number
@@ -266,13 +241,13 @@
                 v-if="!editState"
                 class="general-data"
               >
-                {{ getTool.serial_number || '-' }}
+                {{ tool.serial_number }}
               </span>
 
               <input
                 v-validate="'required'"
                 v-if="editState"
-                v-model="newSerial"
+                v-model="editedTool.serial_number"
                 name="serial"
                 class="general-data light-input"
               >
@@ -292,13 +267,13 @@
                 v-if="!editState"
                 class="general-data"
               >
-                {{ getTool.model_number || '-' }}
+                {{ tool.model_number }}
               </span>
 
               <input
                 v-validate="'required'"
                 v-if="editState"
-                v-model="newModel"
+                v-model="editedTool.model_number"
                 name="model"
                 class="general-data light-input"
               >
@@ -318,13 +293,13 @@
                 v-if="!editState"
                 class="general-data"
               >
-                {{ getTool.year || '-' }}
+                {{ tool.year }}
               </span>
 
               <input
                 v-validate="validations.modelYear"
                 v-if="editState"
-                v-model="newYear"
+                v-model="editedTool.year"
                 name="year"
                 type="number"
                 class="general-data light-input"
@@ -345,12 +320,12 @@
                 v-if="!editState"
                 class="general-data"
               >
-                {{ purchasedFrom }}
+                {{ tool.formattedPurchasedFrom }}
               </span>
 
               <v-select
                 v-if="editState"
-                v-model="newPurchasedFrom"
+                v-model="editedTool.purchased_from"
                 :options="purchasedFromOptions"
                 label="name"
                 class="general-data dark-input"
@@ -362,7 +337,7 @@
                 >
                   <button
                     class="no-options-btn"
-                    @click="() => newPurchasedFrom = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }"
+                    @click="() => editedTool.purchased_from = { name: props.value, type: 'PURCHASED_FROM', isNewConfigurableItem: true }"
                   >
                     Set Type To "{{ props.value }}"
                   </button>
@@ -376,30 +351,14 @@
                 v-if="!editState"
                 class="general-data"
               >
-                {{ formattedDate(getTool.date_purchased) }}
+                {{ tool.formattedDate }}
               </span>
 
-              <v-date-picker
+              <date-picker
                 v-if="editState"
-                v-model="newPurchaseDate"
-                :input-props="{ readonly: true }"
-                :attributes="[{ popover: { visibility: 'hidden' } }]"
-                :max-date="new Date()"
-                :popover-visibility="datePickerVisibility"
-                popover-direction="top"
-                class="general-data"
-                mode="single"
-                @input="toggleDatepicker"
-              >
-                <button
-                  slot-scope="{ inputValue }"
-                  :class="{ placeholder: !inputValue }"
-                  class="dark-input purchase-date-input"
-                  @click="toggleDatepicker"
-                >
-                  {{ inputValue || `eg. ${new Date().toLocaleDateString('en-US')}` }}
-                </button>
-              </v-date-picker>
+                :date="editedTool.jsDate"
+                :on-date-change="onDateChange"
+              />
 
               <span class="general-label">
                 Purchase Price
@@ -408,26 +367,47 @@
                 v-if="!editState"
                 class="general-data"
               >
-                ${{ formattedPrice }}
+                {{ tool.formattedPrice }}
               </span>
 
               <input
                 v-money="moneyInputConfig"
                 v-if="editState"
-                v-model="newPrice"
+                v-model.lazy="editedTool.formattedPrice"
                 name="newPrice"
                 class="light-input"
                 placeholder="Price"
               >
 
+              <span class="general-label">
+                NFC
+              </span>
+
+              <span
+                v-if="!editState"
+                class="general-data"
+              >
+                {{ tool.tagged ? "Tagged" : "Not Tagged" }}
+              </span>
+
+              <div class="nfc-toggle-container">
+                <toggle-button
+                  v-if="editState"
+                  v-model="editedTool.tagged"
+                  :sync="true"
+                  :labels="{ checked: 'Tagged', unchecked: 'Not Tagged' }"
+                  :width="100"
+                />
+              </div>
+
               <extended-fab
                 v-if="$mq === 'mobile'"
+                :disabled="editState"
                 :on-click="transitionToHistory"
                 :outline-display="false"
                 icon-class="fa-book-open"
                 button-text="VIEW HISTORY"
-              >
-              </extended-fab>
+              />
             </div>
           </div>
 
@@ -437,69 +417,12 @@
             <div class="card-title">
               Photo
             </div>
-            <div
-              v-if="!editState"
-              class="photo-box"
-            >
-              <img
-                v-lazy="`${getTool.photo}`"
-                v-if="getTool.photo"
-                class="image"
-              >
-              <i
-                v-if="!getTool.photo"
-                class="fas fa-image no-image"
-              >
-              </i>
-            </div>
 
-            <div
-              v-if="editState"
-              class="add-photo-container"
-            >
-              <input
-                id="file"
-                ref="file"
-                name="file"
-                style="display: none;"
-                type="file"
-                accept="image/*"
-                capture="camera"
-              >
-
-              <label
-                v-if="!newImgSrc"
-                for="file"
-                class="dark-input add-photo"
-              >
-                <label
-                  for="file"
-                  class="fas fa-camera"
-                ></label>
-                {{ getTool.photo ? 'UPDATE PHOTO' : 'Add Photo' }}
-              </label>
-
-              <div
-                v-if="newImgSrc"
-                class="image-container"
-              >
-                <img
-                  v-if="newImgSrc"
-                  :src="newImgSrc"
-                  class="img-preview"
-                >
-              </div>
-
-              <extended-fab
-                v-if="newImgSrc"
-                :on-click="deletePhoto"
-                :outline-display="true"
-                class="delete-photo-efab"
-                icon-class="fa-times"
-                button-text="REMOVE PHOTO"
-              >
-              </extended-fab>
-            </div>
+            <add-photo
+              :on-image-change="onImageChange"
+              :edit-state="editState"
+              :image-url="editState ? editedTool.photo : tool.photo"
+            />
           </div>
         </div>
       </div>
@@ -510,31 +433,33 @@
       :on-click="cancelEdit"
       icon-class="fa-times"
       class="cancel"
-    >
-    </fab>
+    />
 
     <fab
       v-if="canEdit && $mq === 'mobile'"
       :on-click="toggleEditState"
       :icon-class="editState ? 'fa-save' : 'fa-pen'"
       class="edit"
-    >
-    </fab>
+    />
   </div>
 </template>
 
 <script>
-import gql from 'graphql-tag'
-import Fab from '../components/fab.vue'
-import ExtendedFab from '../components/extended-fab.vue'
-import vSelect from '../components/select'
-import ConfigurableItems from '../utils/configurable-items.js'
-import ButtonDropdown from '../components/button-dropdown.vue'
-import NfcEncode from '../components/nfc-encode'
-import swal from 'sweetalert2'
-import nfcMixin from '../mixins/nfc'
-import Platforms from '../utils/platforms'
-import imageCompression from 'browser-image-compression'
+import { mapActions, mapMutations, mapState } from 'vuex'
+import Fab from '@/components/basic/fab.vue'
+import ExtendedFab from '@/components/basic/extended-fab'
+import DatePicker from '@/components/basic/date-picker'
+import vSelect from '@/components/basic/select'
+import Dropdown from '@/components/basic/dropdown'
+import NfcEncode from '@/components/nfc-encode'
+import AddPhoto from '@/components/add-photo'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
+import ConfigurableItems from '@/utils/configurable-items.js'
+import { configurableItemQuery, toolQuery } from '@/utils/gql'
+import { showInvalidIDMsg, showSuccessMsg } from '@/utils/alerts'
+import Tool from '@/models/tool'
 
 export default {
   name: 'ToolDetail',
@@ -542,106 +467,52 @@ export default {
   components: {
     Fab,
     ExtendedFab,
-    ButtonDropdown,
+    Dropdown,
     vSelect,
-    NfcEncode
+    NfcEncode,
+    AddPhoto,
+    DatePicker,
+    LoadingOverlay
   },
 
-  mixins: [ nfcMixin ],
+  mixins: [
+    nfcMixin
+  ],
 
   apollo: {
     getAllConfigurableItem: {
-      query: gql`
-        query {
-          getAllConfigurableItem {
-            id
-            type
-            name
-            sanctioned
-          }
-        }
-      `,
-      fetchPolicy: 'network-only'
+      query: configurableItemQuery
+
     },
 
     getTool: {
-      query: gql`
-        query tool($tool_id: ID!) {
-          getTool(tool_id: $tool_id) {
-            id
-            brand {
-              id
-              name
-            }
-            type {
-              id
-              name
-            }
-            year
-            status
-            model_number
-            serial_number
-            purchased_from {
-              id
-              name
-            }
-            date_purchased
-            price
-            photo
-
-            owner {
-              ... on Location {
-                id
-                name
-                type
-              }
-              ... on User {
-                id
-                first_name
-                last_name
-                email
-                phone_number
-                type
-              }
-            }
-          }
-        }
-      `,
+      query: toolQuery,
       variables () {
-        let options = {}
-        options.tool_id = this.$router.currentRoute.params.toolId
-        return options
+        return {
+          'tool_id': this.$router.currentRoute.params.toolId
+        }
       },
       result (apiResult) {
-        if (!apiResult.data.getTool) {
-          this.showInvalidIDMsg()
+        let tool = apiResult.data.getTool
+        if (tool) {
+          this.tool.update(tool)
+        } else {
+          showInvalidIDMsg()
           this.$router.push({ path: '/tools' })
         }
-      },
-      fetchPolicy: 'network-only'
+      }
+
     }
   },
 
   data () {
     return {
-      newImgSrc: null,
-      reason: null,
-      changingStatus: false,
-      getTool: {},
+      tool: new Tool(),
+      editedTool: null,
       editState: false,
-      newBrand: null,
-      newType: null,
-      newSerial: null,
-      newModel: null,
-      newYear: null,
-      newPurchasedFrom: null,
-      newPurchaseDate: null,
-      newPrice: null,
-      oosStatus: null,
       saving: false,
-      datePickerVisibility: 'hidden',
       validations: {
-        modelYear: `date_format:YYYY|date_between:1950,${new Date().getFullYear() + 1}`
+        modelYear: `date_format:YYYY|before:${new Date().getFullYear()},true`
       },
       moneyInputConfig: {
         decimal: '.',
@@ -655,6 +526,15 @@ export default {
   },
 
   computed: {
+    ...mapState('tools', [
+      'transferState',
+      'selectedToolsMap'
+    ]),
+
+    ...mapState('auth', [
+      'currentUser'
+    ]),
+
     statusOptions () {
       let statusOptions = ['AVAILABLE', 'IN USE', 'MAINTENANCE']
 
@@ -665,18 +545,8 @@ export default {
       return statusOptions
     },
 
-    statusClass () {
-      return (
-        this.getTool.status &&
-        this.getTool.status
-          .split('_')
-          .join('-')
-          .toLowerCase()
-      )
-    },
-
     isToolSelected () {
-      return !!this.$store.state.selectedToolsMap[this.getTool.id]
+      return !!this.selectedToolsMap[this.tool.id]
     },
 
     brandOptions () {
@@ -692,64 +562,15 @@ export default {
     },
 
     canEdit () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
-      return currentUser.role === 'ADMINISTRATOR'
-    },
-
-    owner () {
-      return this.getTool.owner || {}
-    },
-
-    brand () {
-      let brand = this.getTool.brand
-      return brand && brand.name
-    },
-
-    type () {
-      let type = this.getTool.type
-      return type && type.name
-    },
-
-    purchasedFrom () {
-      let purchasedFrom = this.getTool.purchased_from
-      return purchasedFrom ? purchasedFrom.name : '-'
-    },
-
-    formattedStatus () {
-      let status = this.getTool.status
-      return status && status.replace(/_/g, ' ').toUpperCase()
-    },
-
-    formattedPrice () {
-      let priceString = this.getTool.price
-      return priceString ? `${priceString / 100}` : ' -'
+      return this.currentUser.role === 'ADMINISTRATOR'
     },
 
     isTransferable () {
-      let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
       return (
-        currentUser.role === 'ADMINISTRATOR' ||
-        (this.owner.type === 'LOCATION' && this.status === 'AVAILABLE') ||
-        (this.owner.type === 'USER' && currentUser.id === this.owner.id)
+        this.currentUser.role === 'ADMINISTRATOR' ||
+        (this.tool.owner.isLocation && this.tool.status === 'AVAILABLE') ||
+        (this.tool.owner.isUser && this.currentUser.id === this.tool.owner.id)
       )
-    },
-
-    phoneNumber () {
-      if (this.owner.type === 'USER') {
-        return this.owner.phone_number
-      } else if (this.owner.type === 'LOCATION') {
-        return this.owner.phone_number
-      }
-      return ''
-    },
-
-    email () {
-      if (this.owner.type === 'USER') {
-        return this.owner.email
-      } else if (this.owner.type === 'LOCATION') {
-        return this.owner.email
-      }
-      return ''
     }
   },
 
@@ -761,415 +582,85 @@ export default {
   },
 
   methods: {
-    showInvalidIDMsg () {
-      swal({
-        type: 'error',
-        title: 'ERROR',
-        text: 'Invalid Tool ID',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
+    ...mapActions('tools', [
+      'updateTool',
+      'saveStatusChange',
+      'decomissionTool'
+    ]),
 
-    showSuccessMsg () {
-      swal({
-        type: 'success',
-        title: 'TOOL DECOMISSIONED',
-        text: 'Successfully Decomissioned Tool',
-        timer: 1500,
-        showConfirmButton: false
-      })
-    },
-
-    showDecomissionErrorMsg () {
-      swal({
-        type: 'error',
-        title: 'ERROR',
-        text: 'An Error Occurred Trying to Decomission Tool. Please Try Again or Contact Support',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
-
-    showSaveErrorMsg () {
-      swal({
-        type: 'error',
-        title: 'ERROR',
-        text: 'An Error Occurred Trying to Save Tool. Please Try Again or Contact Support',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
-
-    toggleDatepicker () {
-      if (this.datePickerVisibility === 'visible') {
-        this.datePickerVisibility = 'hidden'
-      } else {
-        this.datePickerVisibility = 'visible'
-      }
-    },
-
-    deletePhoto () {
-      this.$refs.file.value = ''
-      this.newImgSrc = null
-      this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
-    },
-
-    toggleChangingStatus () {
-      this.changingStatus = !this.changingStatus
-    },
+    ...mapMutations('tools', [
+      'toggleToolSelection',
+      'updateTransferStatus'
+    ]),
 
     transitionToHistory () {
-      this.$router.push({ name: 'historyDetail', params: { toolId: this.getTool.id } })
+      this.$router.push({ name: 'history', query: { toolId: this.tool.id } })
     },
 
     transitionToTools () {
       this.$router.push({ name: 'tools' })
     },
 
-    formattedDate (date) {
-      let datePurchased = date
-      return datePurchased ? new Date(datePurchased).toLocaleDateString('en-US') : '-'
-    },
-
     getConfigurableItemsForType (type) {
-      return this.getAllConfigurableItem.filter(
-        item => item.type === type && item.sanctioned
-      )
+      return this.getAllConfigurableItem.filter(item => item.type === type && item.sanctioned)
     },
 
     cancelEdit () {
       this.editState = false
     },
 
-    toggleEditState () {
+    async toggleEditState () {
       if (this.editState) {
-        this.$validator.validate().then(result => {
-          if (result) {
-            this.saveTool()
-          }
-        })
+        let result = await this.$validator.validate()
+        if (result) {
+          this.saving = true
+          await this.updateTool(this.editedTool)
+          this.tool.update(this.editedTool)
+          this.$apollo.queries.getAllConfigurableItem.refetch()
+          this.editState = false
+          this.saving = false
+        }
       } else {
-        this.newBrand = this.getTool.brand
-        this.newType = this.getTool.type
-        this.newSerial = this.getTool.serial_number
-        this.newModel = this.getTool.model_number
-        this.newYear = this.getTool.year
-        this.newPurchasedFrom = this.getTool.purchased_from
-        this.newPurchaseDate = this.getTool.date_purchased && new Date(this.getTool.date_purchased)
-        this.newPrice = this.getTool.price ? this.getTool.price : null
+        this.editedTool = new Tool(this.tool)
         this.editState = true
-        this.$nextTick(() => this.$refs.file.addEventListener('change', () => this.updateImageDisplay()))
       }
     },
 
-    createNewConfigurableItem (configurableItem) {
-      return this.$apollo.mutate({
-        mutation: gql`
-          mutation newConfigurableItem(
-            $newConfigurableItem: NewConfigurableItem!
-          ) {
-            createConfigurableItem(newConfigurableItem: $newConfigurableItem) {
-              id
-            }
-          }
-        `,
-        variables: {
-          newConfigurableItem: {
-            type: configurableItem.type,
-            name: configurableItem.name,
-            sanctioned: true
-          }
-        }
-      })
+    onImageChange (newImage) {
+      this.editedTool.image = newImage
+      this.editedTool.photo = null
     },
 
-    updateImageDisplay () {
-      this.newImgSrc = window.URL.createObjectURL(this.$refs.file.files[0])
-    },
-
-    saveTool () {
-      this.saving = true
-      let brandRequest =
-        this.newBrand && this.newBrand.isNewConfigurableItem
-          ? this.createNewConfigurableItem(this.newBrand)
-          : null
-      let typeRequest =
-        this.newType && this.newType.isNewConfigurableItem
-          ? this.createNewConfigurableItem(this.newType)
-          : null
-      let purchaseRequest =
-        this.newPurchasedFrom && this.newPurchasedFrom.isNewConfigurableItem
-          ? this.createNewConfigurableItem(this.newPurchasedFrom)
-          : null
-      let photoRequest = new Promise((resolve) => {
-        let file = this.$refs.file.files[0]
-
-        if (file) {
-          imageCompression(file, 1, 1920).then(compressedImage => {
-            let fd = new FormData()
-
-            let key = `tool_preview-${new Date().getTime()}`
-
-            fd.append('key', key)
-            fd.append('acl', 'public-read')
-            fd.append('Content-Type', compressedImage.type)
-            // TODO enable auth for photo upload
-            // fd.append('AWSAccessKeyId', 'YOUR ACCESS KEY')
-            // fd.append('policy', 'YOUR POLICY')
-            // fd.append('signature', 'YOUR SIGNATURE')
-
-            fd.append('file', compressedImage)
-
-            var xhr = new XMLHttpRequest()
-
-            xhr.open('POST', 'https://retina-images.s3.amazonaws.com/', true)
-
-            xhr.onload = () => {
-              resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
-            }
-
-            xhr.send(fd)
-          })
-        } else {
-          resolve(null)
-        }
-      })
-
-      Promise.all([brandRequest, typeRequest, purchaseRequest, photoRequest]).then(
-        responses => {
-          let [brandResponse, typeResponse, purchaseResponse, photoResponse] = responses
-
-          if (brandResponse) {
-            this.newBrand.id = brandResponse.data.createConfigurableItem.id
-          }
-
-          if (typeResponse) {
-            this.newType.id = typeResponse.data.createConfigurableItem.id
-          }
-
-          if (purchaseResponse) {
-            this.newPurchasedFrom.id = purchaseResponse.data.createConfigurableItem.id
-          }
-
-          let photo = this.getTool.photo
-          if (photoResponse) {
-            photo = photoResponse
-            this.newImgSrc = null
-          }
-
-          this.$apollo
-            .mutate({
-              mutation: gql`
-                mutation updateTool($tool: UpdatedTool!) {
-                  updateTool(updatedTool: $tool) {
-                    id
-                  }
-                }
-              `,
-
-              variables: {
-                tool: {
-                  id: this.getTool.id,
-                  type_id: this.newType.id,
-                  brand_id: this.newBrand.id,
-                  model_number: this.newModel,
-                  serial_number: this.newSerial,
-                  status: this.getTool.status,
-                  owner_id: this.getTool.owner.id,
-                  purchased_from_id: this.newPurchasedFrom && this.newPurchasedFrom.id,
-                  date_purchased: this.newPurchaseDate ? new Date(this.newPurchaseDate).toISOString() : null,
-                  price: this.newPrice ? (this.newPrice.slice(2) * 100).toFixed(2) : null,
-                  year: this.newYear ? this.newYear : null,
-                  photo
-                }
-              }
-            })
-            .then(result => {
-              this.$apollo.queries.getTool.refetch()
-              this.$apollo.queries.getAllConfigurableItem.refetch()
-              this.editState = false
-            })
-        }
-      ).catch(() => {
-        this.showSaveErrorMsg()
-      }).finally(() => {
-        this.saving = false
-      })
+    onDateChange (newDate) {
+      this.editedTool.jsDate = newDate
     },
 
     toggleTransferStatus () {
-      this.$store.commit('toggleToolSelection', this.getTool.id)
-      if (this.$store.state.transferState === 'INITIAL') {
-        this.$store.commit('updateTransferStatus', 'SELECTING')
+      this.toggleToolSelection(this.tool.id)
+      if (this.transferState === 'INITIAL') {
+        this.updateTransferStatus('SELECTING')
       }
-      this.$router.push({ path: '/tools' })
+      this.transitionToTools()
     },
 
-    phoneCall () {
-      window.location.href = `tel:${this.owner.phone_number}`
-    },
+    async updateStatus (newStatus) {
+      newStatus = newStatus.replace(/ /g, '_').toUpperCase()
 
-    sendEmail () {
-      window.location = `mailto:${this.owner.email}`
-    },
-
-    updateStatus (newStatus) {
-      if (newStatus === 'LOST OR STOLEN' || newStatus === 'BEYOND REPAIR') {
-        swal({
-          type: 'warning',
-          title: 'CONFIRM DECOMISSION',
-          text: `Are you sure you want to mark this tool as ${newStatus}? This action cannot be undone.`,
-          input: 'textarea',
-          inputPlaceholder: `Please Explain Why This Tool is Being Marked as ${newStatus}`,
-          reverseButtons: true,
-          showCancelButton: true,
-          cancelButtonText: 'CANCEL',
-          confirmButtonText: 'SUBMIT',
-          confirmButtonColor: '#404040',
-          inputValidator: (value) => {
-            return !value && `Decomission Reason is Required`
-          }
-        }).then(result => {
-          newStatus = newStatus.replace(/ /g, '_').toUpperCase()
-
-          if (result.value) {
-            this.$apollo.mutate({
-              mutation: gql`mutation decomission($tool_id: ID!, $decomissioned_status: DecomissionedToolStatus!, $decomission_reason: String!) {
-                decomissionTool(tool_id: $tool_id, decomissioned_status: $decomissioned_status, decomission_reason: $decomission_reason) {
-                  id
-                }
-              }`,
-              variables: {
-                tool_id: this.getTool.id,
-                decomissioned_status: newStatus,
-                decomission_reason: result.value
-              },
-              refetchQueries: [
-                {
-                  query: gql`query tools($pagingParameters: PagingParameters) {
-                    searchTool(pagingParameters: $pagingParameters) {
-                      id
-                      type {
-                        id
-                        name
-                      }
-                      brand {
-                        id
-                        name
-                      }
-                      status
-                      owner {
-                        ... on Location {
-                           id
-                           name
-                           type
-                        }
-                        ... on User {
-                           id
-                           first_name
-                           last_name
-                           type
-                        }
-                      }
-                    }
-                  }`,
-
-                  variables: {
-                    pagingParameters: {
-                      page_size: 15,
-                      page_number: 0
-                    }
-                  }
-                }
-              ]
-            }).then(() => {
-              this.$apollo.provider.clients.defaultClient.writeFragment({
-                id: `${this.getTool.id}Tool`,
-                fragment: gql`
-                 fragment patchToolStatus on Tool {
-                   status
-                   __typename
-                 }
-                `,
-                data: {
-                  status: newStatus,
-                  __typename: 'Tool'
-                }
-              })
-              this.$store.commit('setToolSelection', this.getTool.id, false)
-              this.showSuccessMsg()
-              this.$router.push({ path: '/tools' })
-            }).catch(() => {
-              this.showDecomissionErrorMsg()
-            })
-          }
-        })
+      if (newStatus === 'LOST_OR_STOLEN' || newStatus === 'BEYOND_REPAIR') {
+        let decomissionCompleted = await this.decomissionTool({ tool: this.tool, newStatus })
+        if (decomissionCompleted) {
+          showSuccessMsg()
+          this.transitionToTools()
+        }
       } else {
-        newStatus = newStatus.replace(/ /g, '_').toUpperCase()
-        this.saveStatusChange(newStatus)
+        this.saveStatusChange({ tool: this.tool, newStatus })
       }
-    },
-
-    saveStatusChange (newStatus) {
-      // save current status in case request fails but set the tool status assuming it will succeed
-      let currentStatus = this.getTool.status
-      this.getTool.status = newStatus
-
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation update($tool: UpdatedTool!) {
-              updateTool(updatedTool: $tool) {
-                status
-              }
-            }
-          `,
-          variables: {
-            tool: {
-              id: this.getTool.id,
-              type_id: this.getTool.type.id,
-              brand_id: this.getTool.brand.id,
-              model_number: this.getTool.model_number,
-              serial_number: this.getTool.serial_number,
-              status: newStatus,
-              purchased_from_id: this.getTool.purchased_from && this.getTool.purchased_from.id,
-              date_purchased: this.getTool.date_purchased,
-              owner_id: this.owner.id,
-              photo: this.getTool.photo,
-              price: this.getTool.price,
-              year: this.getTool.year
-            }
-          }
-        })
-        .then(status => {
-          this.getTool.status = status.data.updateTool.status
-          this.$apollo.provider.clients.defaultClient.writeFragment({
-            id: `${this.getTool.id}Tool`,
-            fragment: gql`
-             fragment patchToolStatus on Tool {
-               status
-               __typename
-             }
-            `,
-            data: {
-              status: this.getTool.status,
-              __typename: 'Tool'
-            }
-          })
-        })
-        .catch(() => {
-          this.getTool.status = currentStatus
-          this.showSaveErrorMsg()
-        })
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
-
 .tool-detail-page {
   background-color: $background-light-gray;
   display: flex;
@@ -1277,28 +768,28 @@ export default {
         z-index: 1;
 
         .action-btn {
-            background-color: $renascent-red;
-            height: 43px;
-            width: 154px;
-            border: none !important;
-            border-radius: 5px;
-            color: white;
-            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-            padding: 0px;
-            display: flex;
-            align-items: center;
-            z-index: -10;
-            padding-left: 10px;
-            font-size: 13px;
-            justify-content: center;
+          background-color: $renascent-red;
+          height: 43px;
+          width: 154px;
+          border: none !important;
+          border-radius: 5px;
+          color: white;
+          box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+          padding: 0px;
+          display: flex;
+          align-items: center;
+          z-index: -10;
+          padding-left: 10px;
+          font-size: 13px;
+          justify-content: center;
 
-            .action-title {
-              flex: 1 1 auto;
-            }
+          .action-title {
+            flex: 1 1 auto;
+          }
 
-            .action-icon {
-              font-size: 18px;
-            }
+          .action-icon {
+            font-size: 18px;
+          }
         }
 
         .transfer-btn {
@@ -1342,13 +833,8 @@ export default {
     .general-card {
       padding-bottom: 10px;
 
-      .purchase-date-input {
-        padding-left: 10px;
-        text-align: left;
-
-        &.placeholder {
-          color: $form-placeholder-color;
-        }
+      .nfc-toggle-container {
+        margin-top: 3px;
       }
 
       .general-details {
@@ -1400,68 +886,6 @@ export default {
     .photo-card {
       padding-bottom: 11px;
       margin-bottom: 80px;
-
-      .photo-box {
-        width: calc(100% - 23px);
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 10px;
-        overflow: hidden;
-
-        .image {
-          height: 100%;
-          width: 100%;
-          border-radius: 2px;
-        }
-
-        .no-image {
-          color: $background-dark-gray;
-          font-size: 60px;
-          width: 100%;
-          text-align: center;
-          margin-top: 20px;
-          margin-bottom: 20px;
-        }
-      }
-
-      .add-photo-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 275px;
-        padding: 0 20px;
-
-        .img-preview {
-          max-height: 175px;
-          max-width: 100%;
-        }
-
-        .add-photo {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100px;
-
-          .fa-camera {
-            margin-right: 5px;
-          }
-        }
-
-        .delete-photo-efab {
-          border-color: transparent;
-          box-shadow: none;
-          font-size: 15px;
-        }
-
-        .image-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 175px;
-          width: 100%;
-        }
-      }
     }
 
     .owner-card {
@@ -1562,23 +986,6 @@ export default {
     display: flex;
     flex-direction: row;
     overflow: hidden;
-
-    .floating-action-bar {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      max-width: 300px;
-      flex: 1 1;
-      padding-top: 80px;
-      overflow-y: auto;
-
-      .container,
-      .extended-fab {
-        margin-left: 10px;
-        margin-top: 20px;
-      }
-    }
 
     .dark-input,
     .popover-container {

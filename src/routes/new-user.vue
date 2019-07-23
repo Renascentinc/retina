@@ -224,12 +224,12 @@
 </template>
 
 <script>
-import HeaderCard from '../components/header-card'
-import UserSearchResult from '../components/user-search-result.vue'
-import ExtendedFab from '../components/extended-fab.vue'
-import Fab from '../components/fab'
-import vSelect from '../components/select'
-import Roles from '../utils/roles'
+import HeaderCard from '@/components/header-card'
+import UserSearchResult from '@/components/user-search-result.vue'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import Fab from '@/components/basic/fab'
+import vSelect from '@/components/basic/select'
+import Roles from '@/utils/roles'
 import swal from 'sweetalert2'
 import gql from 'graphql-tag'
 
@@ -316,24 +316,11 @@ export default {
             role: this.role.id,
             status: 'ACTIVE'
           }
-        },
-        refetchQueries: [{
-          query: gql`
-            query {
-              getAllUser {
-                id
-                first_name
-                last_name
-                role
-              }
-            }
-          `
-        }]
+        }
       }).then(result => {
         ++this.currentState
         this.getUser = result.data.createUser
       }).catch(() => {
-        this.resetData()
         this.currentState = 1
         swal({
           type: 'error',
@@ -359,7 +346,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
   .card-change-enter-active {
     transition: opacity .25s;

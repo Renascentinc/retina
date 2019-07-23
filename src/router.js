@@ -12,12 +12,10 @@ import Users from './routes/users'
 import NewTool from './routes/new-tool'
 import ToolDetail from './routes/tool-detail'
 import NewUser from './routes/new-user'
-import Privacy from './routes/privacy'
 
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
   routes: [
     {
       path: '/login',
@@ -28,11 +26,6 @@ export default new Router({
       path: '/password-reset',
       component: PasswordReset,
       name: 'passwordReset'
-    },
-    {
-      path: '/privacy',
-      component: Privacy,
-      name: 'privacy'
     },
     {
       path: '/',
@@ -72,11 +65,6 @@ export default new Router({
           path: 'history',
           component: History,
           name: 'history'
-        },
-        {
-          path: 'detail-history/:toolId',
-          component: History,
-          name: 'historyDetail'
         },
         {
           path: 'new-user',

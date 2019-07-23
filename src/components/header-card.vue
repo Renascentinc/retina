@@ -40,7 +40,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .header-card {
   background-color: white;

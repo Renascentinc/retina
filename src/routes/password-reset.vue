@@ -1,13 +1,8 @@
 <template>
   <div class="page password-reset-page">
-    <img
-      class="logo"
-      src="../assets/icons/web/red_transparent_512x512.png"
-    >
+    <img class="logo" src="@/assets/icons/red_transparent_512x512.png">
 
-    <span
-      class="header-text"
-    >
+    <span class="header-text">
       RESET YOUR PASSWORD
     </span>
 
@@ -23,9 +18,7 @@
           type="password"
           placeholder="Password"
         >
-        <span
-          class="is-danger error-msg"
-        >
+        <span class="is-danger error-msg">
           {{ errors.first('password') }}
         </span>
       </div>
@@ -46,17 +39,16 @@
         :disabled="!password || !confirmPassword"
         icon-class=""
         button-text="RESET"
-      >
-      </extended-fab>
+      />
     </div>
   </div>
 </template>
 
 <script>
-import gql from 'graphql-tag'
-import swal from 'sweetalert2'
-import ExtendedFab from '../components/extended-fab.vue'
-import ApiStatusCodes from '../utils/api-status-codes'
+import { resetCodeValidityQuery, passwordResetMutation } from '@/utils/gql'
+import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import ExtendedFab from '@/components/basic/extended-fab.vue'
+import ApiStatusCodes from '@/utils/api-status-codes'
 
 export default {
   name: 'PasswordReset',
@@ -67,9 +59,7 @@ export default {
 
   apollo: {
     isPasswordResetCodeValid: {
-      query: gql`query checkResetCode($password_reset_code: ID!) {
-        isPasswordResetCodeValid(password_reset_code: $password_reset_code)
-      }`,
+      query: resetCodeValidityQuery,
       variables () {
         return {
           password_reset_code: this.$route.query.code
@@ -77,8 +67,7 @@ export default {
       },
       result (response) {
         if (!response.data.isPasswordResetCodeValid) {
-          this.showInvalidTokenError()
-          this.$router.push({ path: '/login' })
+          this.onInvalidTokenError()
         }
       }
     }
@@ -92,70 +81,42 @@ export default {
   },
 
   methods: {
-    showSuccessMsg () {
-      swal({
-        type: 'success',
-        title: 'SUCCESS',
-        text: 'Successfully Reset Password',
-        timer: 2000,
-        showConfirmButton: false
-      })
+    onInvalidTokenError () {
+      showErrorMsg('Your Reset Token Has Expired. Please Try Resetting Your Password Again', 'INVALID TOKEN')
+      this.$router.push({ path: '/login' })
     },
 
-    showErrorMsg () {
-      swal({
-        type: 'error',
-        title: 'RESET FAILURE',
-        text: 'There was an error trying to reset your password. Please try again or contact support',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
+    async attemptPasswordReset () {
+      let result = await this.$validator.validate()
 
-    showInvalidTokenError () {
-      swal({
-        type: 'error',
-        title: 'INVALID TOKEN',
-        text: 'Your Reset Token Has Expired. Please Try Resetting Your Password Again',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
-
-    attemptPasswordReset () {
-      this.$validator.validate().then(result => {
-        if (result) {
-          this.$apollo.mutate({
-            mutation: gql`mutation attemptPasswordReset($new_password: String!, $password_reset_code: ID!) {
-              resetPassword(new_password: $new_password, password_reset_code: $password_reset_code)
-            }`,
+      if (result) {
+        try {
+          let { data: { resetPassword } } = await this.$apollo.mutate({
+            mutation: passwordResetMutation,
             variables: {
               new_password: this.password,
               password_reset_code: this.$route.query.code
             }
-          }).then(response => {
-            if (response.data.resetPassword) {
-              this.showSuccessMsg()
-              this.$router.push({ path: '/login' })
-            } else {
-              this.showErrorMsg()
-            }
-          }).catch(response => {
-            if (response && response.graphQLErrors.length && response.graphQLErrors[0].extensions.code === ApiStatusCodes.UNAUTHENTICATED) {
-              this.showInvalidTokenError()
-            } else {
-              this.showErrorMsg()
-            }
           })
+
+          if (resetPassword) {
+            showSuccessMsg('Successfully Reset Password')
+            this.$router.push({ path: '/login' })
+          }
+        } catch (error) {
+          if (error && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.UNAUTHENTICATED) {
+            this.onInvalidTokenError()
+          } else {
+            showErrorMsg('There was an error trying to reset your password. Please try again or contact support', 'RESET FAILURE')
+          }
         }
-      })
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .password-reset-page {
   display: flex;

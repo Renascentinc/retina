@@ -1,34 +1,45 @@
 <template>
   <div class="search-result">
+    <div class="thumbnail-container" @click="onClick">
+      <img
+        v-if="tool.photo"
+        :src="tool.photo"
+        class="photo-thumbnail"
+      >
+
+      <i
+        v-if="!tool.photo"
+        class="fas fa-image no-image"
+      />
+    </div>
     <div
       class="main-container"
       @click="onClick"
     >
       <div class="row">
         <span class="title">
-          {{ name }}
+          {{ tool.name }}
         </span>
       </div>
       <div class="row">
         <span class="subtitle">
-          {{ id }}
+          {{ tool.formattedId }}
         </span>
         <span
-          :class="statusClass"
+          :class="tool.statusClass"
           class="tool-status"
         >
-          {{ status }}
+          {{ tool.formattedStatus }}
         </span>
       </div>
       <div class="row">
         <i
-          :class="assigneeIcon"
+          :class="tool.owner.iconClass"
           class="fas user-icon"
-        >
-        </i>
+        />
 
         <span class="tool-assignee">
-          {{ assignee }}
+          {{ tool.owner.name }}
         </span>
       </div>
     </div>
@@ -49,6 +60,8 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   name: 'ToolSearchResult',
 
@@ -70,56 +83,54 @@ export default {
   },
 
   computed: {
-    id () {
-      return `#${this.tool.id}`
-    },
-
-    name () {
-      return `${this.tool.brand.name} ${this.tool.type.name}`
-    },
-
-    statusClass () {
-      return this.tool.status
-        .split('_')
-        .join('-')
-        .toLowerCase()
-    },
-
-    status () {
-      return this.tool.status
-        .split('_')
-        .join(' ')
-        .toLowerCase()
-    },
-
-    assignee () {
-      return this.tool.owner.type === 'USER' ? `${this.tool.owner.first_name} ${this.tool.owner.last_name}` : this.tool.owner.name
-    },
-
-    assigneeIcon () {
-      return this.tool.owner.type === 'USER' ? 'fa-user' : 'fa-map-marker-alt'
-    },
+    ...mapState('tools', [
+      'selectedToolsMap'
+    ]),
 
     selected () {
-      return this.$store.state.selectedToolsMap[this.tool.id]
+      return this.selectedToolsMap[this.tool.id]
     }
   },
 
   methods: {
+    ...mapMutations('tools', [
+      'toggleToolSelection'
+    ]),
+
     onClick () {
       this.onSelect(this.tool.id)
     },
 
     toggleSelect () {
-      this.$store.commit('toggleToolSelection', this.tool.id)
+      this.toggleToolSelection(this.tool.id)
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
+
 @import "../styles/search-result";
+
+.thumbnail-container {
+  flex: 0 1 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .photo-thumbnail {
+    height: 60px;
+    width: 60px;
+    border-radius: 5px;
+    object-fit: cover;
+    transition: opacity 5s ease-in;
+  }
+
+  .no-image {
+    font-size: 30px;
+    color: $renascent-dark-gray;
+  }
+}
 
 .tool-status {
   text-transform: none;

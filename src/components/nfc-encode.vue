@@ -5,12 +5,7 @@
     @click="onClick"
   >
     <div class="fab-icon-container">
-      <svgicon
-        icon="nfc"
-        width="22"
-        height="22"
-      >
-      </svgicon>
+      <img class="nfc-icon" src="@/assets/icons/nfc.svg"/>
     </div>
     <span class="efab-text">
       ENCODE TAG
@@ -19,9 +14,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import swal from 'sweetalert2'
-import nfcMixin from '../mixins/nfc'
-import '../assets/icons/svg/nfc'
+import nfcMixin from '@/mixins/nfc'
 
 export default {
   name: 'NfcEncode',
@@ -29,13 +24,20 @@ export default {
   mixins: [nfcMixin],
 
   props: {
-    toolId: {
-      type: String,
-      required: true
+    tool: {
+      type: Object,
+      required: false,
+      default () {
+        return {}
+      }
     }
   },
 
   methods: {
+    ...mapActions('tools', [
+      'updateTool'
+    ]),
+
     showSuccessMsg () {
       swal({
         type: 'success',
@@ -86,17 +88,25 @@ export default {
       this.pauseNfcListener()
     },
 
-    _nfcCallback (tag) {
-      const record = [
-        window.ndef.textRecord(`${this.toolId} - Property of Renascent, Inc. (http://renascentinc.com)`)
-      ]
+    onSuccess () {
+      window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
+      this.pauseNfcListener()
+      if (!this.tool.tagged) {
+        this.tool.tagged = true
+        this.updateTool(this.tool)
+      }
+    },
 
-      const lock = () => {
-        window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
-        this.pauseNfcListener()
+    _nfcCallback (tag) {
+      if (!this.tool.id) {
+        return
       }
 
-      window.nfc.write(record, lock, (reason) => this.onError(reason))
+      const record = [
+        window.ndef.textRecord(`${this.tool.id} - Property of Renascent, Inc. (http://renascentinc.com)`)
+      ]
+
+      window.nfc.write(record, () => this.onSuccess(), (reason) => this.onError(reason))
     },
 
     onClick () {
@@ -112,7 +122,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../styles/variables';
 
   .nfc-encode {
       padding: 5px 15px;
@@ -130,15 +139,19 @@ export default {
       background: transparent;
       width: 190px;
 
+      .nfc-icon {
+        height: 22px;
+        width: 22px;
+      }
+
       &.inactive {
         opacity: .5;
         color: $disabled-gray;
         border: solid 1px $disabled-gray;
         box-shadow: none;
 
-        path[pid="1"] {
-          stroke: transparent;
-          fill: $disabled-gray !important;
+        .nfc-icon {
+          opacity: .5;
         }
       }
 

@@ -6,10 +6,7 @@
     <vue-drawer-layout
       ref="drawer"
       :drawer-width="270"
-      :enable="false"
-      :animatable="true"
-      :backdrop="true"
-      :content-drawable="$mq === 'desktop' ? true : false"
+      :content-drawable="false"
       @mask-click="closeDrawer"
     >
       <div
@@ -17,23 +14,23 @@
         class="drawer-content"
       >
         <div class="account-info">
-          <avatar :username="`${ firstname } ${ lastname }`"></avatar>
+          <avatar :username="currentUser.name"></avatar>
           <span class="username">
-            <span> {{ firstname }} </span>
-            <span> {{ lastname }} </span>
+            <span> {{ currentUser.first_name }} </span>
+            <span> {{ currentUser.last_name }} </span>
           </span>
           <span class="role">
-            {{ role }}
+            {{ currentUser.role }}
           </span>
           <span class="email">
-            {{ email }}
+            {{ currentUser.email }}
           </span>
           <hr class="line">
         </div>
 
         <div class="menu-buttons">
           <button
-            v-if="isAdmin"
+            v-if="isAdminUser"
             class="config menu-btn"
             @click="transitionToConfig"
           >
@@ -58,7 +55,7 @@
           </button>
           <button
             class="sign-out menu-btn"
-            @click="signout"
+            @click="logout"
           >
             <i class="fas menu-btn-icon fa-sign-out-alt"></i>
             SIGN OUT
@@ -127,12 +124,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
-import authenticatedRouteMixin from '../mixins/authenticatedRoute'
-import nfcMixin from '../mixins/nfc'
-import Platforms from '../utils/platforms'
+import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'Application',
@@ -141,7 +140,7 @@ export default {
     Avatar
   },
 
-  mixins: [ authenticatedRouteMixin, nfcMixin ],
+  mixins: [ nfcMixin ],
 
   data () {
     return {
@@ -150,29 +149,14 @@ export default {
   },
 
   computed: {
-    currentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser'))
-    },
+    ...mapState('auth', [
+      'currentUser'
+    ]),
 
-    firstname () {
-      return this.currentUser.first_name
-    },
-
-    lastname () {
-      return this.currentUser.last_name
-    },
-
-    email () {
-      return this.currentUser.email
-    },
-
-    role () {
-      return this.currentUser.role
-    },
-
-    isAdmin () {
-      return this.currentUser.role === 'ADMINISTRATOR'
-    }
+    ...mapGetters('auth', [
+      'isAdminUser',
+      'isAuthenticated'
+    ])
   },
 
   mounted () {
@@ -183,32 +167,25 @@ export default {
   },
 
   methods: {
+    ...mapActions('auth', [
+      'logout'
+    ]),
+
     transitionToConfig () {
       this.$router.push({ name: 'configuration' })
       this.closeDrawer()
     },
+
     sendSupportEmail () {
-      window.location = 'mailto:retinasupport@renascentinc.com'
+      window.location.href = 'mailto:retinasupport@renascentinc.com'
     },
+
     closeDrawer () {
       this.$refs.drawer.toggle(false)
     },
 
     openDrawer () {
       this.$refs.drawer.toggle(true)
-    },
-
-    signout () {
-      this.$apollo.mutate({
-        mutation: gql`mutation logout {
-           logout
-        }`
-      })
-
-      setTimeout(() => {
-        window.localStorage.removeItem('token')
-        this.$router.push({ path: '/login' })
-      }, 100)
     },
 
     changePassword () {
@@ -309,6 +286,12 @@ export default {
         })
       })
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    Vue.nextTick(() => {
+      store.getters['auth/isAuthenticated'] ? next() : next('/login')
+    })
   }
 }
 </script>

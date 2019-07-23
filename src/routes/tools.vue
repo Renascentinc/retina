@@ -1,147 +1,123 @@
 <template>
   <div class="page tools-page">
+    <loading-overlay :active="transferInProgress"/>
+
     <div class="search-bar">
       <tool-search-input
         :clear-fuzzy-filter="clearFuzzyFilter"
         :tags="tags"
         :update-tags="updateFilters"
         :disable-user-search="isNonAdminTransfer"
-      >
-      </tool-search-input>
-      <nfc-scan :on-scan="onScan"></nfc-scan>
+      />
+      <nfc-scan :on-scan="onScan"/>
     </div>
 
-    <transition name="fade">
-      <div
-        v-if="transferInProgress"
-        class="overlay"
-      >
-        <div class="half-circle-spinner">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-        </div>
-      </div>
-    </transition>
-
     <extended-fab
-      v-if="$mq === 'mobile' && currentState === states.INITIAL"
+      v-if="$mq === 'mobile' && transferState === states.INITIAL"
       :on-click="moveToSelectingState"
       class="transfer-btn"
       icon-class="fa-exchange-alt"
       button-text="TRANSFER"
-    >
-    </extended-fab>
-    <div class="tools-menu-container">
+    />
+
+    <div class="menu-container">
       <div
-        class="floating-action-bar"
+        class="action-sidebar"
+        v-if="$mq === 'desktop'"
       >
         <extended-fab
-          v-if="$mq === 'desktop' && currentState === states.INITIAL"
+          v-if="transferState === states.INITIAL"
           :on-click="moveToSelectingState"
           class="transfer-btn"
           icon-class="fa-exchange-alt"
           button-text="TRANSFER"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop' && currentState === states.SELECTING"
+          v-if="transferState === states.SELECTING"
           :on-click="cancelTransfer"
           class="cancel-fab-btn"
           icon-class="fa-times"
           button-text="CANCEL"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop' && currentState === states.SELECTING"
+          v-if="transferState === states.SELECTING"
           :on-click="toggleViewSelected"
           :icon-class="showOnlySelectedTools ? 'fa-check-square' : 'fa-list'"
           :button-text="showOnlySelectedTools ? 'VIEW ALL' : 'VIEW SELECTED'"
           class="view-fab-btn"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop' && currentState === states.SELECTING"
+          v-if="transferState === states.SELECTING"
           :on-click="proceedToFinalize"
           :disabled="numSelectedTools === 0"
           :class="{ disabled: numSelectedTools === 0 }"
           class="view-fab-btn next-btn"
           icon-class="fa-arrow-right"
           button-text="NEXT"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop' && currentState === states.INITIAL"
+          v-if="transferState === states.INITIAL"
           :on-click="transitionToAdd"
           class="add-btn"
           icon-class="fa-plus"
           button-text="ADD TOOL"
-        >
-        </extended-fab>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+          v-if="transferState === states.FINALIZING"
           :on-click="moveToSelectingState"
           class="back-efab"
           icon-class="fa-arrow-left"
           button-text="BACK"
-        >
-        </extended-fab>
+        />
 
         <v-select
-          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+          v-if="transferState === states.FINALIZING"
           v-model="transferTarget"
           :options="transferTargets"
           :filterable="false"
           class="dark-input"
-        >
-        </v-select>
+        />
 
         <extended-fab
-          v-if="$mq === 'desktop' && currentState === states.FINALIZING"
+          v-if="transferState === states.FINALIZING"
           :on-click="finalizeTransfer"
           :disabled="!transferTarget.id || numSelectedTools === 0"
           class="finish-transfer"
           icon-class="fa-arrow-right"
           button-text="FINISH"
-        >
-        </extended-fab>
+        />
       </div>
 
       <div
         v-infinite-scroll="loadMore"
         ref="scrollElement"
-        :class="{ finalizing: currentState === states.FINALIZING }"
+        :class="{ finalizing: transferState === states.FINALIZING }"
         infinite-scroll-throttle-delay="200"
-        class="tool-scroll-container"
+        class="scroll-container"
       >
         <add-button
-          v-if="$mq === 'mobile' && currentState === states.INITIAL"
+          v-if="$mq === 'mobile' && transferState === states.INITIAL"
           :key="0"
           :on-click="transitionToAdd"
           text="TOOL"
-        >
-        </add-button>
+        />
 
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchTool.loading"
-            class="loading-container"
-          >
-            <div class="half-circle-spinner">
-              <div class="circle circle-1"></div>
-              <div class="circle circle-2"></div>
-            </div>
-          </div>
-        </transition>
+        <div
+          class="list-loading-container loading-container"
+          :class="{ 'active': $apollo.queries.searchTool.loading }"
+        >
+          <loading-spinner/>
+        </div>
 
         <transition name="fade">
           <div
             v-if="!$apollo.queries.searchTool.loading && !tools.length"
-            class="no-tools-container"
+            class="no-results-container"
           >
             <span class="no-tools-text">
               No Tools To Display
@@ -158,28 +134,22 @@
             :key="tool.id"
             :tool="tool"
             :on-select="transitionToToolInfo"
-            :show-select="currentState !== states.INITIAL"
-          >
-          </tool-search-result>
+            :show-select="transferState !== states.INITIAL"
+          />
         </transition-group>
 
-        <transition name="list-loading">
-          <div
-            v-if="$apollo.queries.searchTool.loading && paginationLoading"
-            class="loading-container"
-          >
-            <div class="half-circle-spinner">
-              <div class="circle circle-1"></div>
-              <div class="circle circle-2"></div>
-            </div>
-          </div>
-        </transition>
+        <div
+          class="list-loading-container loading-container"
+          :class="{ 'active': $apollo.queries.searchTool.loading && paginationLoading }"
+        >
+          <loading-spinner/>
+        </div>
       </div>
     </div>
 
     <transition name="fade">
       <div
-        v-if="$mq === 'mobile' && currentState === states.SELECTING"
+        v-if="$mq === 'mobile' && transferState === states.SELECTING"
         class="nav-bar selection-action-bar"
       >
         <div class="icon-text-container">
@@ -220,7 +190,7 @@
 
     <transition name="fade">
       <div
-        v-if="$mq === 'mobile' && currentState === states.FINALIZING"
+        v-if="$mq === 'mobile' && transferState === states.FINALIZING"
         class="finalizing-action-bar"
       >
         <div class="finalize-row finalize-header">
@@ -236,8 +206,7 @@
             :options="transferTargets"
             :searchable="false"
             class="dark-input"
-          >
-          </v-select>
+          />
         </div>
 
         <div class="finalize-row finalize-footer">
@@ -247,8 +216,7 @@
             class="back-efab"
             icon-class="fa-arrow-left"
             button-text="BACK"
-          >
-          </extended-fab>
+          />
 
           <extended-fab
             :on-click="finalizeTransfer"
@@ -256,8 +224,7 @@
             class="finish-transfer"
             icon-class="fa-arrow-right"
             button-text="FINISH"
-          >
-          </extended-fab>
+          />
         </div>
       </div>
     </transition>
@@ -265,22 +232,36 @@
 </template>
 
 <script>
-import swal from 'sweetalert2'
-import ToolSearchInput from '../components/tool-search-input'
-import ToolSearchResult from '../components/tool-search-result'
-import ExtendedFab from '../components/extended-fab'
-import NfcScan from '../components/nfc-scan'
-import AddButton from '../components/add-button'
-import vSelect from '../components/select'
-import gql from 'graphql-tag'
-import Roles from '../utils/roles'
-import Platforms from '../utils/platforms'
-import nfcMixin from '../mixins/nfc'
+import ToolSearchInput from '@/components/tool-search-input'
+import ToolSearchResult from '@/components/tool-search-result'
+import ExtendedFab from '@/components/basic/extended-fab'
+import NfcScan from '@/components/nfc-scan'
+import AddButton from '@/components/add-button'
+import vSelect from '@/components/basic/select'
+import Platforms from '@/utils/platforms'
+import nfcMixin from '@/mixins/nfc'
+import LoadingOverlay from '@/components/basic/loading-overlay'
+import LoadingSpinner from '@/components/basic/loading-spinner'
+import Tool from '@/models/tool'
+import { mapGetters, mapState, mapMutations } from 'vuex'
+import {
+  locationsQuery,
+  usersQuery,
+  multiToolQuery,
+  searchToolsQuery,
+  toolTransferMutation
+} from '@/utils/gql'
+import {
+  showSuccessMsg,
+  showErrorMsg
+} from '@/utils/alerts'
 
 export default {
   name: 'Tools',
 
   components: {
+    LoadingOverlay,
+    LoadingSpinner,
     ToolSearchInput,
     ToolSearchResult,
     ExtendedFab,
@@ -293,94 +274,27 @@ export default {
 
   apollo: {
     getAllLocation: {
-      query: gql`query {
-        getAllLocation {
-          id
-          name
-          type
-        }
-      }`,
-      fetchPolicy: 'network-only'
+      query: locationsQuery
     },
 
     getAllUser: {
-      query: gql`query {
-        getAllUser {
-          id
-          first_name
-          last_name
-          role
-          type
-          status
-        }
-      }`,
-      fetchPolicy: 'network-only'
+      query: usersQuery
     },
 
     getMultipleTool: {
-      query: gql`query selectedTools($tool_ids: [ID!]!) {
-        getMultipleTool(tool_ids: $tool_ids) {
-          id
-          type {
-            id
-            name
-          }
-          brand {
-            id
-            name
-          }
-          status
-          owner {
-            ... on Location {
-               id
-               name
-               type
-            }
-            ... on User {
-               id
-               first_name
-               last_name
-               type
-            }
-          }
-        }
-      }`,
+      query: multiToolQuery,
       variables () {
         return {
-          tool_ids: this.$store.getters.selectedTools
+          tool_ids: this.selectedTools
         }
       },
-      fetchPolicy: 'network-only'
+      update (data) {
+        return data.getMultipleTool.map(tool => new Tool(tool))
+      }
     },
 
     searchTool: {
-      query: gql`query tools($query: String, $toolFilter: ToolFilter, $pagingParameters: PagingParameters) {
-        searchTool(query: $query, toolFilter: $toolFilter, pagingParameters: $pagingParameters) {
-          id
-          type {
-            id
-            name
-          }
-          brand {
-            id
-            name
-          }
-          status
-          owner {
-            ... on Location {
-               id
-               name
-               type
-            }
-            ... on User {
-               id
-               first_name
-               last_name
-               type
-            }
-          }
-        }
-      }`,
+      query: searchToolsQuery,
 
       variables () {
         let options = {
@@ -390,13 +304,8 @@ export default {
           }
         }
 
-        if (this.searchString) {
-          options.query = this.searchString
-        }
-
-        if (this.filters) {
-          options.toolFilter = this.filters
-        }
+        if (this.searchString) options.query = this.searchString
+        if (this.filters) options.toolFilter = this.filters
 
         if (this.isNonAdminTransfer) {
           if (!options.toolFilter) {
@@ -409,7 +318,9 @@ export default {
 
         return options
       },
-      fetchPolicy: 'network-only'
+      update (data) {
+        return data.searchTool.map(tool => new Tool(tool))
+      }
     }
   },
 
@@ -443,29 +354,30 @@ export default {
   },
 
   computed: {
+    ...mapState('tools', [
+      'showOnlySelectedTools',
+      'transferState'
+    ]),
+
+    ...mapState('auth', [
+      'currentUser'
+    ]),
+
+    ...mapGetters('auth', [
+      'isAdminUser'
+    ]),
+
+    ...mapGetters('tools', [
+      'selectedTools'
+    ]),
+
     infiniteScrollPageNumber () {
       let tools = (this.showOnlySelectedTools ? this.getMultipleTool : this.searchTool) || []
       return Math.ceil(tools.length / this.pageSize)
     },
 
-    currentUser () {
-      return JSON.parse(window.localStorage.getItem('currentUser'))
-    },
-
-    isAdmin () {
-      return this.currentUser.role === Roles.ADMIN
-    },
-
     isNonAdminTransfer () {
-      return this.currentState === this.states.SELECTING && !this.isAdmin
-    },
-
-    showOnlySelectedTools () {
-      return this.$store.state.showOnlySelectedTools
-    },
-
-    currentState () {
-      return this.$store.state.transferState
+      return this.transferState === this.states.SELECTING && !this.isAdminUser
     },
 
     tools () {
@@ -509,7 +421,7 @@ export default {
     },
 
     numSelectedTools () {
-      return this.$store.getters.selectedTools.length
+      return this.selectedTools.length
     },
 
     formattedNumSelectedTools () {
@@ -525,25 +437,13 @@ export default {
   },
 
   methods: {
-    showTransferSuccessMsg () {
-      swal({
-        type: 'success',
-        title: 'TRANSFER SUCCESS',
-        text: 'Successfully Transferred Tools',
-        timer: 1500,
-        showConfirmButton: false
-      })
-    },
-
-    showTransferErrorMsg () {
-      swal({
-        type: 'error',
-        title: 'TRANSFER ERROR',
-        text: 'Error Transferring Tools. Please Try Again or Contact Support',
-        timer: 2000,
-        showConfirmButton: false
-      })
-    },
+    ...mapMutations('tools', [
+      'toggleToolSelection',
+      'toggleShowOnlySelectedTools',
+      'setShowOnlySelectedTools',
+      'updateTransferStatus',
+      'resetSelectedTools'
+    ]),
 
     clearSearchFilters () {
       this.filters = null
@@ -561,10 +461,10 @@ export default {
     },
 
     onScan (value) {
-      if (this.currentState === this.states.INITIAL) {
+      if (this.transferState === this.states.INITIAL) {
         this.transitionToToolInfo(value)
       } else {
-        this.$store.commit('toggleToolSelection', value)
+        this.toggleToolSelection(value)
       }
     },
 
@@ -595,27 +495,27 @@ export default {
     },
 
     moveToSelectingState () {
-      this.$store.commit('setShowOnlySelectedTools', false)
-      this.$store.commit('updateTransferStatus', this.states.SELECTING)
-      if (!this.isAdmin) {
+      this.setShowOnlySelectedTools(false)
+      this.updateTransferStatus(this.states.SELECTING)
+      if (!this.isAdminUser) {
         this.clearSearchFilters()
         this.resetScrollPosition()
       }
     },
 
     cancelTransfer () {
-      this.$store.commit('resetSelectedTools')
-      this.$store.commit('setShowOnlySelectedTools', false)
-      this.$store.commit('updateTransferStatus', this.states.INITIAL)
+      this.resetSelectedTools()
+      this.setShowOnlySelectedTools(false)
+      this.updateTransferStatus(this.states.INITIAL)
       this.resetInfiniteScroll()
     },
 
     toggleViewSelected () {
-      this.$store.commit('toggleShowOnlySelectedTools')
+      this.toggleShowOnlySelectedTools()
       this.resetScrollPosition()
     },
 
-    loadMore () {
+    async loadMore () {
       if (this.hasLoadedLastPage || !this.tools.length || this.$apollo.queries.searchTool.loading || this.showOnlySelectedTools) {
         return
       }
@@ -629,15 +529,10 @@ export default {
         }
       }
 
-      if (this.searchString) {
-        options.query = this.searchString
-      }
+      if (this.searchString) options.query = this.searchString
+      if (this.filters) options.toolFilter = this.filters
 
-      if (this.filters) {
-        options.toolFilter = this.filters
-      }
-
-      this.$apollo.queries.searchTool.fetchMore({
+      await this.$apollo.queries.searchTool.fetchMore({
         variables: options,
 
         updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -646,65 +541,41 @@ export default {
             searchTool: [...previousResult.searchTool, ...fetchMoreResult.searchTool]
           }
         }
-      }).then(() => {
-        this.paginationLoading = false
       })
+
+      this.paginationLoading = false
     },
 
-    finalizeTransfer () {
+    async finalizeTransfer () {
       this.transferInProgress = true
-      this.$apollo.mutate({
-        mutation: gql`mutation transferTools($tool_id_list: [ID!]!, $to_owner_id: ID!) {
-          transferMultipleTool (tool_id_list: $tool_id_list, to_owner_id: $to_owner_id) {
-            id
-            type {
-              id
-              name
-            }
-            brand {
-              id
-              name
-            }
-            status
-            owner {
-              ... on Location {
-                 id
-                 name
-                 type
-              }
-              ... on User {
-                 id
-                 first_name
-                 last_name
-                 type
-              }
-            }
+      try {
+        let { data: { transferMultipleTool } } = await this.$apollo.mutate({
+          mutation: toolTransferMutation,
+          variables: {
+            tool_id_list: this.selectedTools,
+            to_owner_id: this.transferTarget.id
           }
-        }`,
-        variables: {
-          tool_id_list: this.$store.getters.selectedTools,
-          to_owner_id: this.transferTarget.id
-        }
-      }).then(response => {
+        })
+
         this.resetScrollPosition()
-        response.data.transferMultipleTool.forEach(tool => {
+        transferMultipleTool.forEach(tool => {
           let idx = this.searchTool.findIndex(entry => entry.id === tool.id)
           this.searchTool[idx] = tool
         })
-        this.$store.commit('resetSelectedTools')
-        this.$store.commit('setShowOnlySelectedTools', false)
-        this.$store.commit('updateTransferStatus', this.states.INITIAL)
-        this.showTransferSuccessMsg()
-      }).catch(() => {
-        this.showTransferErrorMsg()
-      }).finally(() => {
-        this.transferInProgress = false
-      })
+        this.resetSelectedTools()
+        this.setShowOnlySelectedTools(false)
+        this.updateTransferStatus(this.states.INITIAL)
+        showSuccessMsg('Transfer Successful')
+      } catch {
+        showErrorMsg('Error Transferring Tools. Please Try Again or Contact Support')
+      }
+
+      this.transferInProgress = false
     },
 
     proceedToFinalize () {
-      this.$store.commit('setShowOnlySelectedTools', true)
-      this.$store.commit('updateTransferStatus', this.states.FINALIZING)
+      this.setShowOnlySelectedTools(true)
+      this.updateTransferStatus(this.states.FINALIZING)
       this.resetScrollPosition()
     }
   }
@@ -712,47 +583,19 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/variables';
 
 .tools-page {
   display: flex;
   flex-direction: column;
 
-  .search-bar {
-    background-color: #fff;
-    padding: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-    z-index: 5;
-    min-height: 45px;
-    display: flex;
-    min-height: fit-content;
-  }
-
-  .tools-menu-container {
-    display: flex;
-    height: calc(100% - 67px);
-    background-color: $background-light-gray;
-    flex: 1 1 auto;
-  }
-
-  .tool-scroll-container {
-    background-color: $background-light-gray;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-top: 5px;
-    flex: 1 1 auto;
-  }
-
-  .no-tools-container {
-    display: flex;
-    justify-content: center;
-    padding-top: 50px;
-  }
-
   .next-btn.disabled {
     opacity: .5;
+  }
+
+  .scroll-container {
+    // important to make sure infinite scrolling works
+    height: fit-content;
+    max-height: calc(100% - 10px);
   }
 
   .selection-action-bar {
@@ -841,18 +684,6 @@ export default {
 }
 
 .mobile .tools-page {
-  .tool-scroll-container {
-    padding-bottom: 70px;
-
-    &.finalizing {
-      padding-bottom: 200px;
-    }
-
-    .floating-action-bar {
-      display: none !important;
-    }
-  }
-
   .transfer-btn {
     position: absolute;
     left: calc(50% - 79px);
@@ -861,42 +692,6 @@ export default {
     bottom: calc(70px + env(safe-area-inset-bottom));
     width: 158px;
     z-index: 100;
-  }
-}
-
-.desktop .tools-page {
-  .tools-menu-container {
-    .tool-scroll-container {
-      padding-bottom: 5px;
-    }
-
-    .floating-action-bar {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: column;
-      padding-top: 15px;
-      align-items: center;
-      flex: 1 1 auto;
-      max-width: 300px;
-
-      .extended-fab {
-        margin-left: 10px;
-        margin-top: 20px;
-      }
-
-      .dark-input {
-        width: 158px;
-        margin-left: 10px;
-        margin-top: 20px;
-        font-size: 14px;
-        height: 40px;
-        font-weight: 500;
-
-        .dropdown-menu {
-          font-size: 14px;
-        }
-      }
-    }
   }
 }
 </style>

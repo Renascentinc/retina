@@ -24,7 +24,7 @@
     <preference name="BackgroundColor" value="0xff231F20" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarStyle" value="blackopaque" />
-    <preference name="android-minSdkVersion" value="18" />
+    <preference name="android-minSdkVersion" value="19" />
     <preference name="android-installLocation" value="auto" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
@@ -52,5 +52,5 @@
         <variable name="NFC_USAGE_DESCRIPTION" value="Read NFC Tags" />
     </plugin>
     <engine name="ios" spec="^5.0.0" />
-    <engine name="android" spec="^7.1.0" />
+    <engine name="android" spec="^8.0.0" />
 </widget>

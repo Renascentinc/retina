@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import { resetCodeValidityQuery, passwordResetMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
@@ -104,10 +106,15 @@ export default {
             this.$router.push({ path: '/login' })
           }
         } catch (error) {
+          if (handleCommonErrors(error)) {
+            return
+          }
+
           if (error && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.UNAUTHENTICATED) {
             this.onInvalidTokenError()
           } else {
             showErrorMsg('There was an error trying to reset your password. Please try again or contact support', 'RESET FAILURE')
+            Vue.rollbar.error('Error in routes:password-reset:attemptPasswordReset', error)
           }
         }
       }

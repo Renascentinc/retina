@@ -31,6 +31,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import ApiStatusCodes from '@/utils/api-status-codes'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import Tool from '@/models/tool'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import HeaderCard from '@/components/header-card'
@@ -196,8 +199,12 @@ export default {
         })
       })).then(result => {
         this.deleteConfig(config)
-      }).catch(() => {
+      }).catch((error) => {
+        if (handleCommonErrors(error)) {
+          return
+        }
         showErrorMsg('There was an issue performing the delete. Please try again or contact support.')
+        Vue.rollbar.error('Error in routes:configuration:finalizeDelete', error)
       }).finally(() => {
         this.deleting = false
       })
@@ -215,22 +222,35 @@ export default {
         }
       }).then(result => {
         this.$apollo.queries.getAllConfigurableItem.refetch()
-      }).catch(response => {
-        this.showInvalidItemMsg()
+      }).catch(error => {
+        if (handleCommonErrors(error)) {
+          return
+        }
+
+        if (error && error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.CONFIGURABLE_ITEM_UNIQUE_CONSTRAINT_VIOLATION) {
+          this.showInvalidItemMsg()
+        }
+
+        Vue.rollbar.error('Error in routes:configuration:addConfig', error)
+        showErrorMsg()
       })
     },
 
     toggleSanction (config) {
-      this.$apollo.mutate({
-        mutation: updateConfigurableItemMutation,
-        variables: {
-          item: {
-            id: config.id,
-            name: config.name,
-            sanctioned: !config.sanctioned
+      try {
+        this.$apollo.mutate({
+          mutation: updateConfigurableItemMutation,
+          variables: {
+            item: {
+              id: config.id,
+              name: config.name,
+              sanctioned: !config.sanctioned
+            }
           }
-        }
-      })
+        })
+      } catch (error) {
+        Vue.rollbar.error('Error in routes:configuration:toggleSanction', error)
+      }
     },
 
     saveChanges (config) {
@@ -245,8 +265,17 @@ export default {
         }
       }).then(result => {
         this.$apollo.queries.getAllConfigurableItem.refetch()
-      }).catch(response => {
-        this.showInvalidItemMsg()
+      }).catch(error => {
+        if (handleCommonErrors(error)) {
+          return
+        }
+
+        if (error && error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.CONFIGURABLE_ITEM_UNIQUE_CONSTRAINT_VIOLATION) {
+          this.showInvalidItemMsg()
+        }
+
+        Vue.rollbar.error('Error in routes:configuration:saveChanges', error)
+        showErrorMsg()
       })
     }
   }

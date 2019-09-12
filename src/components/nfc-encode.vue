@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapActions } from 'vuex'
 import swal from 'sweetalert2'
 import nfcMixin from '@/mixins/nfc'
@@ -83,6 +84,7 @@ export default {
         this.showInfoMsg()
       } else {
         this.showErrorMsg()
+        Vue.rollbar.error('Error in components:nfc-encode', reason)
       }
 
       this.pauseNfcListener()

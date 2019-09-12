@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { defaultClient as apollo } from '@/apollo'
 import swal from 'sweetalert2'
 import {
@@ -40,6 +41,7 @@ const users = {
           return
         }
 
+        Vue.rollbar.error('Error in store:modules:user:deleteUser', error)
         throw error
       }
     },
@@ -58,6 +60,7 @@ const users = {
           return
         }
 
+        Vue.rollbar.error('Error in store:modules:user:updateUser', error)
         throw error
       }
     }

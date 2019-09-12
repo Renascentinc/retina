@@ -125,6 +125,7 @@ const tools = {
         }
 
         showErrorMsg()
+        Vue.rollbar.error('Error in store:modules:tools:updateTool', error)
       }
     },
 
@@ -149,6 +150,7 @@ const tools = {
           showErrorMsg('This tool already exists', 'Duplicate Tool')
         } else {
           showErrorMsg()
+          Vue.rollbar.error('Error in store:modules:tools:createNewTool', error)
         }
       }
     },
@@ -174,6 +176,7 @@ const tools = {
         }
 
         showErrorMsg()
+        Vue.rollbar.error('Error in store:modules:tools:saveStatusChange', error)
       }
     },
 
@@ -213,6 +216,7 @@ const tools = {
         }
 
         showErrorMsg()
+        Vue.rollbar.error('Error in store:modules:tools:decomissionTool', error)
         return false
       }
     }

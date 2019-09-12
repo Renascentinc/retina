@@ -128,6 +128,7 @@
 
 <script>
 import Vue from 'vue'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import HistorySearchInput from '@/components/history-search-input'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
 import Fab from '@/components/basic/fab'
@@ -258,8 +259,11 @@ export default {
           showSuccessMsg('', 'TOOL RECOVERED')
           this.$apollo.queries.searchToolSnapshot.refresh()
         } catch (error) {
-          window.console.error(error)
+          if (handleCommonErrors(error)) {
+            return
+          }
           showErrorMsg()
+          Vue.rollbar.error('Error in routes:history:recover', error)
         }
       }
     },

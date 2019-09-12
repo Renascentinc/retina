@@ -78,4 +78,4 @@ Display Image URL: https://retina.renascentinc.com/ios/display_image.png
 Full Display Image URL: https://retina.renascentinc.com/ios/full_display_image.png
 ```
 9. Increment version number in `public/download.html`
-9. Upload `retina.ipa`, `manifest.plist` and `download.html` to S3
+10. Upload `retina.ipa`, `manifest.plist` and `download.html` to S3

@@ -358,7 +358,7 @@ import Tool from '@/models/tool'
 import User from '@/models/user'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import { mapActions } from 'vuex'
-import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import { showSuccessMsg } from '@/utils/alerts'
 
 export default {
   name: 'NewTool',
@@ -479,16 +479,14 @@ export default {
       if (result) {
         if (this.currentState === 3) {
           this.isSavingTool = true
-          try {
-            let response = await this.createNewTool(this.newTool)
+          let response = await this.createNewTool(this.newTool)
+          if (response) {
             this.newTool = new Tool(response.data.createTool)
             ++this.currentState
             showSuccessMsg()
-          } catch {
-            showErrorMsg()
+            this.$apollo.queries.getAllConfigurableItem.refetch()
           }
           this.isSavingTool = false
-          this.$apollo.queries.getAllConfigurableItem.refetch()
         } else {
           ++this.currentState
         }

@@ -1,7 +1,9 @@
 import Vue from 'vue'
+import ApiStatusCodes from '@/utils/api-status-codes'
 import { defaultClient as apollo } from '@/apollo'
 import imageCompression from 'browser-image-compression'
 import { showErrorMsg } from '@/utils/alerts'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import swal from 'sweetalert2'
 import {
   updateToolMutation,
@@ -74,7 +76,7 @@ const tools = {
         return
       }
 
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         imageCompression(image, 1, 1920).then(compressedImage => {
           let fd = new FormData()
 
@@ -98,6 +100,10 @@ const tools = {
             resolve(`https://s3.us-east-2.amazonaws.com/retina-images/${key}`)
           }
 
+          xhr.onerror = (error) => {
+            reject(error)
+          }
+
           xhr.send(fd)
         })
       })
@@ -114,7 +120,10 @@ const tools = {
           }
         })
       } catch (error) {
-        window.console.error(error)
+        if (handleCommonErrors(error)) {
+          return
+        }
+
         showErrorMsg()
       }
     },
@@ -132,8 +141,15 @@ const tools = {
 
         return response
       } catch (error) {
-        window.console.error(error)
-        showErrorMsg()
+        if (handleCommonErrors(error)) {
+          return
+        }
+
+        if (error && error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.TOOL_UNIQUE_IN_SERVICE_CONSTRAINT_VIOLATION) {
+          showErrorMsg('This tool already exists', 'Duplicate Tool')
+        } else {
+          showErrorMsg()
+        }
       }
     },
 
@@ -151,8 +167,12 @@ const tools = {
           }
         })
       } catch (error) {
-        window.console.error(error)
         tool.status = currentStatus
+
+        if (handleCommonErrors(error)) {
+          return
+        }
+
         showErrorMsg()
       }
     },
@@ -188,7 +208,10 @@ const tools = {
         commit('setToolSelection', tool.id, false)
         return true
       } catch (error) {
-        window.console.error(error)
+        if (handleCommonErrors(error)) {
+          return false
+        }
+
         showErrorMsg()
         return false
       }

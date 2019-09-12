@@ -4,6 +4,7 @@ import {
   deleteUserMutation,
   updateUserMutation
 } from '@/utils/gql'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 
 const users = {
   namespaced: true,
@@ -25,23 +26,40 @@ const users = {
         return
       }
 
-      user.status = 'INACTIVE'
-      await apollo.mutate({
-        mutation: deleteUserMutation,
-        variables: {
-          updatedUser: user.getState()
+      try {
+        await apollo.mutate({
+          mutation: deleteUserMutation,
+          variables: {
+            updatedUser: user.getState()
+          }
+        })
+
+        user.status = 'INACTIVE'
+      } catch (error) {
+        if (handleCommonErrors(error)) {
+          return
         }
-      })
+
+        throw error
+      }
     },
 
     async updateUser (store, user) {
-      await apollo.mutate({
-        mutation: updateUserMutation,
+      try {
+        await apollo.mutate({
+          mutation: updateUserMutation,
 
-        variables: {
-          user: user.getState()
+          variables: {
+            user: user.getState()
+          }
+        })
+      } catch (error) {
+        if (handleCommonErrors(error)) {
+          return
         }
-      })
+
+        throw error
+      }
     }
   }
 }

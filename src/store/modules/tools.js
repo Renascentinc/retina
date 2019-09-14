@@ -14,6 +14,8 @@ const tools = {
 
   state: {
     selectedToolsMap: { },
+    tags: [],
+    searchString: '',
     transferState: 'INITIAL',
     showOnlySelectedTools: false
   },
@@ -53,6 +55,11 @@ const tools = {
 
     setShowOnlySelectedTools (state, newState) {
       state.showOnlySelectedTools = newState
+    },
+
+    setSearchFilters (state, { tags, searchString }) {
+      state.tags = tags
+      state.searchString = searchString
     }
   },
 

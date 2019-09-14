@@ -22,6 +22,7 @@
     width: 100%;
     border-radius: 5px;
     max-width: 100% !important;
+    height: 100%;
 
     .autocomplete {
       max-height: 150px;
@@ -44,9 +45,11 @@
 
     .input {
       border: none;
+      height: 100%;
+      overflow: hidden;
 
       .tags {
-        max-height: 87px;
+        max-height: 80px;
         overflow-y: auto;
       }
     }

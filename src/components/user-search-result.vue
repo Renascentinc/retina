@@ -1,5 +1,5 @@
 <template>
-  <div class="search-result">
+  <div class="search-result user-search-result">
     <div
       class="element-container"
       @click="onClick"
@@ -57,19 +57,22 @@ export default {
 @import "../styles/search-result";
 $tool-search-result-border-radius: 3px;
 
-.element-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-left: 10px;
-  flex: 1 1 auto;
-  max-width: 100%;
+.user-search-result {
+  .element-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+    flex: 1 1 auto;
+    max-width: 100%;
 
-  .vue-avatar--wrapper {
-    min-width: 50px;
-    background-color: $background-light-gray !important;
-    color: $renascent-red !important;
-    font-weight: 700 !important;
+    .vue-avatar--wrapper {
+      min-width: 50px;
+      margin-right: 10px;
+      background-color: $background-light-gray !important;
+      color: $renascent-red !important;
+      font-weight: 700 !important;
+    }
   }
 }
 </style>

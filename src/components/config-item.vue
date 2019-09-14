@@ -1,7 +1,7 @@
 <template>
   <div
     :class="configItem.sanctioned ? 'sanctioned' : 'unsanctioned'"
-    class="search-result"
+    class="search-result config-item"
   >
     <div
       class="element-container"
@@ -168,7 +168,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .search-result {
+  .config-item {
     &.sanctioned {
       .save-icon, .cancel-icon {
         color: $renascent-red;
@@ -204,6 +204,12 @@ export default {
     }
 
     .element-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 10px;
+      flex: 1 1 auto;
+      max-width: calc(100% - 20px);
       padding-right: 10px;
     }
 

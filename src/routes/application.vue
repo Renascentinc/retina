@@ -129,6 +129,7 @@
 
 <script>
 import Vue from 'vue'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import Avatar from 'vue-avatar'
 import gql from 'graphql-tag'
 import nfcMixin from '@/mixins/nfc'
@@ -284,7 +285,11 @@ export default {
             this.changePassword()
             swal.showValidationMessage('Current Password is invalid')
           }
-        }).catch(() => {
+        }).catch((error) => {
+          if (handleCommonErrors(error)) {
+            return
+          }
+
           swal({
             type: 'error',
             title: 'ERROR',
@@ -292,6 +297,7 @@ export default {
             timer: 2000,
             showConfirmButton: false
           })
+          Vue.rollbar.error('Error in routes:application:changePassword', error)
         })
       })
     }

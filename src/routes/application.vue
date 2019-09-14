@@ -61,6 +61,10 @@
             SIGN OUT
           </button>
         </div>
+
+        <div class="app-version">
+          {{ appVersion }}
+        </div>
       </div>
 
       <div
@@ -132,6 +136,7 @@ import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import store from '@/store'
+import pkg from '../../package.json'
 
 export default {
   name: 'Application',
@@ -156,7 +161,11 @@ export default {
     ...mapGetters('auth', [
       'isAdminUser',
       'isAuthenticated'
-    ])
+    ]),
+
+    appVersion () {
+      return `RETINA v${pkg.version}`
+    }
   },
 
   mounted () {
@@ -303,5 +312,15 @@ export default {
 
 .error {
   border-color: red !important;
+}
+
+.app-version {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  font-size: 12px;
+  color: #fff;
+  opacity: .25;
 }
 </style>

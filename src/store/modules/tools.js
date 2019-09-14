@@ -3,7 +3,7 @@ import ApiStatusCodes from '@/utils/api-status-codes'
 import { defaultClient as apollo } from '@/apollo'
 import imageCompression from 'browser-image-compression'
 import { showErrorMsg } from '@/utils/alerts'
-import { handleCommonErrors } from '@/utils/api-response-errors'
+import { handleCommonErrors, hasGraphqlErrorCode } from '@/utils/api-response-errors'
 import swal from 'sweetalert2'
 import {
   updateToolMutation,
@@ -146,7 +146,7 @@ const tools = {
           return
         }
 
-        if (error && error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.TOOL_UNIQUE_IN_SERVICE_CONSTRAINT_VIOLATION) {
+        if (hasGraphqlErrorCode(error, ApiStatusCodes.TOOL_UNIQUE_IN_SERVICE_CONSTRAINT_VIOLATION)) {
           showErrorMsg('This tool already exists', 'Duplicate Tool')
         } else {
           showErrorMsg()

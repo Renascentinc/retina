@@ -325,8 +325,8 @@ export default {
         await html2pdf().from(element).set(options).save()
         this.loading = false
       } catch (error) {
-        window.console.error(error)
-        showErrorMsg()
+        showErrorMsg('Error exporting PDF. Please Try Again or Contact Support')
+        Vue.rollbar.error('Error in routes:history:exportTable', error)
       }
     },
 

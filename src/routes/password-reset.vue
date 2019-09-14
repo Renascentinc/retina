@@ -46,7 +46,7 @@
 
 <script>
 import Vue from 'vue'
-import { handleCommonErrors } from '@/utils/api-response-errors'
+import { handleCommonErrors, hasGraphqlErrorCode } from '@/utils/api-response-errors'
 import { resetCodeValidityQuery, passwordResetMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
@@ -110,7 +110,7 @@ export default {
             return
           }
 
-          if (error && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.UNAUTHENTICATED) {
+          if (hasGraphqlErrorCode(error, ApiStatusCodes.UNAUTHENTICATED)) {
             this.onInvalidTokenError()
           } else {
             showErrorMsg('There was an error trying to reset your password. Please try again or contact support', 'RESET FAILURE')

@@ -33,7 +33,7 @@
 <script>
 import Vue from 'vue'
 import ApiStatusCodes from '@/utils/api-status-codes'
-import { handleCommonErrors } from '@/utils/api-response-errors'
+import { handleCommonErrors, hasGraphqlErrorCode } from '@/utils/api-response-errors'
 import Tool from '@/models/tool'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import HeaderCard from '@/components/header-card'
@@ -227,12 +227,12 @@ export default {
           return
         }
 
-        if (error && error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.CONFIGURABLE_ITEM_UNIQUE_CONSTRAINT_VIOLATION) {
+        if (hasGraphqlErrorCode(error, ApiStatusCodes.CONFIGURABLE_ITEM_UNIQUE_CONSTRAINT_VIOLATION)) {
           this.showInvalidItemMsg()
+        } else {
+          Vue.rollbar.error('Error in routes:configuration:addConfig', error)
+          showErrorMsg()
         }
-
-        Vue.rollbar.error('Error in routes:configuration:addConfig', error)
-        showErrorMsg()
       })
     },
 
@@ -270,7 +270,7 @@ export default {
           return
         }
 
-        if (error && error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.code === ApiStatusCodes.CONFIGURABLE_ITEM_UNIQUE_CONSTRAINT_VIOLATION) {
+        if (hasGraphqlErrorCode(error, ApiStatusCodes.CONFIGURABLE_ITEM_UNIQUE_CONSTRAINT_VIOLATION)) {
           this.showInvalidItemMsg()
         }
 

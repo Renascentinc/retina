@@ -9,6 +9,7 @@ import ApiStatusCodes from './utils/api-status-codes'
 import { showErrorMsg } from './utils/alerts'
 import router from './router'
 import store from './store'
+import { handleCommonErrors, hasGraphqlErrorCode } from '@/utils/api-response-errors'
 
 Vue.use(VueApollo)
 
@@ -61,13 +62,13 @@ const authLink = setContext(({ operationName }, { headers = {} }) => {
   }
 })
 
-const errorLink = onError(({ graphQLErrors = [] }) => {
-  graphQLErrors.map(({ extensions: { code } }) => {
-    if (code === ApiStatusCodes.UNAUTHENTICATED && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
-      store.commit('auth/clearAuthStatus')
-      showErrorMsg('Your Session Has Expired. Please Log In Again', 'SESSION EXPIRED')
-    }
-  })
+const errorLink = onError(error => {
+  if (hasGraphqlErrorCode(error, ApiStatusCodes.UNAUTHENTICATED) && router.currentRoute.path !== '/login' && router.currentRoute.path !== '/password-reset') {
+    store.commit('auth/clearAuthStatus')
+    showErrorMsg('Your Session Has Expired. Please Log In Again', 'SESSION EXPIRED')
+  } else {
+    handleCommonErrors(error)
+  }
 })
 
 export const defaultClient = new ApolloClient({

@@ -224,6 +224,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import HeaderCard from '@/components/header-card'
 import UserSearchResult from '@/components/user-search-result.vue'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
@@ -320,8 +322,12 @@ export default {
       }).then(result => {
         ++this.currentState
         this.getUser = result.data.createUser
-      }).catch(() => {
+      }).catch(error => {
         this.currentState = 1
+        if (handleCommonErrors(error)) {
+          return
+        }
+
         swal({
           type: 'error',
           title: 'ERROR',
@@ -329,6 +335,7 @@ export default {
           timer: 2000,
           showConfirmButton: false
         })
+        Vue.rollbar.error('Error in routes:new-user:saveUser', error)
       })
     },
 

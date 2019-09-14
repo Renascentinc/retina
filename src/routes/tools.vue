@@ -232,6 +232,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import ToolSearchInput from '@/components/tool-search-input'
 import ToolSearchResult from '@/components/tool-search-result'
 import ExtendedFab from '@/components/basic/extended-fab'
@@ -565,8 +567,13 @@ export default {
         this.setShowOnlySelectedTools(false)
         this.updateTransferStatus(this.states.INITIAL)
         showSuccessMsg('Transfer Successful')
-      } catch {
+      } catch (error) {
+        if (handleCommonErrors(error)) {
+          return
+        }
+
         showErrorMsg('Error Transferring Tools. Please Try Again or Contact Support')
+        Vue.rollbar.error('Error in routes:tools:finalizeTransfer', error)
       }
 
       this.transferInProgress = false

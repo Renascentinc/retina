@@ -6,9 +6,6 @@ import {
   logoutMutation
 } from '@/utils/gql'
 import router from '@/router'
-import Vue from 'vue'
-import { handleCommonErrors } from '@/utils/api-response-errors'
-import { showErrorMsg } from '@/utils/alerts'
 
 const auth = {
   namespaced: true,
@@ -60,50 +57,32 @@ const auth = {
 
   actions: {
     async login ({ commit }, { email, password, organization_name }) {
-      try {
-        let { data: { login: { token, user } } } = await apollo.mutate({
-          mutation: loginMutation,
-          variables: {
-            organization_name,
-            email,
-            password
-          }
-        })
-
-        commit('setCurrentUser', user)
-        commit('setToken', token)
-
-        window.localStorage.setItem('token', token)
-        window.localStorage.setItem('currentUser', JSON.stringify(user))
-        router.push({ path: '/' })
-      } catch (error) {
-        if (handleCommonErrors(error)) {
-          return
+      let { data: { login: { token, user } } } = await apollo.mutate({
+        mutation: loginMutation,
+        variables: {
+          organization_name,
+          email,
+          password
         }
+      })
 
-        showErrorMsg()
-        Vue.rollbar.error('Error in store:modules:auth:login', error)
-      }
+      commit('setCurrentUser', user)
+      commit('setToken', token)
+
+      window.localStorage.setItem('token', token)
+      window.localStorage.setItem('currentUser', JSON.stringify(user))
+      router.push({ path: '/' })
     },
 
     async logout ({ commit }) {
-      try {
-        await apollo.mutate({
-          mutation: logoutMutation
-        })
-        window.localStorage.removeItem('token')
-        window.localStorage.removeItem('currentUser')
-        commit('setToken', null)
-        router.push({ path: '/login' })
-        commit('setCurrentUser', null)
-      } catch (error) {
-        if (handleCommonErrors(error)) {
-          return
-        }
-
-        showErrorMsg()
-        Vue.rollbar.error('Error in store:modules:auth:logout', error)
-      }
+      await apollo.mutate({
+        mutation: logoutMutation
+      })
+      window.localStorage.removeItem('token')
+      window.localStorage.removeItem('currentUser')
+      commit('setToken', null)
+      router.push({ path: '/login' })
+      commit('setCurrentUser', null)
     },
 
     async initialize ({ commit, dispatch }) {

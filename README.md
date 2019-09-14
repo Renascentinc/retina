@@ -44,7 +44,7 @@ open https://github.com/Renascentinc/retina/compare/master...release/v1.2.3
 If you don't see the new version immediately this is because CloudFront caches assets. You can manually invalidate the cache if you want to confirm that the deploy worked as expected
 
 #### Releasing Android Version
-1. open config.xml and change the `id` to `com.retina.renascentinc`
+1. open config.xml and set the `id` to `com.retina.renascentinc`
 2. From the command line
 ```
 rm -rf www/*
@@ -54,18 +54,18 @@ yarn android
 4. Select `Build` > `Generate Signed Bundle/APK`
 5. When you reach the step that requires a keystore, use the keystore.jks file from previous releases. The key is `key0`.
 6. When it has generated the apk select `locate file` from the toast message.
-7. Log into the [google play console](https://play.google.com/apps/publish/?pli=1&account=8580391619787055888#ManageReleaseTrackPlace:p=com.retina.renascentinc&appid=4974600747755319001&releaseTrackId=4701300564052118845)
+7. Log into the [google play console](https://play.google.com/apps/publish/?pli=1&account=8580391619787055888#AppListPlace)
 8. Select `Release Management` > `App Releases` > `Edit Release`
 9. Upload the apk you generated and fill in the rest of the necessary info to release. 
 
 #### Releasing iOS Version
-1. open config.xml and change the `id` to `com.retinaenterprise.renascentinc`
+1. open config.xml and set the `id` to `com.retinaenterprise.renascentinc`
 2. From the command line
 ```
 rm -rf www/*
 yarn ios
 ```
-3. Open the project in Xcode
+3. Open RETINA.xcworkspace in Xcode
 4. Set the target device to `Generic iOS Device`
 5. Select `Produce` > `Archive`
 6. After that completes, select `Distribute App`
@@ -78,4 +78,4 @@ Display Image URL: https://retina.renascentinc.com/ios/display_image.png
 Full Display Image URL: https://retina.renascentinc.com/ios/full_display_image.png
 ```
 9. Increment version number in `public/download.html`
-10. Upload `retina.ipa`, `manifest.plist` and `download.html` to S3
+10. Upload `retina.ipa`, `manifest.plist` and `download.html` to S3 > retina-us-east-1/ios

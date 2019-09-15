@@ -513,21 +513,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-.card-change-enter-active {
-  transition: opacity .25s;
-}
-
-.card-change-leave-active,
-.card-change-leave-to {
-  display: none;
-  visibility: hidden;
-}
-
-.card-change-enter {
-  opacity: 0;
-}
-
 .new-tool-page {
   display: flex;
   flex-direction: column;
@@ -540,6 +525,20 @@ export default {
     &.placeholder {
       color: $form-placeholder-color;
     }
+  }
+
+  .card-change-enter-active {
+    transition: opacity .25s;
+  }
+
+  .card-change-leave-active,
+  .card-change-leave-to {
+    display: none;
+    visibility: hidden;
+  }
+
+  .card-change-enter {
+    opacity: 0;
   }
 
   .new-tool-input-card {
@@ -651,6 +650,7 @@ export default {
     height: 130px;
     width: 100%;
     max-width: 400px;
+    overflow: hidden;
 
     .tool-selection-container {
       display: none;
@@ -694,17 +694,6 @@ export default {
     max-height: 350px;
     max-width: 100%;
   }
-
-  .add-photo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 250px;
-
-    .fa-camera {
-      margin-right: 5px;
-    }
-  }
 }
 
 .black {
@@ -722,7 +711,7 @@ export default {
   width: 100%;
 }
 
-.desktop {
+.desktop .new-tool-page {
   .header-card {
     width: 100%;
     margin-left: auto;
@@ -741,10 +730,6 @@ export default {
     margin-bottom: auto;
     background-color: white;
 
-    * {
-      font-size: 16px;
-    }
-
     .popover-container {
       height: 45px !important;
       margin-left: auto;
@@ -757,7 +742,7 @@ export default {
       }
     }
 
-    .dark-input, .light-input {
+    .dropdown, .light-input, .purchase-date-input {
       height: 45px !important;
       margin-left: auto;
       margin-right: auto;

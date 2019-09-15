@@ -494,8 +494,11 @@ export default {
     },
 
     addAnother () {
-      this.newTool = this.getDefaultTool()
       this.currentState = 1
+      // RETINA-358: only clear a few of the fields. If they are adding a bunch of the same tools it makes the process much faster
+      this.newTool.serial_number = undefined
+      this.newTool.id = undefined
+      this.newTool.photo = undefined
     },
 
     getDefaultTool () {

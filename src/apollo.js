@@ -67,7 +67,7 @@ const errorLink = onError(error => {
     store.commit('auth/clearAuthStatus')
     showErrorMsg('Your Session Has Expired. Please Log In Again', 'SESSION EXPIRED')
   } else {
-    handleCommonErrors(error)
+    handleCommonErrors(error, true)
   }
 })
 

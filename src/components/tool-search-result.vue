@@ -161,26 +161,26 @@ export default {
       font-weight: 700;
       white-space: nowrap;
     }
+  }
 
-    .tool-selection-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 0 0 100px;
+  .tool-selection-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 100px;
 
-      .checkbox {
-        height: 37px;
-        width: 37px;
-        border: 2px solid $renascent-dark-gray;
-        color: $renascent-dark-gray;
-        border-radius: 3px;
-        padding: 0;
-        font-size: 27px;
-        color: white;
+    .checkbox {
+      height: 37px;
+      width: 37px;
+      border: 2px solid $renascent-dark-gray;
+      color: $renascent-dark-gray;
+      border-radius: 3px;
+      padding: 0;
+      font-size: 27px;
+      color: white;
 
-        &.fa-check {
-          background-color: $renascent-dark-gray;
-        }
+      &.fa-check {
+        background-color: $renascent-dark-gray;
       }
     }
   }

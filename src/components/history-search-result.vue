@@ -157,7 +157,14 @@ export default {
       flex-direction: row;
       font-weight: 600;
       flex: 0 0 calc(33% - 16px);
+      width: calc(33vw - 16px);
       overflow: hidden;
+
+      > span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     .date {

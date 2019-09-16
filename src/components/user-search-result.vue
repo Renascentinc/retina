@@ -58,6 +58,21 @@ export default {
 $tool-search-result-border-radius: 3px;
 
 .user-search-result {
+  overflow: hidden;
+
+  .main-container {
+    overflow: hidden;
+
+    .row {
+      overflow: hidden;
+
+      > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
   .element-container {
     display: flex;
     flex-direction: row;

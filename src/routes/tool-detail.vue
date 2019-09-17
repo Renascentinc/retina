@@ -391,12 +391,14 @@
               </span>
 
               <div class="nfc-toggle-container">
+                <!-- "needsclick" class was applied to keep fastclick from busting the toggle -->
                 <toggle-button
                   v-if="editState"
                   v-model="editedTool.tagged"
                   :sync="true"
                   :labels="{ checked: 'Tagged', unchecked: 'Not Tagged' }"
                   :width="100"
+                  class="needsclick"
                 />
               </div>
 

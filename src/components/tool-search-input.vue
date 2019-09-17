@@ -4,12 +4,13 @@
       <i class="fas fa-search"></i>
     </div>
     <vue-tags-input
-      v-model="tag"
+      :value="searchString"
       :tags="tags"
       :autocomplete-items="filteredItems"
       :add-on-blur="false"
       placeholder="Search"
       @tags-changed="tagsChanged"
+      @input="filterItems"
     >
       <button
         slot="autocompleteItem"
@@ -68,9 +69,8 @@ export default {
       required: true
     },
 
-    // TODO: fixed hacked fuzzy search clear implementation
-    clearFuzzyFilter: {
-      type: Boolean,
+    searchString: {
+      type: String,
       required: true
     }
   },
@@ -100,9 +100,10 @@ export default {
       }
     }`
   },
+
   data () {
     return {
-      tag: ''
+      filteredItems: []
     }
   },
 
@@ -144,10 +145,6 @@ export default {
       return items
     },
 
-    filteredItems () {
-      return this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(this.tag.toLowerCase()) > -1)
-    },
-
     locations () {
       return (this.getAllLocation || []).map(location => {
         location.text = location.name
@@ -183,28 +180,20 @@ export default {
     }
   },
 
-  watch: {
-    clearFuzzyFilter () {
-      this.tag = ''
-    },
-
-    tag (fuzzySearch) {
-      if (!fuzzySearch) {
-        this.tagsChanged(this.tags)
-      }
-    }
-  },
-
   methods: {
     tagsChanged (newTags) {
-      let fuzzySearch = null
+      let searchString = ''
       if (newTags.some(tag => !tag.name)) {
-        fuzzySearch = newTags.pop().text
-        this.tag = fuzzySearch
+        searchString = newTags.pop().text
         document.querySelector('.fa-search').click()
         document.querySelector('.new-tag-input').blur()
+      } else {
+        this.$nextTick(() => {
+          document.querySelector('.new-tag-input').value = ''
+        })
       }
-      this.updateTags(newTags, fuzzySearch)
+      this.filteredItems = []
+      this.updateTags(newTags, searchString)
     },
 
     getTagIconClass (type) {
@@ -213,6 +202,10 @@ export default {
       } else if (type === ConfigurableItems.TYPE) {
         return 'fa-wrench'
       }
+    },
+
+    filterItems (searchString) {
+      this.filteredItems = this.autocompleteItems.filter(i => i.text.toLowerCase().indexOf(searchString.toLowerCase()) > -1)
     }
   }
 }

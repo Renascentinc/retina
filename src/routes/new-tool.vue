@@ -358,7 +358,7 @@ import Tool from '@/models/tool'
 import User from '@/models/user'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import { mapActions } from 'vuex'
-import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import { showSuccessMsg } from '@/utils/alerts'
 
 export default {
   name: 'NewTool',
@@ -479,16 +479,14 @@ export default {
       if (result) {
         if (this.currentState === 3) {
           this.isSavingTool = true
-          try {
-            let response = await this.createNewTool(this.newTool)
+          let response = await this.createNewTool(this.newTool)
+          if (response) {
             this.newTool = new Tool(response.data.createTool)
             ++this.currentState
             showSuccessMsg()
-          } catch {
-            showErrorMsg()
+            this.$apollo.queries.getAllConfigurableItem.refetch()
           }
           this.isSavingTool = false
-          this.$apollo.queries.getAllConfigurableItem.refetch()
         } else {
           ++this.currentState
         }
@@ -496,8 +494,11 @@ export default {
     },
 
     addAnother () {
-      this.newTool = this.getDefaultTool()
       this.currentState = 1
+      // RETINA-358: only clear a few of the fields. If they are adding a bunch of the same tools it makes the process much faster
+      this.newTool.serial_number = undefined
+      this.newTool.id = undefined
+      this.newTool.photo = undefined
     },
 
     getDefaultTool () {
@@ -515,21 +516,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-.card-change-enter-active {
-  transition: opacity .25s;
-}
-
-.card-change-leave-active,
-.card-change-leave-to {
-  display: none;
-  visibility: hidden;
-}
-
-.card-change-enter {
-  opacity: 0;
-}
-
 .new-tool-page {
   display: flex;
   flex-direction: column;
@@ -542,6 +528,20 @@ export default {
     &.placeholder {
       color: $form-placeholder-color;
     }
+  }
+
+  .card-change-enter-active {
+    transition: opacity .25s;
+  }
+
+  .card-change-leave-active,
+  .card-change-leave-to {
+    display: none;
+    visibility: hidden;
+  }
+
+  .card-change-enter {
+    opacity: 0;
   }
 
   .new-tool-input-card {
@@ -653,6 +653,7 @@ export default {
     height: 130px;
     width: 100%;
     max-width: 400px;
+    overflow: hidden;
 
     .tool-selection-container {
       display: none;
@@ -696,17 +697,6 @@ export default {
     max-height: 350px;
     max-width: 100%;
   }
-
-  .add-photo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 250px;
-
-    .fa-camera {
-      margin-right: 5px;
-    }
-  }
 }
 
 .black {
@@ -724,7 +714,7 @@ export default {
   width: 100%;
 }
 
-.desktop {
+.desktop .new-tool-page {
   .header-card {
     width: 100%;
     margin-left: auto;
@@ -743,10 +733,6 @@ export default {
     margin-bottom: auto;
     background-color: white;
 
-    * {
-      font-size: 16px;
-    }
-
     .popover-container {
       height: 45px !important;
       margin-left: auto;
@@ -759,7 +745,7 @@ export default {
       }
     }
 
-    .dark-input, .light-input {
+    .dropdown, .light-input, .purchase-date-input {
       height: 45px !important;
       margin-left: auto;
       margin-right: auto;

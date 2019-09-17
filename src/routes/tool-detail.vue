@@ -391,12 +391,14 @@
               </span>
 
               <div class="nfc-toggle-container">
+                <!-- "needsclick" class was applied to keep fastclick from busting the toggle -->
                 <toggle-button
                   v-if="editState"
                   v-model="editedTool.tagged"
                   :sync="true"
                   :labels="{ checked: 'Tagged', unchecked: 'Not Tagged' }"
                   :width="100"
+                  class="needsclick"
                 />
               </div>
 
@@ -418,11 +420,13 @@
               Photo
             </div>
 
-            <add-photo
-              :on-image-change="onImageChange"
-              :edit-state="editState"
-              :image-url="editState ? editedTool.photo : tool.photo"
-            />
+            <div class="photo-container">
+              <add-photo
+                :on-image-change="onImageChange"
+                :edit-state="editState"
+                :image-url="editState ? editedTool.photo : tool.photo"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -665,6 +669,12 @@ export default {
   background-color: $background-light-gray;
   display: flex;
   flex-direction: column;
+
+  .photo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   .info-menu-container {
     height: 100%;
@@ -987,15 +997,15 @@ export default {
     flex-direction: row;
     overflow: hidden;
 
-    .dark-input,
+    .dropdown,
     .popover-container {
       width: 300px !important;
     }
 
-    .dark-input,
+    .dropdown,
     .dropdown-toggle {
       height: 40px !important;
-      * {
+      .selected-tag {
         font-size: 14px !important;
       }
     }
@@ -1021,14 +1031,6 @@ export default {
     .cards {
       .card {
         width: 500px;
-      }
-    }
-
-    .add-photo {
-      font-size: 19px;
-
-      .fa-camera {
-        font-size: 18px !important;
       }
     }
   }

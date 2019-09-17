@@ -4,8 +4,8 @@
 
     <div class="search-bar">
       <tool-search-input
-        :clear-fuzzy-filter="clearFuzzyFilter"
         :tags="tags"
+        :search-string="searchString"
         :update-tags="updateFilters"
         :disable-user-search="isNonAdminTransfer"
       />
@@ -232,6 +232,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import ToolSearchInput from '@/components/tool-search-input'
 import ToolSearchResult from '@/components/tool-search-result'
 import ExtendedFab from '@/components/basic/extended-fab'
@@ -343,12 +345,8 @@ export default {
       searchTool: [],
       pageNumber: 0,
       pageSize: 15,
-      searchString: null,
-      filters: null,
       paginationLoading: false,
       transferInProgress: false,
-      clearFuzzyFilter: false,
-      tags: [],
       states
     }
   },
@@ -356,7 +354,9 @@ export default {
   computed: {
     ...mapState('tools', [
       'showOnlySelectedTools',
-      'transferState'
+      'transferState',
+      'searchString',
+      'tags'
     ]),
 
     ...mapState('auth', [
@@ -426,6 +426,21 @@ export default {
 
     formattedNumSelectedTools () {
       return `${this.numSelectedTools} ${this.numSelectedTools === 1 ? 'tool' : 'tools'}`
+    },
+
+    filters () {
+      let newFilters = this.tags.length ? {} : null
+      this.tags.forEach(filter => {
+        let key = this.filterMap[filter.type]
+
+        if (!newFilters[key]) {
+          newFilters[key] = [filter.id]
+        } else {
+          newFilters[key].push(filter.id)
+        }
+      })
+
+      return newFilters
     }
   },
 
@@ -442,13 +457,12 @@ export default {
       'toggleShowOnlySelectedTools',
       'setShowOnlySelectedTools',
       'updateTransferStatus',
-      'resetSelectedTools'
+      'resetSelectedTools',
+      'setSearchFilters'
     ]),
 
     clearSearchFilters () {
-      this.filters = null
-      this.tags = []
-      this.clearFuzzyFilter = !this.clearFuzzyFilter
+      this.setSearchFilters({ tags: [], searchString: '' })
     },
 
     resetInfiniteScroll () {
@@ -476,21 +490,8 @@ export default {
       this.$router.push({ name: 'newTool' })
     },
 
-    updateFilters (tags = [], fuzzySearch) {
-      this.tags = tags
-      this.searchString = fuzzySearch
-
-      let newFilters = tags.length ? {} : null
-      tags.forEach(filter => {
-        let key = this.filterMap[filter.type]
-
-        if (!newFilters[key]) {
-          newFilters[key] = [filter.id]
-        } else {
-          newFilters[key].push(filter.id)
-        }
-      })
-      this.filters = newFilters
+    updateFilters (tags = [], searchString) {
+      this.setSearchFilters({ tags, searchString })
       this.resetInfiniteScroll()
     },
 
@@ -566,8 +567,13 @@ export default {
         this.setShowOnlySelectedTools(false)
         this.updateTransferStatus(this.states.INITIAL)
         showSuccessMsg('Transfer Successful')
-      } catch {
+      } catch (error) {
+        if (handleCommonErrors(error)) {
+          return
+        }
+
         showErrorMsg('Error Transferring Tools. Please Try Again or Contact Support')
+        Vue.rollbar.error('Error in routes:tools:finalizeTransfer', error)
       }
 
       this.transferInProgress = false

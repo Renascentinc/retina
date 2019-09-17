@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="add-photo">
     <div
       v-if="!editState"
       class="photo-box"
@@ -32,7 +32,7 @@
       <label
         v-if="!image"
         for="file"
-        class="dark-input add-photo"
+        class="dark-input add-photo-button"
       >
         <label
           for="file"
@@ -142,6 +142,10 @@ export default {
 </script>
 
 <style lang="scss">
+.add-photo {
+  width: calc(100% - 20px);
+}
+
 .photo-box {
   width: calc(100% - 23px);
   margin-left: auto;
@@ -172,14 +176,13 @@ export default {
   justify-content: center;
   align-items: center;
   height: 275px;
-  padding: 0 20px;
 
   .img-preview {
     max-height: 175px;
     max-width: 100%;
   }
 
-  .add-photo {
+  .add-photo-button {
     display: flex;
     align-items: center;
     justify-content: center;

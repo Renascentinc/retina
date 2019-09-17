@@ -13,8 +13,10 @@ import money from 'v-money'
 import router from './router'
 import store from './store'
 import apolloProvider from './apollo'
-import fastclick from 'fastclick'
+import fastclick from '@jbcampbell/fastclick'
 import ToggleButton from 'vue-js-toggle-button'
+import Rollbar from 'vue-rollbar'
+import pkg from '../package.json'
 
 if (process.env.VUE_APP_PLATFORM === 'cordova') {
   let cordovaScript = document.createElement('script')
@@ -34,6 +36,20 @@ Vue.use(VueMq, {
   breakpoints: {
     mobile: 500,
     desktop: Infinity
+  }
+})
+Vue.use(Rollbar, {
+  accessToken: '02d43984a6b54684b5686bc7457685e9',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  enabled: true,
+  environment: process.env.NODE_ENV,
+  payload: {
+    client: {
+      javascript: {
+        code_version: pkg.version
+      }
+    }
   }
 })
 

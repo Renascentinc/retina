@@ -1,5 +1,5 @@
 <template>
-  <div class="search-result">
+  <div class="search-result tool-search-result">
     <div class="thumbnail-container" @click="onClick">
       <img
         v-if="tool.photo"
@@ -112,59 +112,76 @@ export default {
 
 @import "../styles/search-result";
 
-.thumbnail-container {
-  flex: 0 1 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.tool-search-result {
+  overflow: hidden;
 
-  .photo-thumbnail {
-    height: 60px;
-    width: 60px;
-    border-radius: 5px;
-    object-fit: cover;
-    transition: opacity 5s ease-in;
+  .thumbnail-container {
+    flex: 0 0 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .photo-thumbnail {
+      height: 60px;
+      width: 60px;
+      border-radius: 5px;
+      object-fit: cover;
+      transition: opacity 5s ease-in;
+    }
+
+    .no-image {
+      font-size: 30px;
+      color: $renascent-dark-gray;
+    }
   }
 
-  .no-image {
-    font-size: 30px;
-    color: $renascent-dark-gray;
+  .main-container {
+    overflow: hidden;
+
+    .row {
+      overflow: hidden;
+
+      > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .tool-status {
+      text-transform: none;
+      font-weight: bold;
+    }
+
+    .user-icon {
+      font-size: 15px;
+      margin-right: 5px;
+    }
+
+    .tool-assignee {
+      font-weight: 700;
+      white-space: nowrap;
+    }
   }
-}
 
-.tool-status {
-  text-transform: none;
-  font-weight: bold;
-}
+  .tool-selection-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 100px;
 
-.user-icon {
-  font-size: 15px;
-  margin-right: 5px;
-}
+    .checkbox {
+      height: 37px;
+      width: 37px;
+      border: 2px solid $renascent-dark-gray;
+      color: $renascent-dark-gray;
+      border-radius: 3px;
+      padding: 0;
+      font-size: 27px;
+      color: white;
 
-.tool-assignee {
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.tool-selection-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 0 0 100px;
-
-  .checkbox {
-    height: 37px;
-    width: 37px;
-    border: 2px solid $renascent-dark-gray;
-    color: $renascent-dark-gray;
-    border-radius: 3px;
-    padding: 0;
-    font-size: 27px;
-    color: white;
-
-    &.fa-check {
-      background-color: $renascent-dark-gray;
+      &.fa-check {
+        background-color: $renascent-dark-gray;
+      }
     }
   }
 }

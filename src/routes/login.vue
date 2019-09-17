@@ -92,6 +92,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 import { requestPasswordResetMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import ApiStatusCodes from '@/utils/api-status-codes'
@@ -100,7 +102,6 @@ import ExtendedFab from '@/components/basic/extended-fab'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import swal from 'sweetalert2'
 import { mapActions } from 'vuex'
-import Vue from 'vue'
 import store from '@/store'
 
 export default {
@@ -191,8 +192,13 @@ export default {
           if (requestPasswordReset) {
             showSuccessMsg('Instructions for resetting your password will be sent to your email')
           }
-        } catch {
+        } catch (error) {
+          if (handleCommonErrors(error)) {
+            return
+          }
+
           showErrorMsg('There was an error trying to request a password reset. Please make sure you typed in the correct email. If the issue persists please contact support', 'RESET FAILURE')
+          Vue.rollbar.error('Error in routes:login:requestPasswordReset', error)
         }
       }
     },

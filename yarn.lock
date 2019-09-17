@@ -667,6 +667,11 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
+"@jbcampbell/fastclick@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@jbcampbell/fastclick/-/fastclick-2.0.0.tgz#0ee601b0748c89d6ed24b568756d1f06d2a8fee1"
+  integrity sha512-Tfc+rXwm6YBULTpbNil2KC4AdqGn/yUi0FTgkU2xenrN3N044sNzCcMs4megNSh3T+6GOHGq7MCIdKNCYtFNsg==
+
 "@johmun/vue-tags-input@^1.5.5":
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/@johmun/vue-tags-input/-/vue-tags-input-1.5.5.tgz#b7270a04cb4ff2b9fc6da681281a5760559d3260"
@@ -4485,10 +4490,6 @@ fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
-
-"fastclick@https://github.com/Renascentinc/fastclick.git":
-  version "1.0.6"
-  resolved "https://github.com/Renascentinc/fastclick.git#ae86091e9c4831178c8f3050907764893dea335a"
 
 fastparse@^1.1.1:
   version "1.1.2"

@@ -23,7 +23,7 @@
     <preference name="target-device" value="universal" />
     <preference name="BackgroundColor" value="0xff231F20" />
     <preference name="StatusBarOverlaysWebView" value="true" />
-    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="StatusBarStyle" value="blackopaque" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-installLocation" value="auto" />
     <feature name="StatusBar">

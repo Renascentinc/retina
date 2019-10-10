@@ -109,14 +109,14 @@
 
         <div
           class="list-loading-container loading-container"
-          :class="{ 'active': $apollo.queries.searchTool.loading }"
+          :class="{ 'active': isSearchInProgress }"
         >
           <loading-spinner/>
         </div>
 
         <transition name="fade">
           <div
-            v-if="!$apollo.queries.searchTool.loading && !tools.length"
+            v-if="!isSearchInProgress && !tools.length"
             class="no-results-container"
           >
             <span class="no-tools-text">
@@ -140,7 +140,7 @@
 
         <div
           class="list-loading-container loading-container"
-          :class="{ 'active': $apollo.queries.searchTool.loading && paginationLoading }"
+          :class="{ 'active': isSearchInProgress && paginationLoading }"
         >
           <loading-spinner/>
         </div>
@@ -371,6 +371,10 @@ export default {
       'selectedTools'
     ]),
 
+    isSearchInProgress () {
+      return this.$apollo.queries.searchTool && this.$apollo.queries.searchTool.loading
+    },
+
     infiniteScrollPageNumber () {
       let tools = (this.showOnlySelectedTools ? this.getMultipleTool : this.searchTool) || []
       return Math.ceil(tools.length / this.pageSize)
@@ -517,7 +521,7 @@ export default {
     },
 
     async loadMore () {
-      if (this.hasLoadedLastPage || !this.tools.length || this.$apollo.queries.searchTool.loading || this.showOnlySelectedTools) {
+      if (this.hasLoadedLastPage || !this.tools.length || this.isSearchInProgress || this.showOnlySelectedTools) {
         return
       }
 
@@ -532,6 +536,10 @@ export default {
 
       if (this.searchString) options.query = this.searchString
       if (this.filters) options.toolFilter = this.filters
+
+      if (!this.$apollo.queries.searchTool) {
+        return
+      }
 
       await this.$apollo.queries.searchTool.fetchMore({
         variables: options,

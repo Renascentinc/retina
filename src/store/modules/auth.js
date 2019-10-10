@@ -91,9 +91,8 @@ const auth = {
       let token = window.localStorage.getItem('token')
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
 
-      Vue.rollbar.info(`App Initialized v${pkg.version}`)
-
       if (token && currentUser) {
+        Vue.rollbar.info(`App Initialized v${pkg.version} - user ${currentUser.id}`)
         commit('setCurrentUser', currentUser)
         commit('setToken', token)
       }

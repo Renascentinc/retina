@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { defaultClient as apollo } from '@/apollo'
 import Roles from '@/utils/roles'
 import User from '@/models/user'
@@ -6,6 +7,7 @@ import {
   logoutMutation
 } from '@/utils/gql'
 import router from '@/router'
+import pkg from '@/../package.json'
 
 const auth = {
   namespaced: true,
@@ -90,6 +92,7 @@ const auth = {
       let currentUser = JSON.parse(window.localStorage.getItem('currentUser'))
 
       if (token && currentUser) {
+        Vue.rollbar.info(`App Initialized v${pkg.version} - user ${currentUser.id}`)
         commit('setCurrentUser', currentUser)
         commit('setToken', token)
       }

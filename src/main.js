@@ -39,7 +39,7 @@ Vue.use(VueMq, {
   }
 })
 Vue.use(Rollbar, {
-  accessToken: '02d43984a6b54684b5686bc7457685e9',
+  accessToken: 'b3993039bb7140109207d1ac672f0848',
   captureUncaught: true,
   captureUnhandledRejections: true,
   enabled: true,

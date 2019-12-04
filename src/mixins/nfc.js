@@ -65,19 +65,35 @@ export default {
     },
 
     startNfcListener (callback) {
-      let setup = () => {
-        this.nfcListenerEnabled = true
+      // let setup = () => {
+      //   this.nfcListenerEnabled = true
 
-        if (!this.nfcListenerAdded) {
-          window.nfc.addNdefListener(this.callback)
-          this.nfcListenerAdded = true
-        }
-      }
+      //   if (!this.nfcListenerAdded) {
+      //     window.nfc.addNdefListener(this.callback)
+      //     this.nfcListenerAdded = true
+      //   }
+      // }
+
+      console.log('let\'s try this...')
 
       if (window.device.platform === Platforms.IOS) {
-        window.nfc.beginSession(setup)
+        // window.nfc.addNdefListener(() => {
+        //   console.log('Listener has listened to someting')
+        window.nfc.connect().then(() => {
+          console.log('connection made')
+          window.nfc.transceive('90 5A 00 00 03 AA AA AA 00').then(
+            response => {
+              console.log(response.toString())
+              window.nfc.close()
+            },
+            (error) => console.log('Error selecting DESFire application', error)
+          )
+        }, (error) => { console.log('there was an error: ' + error) })
+        // }, window.nfc.beginNDEFSession(), () => console.log('failed'))
+
+        // window.nfc.beginSession(setup)
       } else {
-        setup()
+        // setup()
       }
     },
 

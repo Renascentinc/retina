@@ -87,6 +87,7 @@ export default {
         Vue.rollbar.error('Error in components:nfc-encode', reason)
       }
 
+
       this.pauseNfcListener()
     },
 

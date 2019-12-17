@@ -114,7 +114,7 @@ export default {
     onClick () {
       if (this.isNfcWriteEnabled) {
         this.startNfcListener()
-        this.showReadyToScanModal()
+        // this.showReadyToScanModal()
       } else {
         this.showNfcDisabledMsg()
       }

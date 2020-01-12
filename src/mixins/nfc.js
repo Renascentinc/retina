@@ -75,7 +75,7 @@ export default {
       }
 
       if (window.device.platform === Platforms.IOS) {
-        window.nfc.write('test')
+        window.nfc.beginSession(setup)
       } else {
         setup()
       }

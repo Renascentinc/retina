@@ -91,7 +91,7 @@ export default {
     },
 
     onSuccess () {
-      window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
+      // window.nfc.makeReadOnly(() => this.showSuccessMsg(), (reason) => this.onError(reason))
       this.pauseNfcListener()
       if (!this.tool.tagged) {
         this.tool.tagged = true
@@ -100,15 +100,23 @@ export default {
     },
 
     _nfcCallback (tag) {
-      if (!this.tool.id) {
-        return
+      console.log('we are inside the _nfcCallback!!')
+      console.log(tag.tag.ndefMessage)
+      if (tag.tag.ndefMessage) {
+        console.log('the tag is blank')
+
+        if (!this.tool.id) {
+          console.log('no tool id')
+          return
+        }
+
+        const record = [
+          window.ndef.textRecord(`${this.tool.id} - Property of Renascent, Inc. (http://renascentinc.com)`)
+        ]
+
+        console.log('about to try writing...')
+        window.nfc.write(record, () => this.onSuccess(), (reason) => this.onError(reason))
       }
-
-      const record = [
-        window.ndef.textRecord(`${this.tool.id} - Property of Renascent, Inc. (http://renascentinc.com)`)
-      ]
-
-      window.nfc.write(record, () => this.onSuccess(), (reason) => this.onError(reason))
     },
 
     onClick () {

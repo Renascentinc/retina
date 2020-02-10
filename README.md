@@ -46,7 +46,7 @@ git checkout master
 git pull
 git checkout develop
 git merge master
-yarn version --preminor
+yarn version --preminor --preid alpha
 git push --follow-tags
 ```
 

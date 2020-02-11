@@ -39,6 +39,16 @@ yarn version (--major, --minor, --patch)
 git push --follow-tags
 open https://github.com/Renascentinc/retina/compare/master...release/v1.2.3
 ```
+From the github webpage you can create a pull request from the release branch to master.
+Once the PR has been approved and merged into `master` run the following
+```
+git checkout master
+git pull
+git checkout develop
+git merge master
+yarn version --preminor --preid alpha
+git push --follow-tags
+```
 
 #### Note
 If you don't see the new version immediately this is because CloudFront caches assets. You can manually invalidate the cache if you want to confirm that the deploy worked as expected
@@ -73,9 +83,9 @@ yarn ios
 8. Set the following values when prompted
 ```
 Name: retina
-App URL: https://retina.renascentinc.com/ios/retina.ipa
+App URL: https://retina.renascentinc.com/ios/RETINA.ipa
 Display Image URL: https://retina.renascentinc.com/ios/display_image.png
 Full Display Image URL: https://retina.renascentinc.com/ios/full_display_image.png
 ```
 9. Increment version number in `public/download.html`
-10. Upload `retina.ipa`, `manifest.plist` and `download.html` to S3 > retina-us-east-1/ios
+10. Upload `RETINA.ipa`, `manifest.plist` and `download.html` to S3 > retina-us-east-1/ios

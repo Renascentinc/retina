@@ -80,7 +80,6 @@ export default {
     },
 
     onError (reason) {
-      console.log(reason)
       if (reason === 'Tag is read only') {
         this.showInfoMsg()
       } else {
@@ -116,7 +115,6 @@ export default {
         ]
 
         console.log('about to try writing...')
-        console.log(record)
         window.nfc.write(record, () => this.onSuccess(), (reason) => this.onError(reason))
       }
     },

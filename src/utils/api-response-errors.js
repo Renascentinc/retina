@@ -12,7 +12,12 @@ export function handleCommonErrors (error, displayErrorMessage = false) {
     } else if (hasGraphqlErrorCode(error, ApiStatusCodes.USER_UNIQUE_ACTIVE_CONSTRAINT_VIOLATION) &&
     error.graphQLErrors[0].message.includes('User with email') &&
     error.graphQLErrors[0].message.includes('already exists in active state')) {
-      msgText = 'A user with this information already exists'
+      msgText = 'This email address is already in use by another user'
+      foundCommonError = true
+    } else if (hasGraphqlErrorCode(error, ApiStatusCodes.USER_UNIQUE_ACTIVE_CONSTRAINT_VIOLATION) &&
+    error.graphQLErrors[0].message.includes('User with email') &&
+    error.graphQLErrors[0].message.includes('already exists in inactive state')) {
+      msgText = 'This email address is in use by a deactivated user'
       foundCommonError = true
     }
   }

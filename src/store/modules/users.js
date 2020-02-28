@@ -28,14 +28,14 @@ const users = {
       }
 
       try {
+        user.status = 'INACTIVE'
+
         await apollo.mutate({
           mutation: deleteUserMutation,
           variables: {
             updatedUser: user.getState()
           }
         })
-
-        user.status = 'INACTIVE'
       } catch (error) {
         if (handleCommonErrors(error)) {
           return

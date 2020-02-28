@@ -6,6 +6,7 @@ import {
   updateUserMutation
 } from '@/utils/gql'
 import { handleCommonErrors } from '@/utils/api-response-errors'
+import { showSuccessMsg } from '@/utils/alerts'
 
 const users = {
   namespaced: true,
@@ -36,6 +37,7 @@ const users = {
             updatedUser: user.getState()
           }
         })
+        showSuccessMsg('Successfully Deleted User')
       } catch (error) {
         if (handleCommonErrors(error)) {
           return

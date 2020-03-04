@@ -226,7 +226,7 @@ import Dropdown from '@/components/basic/dropdown'
 import Roles from '@/utils/roles'
 import { getUserById } from '@/utils/gql'
 import User from '@/models/user'
-import { showInvalidIDMsg, showSuccessMsg, showErrorMsg } from '@/utils/alerts'
+import { showInvalidIDMsg, showErrorMsg } from '@/utils/alerts'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
@@ -317,7 +317,6 @@ export default {
     async performUserDelete () {
       try {
         await this.deleteUser(this.editedUser)
-        showSuccessMsg('Successfully Deleted User')
         this.transitionToUsers()
       } catch (error) {
         showErrorMsg('There was an error saving changes. Please try again or contact support.')

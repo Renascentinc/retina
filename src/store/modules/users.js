@@ -6,6 +6,7 @@ import {
   updateUserMutation
 } from '@/utils/gql'
 import { handleCommonErrors } from '@/utils/api-response-errors'
+import { showSuccessMsg } from '@/utils/alerts'
 
 const users = {
   namespaced: true,
@@ -28,14 +29,15 @@ const users = {
       }
 
       try {
+        user.status = 'INACTIVE'
+
         await apollo.mutate({
           mutation: deleteUserMutation,
           variables: {
             updatedUser: user.getState()
           }
         })
-
-        user.status = 'INACTIVE'
+        showSuccessMsg('Successfully Deleted User')
       } catch (error) {
         if (handleCommonErrors(error)) {
           return

@@ -228,6 +228,7 @@ import { getUserById } from '@/utils/gql'
 import User from '@/models/user'
 import { showInvalidIDMsg, showErrorMsg } from '@/utils/alerts'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { handleCommonErrors } from '@/utils/api-response-errors'
 
 export default {
   name: 'ToolDetail',
@@ -335,7 +336,9 @@ export default {
         this.user.update(this.editedUser)
         this.editState = false
       } catch (error) {
-        showErrorMsg('There was an error saving changes. Please try again or contact support.')
+        if (!handleCommonErrors(error)) {
+          showErrorMsg('There was an error saving changes. Please try again or contact support.')
+        }
       }
     },
 
@@ -347,7 +350,9 @@ export default {
         await this.updateUser(this.editedUser)
         this.user.update(this.editedUser)
       } catch (error) {
-        showErrorMsg('There was an error saving changes. Please try again or contact support.')
+        if (handleCommonErrors(error)) {
+          showErrorMsg('There was an error saving changes. Please try again or contact support.')
+        }
       }
     }
   }

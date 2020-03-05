@@ -58,10 +58,6 @@ const users = {
           }
         })
       } catch (error) {
-        if (handleCommonErrors(error)) {
-          return
-        }
-
         Vue.rollbar.error('Error in store:modules:user:updateUser', error)
         throw error
       }

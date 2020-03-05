@@ -325,10 +325,7 @@ export default {
     },
 
     async saveUser () {
-      let isValid
-      this.$validator.validate().then((valid) => {
-        isValid = valid
-      })
+      let isValid = await this.$validator.validate()
 
       if (!isValid) {
         return

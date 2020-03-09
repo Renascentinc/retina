@@ -8150,6 +8150,11 @@ phone-number-formats@^2.2.0:
   dependencies:
     replace-at "^1.0.0"
 
+phonegap-nfc@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/phonegap-nfc/-/phonegap-nfc-1.0.4.tgz#d53b343ba49630e6944928a4873c8fa2fa0178ba"
+  integrity sha512-a0rIrz7F9ycGcCtlOCNPcm3yEf59npzgWPAc69EgWlHmEoYVGsyAx4FB4tFmkIOJ27/Rwjcyd7z268QXmFePnw==
+
 pify@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"

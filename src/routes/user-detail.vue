@@ -350,7 +350,7 @@ export default {
         await this.updateUser(this.editedUser)
         this.user.update(this.editedUser)
       } catch (error) {
-        if (handleCommonErrors(error)) {
+        if (!handleCommonErrors(error)) {
           showErrorMsg('There was an error saving changes. Please try again or contact support.')
         }
       }

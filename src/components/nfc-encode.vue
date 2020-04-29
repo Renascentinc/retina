@@ -18,6 +18,7 @@ import Vue from 'vue'
 import { mapActions } from 'vuex'
 import swal from 'sweetalert2'
 import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
 
 export default {
   name: 'NfcEncode',
@@ -114,7 +115,9 @@ export default {
     onClick () {
       if (this.isNfcWriteEnabled) {
         this.startNfcListener()
-        this.showReadyToScanModal()
+        if (window.device.platform === Platforms.ANDROID) {
+          this.showReadyToScanModal()
+        }
       } else {
         this.showNfcDisabledMsg()
       }

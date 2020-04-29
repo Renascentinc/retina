@@ -22,7 +22,7 @@ export default {
     },
 
     isNfcWriteEnabled () {
-      return this.isNfcEnabled && window.device.platform === Platforms.ANDROID
+      return this.isNfcEnabled
     }
   },
 

@@ -1,5 +1,7 @@
 import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
+import { showErrorMsg } from './utils/alerts'
+import { Vue } from 'vue'
 
 export default {
   beforeDestroy () {
@@ -45,10 +47,12 @@ export default {
     },
 
     _nfcCallback (param) {
+      console.log(param)
       let value = ''
       if (param && param.tag && param.tag.ndefMessage) {
         let [{ payload }] = param.tag.ndefMessage
         value = String.fromCharCode(...payload).slice(3)
+        console.log(value)
         let [id] = value.split(' - ')
         if (id) {
           value = id
@@ -75,7 +79,21 @@ export default {
       }
 
       if (window.device.platform === Platforms.IOS) {
-        window.nfc.scanNdef(setup)
+        // setup()
+        this.nfcListenerEnabled = true
+        if (!this.nfcListenerAdded) {
+          this.nfcListenerAdded = true
+        }
+        window.nfc.scanTag().then(
+          tag => {
+            this._initialNfcCallback({ tag: tag })
+          },
+          err => {
+            showErrorMsg('There was an error while reading the tag', 'TAG ERROR')
+            Vue.rollbar.error('Error in mixins:nfc', err)
+          }
+
+        )
       } else {
         setup()
       }

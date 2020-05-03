@@ -108,15 +108,16 @@ export default {
       const record = [
         window.ndef.textRecord(`${this.tool.id} - Property of Renascent, Inc. (http://renascentinc.com)`)
       ]
-
       window.nfc.write(record, () => this.onSuccess(), (reason) => this.onError(reason))
     },
 
     onClick () {
       if (this.isNfcWriteEnabled) {
-        this.startNfcListener()
         if (window.device.platform === Platforms.ANDROID) {
           this.showReadyToScanModal()
+          this.startNfcListener()
+        } else if (window.device.platform === Platforms.IOS) {
+          this._nfcCallback()
         }
       } else {
         this.showNfcDisabledMsg()

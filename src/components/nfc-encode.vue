@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="{ inactive: !isNfcWriteEnabled }"
+    :class="{ inactive: !isNfcEnabled }"
     class="nfc-encode"
     @click="onClick"
   >
@@ -112,7 +112,7 @@ export default {
     },
 
     onClick () {
-      if (this.isNfcWriteEnabled) {
+      if (this.isNfcEnabled) {
         if (window.device.platform === Platforms.ANDROID) {
           this.showReadyToScanModal()
           this.startNfcListener()

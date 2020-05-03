@@ -21,10 +21,6 @@ export default {
   computed: {
     isNfcEnabled () {
       return !!window.nfc && window.nfc.enabled
-    },
-
-    isNfcWriteEnabled () {
-      return this.isNfcEnabled
     }
   },
 
@@ -79,7 +75,6 @@ export default {
       }
 
       if (window.device.platform === Platforms.IOS) {
-        // setup()
         this.nfcListenerEnabled = true
         if (!this.nfcListenerAdded) {
           this.nfcListenerAdded = true

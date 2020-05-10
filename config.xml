@@ -34,6 +34,7 @@
         <icon src="/public/static/icon-android.png" />
     </platform>
     <platform name="ios">
+        <splash src="public/static/Default@3x~iphone~anyany.png" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="SuppressesIncrementalRendering" value="true" />

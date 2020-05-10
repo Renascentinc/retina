@@ -8150,10 +8150,10 @@ phone-number-formats@^2.2.0:
   dependencies:
     replace-at "^1.0.0"
 
-phonegap-nfc@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/phonegap-nfc/-/phonegap-nfc-1.0.4.tgz#d53b343ba49630e6944928a4873c8fa2fa0178ba"
-  integrity sha512-a0rIrz7F9ycGcCtlOCNPcm3yEf59npzgWPAc69EgWlHmEoYVGsyAx4FB4tFmkIOJ27/Rwjcyd7z268QXmFePnw==
+phonegap-nfc@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/phonegap-nfc/-/phonegap-nfc-1.1.1.tgz#c8674ed537b8178662280381c7eb4b8f5e9f0311"
+  integrity sha512-FlJ5EEvlDh38pyFJY3bOwGgSwcQ64RbWUWC6uXwLe5WU/0VyFa7VTMZ1japzJtNP8gcb+yQ4EGQTP8kg+kxlAg==
 
 pify@^2.0.0:
   version "2.3.0"

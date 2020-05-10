@@ -9,7 +9,7 @@
     "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode=development",
-    "mobile:assets": "app-icon generate -i public/static/icon-ios.png --platforms=ios && app-icon generate -i public/static/icon-android.png --platforms=android && cordova-splash --splash=public/static/launch.png",
+    "mobile:assets": "app-icon generate -i public/static/icon-ios.png --platforms=ios && app-icon generate -i public/static/icon-android.png --platforms=android && cordova-splash --splash=public/static/Default@3x~iphone~anyany.png",
     "build:mobile": "VUE_APP_PLATFORM=cordova vue-cli-service build",
     "build:mobile:dev": "VUE_APP_PLATFORM=cordova vue-cli-service build --mode=development",
     "android": "yarn build:mobile && cordova prepare",

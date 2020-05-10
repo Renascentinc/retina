@@ -1,7 +1,7 @@
 import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
-import { showErrorMsg } from './utils/alerts'
-import { Vue } from 'vue'
+import { showErrorMsg } from '../utils/alerts'
+import Vue from 'vue'
 
 export default {
   beforeDestroy () {

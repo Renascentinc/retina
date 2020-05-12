@@ -43,12 +43,10 @@ export default {
     },
 
     _nfcCallback (param) {
-      console.log(param)
       let value = ''
       if (param && param.tag && param.tag.ndefMessage) {
         let [{ payload }] = param.tag.ndefMessage
         value = String.fromCharCode(...payload).slice(3)
-        console.log(value)
         let [id] = value.split(' - ')
         if (id) {
           value = id

@@ -21,6 +21,10 @@ export default {
   computed: {
     isNfcEnabled () {
       return !!window.nfc && window.nfc.enabled
+    },
+
+    isNfcWriteEnabled () {
+      return this.isNfcEnabled && window.device.platform === Platforms.ANDROID
     }
   },
 

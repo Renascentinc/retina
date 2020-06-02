@@ -1,5 +1,7 @@
 import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
+import { showErrorMsg } from '../utils/alerts'
+import Vue from 'vue'
 
 export default {
   beforeDestroy () {
@@ -75,7 +77,20 @@ export default {
       }
 
       if (window.device.platform === Platforms.IOS) {
-        window.nfc.beginSession(setup)
+        this.nfcListenerEnabled = true
+        if (!this.nfcListenerAdded) {
+          this.nfcListenerAdded = true
+        }
+        window.nfc.scanTag().then(
+          tag => {
+            this._initialNfcCallback({ tag: tag })
+          },
+          err => {
+            showErrorMsg('There was an error while reading the tag', 'TAG ERROR')
+            Vue.rollbar.error('Error in mixins:nfc', err)
+          }
+
+        )
       } else {
         setup()
       }

@@ -24,3 +24,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+bitrise.yml
+.bitrise.secrets.yml

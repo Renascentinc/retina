@@ -18,6 +18,7 @@ import Vue from 'vue'
 import { mapActions } from 'vuex'
 import swal from 'sweetalert2'
 import nfcMixin from '@/mixins/nfc'
+import Platforms from '@/utils/platforms'
 
 export default {
   name: 'NfcEncode',
@@ -107,14 +108,17 @@ export default {
       const record = [
         window.ndef.textRecord(`${this.tool.id} - Property of Renascent, Inc. (http://renascentinc.com)`)
       ]
-
       window.nfc.write(record, () => this.onSuccess(), (reason) => this.onError(reason))
     },
 
     onClick () {
       if (this.isNfcWriteEnabled) {
-        this.startNfcListener()
-        this.showReadyToScanModal()
+        if (window.device.platform === Platforms.ANDROID) {
+          this.showReadyToScanModal()
+          this.startNfcListener()
+        } else if (window.device.platform === Platforms.IOS) {
+          this._nfcCallback()
+        }
       } else {
         this.showNfcDisabledMsg()
       }

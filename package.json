@@ -1,6 +1,6 @@
 {
   "name": "retina",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "private": true,
   "description": "Renascent inc. Asset Tracking Application",
   "author": "Renascent Inc.",
@@ -9,7 +9,7 @@
     "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode=development",
-    "mobile:assets": "app-icon generate -i public/static/icon-ios.png --platforms=ios && app-icon generate -i public/static/icon-android.png --platforms=android && cordova-splash --splash=public/static/launch.png",
+    "mobile:assets": "app-icon generate -i public/static/icon-ios.png --platforms=ios && app-icon generate -i public/static/icon-android.png --platforms=android && cordova-splash --splash=public/static/Default@2x~universal~anyany.png",
     "build:mobile": "VUE_APP_PLATFORM=cordova vue-cli-service build",
     "build:mobile:dev": "VUE_APP_PLATFORM=cordova vue-cli-service build --mode=development",
     "android": "yarn build:mobile && cordova prepare",
@@ -38,7 +38,7 @@
     "html2pdf.js": "^0.9.0",
     "moment": "^2.24.0",
     "phone-number-formats": "^2.2.0",
-    "phonegap-nfc": "^1.0.4",
+    "phonegap-nfc": "^1.1.1",
     "register-service-worker": "^1.6.2",
     "sweetalert2": "^7.29.2",
     "v-calendar": "^0.9.7",
@@ -93,13 +93,13 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "phonegap-nfc": {
-        "NFC_USAGE_DESCRIPTION": "Read NFC Tags"
-      },
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-device": {},
       "cordova-plugin-printer": {},
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "phonegap-nfc": {
+        "NFC_USAGE_DESCRIPTION": "Read NFC Tags"
+      }
     },
     "platforms": [
       "ios",

@@ -1,5 +1,7 @@
 import Platforms from '@/utils/platforms'
 import swal from 'sweetalert2'
+import { showErrorMsg } from '../utils/alerts'
+import Vue from 'vue'
 
 export default {
   beforeDestroy () {
@@ -75,7 +77,24 @@ export default {
       }
 
       if (window.device.platform === Platforms.IOS) {
-        window.nfc.beginSession(setup)
+        this.nfcListenerEnabled = true
+        if (!this.nfcListenerAdded) {
+          this.nfcListenerAdded = true
+
+          window.nfc.scanNdef().then(
+            tag => {
+              this.nfcListenerAdded = false
+              this._initialNfcCallback({ tag: tag })
+            },
+            err => {
+              this.nfcListenerAdded = false
+              if (!this.isUserInvalidatedSessionError(err)) {
+                showErrorMsg('There was an error while reading the tag', 'TAG ERROR')
+                Vue.rollbar.error('Error in mixins:nfc', err)
+              }
+            }
+          )
+        }
       } else {
         setup()
       }
@@ -83,6 +102,10 @@ export default {
 
     pauseNfcListener () {
       this.nfcListenerEnabled = false
+    },
+
+    isUserInvalidatedSessionError (error) {
+      return error.contains('Session invalidated by user')
     },
 
     nfcCallback () {

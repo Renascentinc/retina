@@ -1,6 +1,6 @@
 <template>
   <div class="page tools-page">
-            <v-speed-dial
+    <v-speed-dial
       v-model="fab"
       :bottom="true"
       :right="true"
@@ -8,8 +8,7 @@
       :left="false"
       direction="left"
       transition="slide-x-reverse-transition"
-      style="position: absolute;"
-    >
+      style="position: absolute;">
       <template
         v-slot:activator
         v-if="$mq === 'mobile' && transferState === states.INITIAL">
@@ -22,17 +21,13 @@
           <v-icon v-else>fa-angle-double-left</v-icon>
         </v-btn>
       </template>
-      <v-btn
-        fab
-        dark
-      >
+      <v-btn fab dark>
         <v-icon>fa-file-pdf</v-icon>
       </v-btn>
       <v-btn
         fab
         dark
-        :on-click="moveToSelectingState"
-      >
+        v-on:click="moveToSelectingState">
         <v-icon>fa-people-arrows</v-icon>
       </v-btn>
     </v-speed-dial>
@@ -47,14 +42,6 @@
       />
       <nfc-scan :on-scan="onScan"/>
     </div>
-
-    <!-- <extended-fab
-      v-if="$mq === 'mobile' && transferState === states.INITIAL"
-      :on-click="moveToSelectingState"
-      class="transfer-btn"
-      icon-class="fa-exchange-alt"
-      button-text="TRANSFER"
-    /> -->
 
     <div class="menu-container">
       <div

@@ -132,7 +132,6 @@ import { handleCommonErrors } from '@/utils/api-response-errors'
 import HistorySearchInput from '@/components/history-search-input'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
 import Fab from '@/components/basic/fab'
-import html2pdf from 'html2pdf.js'
 import swal from 'sweetalert2'
 import HistoryTable from '@/components/history-table'
 import HistorySearchResult from '@/components/history-search-result'
@@ -142,6 +141,7 @@ import statuses from '@/utils/statuses'
 import { searchToolSnapshotQuery, recomissionToolMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import HistoryEntry from '@/models/history-entry'
+import { generateTable } from '@/services/pdf-service.js'
 import moment from 'moment'
 
 export default {
@@ -310,24 +310,13 @@ export default {
       this.loading = true
       let element = document.querySelector('.history-table-export')
 
-      let options = {
-        filename: 'transactions_export.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2 },
-        margin: 0.5,
-        pagebreak: {
-          mode: 'avoid-all'
-        },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      }
-
       try {
-        await html2pdf().from(element).set(options).save()
-        this.loading = false
+        generateTable('transactions_export.pdf', element)
       } catch (error) {
-        showErrorMsg('Error exporting PDF. Please Try Again or Contact Support')
+        showErrorMsg('Error exporting PDF. Please try again or contact support.')
         Vue.rollbar.error('Error in routes:history:exportTable', error)
       }
+      this.loading = false
     },
 
     printTable () {

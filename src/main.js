@@ -17,6 +17,8 @@ import fastclick from '@jbcampbell/fastclick'
 import ToggleButton from 'vue-js-toggle-button'
 import Rollbar from 'vue-rollbar'
 import pkg from '../package.json'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 
 if (process.env.VUE_APP_PLATFORM === 'cordova') {
   let cordovaScript = document.createElement('script')
@@ -25,6 +27,11 @@ if (process.env.VUE_APP_PLATFORM === 'cordova') {
   document.body.appendChild(cordovaScript)
 }
 
+Vue.use(Vuetify, {
+  icons: {
+    iconfont: 'fa'
+  }
+})
 Vue.config.productionTip = false
 Vue.use(ToggleButton)
 Vue.use(VueInfiniteScroll)
@@ -73,6 +80,7 @@ window.addEventListener('load', () => {
   fastclick.attach(document.body)
 
   new Vue({
+    Vuetify,
     router,
     store,
     el: '#app',

@@ -1,5 +1,41 @@
 <template>
   <div class="page tools-page">
+            <v-speed-dial
+      v-model="fab"
+      :bottom="true"
+      :right="true"
+      :top="false"
+      :left="false"
+      direction="left"
+      transition="slide-x-reverse-transition"
+      style="position: absolute;"
+    >
+      <template
+        v-slot:activator
+        v-if="$mq === 'mobile' && transferState === states.INITIAL">
+        <v-btn
+          v-model="fab"
+          color="#CE352F"
+          dark
+          fab>
+          <v-icon v-if="fab">fa-times</v-icon>
+          <v-icon v-else>fa-angle-double-left</v-icon>
+        </v-btn>
+      </template>
+      <v-btn
+        fab
+        dark
+      >
+        <v-icon>fa-file-pdf</v-icon>
+      </v-btn>
+      <v-btn
+        fab
+        dark
+        :on-click="moveToSelectingState"
+      >
+        <v-icon>fa-people-arrows</v-icon>
+      </v-btn>
+    </v-speed-dial>
     <loading-overlay :active="transferInProgress"/>
 
     <div class="search-bar">
@@ -12,13 +48,13 @@
       <nfc-scan :on-scan="onScan"/>
     </div>
 
-    <extended-fab
+    <!-- <extended-fab
       v-if="$mq === 'mobile' && transferState === states.INITIAL"
       :on-click="moveToSelectingState"
       class="transfer-btn"
       icon-class="fa-exchange-alt"
       button-text="TRANSFER"
-    />
+    /> -->
 
     <div class="menu-container">
       <div
@@ -347,6 +383,7 @@ export default {
       pageSize: 15,
       paginationLoading: false,
       transferInProgress: false,
+      fab: false,
       states
     }
   },
@@ -600,6 +637,7 @@ export default {
 
 .tools-page {
   display: flex;
+  position: relative;
   flex-direction: column;
 
   .next-btn.disabled {

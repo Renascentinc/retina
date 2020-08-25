@@ -21,7 +21,10 @@
           <v-icon v-else>fa-angle-double-left</v-icon>
         </v-btn>
       </template>
-      <v-btn fab dark>
+      <v-btn
+        fab
+        dark
+        v-on:click="exportTable">
         <v-icon>fa-file-pdf</v-icon>
       </v-btn>
       <v-btn
@@ -151,6 +154,7 @@
         <transition-group
           name="list-element"
           tag="span"
+          class="tools"
         >
           <tool-search-result
             v-for="tool in tools"
@@ -268,6 +272,7 @@ import nfcMixin from '@/mixins/nfc'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import LoadingSpinner from '@/components/basic/loading-spinner'
 import Tool from '@/models/tool'
+import pdf from '@/mixins/pdf'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import {
   locationsQuery,
@@ -295,7 +300,7 @@ export default {
     AddButton
   },
 
-  mixins: [ nfcMixin ],
+  mixins: [ nfcMixin, pdf ],
 
   apollo: {
     getAllLocation: {
@@ -615,6 +620,24 @@ export default {
       this.setShowOnlySelectedTools(true)
       this.updateTransferStatus(this.states.FINALIZING)
       this.resetScrollPosition()
+    },
+
+    exportTable () {
+      let exportTools = this.$apollo.queries.searchTool.refetch({
+        pagingParameters: {
+          page_size: null,
+          page_number: 0
+        }
+      }).then(() => {
+        try {
+          let element = document.querySelector('.tools')
+          this.generateTable('tools_export.pdf', element)
+        } catch (error) {
+          console.log(error)
+          showErrorMsg('Error exporting PDF. Please try again or contact support.')
+          Vue.rollbar.error('Error in routes:tools:exportTable', error)
+        }
+      })
     }
   }
 }

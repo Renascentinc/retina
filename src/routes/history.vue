@@ -141,11 +141,13 @@ import statuses from '@/utils/statuses'
 import { searchToolSnapshotQuery, recomissionToolMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import HistoryEntry from '@/models/history-entry'
-import { generateTable } from '@/services/pdf-service.js'
+import pdf from '@/mixins/pdf'
 import moment from 'moment'
 
 export default {
   name: 'History',
+
+  mixins: [pdf],
 
   components: {
     HistorySearchInput,
@@ -311,7 +313,7 @@ export default {
       let element = document.querySelector('.history-table-export')
 
       try {
-        generateTable('transactions_export.pdf', element)
+        this.generateTable('transactions_export.pdf', element)
       } catch (error) {
         showErrorMsg('Error exporting PDF. Please try again or contact support.')
         Vue.rollbar.error('Error in routes:history:exportTable', error)

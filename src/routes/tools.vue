@@ -623,21 +623,18 @@ export default {
     },
 
     exportTable () {
-      let exportTools = this.$apollo.queries.searchTool.refetch({
-        pagingParameters: {
-          page_size: null,
-          page_number: 0
-        }
-      }).then(() => {
-        try {
-          let element = document.querySelector('.tools')
-          this.generateTable('tools_export.pdf', element)
-        } catch (error) {
-          console.log(error)
-          showErrorMsg('Error exporting PDF. Please try again or contact support.')
-          Vue.rollbar.error('Error in routes:tools:exportTable', error)
-        }
+      var toolsReportData = this.tools.map(tool => {
+        return [
+          tool.image,
+          tool.id,
+          tool.brand.name,
+          tool.type.name,
+          tool.status,
+          `${tool.owner.first_name} ${tool.owner.last_name}`
+        ]
       })
+      var header = ['Image', 'ID', 'Brand', 'Type', 'Status', 'Owner']
+      this.generateTablev2(toolsReportData, header, 'tools.pdf')
     }
   }
 }
@@ -649,6 +646,11 @@ export default {
   display: flex;
   position: relative;
   flex-direction: column;
+
+  .report-loader {
+    position: absolute;
+    bottom: 0;
+  }
 
   .next-btn.disabled {
     opacity: .5;

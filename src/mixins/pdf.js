@@ -6,9 +6,21 @@ export default {
   methods: {
     generatePdfFromObject: async function (data, header, filename, imageIndex) {
       const doc = new jsPDF()
+      var currentImage = null
       doc.autoTable({
         head: [header],
         body: data,
+        CellDef: 30,
+        didParseCell: (data) => {
+          if (data.section === 'body' && data.column.index === 0 && data.row.raw[imageIndex] !== null) {
+            data.cell.text = ''
+          }
+        },
+        willDrawCell: (data) => {
+          if (data.section === 'body' && data.column.index === 0 && data.row.raw[imageIndex] !== null) {
+            doc.set
+          }
+        },
         didDrawCell: (data) => {
           if (data.section === 'body' && data.column.index === 0 && data.row.raw[imageIndex] !== null) {
             doc.addImage(data.row.raw[imageIndex], 'JPEG', data.cell.x + 2, data.cell.y + 2, 10, 10)

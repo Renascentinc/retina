@@ -313,7 +313,7 @@ export default {
       let element = document.querySelector('.history-table-export')
 
       try {
-        this.generateTable('transactions_export.pdf', element)
+        this.generatePdfFromElement(element, 'transactions_export.pdf')
       } catch (error) {
         showErrorMsg('Error exporting PDF. Please try again or contact support.')
         Vue.rollbar.error('Error in routes:history:exportTable', error)

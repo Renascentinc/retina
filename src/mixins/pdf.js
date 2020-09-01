@@ -1,29 +1,28 @@
 import html2pdf from 'html2pdf.js'
 import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
 
 export default {
   methods: {
-    generateTablev2: async function (data, header, filename, firstColumnIsImage) {
+    generatePdfFromObject: async function (data, header, filename, imageIndex) {
       const doc = new jsPDF()
       doc.autoTable({
         head: [header],
         body: data,
         didDrawCell: (data) => {
-          console.log(data)
-          if (data.section === 'body' && data.column.index === 0) {
-            doc.addImage(data.row.raw[0], 'JPEG', data.cell.x + 2, data.cell.y + 2, 10, 10)
+          if (data.section === 'body' && data.column.index === 0 && data.row.raw[imageIndex] !== null) {
+            doc.addImage(data.row.raw[imageIndex], 'JPEG', data.cell.x + 2, data.cell.y + 2, 10, 10)
           }
-        }
+        },
       })
       doc.save(filename)
     },
 
-    generateTable: async function (filename, element) {
+    generatePdfFromElement: async function (element, filename) {
       let options = {
         filename: filename,
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2 },
+        image: { type: 'png', quality: 1 },
+        html2canvas: { scale: 2, allowTaint: true },
         margin: 0.5,
         pagebreak: {
           mode: 'avoid-all'

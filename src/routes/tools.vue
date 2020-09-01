@@ -623,18 +623,20 @@ export default {
     },
 
     exportTable () {
-      var toolsReportData = this.tools.map(tool => {
-        return [
-          tool.image,
-          tool.id,
-          tool.brand.name,
-          tool.type.name,
-          tool.status,
-          `${tool.owner.first_name} ${tool.owner.last_name}`
-        ]
-      })
-      var header = ['Image', 'ID', 'Brand', 'Type', 'Status', 'Owner']
-      this.generateTablev2(toolsReportData, header, 'tools.pdf')
+      var exportTools = this.tools.map(tool => [
+        tool.photo,
+        tool.id,
+        tool.brand.name,
+        tool.type.name,
+        tool.status,
+        `${tool.owner.first_name} ${tool.owner.last_name}`
+      ])
+
+      var header = ['photo', 'id', 'brand', 'type', 'status', 'owner']
+
+      this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0)
+      // let element = document.querySelector('.tools')
+      // this.generatePdfFromElement(element, 'tools.pdf')
     }
   }
 }

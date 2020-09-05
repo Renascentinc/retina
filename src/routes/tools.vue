@@ -623,9 +623,6 @@ export default {
     },
 
     async exportTable () {
-      const currentPageSize = this.pageSize
-      //this.pageSize = Math.Infinity
-
       while (!this.hasLoadedLastPage) {
         await this.loadMore()
       }
@@ -633,16 +630,19 @@ export default {
       var exportTools = this.tools.map(tool => [
         tool.photo,
         tool.id,
-        tool.brand.name,
-        tool.type.name,
+        `${tool.brand.name} ${tool.type.name}`,
         tool.status,
-        `${tool.owner.first_name} ${tool.owner.last_name}`
+        tool.owner.name
       ])
 
-      var header = ['photo', 'id', 'brand', 'type', 'status', 'owner']
+      var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
 
-      this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0)
-      this.pageSize = currentPageSize
+      try {
+        this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0)
+      } catch (error) {
+        showErrorMsg('Error exporting PDF. Please try again or contact support.')
+        Vue.rollbar.error('Error in routes:tools:exportTable', error)
+      }
     }
   }
 }

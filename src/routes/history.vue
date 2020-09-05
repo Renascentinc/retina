@@ -2,11 +2,6 @@
   <div class="page history-page">
     <loading-overlay :active="loading"/>
 
-    <!-- this is the actual table that gets printed or exported to PDF. Invisible to the user -->
-    <history-table
-      :search-tool-snapshot="snapshots"
-    />
-
     <div class="search-bar">
       <history-search-input
         :allow-tool-id-search="!currentToolId"
@@ -310,10 +305,20 @@ export default {
 
     async exportTable () {
       this.loading = true
-      let element = document.querySelector('.history-table-export')
+
+      var data = this.snapshots.map(snapshot => [
+        snapshot.currentSnapshot.id,
+        `${ snapshot.currentSnapshot.brand.name } ${ snapshot.currentSnapshot.type.name }`,
+        snapshot.currentSnapshot.owner.name,
+        snapshot.currentSnapshot.status,
+        new Date(snapshot.metadata.timestamp).toLocaleDateString('en-US'),
+        snapshot.metadata.tool_action,
+      ])
+
+      var header = ['ID', 'Tool', 'Assigned To', 'Status', 'Date', 'Action']
 
       try {
-        this.generatePdfFromElement(element, 'transactions_export.pdf')
+        this.generatePdfFromObject(data, header, 'transactions_export.pdf')
       } catch (error) {
         showErrorMsg('Error exporting PDF. Please try again or contact support.')
         Vue.rollbar.error('Error in routes:history:exportTable', error)

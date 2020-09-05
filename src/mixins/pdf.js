@@ -25,29 +25,15 @@ export default {
         },
       })
       doc.save(filename)
-    },
-
-    generatePdfFromElement: async function (element, filename) {
-      let options = {
-        filename: filename,
-        image: { type: 'png', quality: 1 },
-        html2canvas: { scale: 2, allowTaint: true },
-        margin: 0.5,
-        pagebreak: {
-          mode: 'avoid-all'
-        },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      }
-
-      try {
-        await html2pdf().from(element).set(options).save()
-      } catch (error) {
-        throw error
-      }
     }
   }
 }
 
 function rowHasPhoto(rowData, imageIndex) {
-  return rowData.section === 'body' && rowData.column.index === 0 && rowData.row.raw[imageIndex] !== null
+  if (imageIndex === undefined) {
+    return false
+  }
+  else {
+    return rowData.section === 'body' && rowData.column.index === 0 && rowData.row.raw[imageIndex] !== null
+  }
 }

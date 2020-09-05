@@ -12,17 +12,14 @@ export default {
         body: data,
         CellDef: 30,
         didParseCell: (data) => {
-          if (data.section === 'body' && data.column.index === 0 && data.row.raw[imageIndex] !== null) {
+          if (rowHasPhoto(data, imageIndex)) {
+            // remove image url from row data, and increase height for thumbnail
             data.cell.text = ''
-          }
-        },
-        willDrawCell: (data) => {
-          if (data.section === 'body' && data.column.index === 0 && data.row.raw[imageIndex] !== null) {
-            doc.set
+            data.row.height = 15
           }
         },
         didDrawCell: (data) => {
-          if (data.section === 'body' && data.column.index === 0 && data.row.raw[imageIndex] !== null) {
+          if (rowHasPhoto(data, imageIndex)) {
             doc.addImage(data.row.raw[imageIndex], 'JPEG', data.cell.x + 2, data.cell.y + 2, 10, 10)
           }
         },
@@ -49,4 +46,8 @@ export default {
       }
     }
   }
+}
+
+function rowHasPhoto(rowData, imageIndex) {
+  return rowData.section === 'body' && rowData.column.index === 0 && rowData.row.raw[imageIndex] !== null
 }

@@ -622,7 +622,14 @@ export default {
       this.resetScrollPosition()
     },
 
-    exportTable () {
+    async exportTable () {
+      const currentPageSize = this.pageSize
+      //this.pageSize = Math.Infinity
+
+      while (!this.hasLoadedLastPage) {
+        await this.loadMore()
+      }
+
       var exportTools = this.tools.map(tool => [
         tool.photo,
         tool.id,
@@ -635,8 +642,7 @@ export default {
       var header = ['photo', 'id', 'brand', 'type', 'status', 'owner']
 
       this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0)
-      // let element = document.querySelector('.tools')
-      // this.generatePdfFromElement(element, 'tools.pdf')
+      this.pageSize = currentPageSize
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ disabled: disabled }"
-    class="container"
+    class="dropdown-container"
   >
     <transition name="fade">
       <div
@@ -12,8 +12,7 @@
       </div>
     </transition>
 
-    <v-btn
-      color="primary"
+    <button
       class="button"
       @click="toggle"
     >
@@ -36,7 +35,7 @@
         class="close fas fa-times"
       >
       </i>
-    </v-btn>
+    </button>
 
     <transition name="fade">
       <div
@@ -137,7 +136,7 @@ export default {
 
   .button {
     margin-top: 11px;
-    display: flex;
+    align-items: center;
     justify-content: center;
   }
 }
@@ -175,6 +174,11 @@ export default {
   display: flex;
   align-content: center;
   cursor: pointer;
+
+  .fab-icon-container {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
 
   .text {
     flex: 1 0 auto;

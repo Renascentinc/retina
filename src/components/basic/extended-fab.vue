@@ -1,5 +1,5 @@
 <template>
-  <button
+  <v-btn
     :class="{ outlined: outlineDisplay, inactive: disabled }"
     :disabled="disabled"
     :type="buttonType"
@@ -20,7 +20,7 @@
     >
       {{ buttonText }}
     </span>
-  </button>
+  </v-btn>
 </template>
 
 <script>

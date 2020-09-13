@@ -128,7 +128,6 @@ import HistorySearchInput from '@/components/history-search-input'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
 import Fab from '@/components/basic/fab'
 import swal from 'sweetalert2'
-import HistoryTable from '@/components/history-table'
 import HistorySearchResult from '@/components/history-search-result'
 import LoadingSpinner from '@/components/basic/loading-spinner'
 import LoadingOverlay from '@/components/basic/loading-overlay'
@@ -148,7 +147,6 @@ export default {
     HistorySearchInput,
     Fab,
     ExtendedFab,
-    HistoryTable,
     HistorySearchResult,
     LoadingSpinner,
     LoadingOverlay

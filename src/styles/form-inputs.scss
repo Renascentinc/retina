@@ -12,6 +12,10 @@
   border: none;
   max-width: 100%;
 
+  .option-container {
+    color: $renascent-dark-gray;
+  }
+
   &::placeholder {
     color: $form-placeholder-color;
   }

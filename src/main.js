@@ -30,6 +30,16 @@ if (process.env.VUE_APP_PLATFORM === 'cordova') {
 Vue.use(Vuetify, {
   icons: {
     iconfont: 'fa'
+  },
+  theme: {
+    themes: {
+      dark: {
+        primary: '#CE352F'
+      },
+      light: {
+        primary: '#CE352F'
+      }
+    }
   }
 })
 Vue.config.productionTip = false

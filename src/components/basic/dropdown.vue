@@ -12,7 +12,8 @@
       </div>
     </transition>
 
-    <button
+    <v-btn
+      color="primary"
       class="button"
       @click="toggle"
     >
@@ -35,7 +36,7 @@
         class="close fas fa-times"
       >
       </i>
-    </button>
+    </v-btn>
 
     <transition name="fade">
       <div

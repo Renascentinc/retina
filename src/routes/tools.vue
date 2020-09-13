@@ -1,6 +1,7 @@
 <template>
   <div class="page tools-page">
     <v-speed-dial
+      :v-if="!transferInProgress"
       v-model="fab"
       :bottom="true"
       :right="true"
@@ -8,7 +9,7 @@
       :left="false"
       direction="left"
       transition="slide-x-reverse-transition"
-      style="position: absolute;">
+      style="position: absolute; bottom: 75px">
       <template
         v-slot:activator
         v-if="$mq === 'mobile' && transferState === states.INITIAL">
@@ -652,7 +653,6 @@ export default {
 
 .tools-page {
   display: flex;
-  position: relative;
   flex-direction: column;
 
   .report-loader {
@@ -673,9 +673,9 @@ export default {
   .selection-action-bar {
     position: absolute;
     bottom: 0;
-    width: calc(100vw - 40px);
+    width: 100vw;
     height: 60px;
-    background-color: white;
+    background-color: $renascent-dark-gray;
     z-index: 100;
     box-shadow: none;
     display: flex;
@@ -688,10 +688,10 @@ export default {
       flex: 0 0 95px;
 
       .menu-icon {
-        color: $renascent-red;
+        color: white;
 
         .icon-subtext {
-          color: $renascent-dark-gray;
+          color: white;
         }
       }
     }

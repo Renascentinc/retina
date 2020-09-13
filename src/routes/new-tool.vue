@@ -32,6 +32,7 @@
             >
               <button
                 class="option-container"
+                style="color: black"
                 @click="() => props.select({ name: props.value, type: 'BRAND', isNewConfigurableItem: true })"
               >
                 Set Brand To "{{ props.value }}"

@@ -109,6 +109,7 @@ export default {
   .row {
     display: flex;
     height: 50px;
+    margin: 0;
 
     .fas {
       font-size: 20px;

@@ -65,6 +65,7 @@ $tool-search-result-border-radius: 3px;
 
     .row {
       overflow: hidden;
+      margin: 0;
 
       > span {
         overflow: hidden;

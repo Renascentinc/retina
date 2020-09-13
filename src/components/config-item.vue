@@ -186,6 +186,7 @@ export default {
 
       .edit-icon {
         color: white !important;
+        margin-right: 10px;
       }
 
       .save-icon, .cancel-icon {
@@ -229,12 +230,17 @@ export default {
 
     .edit-icon {
       color: $dark-avatar;
+      margin-right: 10px;
     }
 
     .main-container {
       flex: 1 1 50%;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      .row {
+        margin: 0;
+      }
 
       span {
         overflow: hidden;

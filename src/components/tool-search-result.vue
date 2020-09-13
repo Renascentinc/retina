@@ -140,7 +140,7 @@ export default {
 
     .row {
       overflow: hidden;
-      margin-left: 0;
+      margin: 0;
 
       > span {
         overflow: hidden;

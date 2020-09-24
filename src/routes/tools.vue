@@ -15,7 +15,7 @@
         v-if="$mq === 'mobile' && transferState === states.INITIAL">
         <v-btn
           v-model="fab"
-          color="#CE352F"
+          color=primary
           dark
           fab>
           <v-icon v-if="fab">fa-times</v-icon>
@@ -92,6 +92,14 @@
           class="add-btn"
           icon-class="fa-plus"
           button-text="ADD TOOL"
+        />
+
+        <extended-fab
+          v-if="transferState === states.INITIAL"
+          :on-click="exportTable"
+          class="download-btn"
+          icon-class="fa-file-pdf"
+          button-text="DOWNLOAD"
         />
 
         <extended-fab

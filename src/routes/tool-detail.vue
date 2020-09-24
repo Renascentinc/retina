@@ -34,7 +34,7 @@
           :disabled="editState"
           :on-click="toggleTransferStatus"
           :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
-          icon-class="fa-exchange-alt"
+          icon-class="fa-people-arrows"
           class="action-btn transfer-btn"
         />
 
@@ -51,6 +51,7 @@
           :on-click="updateStatus"
           :options="statusOptions"
           button-text="CHANGE STATUS"
+          class="status-dropdown"
         />
       </div>
 
@@ -991,6 +992,10 @@ export default {
 }
 
 .desktop .tool-detail-page {
+  .status-dropdown {
+    margin-left: 10px;
+    margin-top: 20px;
+  }
   .info-menu-container {
     display: flex;
     flex-direction: row;

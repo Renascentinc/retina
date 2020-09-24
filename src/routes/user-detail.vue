@@ -36,6 +36,7 @@
           :flag="toggleChangingRole"
           :disabled="editState"
           button-text="CHANGE ROLE"
+          class="role-dropdown"
         />
       </div>
       <div class="header-cards-container">
@@ -552,6 +553,10 @@ export default {
 }
 
 .desktop .user-detail-page {
+  .role-dropdown {
+    margin-left: 10px;
+    margin-top: 20px;
+  }
   .info-menu-container {
     display: flex;
     flex-direction: row;

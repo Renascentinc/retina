@@ -7,9 +7,9 @@
       :right="true"
       :top="false"
       :left="false"
+      class="action-speed-dial"
       direction="left"
-      transition="slide-x-reverse-transition"
-      style="position: absolute; bottom: 75px">
+      transition="slide-x-reverse-transition">
       <template
         v-slot:activator
         v-if="$mq === 'mobile' && transferState === states.INITIAL">
@@ -654,6 +654,11 @@ export default {
 .tools-page {
   display: flex;
   flex-direction: column;
+
+  .action-speed-dial {
+    position: absolute;
+    bottom: 75px;
+  }
 
   .report-loader {
     position: absolute;

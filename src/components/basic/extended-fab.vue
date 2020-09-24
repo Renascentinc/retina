@@ -5,6 +5,8 @@
     :type="buttonType"
     class="extended-fab"
     @click="onClick"
+    color="#CE352F"
+    dark
   >
     <div
       class="fab-icon-container"

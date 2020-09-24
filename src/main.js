@@ -27,7 +27,7 @@ if (process.env.VUE_APP_PLATFORM === 'cordova') {
   document.body.appendChild(cordovaScript)
 }
 
-Vue.use(Vuetify, {
+const vuetify = new Vuetify({
   icons: {
     iconfont: 'fa'
   },
@@ -42,6 +42,8 @@ Vue.use(Vuetify, {
     }
   }
 })
+
+Vue.use(Vuetify)
 Vue.config.productionTip = false
 Vue.use(ToggleButton)
 Vue.use(VueInfiniteScroll)
@@ -90,7 +92,7 @@ window.addEventListener('load', () => {
   fastclick.attach(document.body)
 
   new Vue({
-    Vuetify,
+    vuetify,
     router,
     store,
     el: '#app',

@@ -22,6 +22,7 @@ html, body, #app {
   height: 100%;
   margin: 0;
   overflow: hidden;
+  line-height: normal;
 }
 
 body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {

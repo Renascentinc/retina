@@ -4762,6 +4762,11 @@ form-data@~2.3.2:
     combined-stream "1.0.6"
     mime-types "^2.1.12"
 
+format-thousands@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/format-thousands/-/format-thousands-1.1.1.tgz#7975bee30338d9006390da5831db0b41c323fbfa"
+  integrity sha1-eXW+4wM42QBjkNpYMdsLQcMj+/o=
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
@@ -4903,6 +4908,11 @@ getpass@^0.1.1:
   integrity sha1-Xv+OPmhNVprkyysSgmBOi6YhSfo=
   dependencies:
     assert-plus "^1.0.0"
+
+github-buttons@^2.8.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/github-buttons/-/github-buttons-2.14.0.tgz#32ce381651091accda09217cd7a6e4c77f91e222"
+  integrity sha512-rAwKwFOiWoyhb3g5ZyXjI3XXprAa36jCd0tm467aEUYtiDZkqEXkepuzNg9LryLbnuLRQmcifIPTxLUBnuYpXQ==
 
 glob-base@^0.3.0:
   version "0.3.0"
@@ -7463,6 +7473,11 @@ node-cache@^4.1.1:
     clone "2.x"
     lodash "4.x"
 
+node-fetch@^2.3.0:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
 node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
@@ -7790,6 +7805,11 @@ onetime@^2.0.0:
   integrity sha1-BnQoIw/WdEOyeUsiu6UotoZ5YtQ=
   dependencies:
     mimic-fn "^1.0.0"
+
+opencollective-postinstall@^2.0.2:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.3.tgz#7a0fff978f6dbfa4d006238fbac98ed4198c3259"
+  integrity sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==
 
 opener@^1.5.1:
   version "1.5.1"
@@ -10476,6 +10496,11 @@ tslib@^1.9.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
 
+tslib@^1.9.3:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
+  integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
+
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
@@ -10870,6 +10895,22 @@ vue-eslint-parser@^5.0.0:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
+vue-github-button@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-github-button/-/vue-github-button-1.2.0.tgz#5624a2807b16bdac61589f55503b8a492d2a9d5b"
+  integrity sha512-lvGrbQnHWX8bYovtBFz5uSgtbM+glXXQQq5VR79YDsZ+Fh5DBpLR+Ws5YLz9eSA+gNGi3xnXKjZDbUeQXOYh6A==
+  dependencies:
+    github-buttons "^2.8.0"
+
+vue-github-buttons@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/vue-github-buttons/-/vue-github-buttons-3.1.0.tgz#eaea2ba0b7e0df5a7fd1c61ba37dabf7553dd79a"
+  integrity sha512-x0b9bdhP5xZOD5kQ9+nnCzvKqVyHb4moqN2l06mjYB/k2WRdW5jiAWlneUgoPFwPvcqM40vrTDXVvBrS0MMlEQ==
+  dependencies:
+    format-thousands "^1.1.1"
+    node-fetch "^2.3.0"
+    tslib "^1.9.3"
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.0.tgz#97976142405d13d8efae154749e88c4e358cf926"
@@ -10912,6 +10953,16 @@ vue-loader@^15.6.4:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-material@^1.0.0-beta-15:
+  version "1.0.0-beta-15"
+  resolved "https://registry.yarnpkg.com/vue-material/-/vue-material-1.0.0-beta-15.tgz#949025464f8fe2ff3b9be2ba1365d9eab770ad8a"
+  integrity sha512-nNC1mF1BQNKsyEjRXPYxweYlIOcVE9rK4LeeyppOU6h4vgQnZuNmlGIRnl6fUe8dj+x7c5x5/qydLhJRabPMng==
+  dependencies:
+    opencollective-postinstall "^2.0.2"
+    vue-github-button "^1.2.0"
+    vue-github-buttons "^3.1.0"
+    vue-toc "0.0.1"
+
 vue-mq@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/vue-mq/-/vue-mq-0.2.1.tgz#2f4413684e7c0f4fa3ffc1d8a35cae72cc7c77f6"
@@ -10952,10 +11003,22 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
+vue-toc@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/vue-toc/-/vue-toc-0.0.1.tgz#6a4dfa9c144445679705cd7b991a1a73ac080cc0"
+  integrity sha512-RZfVgLzk/kpEmk05ptvU/+x3TVo4Ai4BBARvV4iCurR9bJsAqnnrqwjEBKnEG+s6NT0yQ6EY0JMGViyOUGysDw==
+  dependencies:
+    vue "^2.6.10"
+
 vue@^2.5.0, vue@^2.5.16, vue@^2.6.6, vue@^2.6.8:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.9.tgz#415c1cc1a5ed00c8f0acdd0a948139d12b7ea6b3"
   integrity sha512-t1+tvH8hybPM86oNne3ZozCD02zj/VoZIiojOBPJLjwBn7hxYU5e1gBObFpq8ts1NEn1VhPf/hVXBDAJ3X5ljg==
+
+vue@^2.6.10:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
+  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
 vuex@^3.0.1:
   version "3.0.1"

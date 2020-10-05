@@ -17,7 +17,7 @@ import fastclick from '@jbcampbell/fastclick'
 import ToggleButton from 'vue-js-toggle-button'
 import Rollbar from 'vue-rollbar'
 import pkg from '../package.json'
-import { MdSpeedDial } from 'vue-material/dist/components'
+import { MdSpeedDial, MdButton } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
@@ -32,6 +32,7 @@ Vue.config.productionTip = false
 Vue.use(ToggleButton)
 Vue.use(VueInfiniteScroll)
 Vue.use(MdSpeedDial)
+Vue.use(MdButton)
 Vue.use(DrawerLayout)
 Vue.use(VCalendar)
 Vue.use(VeeValidate)

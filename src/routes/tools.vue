@@ -12,13 +12,34 @@
       <nfc-scan :on-scan="onScan"/>
     </div>
 
-    <extended-fab
+    <!-- <extended-fab
       v-if="$mq === 'mobile' && transferState === states.INITIAL"
       :on-click="moveToSelectingState"
       class="transfer-btn"
       icon-class="fa-exchange-alt"
       button-text="TRANSFER"
-    />
+    /> -->
+
+    <md-speed-dial
+      v-if="$mq === 'mobile' && transferState === states.INITIAL"
+      md-direction="top"
+      md-event="click"
+      class="transfer-speed-dial">
+      <md-speed-dial-target class="fas fa-times menu-icon">
+        <span class="fas fa-chevron-up"></span>
+      </md-speed-dial-target>
+
+      <md-speed-dial-content>
+        <md-button class="md-icon-button"
+        @click="moveToSelectingState">
+          <span class="fas fa-people-arrows"></span>
+        </md-button>
+
+        <md-button class="md-icon-button">
+          <span class="fas fa-file-pdf"></span>
+        </md-button>
+      </md-speed-dial-content>
+    </md-speed-dial>
 
     <div class="menu-container">
       <div
@@ -615,7 +636,7 @@ export default {
   .selection-action-bar {
     position: absolute;
     bottom: 0;
-    width: calc(100vw - 40px);
+    width: 100vw;
     height: 60px;
     background-color: white;
     z-index: 100;
@@ -698,6 +719,12 @@ export default {
 }
 
 .mobile .tools-page {
+  .transfer-speed-dial {
+    position: absolute;
+    right: 20px;
+    bottom: 80px;
+    color: white;
+  }
   .transfer-btn {
     position: absolute;
     left: calc(50% - 79px);

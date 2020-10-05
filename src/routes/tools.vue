@@ -15,8 +15,8 @@
         v-if="$mq === 'mobile' && transferState === states.INITIAL">
         <v-btn
           v-model="fab"
-          color=primary
           dark
+          class='fab-main'
           fab>
           <v-icon v-if="fab">fa-times</v-icon>
           <v-icon v-else>fa-angle-double-left</v-icon>
@@ -666,6 +666,10 @@ export default {
   .action-speed-dial {
     position: absolute;
     bottom: 75px;
+
+    .fab-main {
+      background-color: $renascent-red !important;
+    }
   }
 
   .report-loader {

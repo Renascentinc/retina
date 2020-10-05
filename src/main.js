@@ -17,7 +17,7 @@ import fastclick from '@jbcampbell/fastclick'
 import ToggleButton from 'vue-js-toggle-button'
 import Rollbar from 'vue-rollbar'
 import pkg from '../package.json'
-import Vuetify from 'vuetify'
+import Vuetify, { VBtn, VIcon, VSpeedDial } from 'vuetify/lib'
 import 'vuetify/dist/vuetify.min.css'
 
 if (process.env.VUE_APP_PLATFORM === 'cordova') {
@@ -43,7 +43,9 @@ const vuetify = new Vuetify({
   }
 })
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  components: {VBtn, VIcon, VSpeedDial}
+})
 Vue.config.productionTip = false
 Vue.use(ToggleButton)
 Vue.use(VueInfiniteScroll)

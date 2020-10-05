@@ -2,11 +2,6 @@
   <div class="page history-page">
     <loading-overlay :active="loading"/>
 
-    <!-- this is the actual table that gets printed or exported to PDF. Invisible to the user -->
-    <history-table
-      :search-tool-snapshot="snapshots"
-    />
-
     <div class="search-bar">
       <history-search-input
         :allow-tool-id-search="!currentToolId"
@@ -132,9 +127,7 @@ import { handleCommonErrors } from '@/utils/api-response-errors'
 import HistorySearchInput from '@/components/history-search-input'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
 import Fab from '@/components/basic/fab'
-import html2pdf from 'html2pdf.js'
 import swal from 'sweetalert2'
-import HistoryTable from '@/components/history-table'
 import HistorySearchResult from '@/components/history-search-result'
 import LoadingSpinner from '@/components/basic/loading-spinner'
 import LoadingOverlay from '@/components/basic/loading-overlay'
@@ -143,15 +136,17 @@ import { searchToolSnapshotQuery, recomissionToolMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import HistoryEntry from '@/models/history-entry'
 import moment from 'moment'
+import pdf from '@/mixins/pdf'
 
 export default {
   name: 'History',
+
+  mixins: [pdf],
 
   components: {
     HistorySearchInput,
     Fab,
     ExtendedFab,
-    HistoryTable,
     HistorySearchResult,
     LoadingSpinner,
     LoadingOverlay
@@ -308,26 +303,22 @@ export default {
 
     async exportTable () {
       this.loading = true
-      let element = document.querySelector('.history-table-export')
-
-      let options = {
-        filename: 'transactions_export.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2 },
-        margin: 0.5,
-        pagebreak: {
-          mode: 'avoid-all'
-        },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      }
-
+      var data = this.snapshots.map(snapshot => [
+        snapshot.currentSnapshot.id,
+        `${ snapshot.currentSnapshot.brand.name } ${ snapshot.currentSnapshot.type.name }`,
+        snapshot.currentSnapshot.owner.name,
+        snapshot.currentSnapshot.status,
+        new Date(snapshot.metadata.timestamp).toLocaleDateString('en-US'),
+        snapshot.metadata.tool_action,
+      ])
+      var header = ['ID', 'Tool', 'Assigned To', 'Status', 'Date', 'Action']
       try {
-        await html2pdf().from(element).set(options).save()
-        this.loading = false
+        this.generatePdfFromObject(data, header, 'transactions_export.pdf')
       } catch (error) {
-        showErrorMsg('Error exporting PDF. Please Try Again or Contact Support')
+        showErrorMsg('Error exporting PDF. Please try again or contact support.')
         Vue.rollbar.error('Error in routes:history:exportTable', error)
       }
+      this.loading = false
     },
 
     printTable () {

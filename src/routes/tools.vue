@@ -17,17 +17,17 @@
       md-direction="top"
       md-event="click"
       class="transfer-speed-dial">
-      <md-speed-dial-target class="speed-dial-parent">
+      <md-speed-dial-target>
         <span class="fas fa-chevron-up"></span>
       </md-speed-dial-target>
 
       <md-speed-dial-content>
-        <md-button class="speed-dial-child md-icon-button"
+        <md-button class="md-icon-button"
           @click="moveToSelectingState">
           <span class="fas fa-people-arrows"></span>
         </md-button>
 
-        <md-button class="speed-dial-child md-icon-button"
+        <md-button class="md-icon-button"
           @click="exportReport">
           <span class="fas fa-file-pdf"></span>
         </md-button>

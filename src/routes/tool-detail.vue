@@ -34,7 +34,7 @@
           :disabled="editState"
           :on-click="toggleTransferStatus"
           :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
-          icon-class="fa-exchange-alt"
+          icon-class="fa-people-arrows"
           class="action-btn transfer-btn"
         />
 

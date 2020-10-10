@@ -43,8 +43,16 @@
           v-if="transferState === states.INITIAL"
           :on-click="moveToSelectingState"
           class="transfer-btn"
-          icon-class="fa-exchange-alt"
+          icon-class="fa-people-arrows"
           button-text="TRANSFER"
+        />
+
+        <extended-fab
+          v-if="transferState === states.INITIAL"
+          :on-click="moveToSelectingState"
+          class="transfer-btn"
+          icon-class="fa-file-pdf"
+          button-text="DOWNLOAD"
         />
 
         <extended-fab

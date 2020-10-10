@@ -518,9 +518,9 @@ export default {
   }
   .edit {
     position: absolute;
-    bottom: 70px;
-    bottom: calc(70px + constant(safe-area-inset-bottom));
-    bottom: calc(70px + env(safe-area-inset-bottom));
+    bottom: 80px;
+    bottom: calc(80px + constant(safe-area-inset-bottom));
+    bottom: calc(80px + env(safe-area-inset-bottom));
     right: 20px;
   }
 

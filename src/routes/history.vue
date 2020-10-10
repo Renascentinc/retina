@@ -429,10 +429,10 @@ export default {
 
   .print-btn {
     position: absolute;
-    right: 30px;
-    bottom: 70px;
-    bottom: calc(70px + constant(safe-area-inset-bottom));
-    bottom: calc(70px + env(safe-area-inset-bottom));
+    right: 20px;
+    bottom: 80px;
+    bottom: calc(80px + constant(safe-area-inset-bottom));
+    bottom: calc(80px + env(safe-area-inset-bottom));
     z-index: 100;
   }
 }

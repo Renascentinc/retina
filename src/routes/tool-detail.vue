@@ -164,7 +164,7 @@
               class="action-btn transfer-btn"
               @click="toggleTransferStatus"
             >
-              <i class="fas fa-exchange-alt action-icon"></i>
+              <i class="fas fa-people-arrows action-icon"></i>
               <span class="action-title">
                 {{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}
               </span>

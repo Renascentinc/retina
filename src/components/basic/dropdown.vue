@@ -172,7 +172,7 @@ export default {
   padding-left: 12px;
   font-size: 13px;
   display: flex;
-  align-content: center;
+  align-items: center;
   cursor: pointer;
 
   .text {

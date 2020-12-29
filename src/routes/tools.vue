@@ -49,7 +49,15 @@
 
         <extended-fab
           v-if="transferState === states.INITIAL"
-          :on-click="moveToSelectingState"
+          :on-click="exportReport"
+          class="transfer-btn"
+          icon-class="fa-file-pdf"
+          button-text="DOWNLOAD"
+        />
+
+        <extended-fab
+          v-if="transferState === states.INITIAL"
+          :on-click="print"
           class="transfer-btn"
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD"
@@ -630,6 +638,26 @@ export default {
       var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
       try {
         this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0)
+      } catch (error) {
+        showErrorMsg('Error exporting PDF. Please try again or contact support.')
+        Vue.rollbar.error('Error in routes:tools:exportTable', error)
+      }
+    },
+
+    async printTable () {
+      while (!this.hasLoadedLastPage) {
+        await this.loadMore()
+      }
+      var exportTools = this.tools.map(tool => [
+        tool.photo,
+        tool.id,
+        `${tool.brand.name} ${tool.type.name}`,
+        tool.status,
+        tool.owner.name
+      ])
+      var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
+      try {
+        this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0, true)
       } catch (error) {
         showErrorMsg('Error exporting PDF. Please try again or contact support.')
         Vue.rollbar.error('Error in routes:tools:exportTable', error)

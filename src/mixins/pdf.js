@@ -1,4 +1,3 @@
-import html2pdf from 'html2pdf.js'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
@@ -17,8 +16,7 @@ export default {
 }
 
 function generateDocument (data, header, filename, imageIndex) {
-  const doc = new jsPDF()
-  var currentImage = null
+  const doc = new jsPDF('p', 'in', [10, 8.5])
   doc.autoTable({
     head: [header],
     body: data,

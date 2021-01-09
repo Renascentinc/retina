@@ -28,8 +28,15 @@
         </md-button>
 
         <md-button class="md-icon-button"
+          v-if="!isNativeApp"
           @click="exportReport">
           <span class="fas fa-file-pdf"></span>
+        </md-button>
+
+        <md-button class="md-icon-button"
+          v-if="isNativeApp"
+          @click="printTable">
+          <span class="fas fa-print"></span>
         </md-button>
       </md-speed-dial-content>
     </md-speed-dial>
@@ -50,14 +57,6 @@
         <extended-fab
           v-if="transferState === states.INITIAL"
           :on-click="exportReport"
-          class="transfer-btn"
-          icon-class="fa-file-pdf"
-          button-text="DOWNLOAD"
-        />
-
-        <extended-fab
-          v-if="transferState === states.INITIAL"
-          :on-click="print"
           class="transfer-btn"
           icon-class="fa-file-pdf"
           button-text="DOWNLOAD"
@@ -415,6 +414,10 @@ export default {
       return this.transferState === this.states.SELECTING && !this.isAdminUser
     },
 
+    isNativeApp () {
+      return !!window.device && !!window.device.cordova
+    },
+
     tools () {
       if (this.showOnlySelectedTools) {
         return this.getMultipleTool || []
@@ -656,13 +659,9 @@ export default {
         tool.owner.name
       ])
       var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
-      try {
-        this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0, true)
-      } catch (error) {
-        showErrorMsg('Error exporting PDF. Please try again or contact support.')
-        Vue.rollbar.error('Error in routes:tools:exportTable', error)
-      }
-    }
+      let datauri = await this.generateDataUrlFromObject(exportTools, header, 'tools.pdf', 0)
+      window.cordova.plugins.printer.print(datauri, { name: 'tools.html', landscape: false })
+    },
   }
 }
 </script>
@@ -687,7 +686,8 @@ export default {
     position: absolute;
     bottom: 0;
     width: 100vw;
-    height: 60px;
+    height: max(calc(60px + constant(safe-area-inset-bottom) - 18px), 60px);
+    height: max(calc(60px + env(safe-area-inset-bottom) - 18px), 60px);
     background-color: white;
     z-index: 100;
     box-shadow: none;
@@ -773,6 +773,8 @@ export default {
     position: absolute;
     right: 20px;
     bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
 
     .md-speed-dial-target {
       background-color: $renascent-red !important;

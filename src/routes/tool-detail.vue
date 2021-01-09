@@ -971,16 +971,17 @@ export default {
   .edit {
     position: absolute;
     bottom: 80px;
-    bottom: calc(80px + constant(safe-area-inset-bottom));
-    bottom: calc(80px + env(safe-area-inset-bottom));
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
     right: 20px;
   }
 
   .cancel {
     position: absolute;
     bottom: 80px;
-    bottom: calc(80px + constant(safe-area-inset-bottom));
-    bottom: calc(80px + env(safe-area-inset-bottom));
+    bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
     right: 80px;
   }
 }

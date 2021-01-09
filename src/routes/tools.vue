@@ -780,6 +780,10 @@ export default {
       background-color: $renascent-red !important;
       color: white;
     }
+
+    .md-icon-button {
+      background-color: white;
+    }
   }
 }
 </style>

@@ -331,9 +331,8 @@ export default {
         snapshot.metadata.tool_action,
       ])
       var header = ['ID', 'Tool', 'Assigned To', 'Status', 'Date', 'Action']
-      // let element = document.querySelector('.history-table-export')
       let datauri = await this.generateDataUrlFromObject(data, header, 'transactions_export.pdf')
-      window.cordova.plugins.printer.print(datauri, { name: 'retina_history.html', landscape: true, margin: false })
+      window.cordova.plugins.printer.print(datauri, { name: 'retina_history.html', landscape: true })
     },
 
     checkDateFilter () {

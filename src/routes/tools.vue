@@ -1,6 +1,6 @@
 <template>
   <div class="page tools-page">
-    <loading-overlay :active="transferInProgress"/>
+    <loading-overlay :active="transferInProgress || downloadingAllTools"/>
 
     <div class="search-bar">
       <tool-search-input
@@ -377,6 +377,7 @@ export default {
       pageSize: 15,
       paginationLoading: false,
       transferInProgress: false,
+      downloadingAllTools: false,
       states
     }
   },
@@ -628,6 +629,7 @@ export default {
     },
 
     async exportReport () {
+      this.downloadingAllTools = true
       while (!this.hasLoadedLastPage) {
         await this.loadMore()
       }
@@ -639,6 +641,7 @@ export default {
         tool.owner.name
       ])
       var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
+      this.downloadingAllTools = false
       try {
         this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0)
       } catch (error) {
@@ -648,6 +651,7 @@ export default {
     },
 
     async printTable () {
+      this.downloadingAllTools = true
       while (!this.hasLoadedLastPage) {
         await this.loadMore()
       }
@@ -660,6 +664,7 @@ export default {
       ])
       var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
       let datauri = await this.generateDataUrlFromObject(exportTools, header, 'tools.pdf', 0)
+      this.downloadingAllTools = false
       window.cordova.plugins.printer.print(datauri, { name: 'tools.html', landscape: false })
     },
   }

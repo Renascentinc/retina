@@ -16,7 +16,7 @@ export default {
 }
 
 function generateDocument (data, header, filename, imageIndex) {
-  const doc = new jsPDF('p', 'in', [10, 8.5])
+  const doc = new jsPDF()
   doc.autoTable({
     head: [header],
     body: data,

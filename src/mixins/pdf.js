@@ -1,5 +1,5 @@
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import JsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 export default {
   methods: {
@@ -16,7 +16,7 @@ export default {
 }
 
 function generateDocument (data, header, filename, imageIndex) {
-  const doc = new jsPDF()
+  const doc = new JsPDF()
   doc.autoTable({
     head: [header],
     body: data,

@@ -35,7 +35,6 @@
     "debounce": "^1.2.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
-    "html2pdf.js": "^0.9.0",
     "jspdf": "^2.1.1",
     "jspdf-autotable": "^3.5.13",
     "moment": "^2.24.0",

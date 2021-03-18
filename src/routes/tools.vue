@@ -666,7 +666,7 @@ export default {
       let datauri = await this.generateDataUrlFromObject(exportTools, header, 'tools.pdf', 0)
       this.downloadingAllTools = false
       window.cordova.plugins.printer.print(datauri, { name: 'tools.html', landscape: false })
-    },
+    }
   }
 }
 </script>

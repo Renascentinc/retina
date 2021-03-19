@@ -5,7 +5,7 @@
   "description": "Renascent inc. Asset Tracking Application",
   "author": "Renascent Inc.",
   "scripts": {
-    "setup": "rm -rf www plugins platforms node_modules && yarn && mkdir www plugins platforms && cordova prepare && yarn mobile:assets && yarn --check-files",
+    "setup": "rm -rf www plugins platforms node_modules && yarn --pure-lockfile && mkdir www plugins platforms && cordova prepare && yarn mobile:assets && yarn --force --pure-lockfile",
     "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode=development",
@@ -29,6 +29,7 @@
     "apollo-link-http": "^1.5.5",
     "browser-image-compression": "^0.0.3",
     "cordova-android": "^9.0.0",
+    "cordova-ios": "^6.2.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-printer": "^0.7.3",
     "debounce": "^1.2.0",

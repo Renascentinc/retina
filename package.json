@@ -1,6 +1,6 @@
 {
   "name": "retina",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "private": true,
   "description": "Renascent inc. Asset Tracking Application",
   "author": "Renascent Inc.",
@@ -70,6 +70,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "cordova": "^10.0.0",
+    "cordova-ios": "^6.2.0",
     "cordova-splash": "^1.0.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",

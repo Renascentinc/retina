@@ -3,6 +3,15 @@
     :class="{ disabled: disabled }"
     class="dropdown-container"
   >
+    <transition name="fade">
+      <div
+        v-if="activated"
+        class="scrim"
+        @click="toggle"
+      >
+      </div>
+    </transition>
+
     <button
       class="button extended-fab"
       @click="toggle"
@@ -128,7 +137,6 @@ export default {
 
 .options {
   position: absolute;
-  left: 10px;
 
   .button {
     margin-top: 11px;
@@ -136,6 +144,17 @@ export default {
     justify-content: center;
     align-items: center;
   }
+}
+
+.scrim {
+  background-color: rgba(255, 255, 255, 0.75);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  display: block;
+  top: 0px;
+  left: 0px;
+  z-index: -5;
 }
 
 .disabled {

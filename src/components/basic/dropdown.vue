@@ -123,10 +123,6 @@ export default {
 </script>
 
 <style lang="scss">
-.dropdown-container {
-  position: relative;
-}
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s;
 }

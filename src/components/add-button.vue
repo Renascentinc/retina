@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container search-result"
+    class="search-container search-result"
     @click="onClick"
   >
     <div class="default-text">

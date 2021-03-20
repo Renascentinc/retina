@@ -547,7 +547,7 @@ export default {
   .new-tool-input-card {
     display: flex;
     flex: 1 0 420px;
-    max-height: 475px;
+    max-height: 550px;
     flex-direction: column;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
     margin: 10px 10px 0 10px;

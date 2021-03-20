@@ -1,4 +1,4 @@
-.container {
+.search-container {
   height: 60px;
   min-height: 60px;
   color: $renascent-red;
@@ -44,7 +44,7 @@
 }
 
 .mobile {
-  .container {
+  .search-container {
     font-size: 18px;
 
     input {

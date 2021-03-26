@@ -171,7 +171,11 @@ export default {
         }
       },
       result (apiResult) {
-        this.snapshots = apiResult.data.searchToolSnapshot.map(snapshot => new HistoryEntry(snapshot))
+        if (apiResult && apiResult.data && apiResult.data.searchToolSnapshot && apiResult.data.searchToolSnapshot.length) {
+          this.snapshots = apiResult.data.searchToolSnapshot.map(snapshot => new HistoryEntry(snapshot))
+        } else {
+          this.snapshots = []
+        }
       }
     }
   },

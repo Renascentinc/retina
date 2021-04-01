@@ -12,8 +12,17 @@
       <nfc-scan :on-scan="onScan"/>
     </div>
 
-    <md-speed-dial
+    <extended-fab
       v-if="$mq === 'mobile' && transferState === states.INITIAL"
+      :on-click="moveToSelectingState"
+      class="transfer-btn"
+      icon-class="fa-people-arrows"
+      button-text="TRANSFER"
+    />
+
+    <!-- disabled until server-side reporting is implemented -->
+    <md-speed-dial
+      v-if="false"
       md-direction="top"
       md-event="click"
       class="transfer-speed-dial">
@@ -774,6 +783,16 @@ export default {
 }
 
 .mobile .tools-page {
+  .transfer-btn {
+    position: absolute;
+    left: calc(50% - 79px);
+    bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
+    width: 158px;
+    z-index: 100;
+  }
+
   .transfer-speed-dial {
     position: absolute;
     right: 20px;

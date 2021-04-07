@@ -1,11 +1,11 @@
 {
   "name": "retina",
-  "version": "3.6.0-alpha.0",
+  "version": "3.6.1",
   "private": true,
   "description": "Renascent inc. Asset Tracking Application",
   "author": "Renascent Inc.",
   "scripts": {
-    "setup": "rm -rf www plugins platforms node_modules && yarn && mkdir www plugins platforms && cordova prepare && yarn mobile:assets && yarn --check-files",
+    "setup": "rm -rf www plugins platforms node_modules && yarn --pure-lockfile && mkdir www plugins platforms && cordova prepare && yarn mobile:assets && yarn --force --pure-lockfile",
     "start": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode=development",
@@ -14,7 +14,7 @@
     "build:mobile:dev": "VUE_APP_PLATFORM=cordova vue-cli-service build --mode=development",
     "android": "yarn build:mobile && cordova prepare",
     "ios": "yarn build:mobile && cordova prepare",
-    "test": "yarn lint && yarn test:unit",
+    "test": "yarn lint --no-fix && yarn test:unit",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "clean:lock": "yarn-deduplicate yarn.lock"
@@ -28,8 +28,8 @@
     "apollo-link-error": "^1.1.1",
     "apollo-link-http": "^1.5.5",
     "browser-image-compression": "^0.0.3",
-    "cordova-android": "^8.0.0",
-    "cordova-ios": "^5.0.0",
+    "cordova-android": "^9.0.0",
+    "cordova-ios": "^6.2.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-printer": "^0.7.3",
     "debounce": "^1.2.0",
@@ -72,7 +72,8 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
-    "cordova": "^9.0.0",
+    "cordova": "^10.0.0",
+    "cordova-ios": "^6.2.0",
     "cordova-splash": "^1.0.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -104,8 +105,8 @@
       }
     },
     "platforms": [
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

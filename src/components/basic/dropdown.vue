@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ disabled: disabled }"
-    class="container"
+    class="dropdown-container"
   >
     <transition name="fade">
       <div
@@ -13,7 +13,7 @@
     </transition>
 
     <button
-      class="button"
+      class="button extended-fab"
       @click="toggle"
     >
       <div class="fab-icon-container">
@@ -138,6 +138,7 @@ export default {
     margin-top: 11px;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 }
 

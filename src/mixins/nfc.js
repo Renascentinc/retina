@@ -80,17 +80,21 @@ export default {
         this.nfcListenerEnabled = true
         if (!this.nfcListenerAdded) {
           this.nfcListenerAdded = true
-        }
-        window.nfc.scanTag().then(
-          tag => {
-            this._initialNfcCallback({ tag: tag })
-          },
-          err => {
-            showErrorMsg('There was an error while reading the tag', 'TAG ERROR')
-            Vue.rollbar.error('Error in mixins:nfc', err)
-          }
 
-        )
+          window.nfc.scanNdef().then(
+            tag => {
+              this.nfcListenerAdded = false
+              this._initialNfcCallback({ tag: tag })
+            },
+            err => {
+              this.nfcListenerAdded = false
+              if (!this.isUserInvalidatedSessionError(err)) {
+                showErrorMsg('There was an error while reading the tag', 'TAG ERROR')
+                Vue.rollbar.error('Error in mixins:nfc', err)
+              }
+            }
+          )
+        }
       } else {
         setup()
       }
@@ -98,6 +102,10 @@ export default {
 
     pauseNfcListener () {
       this.nfcListenerEnabled = false
+    },
+
+    isUserInvalidatedSessionError (error) {
+      return error.contains('Session invalidated by user')
     },
 
     nfcCallback () {

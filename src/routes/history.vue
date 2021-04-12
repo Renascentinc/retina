@@ -305,11 +305,11 @@ export default {
       this.loading = true
       var data = this.snapshots.map(snapshot => [
         snapshot.currentSnapshot.id,
-        `${ snapshot.currentSnapshot.brand.name } ${ snapshot.currentSnapshot.type.name }`,
+        `${snapshot.currentSnapshot.brand.name} ${snapshot.currentSnapshot.type.name}`,
         snapshot.currentSnapshot.owner.name,
         snapshot.currentSnapshot.status,
         new Date(snapshot.metadata.timestamp).toLocaleDateString('en-US'),
-        snapshot.metadata.tool_action,
+        snapshot.metadata.tool_action
       ])
       var header = ['ID', 'Tool', 'Assigned To', 'Status', 'Date', 'Action']
       try {
@@ -324,11 +324,11 @@ export default {
     async printTable () {
       var data = this.snapshots.map(snapshot => [
         snapshot.currentSnapshot.id,
-        `${ snapshot.currentSnapshot.brand.name } ${ snapshot.currentSnapshot.type.name }`,
+        `${snapshot.currentSnapshot.brand.name} ${snapshot.currentSnapshot.type.name}`,
         snapshot.currentSnapshot.owner.name,
         snapshot.currentSnapshot.status,
         new Date(snapshot.metadata.timestamp).toLocaleDateString('en-US'),
-        snapshot.metadata.tool_action,
+        snapshot.metadata.tool_action
       ])
       var header = ['ID', 'Tool', 'Assigned To', 'Status', 'Date', 'Action']
       let datauri = await this.generateDataUrlFromObject(data, header, 'transactions_export.pdf')

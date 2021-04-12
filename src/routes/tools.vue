@@ -1,6 +1,6 @@
 <template>
   <div class="page tools-page">
-    <loading-overlay :active="transferInProgress"/>
+    <loading-overlay :active="transferInProgress || downloadingAllTools"/>
 
     <div class="search-bar">
       <tool-search-input
@@ -16,9 +16,39 @@
       v-if="$mq === 'mobile' && transferState === states.INITIAL"
       :on-click="moveToSelectingState"
       class="transfer-btn"
-      icon-class="fa-exchange-alt"
+      icon-class="fa-people-arrows"
       button-text="TRANSFER"
     />
+
+    <!-- disabled until server-side reporting is implemented -->
+    <md-speed-dial
+      v-if="false"
+      md-direction="top"
+      md-event="click"
+      class="transfer-speed-dial">
+      <md-speed-dial-target>
+        <span class="fas fa-chevron-up"></span>
+      </md-speed-dial-target>
+
+      <md-speed-dial-content>
+        <md-button class="md-icon-button"
+          @click="moveToSelectingState">
+          <span class="fas fa-people-arrows"></span>
+        </md-button>
+
+        <md-button class="md-icon-button"
+          v-if="!isNativeApp"
+          @click="exportReport">
+          <span class="fas fa-file-pdf"></span>
+        </md-button>
+
+        <md-button class="md-icon-button"
+          v-if="isNativeApp"
+          @click="printTable">
+          <span class="fas fa-print"></span>
+        </md-button>
+      </md-speed-dial-content>
+    </md-speed-dial>
 
     <div class="menu-container">
       <div
@@ -29,8 +59,16 @@
           v-if="transferState === states.INITIAL"
           :on-click="moveToSelectingState"
           class="transfer-btn"
-          icon-class="fa-exchange-alt"
+          icon-class="fa-people-arrows"
           button-text="TRANSFER"
+        />
+
+        <extended-fab
+          v-if="transferState === states.INITIAL"
+          :on-click="exportReport"
+          class="transfer-btn"
+          icon-class="fa-file-pdf"
+          button-text="DOWNLOAD"
         />
 
         <extended-fab
@@ -242,6 +280,7 @@ import AddButton from '@/components/add-button'
 import vSelect from '@/components/basic/select'
 import Platforms from '@/utils/platforms'
 import nfcMixin from '@/mixins/nfc'
+import pdf from '@/mixins/pdf'
 import LoadingOverlay from '@/components/basic/loading-overlay'
 import LoadingSpinner from '@/components/basic/loading-spinner'
 import Tool from '@/models/tool'
@@ -272,7 +311,7 @@ export default {
     AddButton
   },
 
-  mixins: [ nfcMixin ],
+  mixins: [ nfcMixin, pdf ],
 
   apollo: {
     getAllLocation: {
@@ -347,6 +386,7 @@ export default {
       pageSize: 15,
       paginationLoading: false,
       transferInProgress: false,
+      downloadingAllTools: false,
       states
     }
   },
@@ -382,6 +422,10 @@ export default {
 
     isNonAdminTransfer () {
       return this.transferState === this.states.SELECTING && !this.isAdminUser
+    },
+
+    isNativeApp () {
+      return !!window.device && !!window.device.cordova
     },
 
     tools () {
@@ -591,6 +635,46 @@ export default {
       this.setShowOnlySelectedTools(true)
       this.updateTransferStatus(this.states.FINALIZING)
       this.resetScrollPosition()
+    },
+
+    async exportReport () {
+      this.downloadingAllTools = true
+      while (!this.hasLoadedLastPage) {
+        await this.loadMore()
+      }
+      var exportTools = this.tools.map(tool => [
+        tool.photo,
+        tool.id,
+        `${tool.brand.name} ${tool.type.name}`,
+        tool.status,
+        tool.owner.name
+      ])
+      var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
+      this.downloadingAllTools = false
+      try {
+        this.generatePdfFromObject(exportTools, header, 'tools.pdf', 0)
+      } catch (error) {
+        showErrorMsg('Error exporting PDF. Please try again or contact support.')
+        Vue.rollbar.error('Error in routes:tools:exportTable', error)
+      }
+    },
+
+    async printTable () {
+      this.downloadingAllTools = true
+      while (!this.hasLoadedLastPage) {
+        await this.loadMore()
+      }
+      var exportTools = this.tools.map(tool => [
+        tool.photo,
+        tool.id,
+        `${tool.brand.name} ${tool.type.name}`,
+        tool.status,
+        tool.owner.name
+      ])
+      var header = ['Photo', 'ID', 'Tool', 'Status', 'Owner']
+      let datauri = await this.generateDataUrlFromObject(exportTools, header, 'tools.pdf', 0)
+      this.downloadingAllTools = false
+      window.cordova.plugins.printer.print(datauri, { name: 'tools.html', landscape: false })
     }
   }
 }
@@ -615,8 +699,9 @@ export default {
   .selection-action-bar {
     position: absolute;
     bottom: 0;
-    width: calc(100vw - 40px);
-    height: 60px;
+    width: 100vw;
+    height: max(calc(60px + constant(safe-area-inset-bottom) - 18px), 60px);
+    height: max(calc(60px + env(safe-area-inset-bottom) - 18px), 60px);
     background-color: white;
     z-index: 100;
     box-shadow: none;
@@ -701,11 +786,28 @@ export default {
   .transfer-btn {
     position: absolute;
     left: calc(50% - 79px);
-    bottom: 70px;
-    bottom: calc(70px + constant(safe-area-inset-bottom));
-    bottom: calc(70px + env(safe-area-inset-bottom));
+    bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
     width: 158px;
     z-index: 100;
+  }
+
+  .transfer-speed-dial {
+    position: absolute;
+    right: 20px;
+    bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
+
+    .md-speed-dial-target {
+      background-color: $renascent-red !important;
+      color: white;
+    }
+
+    .md-icon-button {
+      background-color: white;
+    }
   }
 }
 </style>

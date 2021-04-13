@@ -105,7 +105,7 @@ export default {
     },
 
     isUserInvalidatedSessionError (error) {
-      return error.contains('Session invalidated by user')
+      return error.includes('Session invalidated by user')
     },
 
     nfcCallback () {

@@ -34,7 +34,7 @@
           :disabled="editState"
           :on-click="toggleTransferStatus"
           :button-text="isToolSelected ? 'DESELECT' : 'TRANSFER'"
-          icon-class="fa-exchange-alt"
+          icon-class="fa-people-arrows"
           class="action-btn transfer-btn"
         />
 
@@ -164,7 +164,7 @@
               class="action-btn transfer-btn"
               @click="toggleTransferStatus"
             >
-              <i class="fas fa-exchange-alt action-icon"></i>
+              <i class="fas fa-people-arrows action-icon"></i>
               <span class="action-title">
                 {{ isToolSelected ? 'DESELECT' : 'TRANSFER' }}
               </span>
@@ -970,17 +970,18 @@ export default {
 
   .edit {
     position: absolute;
-    bottom: 70px;
-    bottom: calc(70px + constant(safe-area-inset-bottom));
-    bottom: calc(70px + env(safe-area-inset-bottom));
+    bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
     right: 20px;
   }
 
   .cancel {
     position: absolute;
-    bottom: 70px;
-    bottom: calc(70px + constant(safe-area-inset-bottom));
-    bottom: calc(70px + env(safe-area-inset-bottom));
+    bottom: 80px;
+    bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
     right: 80px;
   }
 }

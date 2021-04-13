@@ -2,11 +2,6 @@
   <div class="page history-page">
     <loading-overlay :active="loading"/>
 
-    <!-- this is the actual table that gets printed or exported to PDF. Invisible to the user -->
-    <history-table
-      :search-tool-snapshot="snapshots"
-    />
-
     <div class="search-bar">
       <history-search-input
         :allow-tool-id-search="!currentToolId"
@@ -132,9 +127,7 @@ import { handleCommonErrors } from '@/utils/api-response-errors'
 import HistorySearchInput from '@/components/history-search-input'
 import ExtendedFab from '@/components/basic/extended-fab.vue'
 import Fab from '@/components/basic/fab'
-import html2pdf from 'html2pdf.js'
 import swal from 'sweetalert2'
-import HistoryTable from '@/components/history-table'
 import HistorySearchResult from '@/components/history-search-result'
 import LoadingSpinner from '@/components/basic/loading-spinner'
 import LoadingOverlay from '@/components/basic/loading-overlay'
@@ -143,15 +136,17 @@ import { searchToolSnapshotQuery, recomissionToolMutation } from '@/utils/gql'
 import { showSuccessMsg, showErrorMsg } from '@/utils/alerts'
 import HistoryEntry from '@/models/history-entry'
 import moment from 'moment'
+import pdf from '@/mixins/pdf'
 
 export default {
   name: 'History',
+
+  mixins: [pdf],
 
   components: {
     HistorySearchInput,
     Fab,
     ExtendedFab,
-    HistoryTable,
     HistorySearchResult,
     LoadingSpinner,
     LoadingOverlay
@@ -171,7 +166,11 @@ export default {
         }
       },
       result (apiResult) {
-        this.snapshots = apiResult.data.searchToolSnapshot.map(snapshot => new HistoryEntry(snapshot))
+        if (apiResult && apiResult.data && apiResult.data.searchToolSnapshot && apiResult.data.searchToolSnapshot.length) {
+          this.snapshots = apiResult.data.searchToolSnapshot.map(snapshot => new HistoryEntry(snapshot))
+        } else {
+          this.snapshots = []
+        }
       }
     }
   },
@@ -308,31 +307,36 @@ export default {
 
     async exportTable () {
       this.loading = true
-      let element = document.querySelector('.history-table-export')
-
-      let options = {
-        filename: 'transactions_export.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2 },
-        margin: 0.5,
-        pagebreak: {
-          mode: 'avoid-all'
-        },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      }
-
+      var data = this.snapshots.map(snapshot => [
+        snapshot.currentSnapshot.id,
+        `${snapshot.currentSnapshot.brand.name} ${snapshot.currentSnapshot.type.name}`,
+        snapshot.currentSnapshot.owner.name,
+        snapshot.currentSnapshot.status,
+        new Date(snapshot.metadata.timestamp).toLocaleDateString('en-US'),
+        snapshot.metadata.tool_action
+      ])
+      var header = ['ID', 'Tool', 'Assigned To', 'Status', 'Date', 'Action']
       try {
-        await html2pdf().from(element).set(options).save()
-        this.loading = false
+        this.generatePdfFromObject(data, header, 'transactions_export.pdf')
       } catch (error) {
-        showErrorMsg('Error exporting PDF. Please Try Again or Contact Support')
+        showErrorMsg('Error exporting PDF. Please try again or contact support.')
         Vue.rollbar.error('Error in routes:history:exportTable', error)
       }
+      this.loading = false
     },
 
-    printTable () {
-      let element = document.querySelector('.history-table-export')
-      window.cordova.plugins.printer.print(element, { name: 'retina_history.html', landscape: true })
+    async printTable () {
+      var data = this.snapshots.map(snapshot => [
+        snapshot.currentSnapshot.id,
+        `${snapshot.currentSnapshot.brand.name} ${snapshot.currentSnapshot.type.name}`,
+        snapshot.currentSnapshot.owner.name,
+        snapshot.currentSnapshot.status,
+        new Date(snapshot.metadata.timestamp).toLocaleDateString('en-US'),
+        snapshot.metadata.tool_action
+      ])
+      var header = ['ID', 'Tool', 'Assigned To', 'Status', 'Date', 'Action']
+      let datauri = await this.generateDataUrlFromObject(data, header, 'transactions_export.pdf')
+      window.cordova.plugins.printer.print(datauri, { name: 'retina_history.html', landscape: true })
     },
 
     checkDateFilter () {
@@ -438,10 +442,10 @@ export default {
 
   .print-btn {
     position: absolute;
-    right: 30px;
-    bottom: 70px;
-    bottom: calc(70px + constant(safe-area-inset-bottom));
-    bottom: calc(70px + env(safe-area-inset-bottom));
+    right: 20px;
+    bottom: 80px;
+    bottom: max(calc(80px + constant(safe-area-inset-bottom) - 18px), 80px);
+    bottom: max(calc(80px + env(safe-area-inset-bottom) - 18px), 80px);
     z-index: 100;
   }
 }

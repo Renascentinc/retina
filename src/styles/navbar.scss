@@ -5,6 +5,8 @@
 .nav-bar {
   display: flex;
   flex: 0 0 60px;
+  flex: 0 0 max(calc(60px + constant(safe-area-inset-bottom) - 18px), 60px);
+  flex: 0 0 max(calc(60px + env(safe-area-inset-bottom) - 18px), 60px);
   background-color: $renascent-dark-gray;
   align-items: center;
   color: $disabled-gray;
@@ -31,6 +33,7 @@
       border: none;
       font-size: 25px;
       cursor: pointer;
+      text-decoration: none;
 
       .icon-subtext {
         margin-top: 7px;
